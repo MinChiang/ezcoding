@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezcoding.facility.module.message.dao.MessageMapper">
+
+    <select id="selectUnreadCountByCondition" resultType="java.lang.Integer">
+        select
+            count(*)
+        from facility_message mm
+            inner join facility_subscription ms on ms.application_code = mm.application_code and ms.scene = mm.scene and ms.subject_id = mm.subject_id and ms.subscriber = #{condition.user} and mm.create_time > ms.subscribe_time
+            left join facility_message_read_record mmar on mm.id = mmar.message_id and mmar.user = #{condition.user}
+        where
+            mmar.message_id is null
+            <if test="condition.beginTime != null">
+                <![CDATA[and mm.create_time >= #{condition.beginTime}]]>
+            </if>
+            <if test="condition.endTime != null">
+                <![CDATA[and mm.create_time <= #{condition.endTime}]]>
+            </if>
+            <if test="condition.applicationCode != null">
+                and mm.application_code = #{condition.applicationCode}
+            </if>
+            <if test="condition.scene != null">
+                and mm.scene = #{condition.scene}
+            </if>
+    </select>
+
+    <select id="selectListByCondition" resultType="com.ezcoding.sdk.facility.message.bean.dto.MessageSearchDTO">
+        select
+            mm.id,
+            mm.application_code,
+            mm.scene,
+            mm.subject_id,
+            mm.create_time,
+            mm.content,
+            ifnull(mmar.message_id, 0) as already_read
+        from facility_message mm
+            inner join facility_subscription ms on ms.application_code = mm.application_code and ms.scene = mm.scene and ms.subject_id = mm.subject_id and ms.subscriber = #{condition.user} and mm.create_time > ms.subscribe_time
+            left join facility_message_read_record mmar on mm.id = mmar.message_id and mmar.user = #{condition.user}
+        <where>
+            <if test="condition.beginTime != null">
+                <![CDATA[mm.create_time >= #{condition.beginTime}]]>
+            </if>
+            <if test="condition.endTime != null">
+                <![CDATA[and mm.create_time <= #{condition.endTime}]]>
+            </if>
+            <if test="condition.applicationCode != null">
+                and mm.application_code = #{condition.applicationCode}
+            </if>
+            <if test="condition.scene != null">
+                and mm.scene = #{condition.scene}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectExistAndUnread" resultType="java.lang.Long">
+        select
+            mm.id
+        from facility_message mm
+            inner join facility_subscription ms on ms.application_code = mm.application_code and ms.scene = mm.scene and ms.subject_id = mm.subject_id and ms.subscriber = #{user} and mm.create_time > ms.subscribe_time
+            left join facility_message_read_record mmar on mm.id = mmar.message_id and mmar.user = #{user}
+        where
+            mmar.message_id is null
+            and mm.id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+    </select>
+
+</mapper>

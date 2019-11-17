@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezcoding.facility.module.message.dao.PersonalMessageMapper">
+    <select id="selectUnreadCountByCondition" resultType="java.lang.Integer">
+        select
+            count(*)
+        from facility_personal_message mpm
+        where
+            mpm.receiver = #{condition.receiver}
+            <if test="condition.sender != null">
+                and mpm.sender = #{condition.sender}
+            </if>
+            <if test="condition.beginTime != null">
+                <![CDATA[and mpm.send_time >= #{condition.beginTime}]]>
+            </if>
+            <if test="condition.endTime != null">
+                <![CDATA[and mpm.send_time <= #{condition.endTime}]]>
+            </if>
+            and mpm.already_read = 0
+            and mpm.deleted = 0
+    </select>
+
+    <select id="selectListByCondition" resultType="com.ezcoding.facility.module.message.bean.model.PersonalMessage">
+        select
+              mpm.id, content, receiver, sender, send_time, already_read, deleted
+        from facility_personal_message mpm
+        where
+            mpm.receiver = #{condition.receiver}
+            <if test="condition.sender != null">
+                and mpm.sender = #{condition.sender}
+            </if>
+            <if test="condition.beginTime != null">
+                <![CDATA[and mpm.send_time >= #{condition.beginTime}]]>
+            </if>
+            <if test="condition.endTime != null">
+                <![CDATA[and mpm.send_time <= #{condition.endTime}]]>
+            </if>
+            and mpm.deleted = 0
+    </select>
+
+    <update id="updateReadStatus">
+        update
+            facility_personal_message mpm
+        set
+            mpm.already_read = ${@com.ezcoding.base.web.extend.mybatis.type.BooleanTypeEnum@TRUE.id}
+        where
+            mpm.receiver = #{receiver}
+            and mpm.id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+    </update>
+
+    <delete id="deleteBatch">
+        update
+            facility_personal_message mpm
+        set
+            mpm.deleted = ${@com.ezcoding.base.web.extend.mybatis.type.BooleanTypeEnum@TRUE.id}
+        where
+            mpm.receiver = #{receiver}
+            and mpm.id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezcoding.account.module.user.dao.UserMapper">
+
+    <sql id="userFieldDetails">
+        <foreach collection="userFieldDetails" item="userField" separator=",">
+            ${userField}
+        </foreach>
+    </sql>
+
+    <select id="selectByCodes" resultType="com.ezcoding.sdk.account.user.bean.dto.UserDetailResultDTO">
+        select
+            <include refid="userFieldDetails"/>
+        from
+            account_user
+        where code in
+        <foreach collection="codes" item="code" separator="," open="(" close=")">
+            #{code}
+        </foreach>
+    </select>
+
+    <select id="selectByCode" resultType="com.ezcoding.sdk.account.user.bean.dto.UserDetailResultDTO">
+        select
+            <include refid="userFieldDetails"/>
+        from
+            account_user
+        where
+            code = #{code}
+    </select>
+
+    <select id="selectAuthenticationDetailByCondition" resultType="com.ezcoding.account.module.user.bean.model.User">
+        select
+            su.id,
+            su.code,
+            su.account,
+            su.password,
+            su.phone,
+            su.email,
+            su.status
+        from
+            account_user su
+        <where>
+            <if test="user.id != null">
+                su.id = #{user.id}
+            </if>
+            <if test="user.code != null">
+                and su.code = #{user.code}
+            </if>
+            <if test="user.account != null">
+                and su.account = #{user.account}
+            </if>
+            <if test="user.phone != null">
+                and su.phone = #{user.phone}
+            </if>
+            <if test="user.email != null">
+                and su.email = #{user.email}
+            </if>
+            and su.status = ${@com.ezcoding.sdk.account.user.bean.model.UserStatusEnum@NORMAL.id}
+        </where>
+    </select>
+
+</mapper>

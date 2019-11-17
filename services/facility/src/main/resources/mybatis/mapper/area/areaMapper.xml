@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezcoding.facility.module.area.dao.AreaMapper">
+
+    <select id="selectAreaByCondition" resultType="com.ezcoding.facility.module.area.bean.model.Area">
+        select
+        sa.id,
+        sa.name,
+        sa.area_code,
+        sa.city_code,
+        sa.name,
+        sa.short_name,
+        sa.merger_name,
+        sa.pinyin,
+        sa.lng,
+        sa.lat
+        from sys_area sa
+        <where>
+            <if test="areaSearchDTO.id != null">
+                sa.id = #{areaSearchDTO.id}
+            </if>
+            <if test="areaSearchDTO.parentId != null">
+                and sa.parent_id = #{areaSearchDTO.parentId}
+            </if>
+            <if test="areaSearchDTO.level != null">
+                and sa.level = #{areaSearchDTO.level}
+            </if>
+            <if test="areaSearchDTO.zipCode != null">
+                and sa.zip_code = #{areaSearchDTO.zipCode}
+            </if>
+            <if test="areaSearchDTO.name != null and areaSearchDTO.name != ''">
+                and sa.name like concat('%',#{areaSearchDTO.name},'%')
+            </if>
+            <if test="areaSearchDTO.shortName != null and areaSearchDTO.shortName != ''">
+                and sa.short_name like concat('%',#{areaSearchDTO.shortName},'%')
+            </if>
+            <if test="areaSearchDTO.pinyin != null and areaSearchDTO.pinyin != ''">
+                and sa.pinyin like concat('%',#{areaSearchDTO.pinyin},'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,109 @@
+logging:
+  file: ${log.path:../logs}/${metadata.category}.log
+  level:
+    org.springframework: info
+    com.ezcoding: debug
+server:
+  port: 8085
+  servlet:
+    context-path: /
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: ${metadata.category}
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  datasource:
+    druid:
+      url: jdbc:mysql://cdb-m7a0slf1.gz.tencentcdb.com:10079/auth?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false&serverTimezone=Asia/Shanghai
+      username: auth
+      password: "1Kym6PcMHABLkG5X"
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      maxActive: 20
+      initialSize: 0
+      maxWait: 60000
+      minIdle: 5
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 1800000
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: true
+      testOnReturn: false
+      maxOpenPreparedStatements: 10
+      removeAbandoned: true
+      removeAbandonedTimeout: 1800
+      logAbandoned: true
+      filters: stat,wall,slf4j
+  redis:
+    host: 134.175.139.134
+    port: 6379
+    password: "9(%4_Er8#MiP7$"
+    jedis:
+      pool:
+        max-idle: 8
+        max-active: 8
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    #10秒发送一次心跳包
+    lease-renewal-interval-in-seconds: 10
+    #30秒没有发送心跳，本节点已经宕机
+    lease-expiration-duration-in-seconds: 30
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 0
+        readTimeout: 0
+  hystrix:
+    enabled: true
+ribbon:
+  ConnectTimeout: 2000
+  ReadTimeout: 2147483647
+hystrix:
+  shareSecurityContext: true
+  threadpool:
+    default:
+      coreSize: 10
+  command:
+    default:
+      circuitBreaker:
+        enabled: true
+        #10秒内熔断触发的最小个数，默认20
+        requestVolumeThreshold: 20
+        #短路多久以后开始尝试是否恢复，默认5000ms
+        sleepWindowInMilliseconds: 5000
+        #失败率达到多少百分比后熔断，默认50%
+        errorThresholdPercentage: 50
+      fallback:
+        enabled: true
+      execution:
+        timeout:
+          #是否设置超时时间
+          enabled: false
+        isolation:
+          thread:
+            #设置调用者的超时时间
+            timeoutInMilliseconds: ${ribbon.ReadTimeout}
+#Token
+token:
+  header: Authorization
+  expiration: 604800
+  subject: token
+  issuer: ezcoding
+metadata:
+  dataCenterNo: 0
+  category: auth
+  categoryNo: 0
+zookeeper:
+  auth: ezcoding:Cw7z6HV8Dm5JuKN3
+  ips:
+    - 134.175.139.134:2181
+service:
+  account: account

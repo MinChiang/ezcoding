@@ -1,0 +1,61 @@
+logging:
+  file: ${log.path:../logs}/${metadata.category}.log
+  level:
+    org.springframework: info
+server:
+  port: 8082
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: ${metadata.category}
+  redis:
+    host: 134.175.139.134
+    port: 6379
+    password: "9(%4_Er8#MiP7$"
+    jedis:
+      pool:
+        max-idle: 8
+        max-active: 8
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    #10秒发送一次心跳包
+    lease-renewal-interval-in-seconds: 10
+    #30秒没有发送心跳，本节点已经宕机
+    lease-expiration-duration-in-seconds: 30
+zuul:
+  sensitive-headers: Cookie,Set-Cookie,XID
+  host:
+    connect-timeout-millis: 2000
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 0
+        readTimeout: 0
+ribbon:
+  ConnectTimeout: 2000
+  ReadTimeout: 2147483647
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: ${ribbon.ReadTimeout}
+#Token
+token:
+  header: Authorization
+  expiration: 604800
+metadata:
+  dataCenterNo: 0
+  category: gateway
+  categoryNo: 0
+service:
+  auth: auth
