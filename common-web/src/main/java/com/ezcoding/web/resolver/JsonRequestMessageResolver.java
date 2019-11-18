@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 public class JsonRequestMessageResolver {
 
     private static final Charset CHARSET_READ_DEFAULT = StandardCharsets.UTF_8;
-    public static final String REQUEST_MESSAGE = "REQUEST_MESSAGE";
+    private static final String REQUEST_MESSAGE = "__REQUEST_MESSAGE__";
 
     private IMessageBuilder messageBuilder;
 
@@ -65,4 +65,5 @@ public class JsonRequestMessageResolver {
     public void setMessageBuilder(IMessageBuilder messageBuilder) {
         this.messageBuilder = messageBuilder;
     }
+
 }

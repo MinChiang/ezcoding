@@ -1,9 +1,11 @@
 package com.ezcoding.common.user.resolve;
 
 import com.ezcoding.common.user.model.IUser;
+import com.ezcoding.common.user.model.UserDTO;
 import com.google.common.collect.Lists;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author MinChiang
@@ -12,7 +14,7 @@ import java.util.List;
  */
 public class CurrentUserLoader implements IUserLoadable {
 
-    private static final List<IUserLoadable> LOADERS = Lists.newArrayList();
+    private static final List<IUserLoadable> LOADERS = Lists.newArrayList(new EmptyUserLoader());
 
     private CurrentUserLoader() {
     }
@@ -54,16 +56,34 @@ public class CurrentUserLoader implements IUserLoadable {
 
     @Override
     public IUser load() {
-        return null;
+        return LOADERS
+                .stream()
+                .map(IUserLoadable::load)
+                .findFirst()
+                .orElse(new UserDTO());
     }
 
-    public static void registerLoaders(){
-
+    public static void registerLoaders(IUserLoadable loadable) {
+        Optional
+                .of(loadable)
+                .ifPresent(LOADERS::add);
     }
 
     private static final class UserResolverUtilsHolder {
 
         private static final CurrentUserLoader INSTANCE = new CurrentUserLoader();
+
+    }
+
+    /**
+     * 空用户加载器
+     */
+    private static final class EmptyUserLoader implements IUserLoadable {
+
+        @Override
+        public IUser load() {
+            return new UserDTO();
+        }
 
     }
 

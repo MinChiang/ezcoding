@@ -1,16 +1,18 @@
 package com.ezcoding.web.resolver;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezcoding.base.web.util.PageUtils;
 import com.ezcoding.common.foundation.core.exception.CommonApplicationExceptionConstants;
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
-import com.ezcoding.common.foundation.core.message.head.*;
+import com.ezcoding.common.foundation.core.message.head.RequestAppHead;
+import com.ezcoding.common.foundation.core.message.head.RequestSystemHead;
+import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
+import com.ezcoding.common.foundation.core.message.head.SuccessAppHead;
 import com.ezcoding.common.foundation.util.ConvertUtils;
+import com.ezcoding.web.resolver.returnValue.IResponseMessageReturnValueResolvable;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -43,11 +46,11 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonMessageMethodProcessor.class);
     private static final String PATH_PREFIX = "/";
 
-    private IMessageBuilder messageBuilder;
     private ObjectMapper objectMapper;
     private Validator validator;
     private boolean openObjectValidate = false;
     private JsonRequestMessageResolver requestMessageResolver;
+    private List<IResponseMessageReturnValueResolvable> returnValueResolvables = Lists.newLinkedList();
 
     public JsonMessageMethodProcessor(List<HttpMessageConverter<?>> converters) {
         super(converters);
@@ -59,6 +62,31 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
 
     public JsonMessageMethodProcessor(List<HttpMessageConverter<?>> converters, ContentNegotiationManager manager, List<Object> requestResponseBodyAdvice) {
         super(converters, manager, requestResponseBodyAdvice);
+    }
+
+    /**
+     * 按照顺序注册出参解析器
+     *
+     * @param resolvers 需要注册的解析器
+     */
+    public void registerReturnValueResolvables(IResponseMessageReturnValueResolvable... resolvers) {
+        if (resolvers == null) {
+            return;
+        }
+        returnValueResolvables.addAll(Arrays.asList(resolvers));
+    }
+
+    /**
+     * 按照顺序注册出参解析器
+     *
+     * @param order    需要加入的
+     * @param resolver 需要注册的解析器
+     */
+    public void registerReturnValueResolvables(int order, IResponseMessageReturnValueResolvable resolver) {
+        if (resolver == null) {
+            return;
+        }
+        returnValueResolvables.add(order, resolver);
     }
 
     @Override
@@ -160,33 +188,33 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
         //标识请求是否已经在该方法内完成处理
         mavContainer.setRequestHandled(true);
 
-        ResponseMessage responseMessage;
-        //以标准的方式写出报文
-        if (returnValue instanceof ResponseMessage) {
-            responseMessage = (ResponseMessage) returnValue;
-        } else if (returnValue instanceof ResponseSystemHead) {
-            responseMessage = new ResponseMessage<>((ResponseSystemHead) returnValue, new SuccessAppHead(), null);
-        } else if (returnValue instanceof ResponseAppHead) {
-            responseMessage = new ResponseMessage<>(new ResponseSystemHead(), (ResponseAppHead) returnValue, null);
-        } else if (returnValue instanceof Page) {
-            Page page = (Page) returnValue;
-            PageInfo pageInfo = PageUtils.convertToPageInfo(page);
-            responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(pageInfo), page.getRecords());
-        } else {
-            responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), returnValue);
-        }
+//        ResponseMessage responseMessage;
+//        //以标准的方式写出报文
+//        if (returnValue instanceof ResponseMessage) {
+//            responseMessage = (ResponseMessage) returnValue;
+//        } else if (returnValue instanceof ResponseSystemHead) {
+//            responseMessage = new ResponseMessage<>((ResponseSystemHead) returnValue, new SuccessAppHead(), null);
+//        } else if (returnValue instanceof ResponseAppHead) {
+//            responseMessage = new ResponseMessage<>(new ResponseSystemHead(), (ResponseAppHead) returnValue, null);
+//        } else if (returnValue instanceof Page) {
+//            Page page = (Page) returnValue;
+//            PageInfo pageInfo = PageUtils.convertToPageInfo(page);
+//            responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(pageInfo), page.getRecords());
+//        } else {
+//            responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), returnValue);
+//        }
+
+        ResponseMessage responseMessage
+                = returnValueResolvables
+                .stream()
+                .filter(resolver -> resolver.match(returnValue.getClass()))
+                .map(resolver -> resolver.resolveReturnValue(returnValue, returnType))
+                .findFirst()
+                .orElse(new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), returnValue));
 
         ServletServerHttpRequest inputMessage = this.createInputMessage(webRequest);
         ServletServerHttpResponse outputMessage = this.createOutputMessage(webRequest);
         this.writeWithMessageConverters(responseMessage, returnType, inputMessage, outputMessage);
-    }
-
-    public IMessageBuilder getMessageBuilder() {
-        return this.messageBuilder;
-    }
-
-    public void setMessageBuilder(IMessageBuilder messageBuilder) {
-        this.messageBuilder = messageBuilder;
     }
 
     public ObjectMapper getObjectMapper() {
@@ -220,4 +248,5 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
     public void setRequestMessageResolver(JsonRequestMessageResolver requestMessageResolver) {
         this.requestMessageResolver = requestMessageResolver;
     }
+
 }
