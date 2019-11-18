@@ -1,10 +1,7 @@
-package com.ezcoding.sdk.account.user.bean.dto;
+package com.ezcoding.common.user.model;
 
-import com.ezcoding.sdk.account.user.api.IUser;
-import com.ezcoding.sdk.account.user.bean.model.GenderEnum;
 import com.google.common.collect.Sets;
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 import java.util.Date;
@@ -100,13 +97,6 @@ public class UserDTO implements IUser {
     /**
      * 拥有的权限
      */
-    private Collection<? extends GrantedAuthority> authorities = Sets.newHashSet();
-
-    @Override
-    public Collection<String> getRoles() {
-        Collection<String> result = Sets.newHashSet();
-        this.authorities.forEach(a -> result.add(a.getAuthority()));
-        return result;
-    }
+    private Collection<String> roles = Sets.newHashSet();
 
 }

@@ -1,13 +1,13 @@
-package com.ezcoding.base.web.extend.spring.security.authentication;
+package com.ezcoding.common.user.resolve;
 
-import com.ezcoding.sdk.account.user.api.IUser;
+import com.ezcoding.common.user.model.IUser;
 
 /**
  * @author MinChiang
  * @version 1.0.0
- * @date 2019-08-30 22:48
+ * @date 2019-11-18 14:42
  */
-public interface IUserLoadable {
+public interface IUserProxyable {
 
     /**
      * 加载用户

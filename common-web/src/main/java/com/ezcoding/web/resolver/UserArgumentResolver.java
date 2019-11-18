@@ -15,7 +15,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  * @version 1.0.0
  * @date 2018-10-15 15:19
  */
-public class CurrentUserResolver implements HandlerMethodArgumentResolver {
+public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     private static final UserResolver USER_RESOLVER_UTILS = UserResolver.getInstance();
 

@@ -1,7 +1,7 @@
 package com.ezcoding.common.mybatis.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.ezcoding.common.user.IUserResolver;
+import com.ezcoding.common.user.model.IUserIdentifiable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
 
@@ -16,14 +16,14 @@ import java.util.Date;
  */
 public class BaseModelMetaObjectHandler implements MetaObjectHandler {
 
-    private IUserResolver userResolver;
+    private IUserIdentifiable userResolver;
 
     private static final String FIELD_NAME_CREATOR = "creator";
     private static final String FIELD_NAME_CREATE_TIME = "createTime";
     private static final String FIELD_NAME_MODIFIER = "modifier";
     private static final String FIELD_NAME_MODIFY_TIME = "modifyTime";
 
-    public BaseModelMetaObjectHandler(IUserResolver userResolver) {
+    public BaseModelMetaObjectHandler(IUserIdentifiable userResolver) {
         this.userResolver = userResolver;
     }
 
@@ -31,7 +31,7 @@ public class BaseModelMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         Object creator = getFieldValByName(FIELD_NAME_CREATOR, metaObject);
         if (creator == null) {
-            String currentUserPrincipal = getCurrentUserPrincipal();
+            String currentUserPrincipal = this.userResolver.getCode();
             if (StringUtils.isNotEmpty(currentUserPrincipal)) {
                 setFieldValByName(FIELD_NAME_CREATOR, currentUserPrincipal, metaObject);
             }
@@ -49,7 +49,7 @@ public class BaseModelMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         Object updator = getFieldValByName(FIELD_NAME_MODIFIER, metaObject);
         if (updator == null) {
-            String currentUserPrincipal = getCurrentUserPrincipal();
+            String currentUserPrincipal = this.userResolver.getCode();
             if (StringUtils.isNotEmpty(currentUserPrincipal)) {
                 setFieldValByName(FIELD_NAME_MODIFIER, currentUserPrincipal, metaObject);
             }
@@ -59,15 +59,6 @@ public class BaseModelMetaObjectHandler implements MetaObjectHandler {
         if (updateTime == null) {
             setFieldValByName(FIELD_NAME_MODIFY_TIME, new Date(), metaObject);
         }
-    }
-
-    /**
-     * 获取当前的用户凭证
-     *
-     * @return 当前用户的code
-     */
-    private String getCurrentUserPrincipal() {
-        return userResolver.getCode();
     }
 
 }

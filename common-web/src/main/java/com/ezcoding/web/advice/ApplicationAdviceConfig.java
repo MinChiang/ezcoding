@@ -1,4 +1,4 @@
-package com.ezcoding.base.web.config;
+package com.ezcoding.web.advice;
 
 import com.ezcoding.common.foundation.core.exception.AbstractApplicationException;
 import com.ezcoding.common.foundation.core.exception.CommonApplicationExceptionConstants;
@@ -93,23 +93,5 @@ public class ApplicationAdviceConfig {
         }
         return this.messageBuilder.buildErrorResponseMessage(e, null);
     }
-
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(value = AccessDeniedException.class)
-    public ResponseMessage handleAccessDeniedException(AccessDeniedException e) throws IOException {
-        if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("权限不足异常：", e);
-        }
-        return this.messageBuilder.buildErrorResponseMessage(CommonApplicationExceptionConstants.COMMON_NO_PERMISSION_ERROR, null);
-    }
-
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(value = Exception.class)
-//    public ResponseMessage handleException(Exception e) throws IOException {
-//        if (log.isErrorEnabled()) {
-//            log.error("未知异常：", e);
-//        }
-//        return this.messageBuilder.buildErrorResponseMessage();
-//    }
 
 }

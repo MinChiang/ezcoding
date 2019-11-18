@@ -1,6 +1,4 @@
-package com.ezcoding.common.user;
-
-import com.ezcoding.common.user.model.GenderEnum;
+package com.ezcoding.common.user.model;
 
 import java.util.Collection;
 import java.util.Date;
@@ -10,7 +8,7 @@ import java.util.Date;
  * @version 1.0.0
  * @date 2019-01-04 10:07
  */
-public interface IUser extends IUserResolver {
+public interface IUser extends IUserIdentifiable {
 
     /**
      * 获取用户id

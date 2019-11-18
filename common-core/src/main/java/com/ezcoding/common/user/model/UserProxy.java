@@ -1,8 +1,6 @@
-package com.ezcoding.base.web.extend.spring.security.authentication;
+package com.ezcoding.common.user.model;
 
-import com.ezcoding.sdk.account.user.api.IUser;
-import com.ezcoding.sdk.account.user.bean.dto.UserDTO;
-import com.ezcoding.sdk.account.user.bean.model.GenderEnum;
+import com.ezcoding.common.user.resolve.IUserProxyable;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
@@ -22,14 +20,14 @@ public class UserProxy implements IUser {
      */
     private boolean resolved;
 
-    private static IUserLoadable loader;
+    private static IUserProxyable loader;
 
     /**
      * 真实的user对象
      */
     private IUser user;
 
-    UserProxy(IUser user) {
+    public UserProxy(IUser user) {
         this.user = user;
         this.resolved = false;
     }
@@ -61,7 +59,7 @@ public class UserProxy implements IUser {
      *
      * @param loader 用户加载器
      */
-    public static void configLoader(IUserLoadable loader) {
+    public static void configLoader(IUserProxyable loader) {
         UserProxy.loader = loader;
     }
 
