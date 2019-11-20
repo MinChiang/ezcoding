@@ -1,6 +1,8 @@
 package com.ezcoding.web.resolver.parameter;
 
-import com.ezcoding.common.foundation.core.message.ResponseMessage;
+import com.ezcoding.common.foundation.core.message.RequestMessage;
+import com.ezcoding.web.resolver.JsonParam;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.core.MethodParameter;
 
 /**
@@ -21,9 +23,11 @@ public interface IRequestMessageParameterResolvable {
     /**
      * 对象解析为输出报文
      *
-     * @param methodParameter 方法参数
+     * @param requestMessage      请求内容
+     * @param parameterAnnotation 方法级注解
+     * @param methodParameter     方法参数
      * @return 解析后的报文
      */
-    ResponseMessage resolveReturnValue(MethodParameter methodParameter);
+    Object resolveReturnValue(RequestMessage<JsonNode> requestMessage, JsonParam parameterAnnotation, MethodParameter methodParameter);
 
 }

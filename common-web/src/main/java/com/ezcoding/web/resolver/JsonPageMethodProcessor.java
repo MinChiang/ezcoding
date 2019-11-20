@@ -1,7 +1,5 @@
 package com.ezcoding.web.resolver;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ezcoding.base.web.util.PageUtils;
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import com.ezcoding.common.foundation.core.message.head.PageInfo;
@@ -31,7 +29,7 @@ public class JsonPageMethodProcessor implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        RequestMessage<JsonNode> requestMessage = requestMessageResolver.resolve(
+        RequestMessage<JsonNode> requestMessage = requestMessageResolver.parse(
                 webRequest.getNativeRequest(HttpServletRequest.class)
         );
 
@@ -42,17 +40,17 @@ public class JsonPageMethodProcessor implements HandlerMethodArgumentResolver {
 
         JsonPage parameterAnnotation = parameter.getParameterAnnotation(JsonPage.class);
 
-        Class<?> parameterType = parameter.getParameterType();
-        if (parameterType.isAssignableFrom(PageInfo.class)) {
-            PageInfo result = requestMessage.getAppHead().getPageInfo();
-            return fillDefaultValue(result, parameterAnnotation.defaultCurrentPage(), parameterAnnotation.defaultPageSize());
-        } else if (parameterType.isAssignableFrom(Page.class)) {
-            PageInfo pageInfo = requestMessage.getAppHead().getPageInfo();
-            pageInfo = fillDefaultValue(pageInfo, parameterAnnotation.defaultCurrentPage(), parameterAnnotation.defaultPageSize());
-            Page<Object> page = PageUtils.convertToPage(pageInfo);
-            page.setSearchCount(parameterAnnotation.searchCount());
-            return page;
-        }
+//        Class<?> parameterType = parameter.getParameterType();
+//        if (parameterType.isAssignableFrom(PageInfo.class)) {
+//            PageInfo result = requestMessage.getAppHead().getPageInfo();
+//            return fillDefaultValue(result, parameterAnnotation.defaultCurrentPage(), parameterAnnotation.defaultPageSize());
+//        } else if (parameterType.isAssignableFrom(Page.class)) {
+//            PageInfo pageInfo = requestMessage.getAppHead().getPageInfo();
+//            pageInfo = fillDefaultValue(pageInfo, parameterAnnotation.defaultCurrentPage(), parameterAnnotation.defaultPageSize());
+//            Page<Object> page = PageUtils.convertToPage(pageInfo);
+//            page.setSearchCount(parameterAnnotation.searchCount());
+//            return page;
+//        }
 
         return null;
     }

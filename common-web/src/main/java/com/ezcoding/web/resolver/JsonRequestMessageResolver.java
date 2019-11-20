@@ -2,6 +2,7 @@ package com.ezcoding.web.resolver;
 
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
+import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
 import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.web.context.request.RequestAttributes;
@@ -22,7 +23,7 @@ public class JsonRequestMessageResolver {
     private static final Charset CHARSET_READ_DEFAULT = StandardCharsets.UTF_8;
     private static final String REQUEST_MESSAGE = "__REQUEST_MESSAGE__";
 
-    private IMessageBuilder messageBuilder;
+    private IMessageBuilder messageBuilder = MessageBuilder.getInstance();
 
     public JsonRequestMessageResolver(IMessageBuilder messageBuilder) {
         this.messageBuilder = messageBuilder;
@@ -38,7 +39,7 @@ public class JsonRequestMessageResolver {
      * @return 原生报文
      * @throws IOException 解析失败
      */
-    public RequestMessage<JsonNode> resolve(HttpServletRequest servletRequest) throws IOException {
+    public RequestMessage<JsonNode> parse(HttpServletRequest servletRequest) throws IOException {
         if (servletRequest == null) {
             return null;
         }

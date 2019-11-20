@@ -25,6 +25,6 @@ public interface IResponseMessageReturnValueResolvable {
      * @param methodParameter 方法参数
      * @return 解析后的报文
      */
-    ResponseMessage resolveReturnValue(Object returnValue, MethodParameter methodParameter);
+    ResponseMessage<Object> resolveReturnValue(Object returnValue, MethodParameter methodParameter);
 
 }

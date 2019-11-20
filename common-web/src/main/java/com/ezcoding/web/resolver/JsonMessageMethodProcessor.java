@@ -1,19 +1,16 @@
 package com.ezcoding.web.resolver;
 
-import com.ezcoding.common.foundation.core.exception.CommonApplicationExceptionConstants;
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.head.RequestAppHead;
-import com.ezcoding.common.foundation.core.message.head.RequestSystemHead;
 import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
 import com.ezcoding.common.foundation.core.message.head.SuccessAppHead;
 import com.ezcoding.common.foundation.util.ConvertUtils;
+import com.ezcoding.web.resolver.parameter.DefaultRequestMessageResolver;
+import com.ezcoding.web.resolver.parameter.IRequestMessageParameterResolvable;
 import com.ezcoding.web.resolver.returnValue.IResponseMessageReturnValueResolvable;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -44,13 +41,12 @@ import java.util.Set;
 public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonMessageMethodProcessor.class);
-    private static final String PATH_PREFIX = "/";
 
-    private ObjectMapper objectMapper;
     private Validator validator;
-    private boolean openObjectValidate = false;
-    private JsonRequestMessageResolver requestMessageResolver;
+    private JsonRequestMessageResolver requestMessageResolver = new JsonRequestMessageResolver();
+    private IRequestMessageParameterResolvable defaultParameterResolver = new DefaultRequestMessageResolver(new ObjectMapper());
     private List<IResponseMessageReturnValueResolvable> returnValueResolvables = Lists.newLinkedList();
+    private List<IRequestMessageParameterResolvable> parameterResolvables = Lists.newLinkedList();
 
     public JsonMessageMethodProcessor(List<HttpMessageConverter<?>> converters) {
         super(converters);
@@ -89,6 +85,31 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
         returnValueResolvables.add(order, resolver);
     }
 
+    /**
+     * 按照顺序注册入参解析器
+     *
+     * @param resolvers 需要注册的解析器
+     */
+    public void registerParameterResolvables(IRequestMessageParameterResolvable... resolvers) {
+        if (resolvers == null) {
+            return;
+        }
+        parameterResolvables.addAll(Arrays.asList(resolvers));
+    }
+
+    /**
+     * 按照顺序注册入参解析器
+     *
+     * @param order    需要加入的
+     * @param resolver 需要注册的解析器
+     */
+    public void registerParameterResolvables(int order, IRequestMessageParameterResolvable resolver) {
+        if (resolver == null) {
+            return;
+        }
+        parameterResolvables.add(order, resolver);
+    }
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(JsonParam.class);
@@ -96,61 +117,24 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws IOException {
-        RequestMessage<JsonNode> requestMessage = this.requestMessageResolver.resolve(
+        RequestMessage<JsonNode> requestMessage = this.requestMessageResolver.parse(
                 webRequest.getNativeRequest(HttpServletRequest.class)
         );
 
-        //如果获取不到对象，且参数类型是基础类型，直接返回默认对象
+        //如果获取不到对象
         if (requestMessage == null) {
-            if (parameter.getParameterType().isPrimitive()) {
-                return ConvertUtils.convert(null, parameter.getParameterType());
-            }
-            return null;
+            return ConvertUtils.convert(null, parameter.getParameterType());
         }
 
-        JsonParam parameterAnnotation = parameter.getParameterAnnotation(JsonParam.class);
-        String defaultValue = parameterAnnotation.defaultValue();
-
-        Object result = null;
-        Class<?> parameterType = parameter.getParameterType();
-        if (parameterType.isAssignableFrom(RequestMessage.class)) {
-            result = requestMessage;
-        } else if (parameterType.isAssignableFrom(RequestSystemHead.class)) {
-            result = requestMessage.getSystemHead();
-        } else if (parameterType.isAssignableFrom(RequestAppHead.class)) {
-            result = requestMessage.getAppHead();
-        } else {
-            JsonNode payload = requestMessage.getPayload();
-            String value = parameterAnnotation.value();
-            if (StringUtils.isNotBlank(value)) {
-                if (!value.startsWith(PATH_PREFIX)) {
-                    value = (PATH_PREFIX + value);
-                }
-                try {
-                    payload = payload.at(value);
-                } catch (Exception e) {
-                    throw CommonApplicationExceptionConstants.COMMON_PARAM_PARSE_ERROR.instance().param("未知的参数路径" + value).cause(e).build();
-                }
-            }
-            if (payload == null || payload.isMissingNode()) {
-                //查不到节点且参数必填，报错
-                if (parameterAnnotation.required()) {
-                    throw new IllegalArgumentException("方法" + parameter.getMethod() + "参数" + parameter.getParameterName() + "为必输");
-                }
-                result = ConvertUtils.convert(defaultValue, parameter.getParameterType());
-            } else {
-                //解决参数类型中的泛型问题
-                JavaType javaType = this.objectMapper.constructType(parameter.getGenericParameterType());
-                try {
-                    result = this.objectMapper.convertValue(payload, javaType);
-                } catch (Exception e) {
-                    throw CommonApplicationExceptionConstants.COMMON_PARAM_PARSE_ERROR.instance().param("无法将" + payload + "转化为类型" + javaType).cause(e).build();
-                }
-            }
-        }
+        IRequestMessageParameterResolvable resolvable = parameterResolvables
+                .stream()
+                .filter(resolver -> resolver.match(parameter.getParameterType()))
+                .findFirst()
+                .orElse(defaultParameterResolver);
+        Object result = resolvable.resolveReturnValue(requestMessage, parameter.getParameterAnnotation(JsonParam.class), parameter);
 
         //参数校验，校验不通过直接返回异常
-        if (this.openObjectValidate && this.validator != null) {
+        if (this.validator != null) {
             this.validateArgument(parameter, result);
         }
 
@@ -188,23 +172,7 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
         //标识请求是否已经在该方法内完成处理
         mavContainer.setRequestHandled(true);
 
-//        ResponseMessage responseMessage;
-//        //以标准的方式写出报文
-//        if (returnValue instanceof ResponseMessage) {
-//            responseMessage = (ResponseMessage) returnValue;
-//        } else if (returnValue instanceof ResponseSystemHead) {
-//            responseMessage = new ResponseMessage<>((ResponseSystemHead) returnValue, new SuccessAppHead(), null);
-//        } else if (returnValue instanceof ResponseAppHead) {
-//            responseMessage = new ResponseMessage<>(new ResponseSystemHead(), (ResponseAppHead) returnValue, null);
-//        } else if (returnValue instanceof Page) {
-//            Page page = (Page) returnValue;
-//            PageInfo pageInfo = PageUtils.convertToPageInfo(page);
-//            responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(pageInfo), page.getRecords());
-//        } else {
-//            responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), returnValue);
-//        }
-
-        ResponseMessage responseMessage
+        ResponseMessage<Object> responseMessage
                 = returnValueResolvables
                 .stream()
                 .filter(resolver -> resolver.match(returnValue.getClass()))
@@ -217,28 +185,12 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
         this.writeWithMessageConverters(responseMessage, returnType, inputMessage, outputMessage);
     }
 
-    public ObjectMapper getObjectMapper() {
-        return this.objectMapper;
-    }
-
-    public void setObjectMapper(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
     public Validator getValidator() {
         return this.validator;
     }
 
     public void setValidator(Validator validator) {
         this.validator = validator;
-    }
-
-    public boolean isOpenObjectValidate() {
-        return this.openObjectValidate;
-    }
-
-    public void setOpenObjectValidate(boolean openObjectValidate) {
-        this.openObjectValidate = openObjectValidate;
     }
 
     public JsonRequestMessageResolver getRequestMessageResolver() {

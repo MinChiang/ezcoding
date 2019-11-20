@@ -5,11 +5,11 @@ package com.ezcoding.web.resolver.returnValue;
  * @version 1.0.0
  * @date 2019-11-18 20:38
  */
-public abstract class AbstractMessaageResolver implements IResponseMessageReturnValueResolvable {
+public abstract class AbstractResponseMessaageResolver implements IResponseMessageReturnValueResolvable {
 
     private Class<?> targetClass;
 
-    public AbstractMessaageResolver(Class<?> targetClass) {
+    public AbstractResponseMessaageResolver(Class<?> targetClass) {
         if (targetClass == null) {
             throw new IllegalArgumentException("判断类型不能为空");
         }

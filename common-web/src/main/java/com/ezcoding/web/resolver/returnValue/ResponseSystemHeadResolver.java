@@ -10,14 +10,14 @@ import org.springframework.core.MethodParameter;
  * @version 1.0.0
  * @date 2019-11-18 20:46
  */
-public class ResponseSystemHeadResolver extends AbstractMessaageResolver {
+public class ResponseSystemHeadResolver extends AbstractResponseMessaageResolver {
 
-    public ResponseSystemHeadResolver(Class<?> targetClass) {
-        super(targetClass);
+    public ResponseSystemHeadResolver() {
+        super(ResponseSystemHead.class);
     }
 
     @Override
-    public ResponseMessage resolveReturnValue(Object returnValue, MethodParameter methodParameter) {
+    public ResponseMessage<Object> resolveReturnValue(Object returnValue, MethodParameter methodParameter) {
         return new ResponseMessage<>((ResponseSystemHead) returnValue, new SuccessAppHead(), null);
     }
 

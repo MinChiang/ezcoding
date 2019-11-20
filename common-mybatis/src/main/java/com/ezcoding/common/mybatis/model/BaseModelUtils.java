@@ -1,5 +1,6 @@
 package com.ezcoding.common.mybatis.model;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**

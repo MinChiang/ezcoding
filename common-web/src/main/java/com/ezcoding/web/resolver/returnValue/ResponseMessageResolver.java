@@ -8,15 +8,15 @@ import org.springframework.core.MethodParameter;
  * @version 1.0.0
  * @date 2019-11-18 20:45
  */
-public class ResponseMessageResolver extends AbstractMessaageResolver {
+public class ResponseMessageResolver extends AbstractResponseMessaageResolver {
 
-    public ResponseMessageResolver(Class<?> targetClass) {
-        super(targetClass);
+    public ResponseMessageResolver() {
+        super(ResponseMessage.class);
     }
 
     @Override
-    public ResponseMessage resolveReturnValue(Object returnValue, MethodParameter methodParameter) {
-        return (ResponseMessage<?>) returnValue;
+    public ResponseMessage<Object> resolveReturnValue(Object returnValue, MethodParameter methodParameter) {
+        return (ResponseMessage<Object>) returnValue;
     }
 
 }
