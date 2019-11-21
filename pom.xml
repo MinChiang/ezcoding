@@ -18,6 +18,8 @@
         <module>common-core</module>
         <module>common-mybatis</module>
         <module>common-web</module>
+
+        <module>web-starter</module>
     </modules>
 
     <properties>

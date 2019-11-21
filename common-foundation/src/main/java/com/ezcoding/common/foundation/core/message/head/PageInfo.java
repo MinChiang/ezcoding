@@ -12,6 +12,15 @@ import java.io.Serializable;
  */
 public class PageInfo implements Cloneable, Serializable, Mappable {
 
+    /**
+     * 当前页码
+     */
+    public static final int CURRENT_PAGE = 1;
+    /**
+     * 每页的条数
+     */
+    public static final int PAGE_SIZE = 10;
+
     @JsonProperty
     protected Integer pageSize;
 
@@ -61,4 +70,5 @@ public class PageInfo implements Cloneable, Serializable, Mappable {
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
 }

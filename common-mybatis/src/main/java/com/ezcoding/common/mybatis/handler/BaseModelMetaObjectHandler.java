@@ -1,7 +1,7 @@
 package com.ezcoding.common.mybatis.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.ezcoding.common.user.model.IUserIdentifiable;
+import com.ezcoding.common.core.user.model.IUserIdentifiable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
 

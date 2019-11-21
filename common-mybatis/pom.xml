@@ -93,6 +93,7 @@
             <artifactId>kaptcha</artifactId>
         </dependency>
 
+        <!-- Mybatis -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-extension</artifactId>
