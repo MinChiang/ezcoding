@@ -3,6 +3,10 @@ package com.ezcoding.starter.web;
 import com.ezcoding.common.core.user.resolve.CurrentUserLoader;
 import com.ezcoding.common.core.user.resolve.IUserProxyable;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
+import com.ezcoding.common.web.error.ApplicationErrorController;
+import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
+import com.ezcoding.common.web.filter.FilterConstants;
+import com.ezcoding.common.web.filter.IApplicationContextValueFetchable;
 import com.ezcoding.common.web.resolver.JsonMessageMethodProcessor;
 import com.ezcoding.common.web.resolver.JsonPageMethodProcessor;
 import com.ezcoding.common.web.resolver.JsonRequestMessageResolver;
@@ -21,6 +25,10 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -51,11 +59,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private IUserProxyable userProxyable;
 
-    @Bean
-    public JsonRequestMessageResolver jsonRequestMessageResolver() {
-        return new JsonRequestMessageResolver(messageBuilder);
-    }
-
     private void registerParameterResolver(List<IRequestMessageParameterResolvable> resolvables) {
         resolvables.add(new ReqeustMessageResolver());
         resolvables.add(new RequestSystemHeadResolver());
@@ -71,6 +74,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     private IRequestMessageParameterResolvable defaultParameterResolver() {
         return new DefaultRequestMessageResolver(objectMapper);
+    }
+
+    private JsonRequestMessageResolver jsonRequestMessageResolver() {
+        return new JsonRequestMessageResolver(messageBuilder);
     }
 
     private JsonMessageMethodProcessor jsonMessageMethodProcessor() {
@@ -105,6 +112,21 @@ public class WebConfig implements WebMvcConfigurer {
         argumentResolvers.add(jsonMessageMethodProcessor());
         argumentResolvers.add(jsonPageMethodProcessor());
         argumentResolvers.add(userArgumentResolver());
+    }
+
+    @Bean
+    public FilterRegistrationBean<ApplicationContextHolderFilter> applicationContextHolderFilter(List<IApplicationContextValueFetchable> settables) {
+        ApplicationContextHolderFilter applicationContextHolderFilter = new ApplicationContextHolderFilter(settables);
+        FilterRegistrationBean<ApplicationContextHolderFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(applicationContextHolderFilter);
+        registrationBean.setName(FilterConstants.Name.APPLICATION_CONTEXT_HOLDER_NAME);
+        registrationBean.setOrder(FilterConstants.Order.APPLICATION_CONTEXT_HOLDER_ORDER);
+        return registrationBean;
+    }
+
+    @Bean
+    public ApplicationErrorController basicErrorController(ErrorAttributes errorAttributes, ServerProperties serverProperties, List<ErrorViewResolver> errorViewResolvers) {
+        return new ApplicationErrorController(errorAttributes, serverProperties.getError(), errorViewResolvers);
     }
 
     @Configuration
