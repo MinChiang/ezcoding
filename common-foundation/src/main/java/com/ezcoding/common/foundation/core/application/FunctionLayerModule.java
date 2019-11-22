@@ -7,22 +7,21 @@ import org.apache.commons.lang3.StringUtils;
  * @version 1.0.0
  * @date 2019-11-10 13:54
  */
-public class FunctionLayer extends ModuleLayer {
+public class FunctionLayerModule extends ModuleLayerModule {
 
-    private static int functionCodeLength = 4;
-
+    private static int functionCodeLength = FUNCTION_CODE_LENGTH;
     protected final String functionName;
     protected final String functionCode;
 
-    public FunctionLayer(String applicationName, String applicationCode, String moduleName, String moduleCode, String functionName, String functionCode) {
+    public FunctionLayerModule(String applicationName, String applicationCode, String moduleName, String moduleCode, String functionName, String functionCode) {
         super(applicationName, moduleName, moduleName, moduleCode);
         this.functionName = functionName;
         this.functionCode = functionCode;
         this.validate();
     }
 
-    public FunctionLayer(ModuleLayer moduleLayer, String functionName, String functionCode) {
-        this(moduleLayer.getApplicationName(), moduleLayer.getApplicationCode(), moduleLayer.getModuleName(), moduleLayer.getModuleCode(), functionName, functionCode);
+    public FunctionLayerModule(ModuleLayerModule moduleLayerModule, String functionName, String functionCode) {
+        this(moduleLayerModule.getApplicationName(), moduleLayerModule.getApplicationCode(), moduleLayerModule.getModuleName(), moduleLayerModule.getModuleCode(), functionName, functionCode);
     }
 
     /**
@@ -33,7 +32,7 @@ public class FunctionLayer extends ModuleLayer {
             throw new IllegalArgumentException("功能名称，功能码不能为空");
         }
         if (functionCode.length() != functionCodeLength) {
-            throw new IllegalArgumentException("模块码长度必须为" + functionCodeLength);
+            throw new IllegalArgumentException("模块码长度必须为" + FUNCTION_CODE_LENGTH);
         }
     }
 
@@ -60,7 +59,7 @@ public class FunctionLayer extends ModuleLayer {
     }
 
     public static void setFunctionCodeLength(int functionCodeLength) {
-        FunctionLayer.functionCodeLength = functionCodeLength;
+        FunctionLayerModule.functionCodeLength = functionCodeLength;
     }
 
 }

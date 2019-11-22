@@ -1,4 +1,4 @@
-package com.ezcoding.base.web.extend.spring.config;
+package com.ezcoding.starter.foundation.config;
 
 import lombok.Data;
 

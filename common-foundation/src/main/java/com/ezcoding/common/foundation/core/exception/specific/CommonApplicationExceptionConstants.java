@@ -1,4 +1,6 @@
-package com.ezcoding.common.foundation.core.exception;
+package com.ezcoding.common.foundation.core.exception.specific;
+
+import com.ezcoding.common.foundation.core.exception.ExceptionBuilderFactory;
 
 /**
  * @author MinChiang

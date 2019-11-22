@@ -1,5 +1,8 @@
 package com.ezcoding.common.foundation.core.message.head;
 
+import com.ezcoding.common.foundation.core.application.IModuleNameable;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,8 +13,8 @@ import java.util.List;
  */
 public class ErrorAppHead extends ResponseAppHead implements Serializable {
 
-    protected static String defaultErrorCode = "99999999";
-    protected static String defaultErrorMessage = "发生未知错误";
+    public static String defaultErrorMessage = "发生未知错误";
+    public static String defaultErrorCode = StringUtils.repeat("9", IModuleNameable.DETAIL_CODE_LENGHT);
 
     public ErrorAppHead() {
         super(defaultErrorCode, defaultErrorMessage);
@@ -40,4 +43,5 @@ public class ErrorAppHead extends ResponseAppHead implements Serializable {
     public static void setDefaultErrorMessage(String defaultErrorMessage) {
         ErrorAppHead.defaultErrorMessage = defaultErrorMessage;
     }
+
 }

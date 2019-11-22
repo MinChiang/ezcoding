@@ -1,5 +1,8 @@
 package com.ezcoding.common.foundation.core.message.head;
 
+import com.ezcoding.common.foundation.core.application.IModuleNameable;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 
 /**
@@ -9,8 +12,8 @@ import java.io.Serializable;
  */
 public class SuccessAppHead extends ResponseAppHead implements Serializable {
 
-    protected static String defaultSuccessCode = "000000";
     protected static String defaultSuceessMessage = "处理成功";
+    protected static String defaultSuccessCode = StringUtils.repeat("0", IModuleNameable.DETAIL_CODE_LENGHT);
 
     public SuccessAppHead() {
         super(defaultSuccessCode, defaultSuceessMessage);
@@ -35,4 +38,5 @@ public class SuccessAppHead extends ResponseAppHead implements Serializable {
     public static void setDefaultSuceessMessage(String defaultSuceessMessage) {
         SuccessAppHead.defaultSuceessMessage = defaultSuceessMessage;
     }
+
 }

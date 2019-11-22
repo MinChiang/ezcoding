@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>web-starter</artifactId>
+    <artifactId>common-foundation-starter</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>web-starter</name>
+    <name>common-foundation-starter</name>
     <description>web基础依赖框架</description>
 
     <parent>
@@ -26,8 +26,13 @@
 
         <dependency>
             <groupId>com.ezcoding</groupId>
-            <artifactId>common-web</artifactId>
+            <artifactId>common-foundation</artifactId>
             <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
         </dependency>
     </dependencies>
 

@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.advice;
 
 import com.ezcoding.common.foundation.core.exception.AbstractApplicationException;
-import com.ezcoding.common.foundation.core.exception.CommonApplicationExceptionConstants;
+import com.ezcoding.common.foundation.core.exception.specific.CommonApplicationExceptionConstants;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import org.slf4j.Logger;

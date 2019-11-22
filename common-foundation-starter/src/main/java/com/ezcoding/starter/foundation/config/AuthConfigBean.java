@@ -1,6 +1,5 @@
-package com.ezcoding.base.web.extend.spring.config;
+package com.ezcoding.starter.foundation.config;
 
-import com.ezcoding.common.foundation.core.constant.GlobalConstants;
 import com.ezcoding.common.foundation.core.tools.jwt.AuthSettings;
 import lombok.Data;
 
@@ -12,7 +11,7 @@ import lombok.Data;
 @Data
 public class AuthConfigBean {
 
-    private String header = GlobalConstants.Header.AUTHORIZATION;
+    private String header = AuthSettings.DEFAULT_HEADER;
     private Long expiration = AuthSettings.DEFAULT_EXPIRATION;
 
 }

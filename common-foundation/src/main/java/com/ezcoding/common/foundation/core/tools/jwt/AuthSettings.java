@@ -9,7 +9,7 @@ import com.ezcoding.common.foundation.core.constant.GlobalConstants;
  */
 public class AuthSettings {
 
-    public static final String DEFAULT_HEADER = GlobalConstants.Header.AUTHORIZATION;
+    public static final String DEFAULT_HEADER = "Authorization";
     public static final long DEFAULT_EXPIRATION = 604800L;
 
     private String header = DEFAULT_HEADER;

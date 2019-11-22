@@ -19,6 +19,11 @@ import java.util.List;
  */
 public interface IMessageBuilder {
 
+    String DEFAULT_READ_CHARSET = "UTF-8";
+    String DEFAULT_WRITE_CHARSET = "UTF-8";
+    String DEFAULT_READ_MESSAGE_TYPE = MessageTypeEnum.JSON.name();
+    String DEFAULT_WRITE_MESSAGE_TYPE = MessageTypeEnum.JSON.name();
+
     /**
      * 构造请求信息
      *

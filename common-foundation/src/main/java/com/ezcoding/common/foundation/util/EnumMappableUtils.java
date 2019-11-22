@@ -27,7 +27,7 @@ public class EnumMappableUtils {
      * @param <T>       被映射后的枚举实例
      * @return 被映射后的枚举实例
      */
-    public static <T extends Enum> T map(Object object, Class<T> enumClass) {
+    public static <T extends Enum<T>> T map(Object object, Class<T> enumClass) {
         Map<Object, ? extends Enum> serializableEnumMap = CLASS_OBJECT_ENUM_MAPPING.get(enumClass);
         if (serializableEnumMap == null) {
             createMapping(enumClass);

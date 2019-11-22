@@ -1,4 +1,4 @@
-package com.ezcoding.base.web.extend.spring.config;
+package com.ezcoding.starter.foundation.config;
 
 import org.springframework.context.annotation.Import;
 
@@ -13,6 +13,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 @Import(EzcodingAutoConfiguration.class)
-public @interface EnableEzcoding {
+public @interface EnableEzcodingFoundation {
 
 }

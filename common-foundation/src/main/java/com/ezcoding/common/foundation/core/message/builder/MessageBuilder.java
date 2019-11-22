@@ -15,7 +15,6 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,11 +32,11 @@ public class MessageBuilder implements IMessageBuilder {
 
     private IMessageBuilderHandler defaultMessageBuilder = new JsonMessageBuilderHandler();
 
-    private Charset defaultReadCharset = StandardCharsets.UTF_8;
-    private Charset defaultWriteCharset = StandardCharsets.UTF_8;
+    private Charset defaultReadCharset = Charset.forName(DEFAULT_READ_CHARSET);
+    private Charset defaultWriteCharset = Charset.forName(DEFAULT_WRITE_CHARSET);
 
-    private MessageTypeEnum defaultReadMessageType = MessageTypeEnum.JSON;
-    private MessageTypeEnum defaultWriteMessageType = MessageTypeEnum.JSON;
+    private MessageTypeEnum defaultReadMessageType = MessageTypeEnum.valueOf(DEFAULT_READ_MESSAGE_TYPE);
+    private MessageTypeEnum defaultWriteMessageType = MessageTypeEnum.valueOf(DEFAULT_WRITE_MESSAGE_TYPE);
 
     private String defaultConsumerId;
 
@@ -234,6 +233,9 @@ public class MessageBuilder implements IMessageBuilder {
     }
 
     private static final class MessageBuilderHolder {
+
         private static MessageBuilder INSTANCE = new MessageBuilder();
+
     }
+
 }

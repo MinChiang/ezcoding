@@ -1,5 +1,6 @@
-package com.ezcoding.common.foundation.core.exception;
+package com.ezcoding.common.foundation.core.exception.specific;
 
+import com.ezcoding.common.foundation.core.exception.AbstractApplicationException;
 import com.ezcoding.common.foundation.util.ApplicationUtils;
 
 /**

@@ -7,22 +7,21 @@ import org.apache.commons.lang3.StringUtils;
  * @version 1.0.0
  * @date 2019-11-10 13:52
  */
-public class ModuleLayer extends ApplicationLayer {
+public class ModuleLayerModule extends ApplicationLayerModule {
 
-    private static int moduleCodeLength = 4;
-
+    private static int moduleCodeLength = MODULE_CODE_LENGTH;
     protected final String moduleName;
     protected final String moduleCode;
 
-    public ModuleLayer(String applicationName, String applicationCode, String moduleName, String moduleCode) {
+    public ModuleLayerModule(String applicationName, String applicationCode, String moduleName, String moduleCode) {
         super(applicationName, applicationCode);
         this.moduleName = moduleName;
         this.moduleCode = moduleCode;
         this.validate();
     }
 
-    public ModuleLayer(ApplicationLayer applicationLayer, String moduleName, String moduleCode) {
-        this(applicationLayer.getApplicationName(), applicationLayer.getApplicationCode(), moduleName, moduleCode);
+    public ModuleLayerModule(ApplicationLayerModule applicationLayerModule, String moduleName, String moduleCode) {
+        this(applicationLayerModule.getApplicationName(), applicationLayerModule.getApplicationCode(), moduleName, moduleCode);
     }
 
     /**
@@ -33,7 +32,7 @@ public class ModuleLayer extends ApplicationLayer {
             throw new IllegalArgumentException("模块名称，模块码不能为空");
         }
         if (moduleCode.length() != moduleCodeLength) {
-            throw new IllegalArgumentException("模块码长度必须为" + moduleCodeLength);
+            throw new IllegalArgumentException("模块码长度必须为" + MODULE_CODE_LENGTH);
         }
     }
 
@@ -60,7 +59,7 @@ public class ModuleLayer extends ApplicationLayer {
     }
 
     public static void setModuleCodeLength(int moduleCodeLength) {
-        ModuleLayer.moduleCodeLength = moduleCodeLength;
+        ModuleLayerModule.moduleCodeLength = moduleCodeLength;
     }
 
 }

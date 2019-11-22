@@ -1,4 +1,4 @@
-package com.ezcoding.base.web.extend.spring.config;
+package com.ezcoding.starter.foundation.config;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ezcoding.base.web.extend.core.PageConvertor;
@@ -6,7 +6,6 @@ import com.ezcoding.base.web.extend.core.PageInfoConverter;
 import com.ezcoding.base.web.extend.spring.aspect.ServiceLoggerAspect;
 import com.ezcoding.base.web.extend.spring.resolver.JsonRequestMessageResolver;
 import com.ezcoding.base.web.util.PageUtils;
-import com.ezcoding.common.foundation.core.constant.GlobalConstants;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
 import com.ezcoding.common.foundation.core.message.head.PageInfo;
@@ -14,7 +13,6 @@ import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.tools.jwt.AuthSettings;
 import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeUUIDProducer;
-import com.ezcoding.common.foundation.util.ApplicationUtils;
 import com.ezcoding.common.foundation.util.ConvertUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -25,10 +23,10 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
@@ -45,8 +43,8 @@ import java.util.Locale;
  * @version 1.0.0
  * @date 2019-11-11 10:47
  */
-//@Configuration
-@EnableConfigurationProperties(EzcodingConfigBean.class)
+@Configuration
+@EnableConfigurationProperties(EzcodingFoundationConfigBean.class)
 public class EzcodingAutoConfiguration implements InitializingBean {
 
     private static final String ENCODING = "UTF-8";
@@ -54,16 +52,13 @@ public class EzcodingAutoConfiguration implements InitializingBean {
     private static final String DIR = "validation";
 
     @Autowired
-    private EzcodingConfigBean ezcodingConfigBean;
-
-    @Value("${spring.application.name}")
-    private String defaultConsumerId;
+    private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
 
     @Bean
     public IUUIDProducer snowflakeUUIDProducer() {
-        //高六位为微服务的服务对应序号，低4位为此类微服务对应的机器号
-        int mechineId = (ApplicationUtils.getApplicationMetadata().getCategoryCode() << (SnowflakeUUIDProducer.MACHINE_BIT - GlobalConstants.Application.APPLICATION_CODE_BIT_LENGTH)) | ApplicationUtils.getApplicationMetadata().getCategoryNo();
-        return new SnowflakeUUIDProducer(ApplicationUtils.getApplicationMetadata().getDataCenterNo(), mechineId);
+//        //高六位为微服务的服务对应序号，低4位为此类微服务对应的机器号
+//        int mechineId = (ApplicationUtils.getApplicationMetadata().getCategoryCode() << (SnowflakeUUIDProducer.MACHINE_BIT - GlobalConstants.Application.APPLICATION_CODE_BIT_LENGTH)) | ApplicationUtils.getApplicationMetadata().getCategoryNo();
+        return new SnowflakeUUIDProducer(ezcodingFoundationConfigBean.getMetadata().getDataCenterNo(), ezcodingFoundationConfigBean.getMetadata().getCategoryNo());
     }
 
     @Primary
@@ -101,7 +96,7 @@ public class EzcodingAutoConfiguration implements InitializingBean {
         MessageBuilder.configHandler(MessageTypeEnum.JSON, jsonMessageBuilderHandler);
         MessageBuilder.setIdProducer(producer);
 
-        MessageConfigBean message = ezcodingConfigBean.getMessage();
+        MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
 
         MessageBuilder instance = MessageBuilder.getInstance();
         instance.setDefaultErrorResponseCode(message.getErrorResponseCode());
@@ -111,7 +106,7 @@ public class EzcodingAutoConfiguration implements InitializingBean {
         instance.setDefaultMessageBuilder(jsonMessageBuilderHandler);
         instance.setDefaultReadCharset(Charset.forName(message.getReadCharset()));
         instance.setDefaultWriteCharset(Charset.forName(message.getWriteCharset()));
-        instance.setDefaultConsumerId(this.defaultConsumerId);
+//        instance.setDefaultConsumerId(this.defaultConsumerId);
 
         instance.setDefaultReadMessageType(MessageTypeEnum.valueOf(message.getReadMessageType()));
         instance.setDefaultWriteMessageType(MessageTypeEnum.valueOf(message.getWriteMessageType()));
@@ -120,23 +115,13 @@ public class EzcodingAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    public ServiceLoggerAspect serviceLoggerAspect() {
-        return new ServiceLoggerAspect();
-    }
-
-    @Bean
     public AuthSettings authSettings() {
-        AuthConfigBean auth = ezcodingConfigBean.getAuth();
+        AuthConfigBean auth = ezcodingFoundationConfigBean.getAuth();
 
         AuthSettings authSettings = new AuthSettings();
         authSettings.setExpiration(auth.getExpiration());
         authSettings.setHeader(auth.getHeader());
         return authSettings;
-    }
-
-    @Bean
-    public JsonRequestMessageResolver requestMessageResolver(MessageBuilder messageBuilder) {
-        return new JsonRequestMessageResolver(messageBuilder);
     }
 
     /**
@@ -171,7 +156,7 @@ public class EzcodingAutoConfiguration implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() {
-        MetadataConfigBean metadata = ezcodingConfigBean.getMetadata();
+        MetadataConfigBean metadata = ezcodingFoundationConfigBean.getMetadata();
         if (metadata == null) {
             throw new Error("配置元数据不能为空");
         }
@@ -180,7 +165,7 @@ public class EzcodingAutoConfiguration implements InitializingBean {
 
     @Deprecated
     private void doRegisterConverUtils() {
-        MessageConfigBean message = ezcodingConfigBean.getMessage();
+        MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
 
         //关于标准报文头的分页类型转换插件
         ConvertUtils.register(new PageInfoConverter(new PageInfo(message.getCurrentPage(), message.getPageSize())), PageInfo.class);
@@ -191,7 +176,7 @@ public class EzcodingAutoConfiguration implements InitializingBean {
     }
 
     private void doInitPageUtils() {
-        MessageConfigBean message = ezcodingConfigBean.getMessage();
+        MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
 
         PageUtils.setDefaultCurrentPage(message.getCurrentPage());
         PageUtils.setDefaultPageSize(message.getPageSize());

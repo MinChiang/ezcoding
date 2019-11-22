@@ -3,7 +3,7 @@ package com.ezcoding.common.web.resolver;
 import com.ezcoding.common.core.user.model.IUser;
 import com.ezcoding.common.core.user.resolve.CurrentUserLoader;
 import com.ezcoding.common.core.user.resolve.IUserProxyable;
-import com.ezcoding.common.foundation.core.exception.CommonApplicationExceptionConstants;
+import com.ezcoding.common.foundation.core.exception.specific.CommonApplicationExceptionConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
