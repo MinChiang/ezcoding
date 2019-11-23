@@ -1,10 +1,9 @@
-package com.ezcoding.base.web.extend.validation;
+package com.ezcoding.common.foundation.core.validation;
 
 import org.hibernate.validator.internal.metadata.descriptor.ConstraintDescriptorImpl;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.hibernate.validator.spi.resourceloading.ResourceBundleLocator;
 
-import javax.el.ExpressionFactory;
 import java.util.Locale;
 
 /**
@@ -31,10 +30,6 @@ public class PrependMessageInterpolator extends ResourceBundleMessageInterpolato
 
     public PrependMessageInterpolator(ResourceBundleLocator userResourceBundleLocator, boolean cachingEnabled) {
         super(userResourceBundleLocator, cachingEnabled);
-    }
-
-    public PrependMessageInterpolator(ResourceBundleLocator userResourceBundleLocator, boolean cachingEnabled, ExpressionFactory expressionFactory) {
-        super(userResourceBundleLocator, cachingEnabled, expressionFactory);
     }
 
     @Override

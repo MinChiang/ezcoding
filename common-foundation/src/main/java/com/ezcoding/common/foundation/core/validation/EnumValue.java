@@ -1,4 +1,4 @@
-package com.ezcoding.base.web.extend.validation;
+package com.ezcoding.common.foundation.core.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

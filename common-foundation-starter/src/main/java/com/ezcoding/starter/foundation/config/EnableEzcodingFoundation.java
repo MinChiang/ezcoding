@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import(EzcodingAutoConfiguration.class)
+@Import(EzcodingFoundationAutoConfiguration.class)
 public @interface EnableEzcodingFoundation {
 
 }

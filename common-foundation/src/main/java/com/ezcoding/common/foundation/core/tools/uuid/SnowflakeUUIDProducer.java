@@ -32,9 +32,9 @@ public class SnowflakeUUIDProducer implements IUUIDProducer {
     /**
      * 每一部分的最大值
      */
-    private final static long MAX_DATACENTER_NUM = ~(-1L << DATACENTER_BIT);
-    private final static long MAX_MACHINE_NUM = ~(-1L << MACHINE_BIT);
-    private final static long MAX_SEQUENCE = ~(-1L << SEQUENCE_BIT);
+    public final static long MAX_DATACENTER_NUM = ~(-1L << DATACENTER_BIT);
+    public final static long MAX_MACHINE_NUM = ~(-1L << MACHINE_BIT);
+    public final static long MAX_SEQUENCE = ~(-1L << SEQUENCE_BIT);
 
     /**
      * 每一部分向左的位移
@@ -65,7 +65,7 @@ public class SnowflakeUUIDProducer implements IUUIDProducer {
 
     public SnowflakeUUIDProducer(long datacenterId, long machineId) {
         if (datacenterId > MAX_DATACENTER_NUM || datacenterId < 0) {
-            throw new IllegalArgumentException("数据中心号码不能小于0或者大于" + datacenterId);
+            throw new IllegalArgumentException("数据中心号码不能小于0或者大于" + MAX_DATACENTER_NUM);
         }
         if (machineId > MAX_MACHINE_NUM || machineId < 0) {
             throw new IllegalArgumentException("机器号码不能小于0或者大于" + MAX_MACHINE_NUM);

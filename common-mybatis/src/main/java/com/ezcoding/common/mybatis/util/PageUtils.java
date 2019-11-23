@@ -12,8 +12,8 @@ import com.ezcoding.common.foundation.core.message.head.PageInfo;
  */
 public class PageUtils {
 
-    private static int defaultCurrentPage = 1;
-    private static int defaultPageSize = 10;
+    private static int defaultCurrentPage = PageInfo.CURRENT_PAGE;
+    private static int defaultPageSize = PageInfo.CURRENT_PAGE;
 
     private PageUtils() {
 
