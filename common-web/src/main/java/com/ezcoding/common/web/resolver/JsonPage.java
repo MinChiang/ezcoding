@@ -27,13 +27,13 @@ public @interface JsonPage {
      *
      * @return 默认当前页码
      */
-    int defaultCurrentPage() default PageInfo.CURRENT_PAGE;
+    int defaultCurrentPage();
 
     /**
      * 默认每页条数
      *
      * @return 默认每页条数
      */
-    int defaultPageSize() default PageInfo.PAGE_SIZE;
+    int defaultPageSize();
 
 }

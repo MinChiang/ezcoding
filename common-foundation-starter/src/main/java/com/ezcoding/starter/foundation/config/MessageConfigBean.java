@@ -24,7 +24,7 @@ public class MessageConfigBean {
     private String errorResponseMessage = ErrorAppHead.getDefaultErrorMessage();
     private String successResponseMessage = SuccessAppHead.getDefaultSuceessMessage();
 
-    private Integer currentPage = PageInfo.CURRENT_PAGE;
-    private Integer pageSize = PageInfo.PAGE_SIZE;
+    private Integer currentPage = PageInfo.getDefaultCurrentPage();
+    private Integer pageSize = PageInfo.getDefaultPageSize();
 
 }

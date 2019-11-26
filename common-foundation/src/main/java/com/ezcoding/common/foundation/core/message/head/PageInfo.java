@@ -15,11 +15,11 @@ public class PageInfo implements Cloneable, Serializable, Mappable {
     /**
      * 当前页码
      */
-    public static final int CURRENT_PAGE = 1;
+    public static int DEFAULT_CURRENT_PAGE = 1;
     /**
      * 每页的条数
      */
-    public static final int PAGE_SIZE = 10;
+    public static int DEFAULT_PAGE_SIZE = 10;
 
     @JsonProperty
     protected Integer pageSize;
@@ -69,6 +69,22 @@ public class PageInfo implements Cloneable, Serializable, Mappable {
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    public static int getDefaultCurrentPage() {
+        return DEFAULT_CURRENT_PAGE;
+    }
+
+    public static void setDefaultCurrentPage(int defaultCurrentPage) {
+        DEFAULT_CURRENT_PAGE = defaultCurrentPage;
+    }
+
+    public static int getDefaultPageSize() {
+        return DEFAULT_PAGE_SIZE;
+    }
+
+    public static void setDefaultPageSize(int defaultPageSize) {
+        DEFAULT_PAGE_SIZE = defaultPageSize;
     }
 
 }
