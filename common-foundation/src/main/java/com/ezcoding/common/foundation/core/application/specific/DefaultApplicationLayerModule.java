@@ -1,4 +1,6 @@
-package com.ezcoding.common.foundation.core.application;
+package com.ezcoding.common.foundation.core.application.specific;
+
+import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
 
 /**
  * @author MinChiang
@@ -8,7 +10,7 @@ package com.ezcoding.common.foundation.core.application;
 public class DefaultApplicationLayerModule extends ApplicationLayerModule {
 
     private DefaultApplicationLayerModule() {
-        super(DEFAULT_APPLICATION_NAME, IModuleNameable.fillBlankChar(String.valueOf(FILL_CHAR)));
+        super(DEFAULT_APPLICATION_NAME, String.valueOf(FILL_CHAR));
     }
 
     public static ApplicationLayerModule getInstance() {

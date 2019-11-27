@@ -21,7 +21,7 @@ public class ModuleLayerModule extends ApplicationLayerModule {
             throw new IllegalArgumentException("模块码长度必须小于等于" + MODULE_CODE_LENGTH);
         }
         this.moduleName = moduleName;
-        this.moduleCode = IModuleNameable.fillBlankChar(moduleCode);
+        this.moduleCode = StringUtils.leftPad(moduleCode, MODULE_CODE_LENGTH, FILL_CHAR);
     }
 
     public ModuleLayerModule(ApplicationLayerModule applicationLayerModule, String moduleName, String moduleCode) {

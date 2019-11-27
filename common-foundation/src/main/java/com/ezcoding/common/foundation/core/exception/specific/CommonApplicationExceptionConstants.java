@@ -1,6 +1,6 @@
 package com.ezcoding.common.foundation.core.exception.specific;
 
-import com.ezcoding.common.foundation.core.application.DefaultModuleLayerModule;
+import com.ezcoding.common.foundation.core.application.specific.DefaultModuleLayerModule;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.exception.ExceptionBuilderFactory;
 

@@ -9,6 +9,7 @@ import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeUUIDProducer;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
+import com.ezcoding.common.foundation.util.ConvertUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -56,6 +57,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() {
+        ConvertUtils.init();
 //        MetadataConfigBean metadata = ezcodingFoundationConfigBean.getMetadata();
 //        if (metadata == null) {
 //            throw new Error("配置元数据不能为空");

@@ -21,7 +21,7 @@ public class FunctionLayerModule extends ModuleLayerModule {
             throw new IllegalArgumentException("模块码长度必须小于等于" + FUNCTION_CODE_LENGTH);
         }
         this.functionName = functionName;
-        this.functionCode = IModuleNameable.fillBlankChar(functionCode);
+        this.functionCode = StringUtils.leftPad(functionCode, FUNCTION_CODE_LENGTH, FILL_CHAR);
     }
 
     public FunctionLayerModule(ModuleLayerModule moduleLayerModule, String functionName, String functionCode) {

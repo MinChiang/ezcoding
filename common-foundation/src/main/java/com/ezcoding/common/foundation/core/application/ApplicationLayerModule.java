@@ -23,7 +23,7 @@ public class ApplicationLayerModule implements IModuleNameable {
         }
 
         this.applicationName = applicationName;
-        this.applicationCode = IModuleNameable.fillBlankChar(applicationCode);
+        this.applicationCode = StringUtils.leftPad(applicationCode, APPLICATION_CODE_LENGTH, FILL_CHAR);;
     }
 
     @Override

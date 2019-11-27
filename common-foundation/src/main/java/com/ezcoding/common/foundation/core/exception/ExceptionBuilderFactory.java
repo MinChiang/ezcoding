@@ -29,8 +29,9 @@ public class ExceptionBuilderFactory<E extends AbstractApplicationException> {
      */
     private ModuleLayerModule moduleLayerModule;
 
-    private ExceptionBuilderFactory(Class<E> e, String detailCode, String template) {
+    private ExceptionBuilderFactory(Class<E> e, ModuleLayerModule moduleLayerModule, String detailCode, String template) {
         this.e = e;
+        this.moduleLayerModule = moduleLayerModule;
         this.detailCode = detailCode;
         this.template = template;
     }
@@ -46,7 +47,7 @@ public class ExceptionBuilderFactory<E extends AbstractApplicationException> {
      * @return 构造器实例
      */
     public static <E extends AbstractApplicationException> ExceptionBuilderFactory<E> create(Class<E> e, ModuleLayerModule moduleLayerModule, String detailCode, String template) {
-        return new ExceptionBuilderFactory<>(e, detailCode, template);
+        return new ExceptionBuilderFactory<>(e, moduleLayerModule, detailCode, template);
     }
 
     /**

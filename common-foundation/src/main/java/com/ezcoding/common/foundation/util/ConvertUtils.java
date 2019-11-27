@@ -18,6 +18,13 @@ public class ConvertUtils extends org.apache.commons.beanutils.ConvertUtils {
     public static final char SPLITTER = ',';
 
     static {
+        init();
+    }
+
+    /**
+     * 初始化
+     */
+    public static void init() {
         registerStandard();
         registerExtra();
     }
