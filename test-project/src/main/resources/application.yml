@@ -1,4 +1,4 @@
 spring:
   messages:
-    basename: i18n/messages
+    basename: i18n/**/messages
     encoding: UTF-8

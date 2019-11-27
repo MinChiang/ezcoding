@@ -1,5 +1,7 @@
 package com.ezcoding.common.foundation.core.exception;
 
+import com.ezcoding.common.foundation.core.application.IModuleNameable;
+
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -15,7 +17,7 @@ public interface IApplicationException {
     /**
      * 空缺内容填补字符
      */
-    char FILL_CHAR = '0';
+    char FILL_CHAR = IModuleNameable.FILL_CHAR;
 
     /**
      * 获取完整的错误码

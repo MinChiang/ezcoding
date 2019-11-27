@@ -1,6 +1,7 @@
 package com.ezcoding.common.foundation.core.exception;
 
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 业务定义异常
@@ -28,8 +29,14 @@ public abstract class AbstractApplicationException extends RuntimeException impl
 
     public AbstractApplicationException(ModuleLayerModule moduleLayerModule, String detailCode, String message, Throwable cause) {
         super(message, cause);
+        if (moduleLayerModule == null || StringUtils.isAnyEmpty(detailCode, message)) {
+            throw new IllegalArgumentException("应用模块、详细错误码、错误信息不能为空");
+        }
+        if (detailCode.length() > DETAIL_CODE_LENGTH) {
+            throw new IllegalArgumentException("详细错误码长度必须小于等于" + DETAIL_CODE_LENGTH);
+        }
         this.moduleLayerModule = moduleLayerModule;
-        this.detailCode = detailCode;
+        this.detailCode = StringUtils.leftPad(detailCode, DETAIL_CODE_LENGTH, FILL_CHAR);
     }
 
     @Override

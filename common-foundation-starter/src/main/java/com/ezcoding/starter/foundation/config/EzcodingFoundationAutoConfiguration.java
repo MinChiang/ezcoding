@@ -52,6 +52,9 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @Autowired
     private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
 
+    @Autowired
+    private MessageSource messageSource;
+
     /**
      * 注册默认分页类型
      */
@@ -145,6 +148,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 
     @Bean
     public AuthSettings authSettings() {
+        String message = messageSource.getMessage("user.code", null, Locale.getDefault());
         return ezcodingFoundationConfigBean.getAuth();
     }
 
