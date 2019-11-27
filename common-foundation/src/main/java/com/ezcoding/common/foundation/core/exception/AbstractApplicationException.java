@@ -39,15 +39,16 @@ public abstract class AbstractApplicationException extends RuntimeException impl
 
     @Override
     public String toString() {
-        return "模块" +
-                moduleLayerModule.getName() +
-                "发生异常：\n错误类型：" +
+        return "发生异常：" +
+                "\n\t错误类型：" +
                 getClass().getName() +
-                "\n指令代码：" +
+                "\n\t错误模块：" +
+                moduleLayerModule.getName() +
+                "\n\t指令代码：" +
                 getCode() +
-                "\n错误信息：" +
+                "\n\t错误信息：" +
                 getLocalizedMessage() +
-                "\n发生原因：" +
+                "\n\t发生原因：" +
                 getCause();
     }
 
