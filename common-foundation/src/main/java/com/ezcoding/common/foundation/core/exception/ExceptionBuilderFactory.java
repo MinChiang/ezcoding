@@ -1,5 +1,7 @@
 package com.ezcoding.common.foundation.core.exception;
 
+import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
+
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -22,6 +24,11 @@ public class ExceptionBuilderFactory<E extends AbstractApplicationException> {
      */
     private String template;
 
+    /**
+     * 错误所属模块
+     */
+    private ModuleLayerModule moduleLayerModule;
+
     private ExceptionBuilderFactory(Class<E> e, String detailCode, String template) {
         this.e = e;
         this.detailCode = detailCode;
@@ -31,13 +38,14 @@ public class ExceptionBuilderFactory<E extends AbstractApplicationException> {
     /**
      * 创建构造器实例
      *
-     * @param e          错误类型
-     * @param detailCode 错误详情码
-     * @param template   模板内容
-     * @param <E>        错误类型
+     * @param e                 错误类型
+     * @param moduleLayerModule 所属模块号
+     * @param detailCode        错误详情码
+     * @param template          模板内容
+     * @param <E>               错误类型
      * @return 构造器实例
      */
-    public static <E extends AbstractApplicationException> ExceptionBuilderFactory<E> create(Class<E> e, String detailCode, String template) {
+    public static <E extends AbstractApplicationException> ExceptionBuilderFactory<E> create(Class<E> e, ModuleLayerModule moduleLayerModule, String detailCode, String template) {
         return new ExceptionBuilderFactory<>(e, detailCode, template);
     }
 
@@ -47,7 +55,7 @@ public class ExceptionBuilderFactory<E extends AbstractApplicationException> {
      * @return 异常创建器
      */
     public ExceptionBuilder<E> instance() {
-        return new ExceptionBuilder<>(this.e, this.detailCode, this.template);
+        return new ExceptionBuilder<>(this.e, this.moduleLayerModule, this.detailCode, this.template);
     }
 
 }

@@ -4,7 +4,6 @@ import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
 import com.ezcoding.common.foundation.core.message.head.SuccessAppHead;
-import com.ezcoding.common.foundation.util.ConvertUtils;
 import com.ezcoding.common.web.resolver.parameter.IRequestMessageParameterResolvable;
 import com.ezcoding.common.web.resolver.returnValue.IResponseMessageReturnValueResolvable;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -73,7 +72,7 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
 
         //如果获取不到对象
         if (requestMessage == null) {
-            return ConvertUtils.convert(null, parameter.getParameterType());
+            return null;
         }
 
         IRequestMessageParameterResolvable resolvable = parameterResolvables

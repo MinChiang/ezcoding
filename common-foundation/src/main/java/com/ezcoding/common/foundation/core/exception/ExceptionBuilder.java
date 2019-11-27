@@ -1,5 +1,6 @@
 package com.ezcoding.common.foundation.core.exception;
 
+import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.Constructor;
@@ -22,6 +23,11 @@ public class ExceptionBuilder<E extends AbstractApplicationException> {
     private Class<E> e;
 
     /**
+     * 错误所属模块
+     */
+    private ModuleLayerModule moduleLayerModule;
+
+    /**
      * 错误详情码
      */
     private String detailCode;
@@ -41,8 +47,9 @@ public class ExceptionBuilder<E extends AbstractApplicationException> {
      */
     private Throwable cause;
 
-    ExceptionBuilder(Class<E> e, String detailCode, String template) {
+    ExceptionBuilder(Class<E> e, ModuleLayerModule moduleLayerModule, String detailCode, String template) {
         this.e = e;
+        this.moduleLayerModule = moduleLayerModule;
         this.detailCode = detailCode;
         this.template = template;
     }
@@ -117,9 +124,9 @@ public class ExceptionBuilder<E extends AbstractApplicationException> {
     public E build() {
         try {
             String translate = translator.translate(template, this.params);
-            Constructor<E> constructor = this.e.getDeclaredConstructor(String.class, String.class, Throwable.class);
+            Constructor<E> constructor = this.e.getDeclaredConstructor(ModuleLayerModule.class, String.class, String.class, Throwable.class);
             constructor.setAccessible(true);
-            return constructor.newInstance(this.detailCode, translate, this.cause);
+            return constructor.newInstance(this.moduleLayerModule, this.detailCode, translate, this.cause);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

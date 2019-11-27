@@ -11,26 +11,19 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ApplicationLayerModule implements IModuleNameable {
 
-    private static int applicationCodeLength = APPLICATION_CODE_LENGTH;
     protected final String applicationName;
     protected final String applicationCode;
 
     public ApplicationLayerModule(String applicationName, String applicationCode) {
-        this.applicationName = applicationName;
-        this.applicationCode = applicationCode;
-        this.validate();
-    }
-
-    /**
-     * 验证输入参数
-     */
-    private void validate() {
         if (StringUtils.isAnyEmpty(applicationName, applicationCode)) {
             throw new IllegalArgumentException("系统名称，系统码不能为空");
         }
-        if (applicationCode.length() != applicationCodeLength) {
-            throw new IllegalArgumentException("系统码长度必须为" + APPLICATION_CODE_LENGTH);
+        if (applicationCode.length() > APPLICATION_CODE_LENGTH) {
+            throw new IllegalArgumentException("系统码长度必须小于等于" + APPLICATION_CODE_LENGTH);
         }
+
+        this.applicationName = applicationName;
+        this.applicationCode = IModuleNameable.fillBlankChar(applicationCode);
     }
 
     @Override
@@ -43,20 +36,17 @@ public class ApplicationLayerModule implements IModuleNameable {
         return applicationCode;
     }
 
+    @Override
+    public String getName() {
+        return applicationName;
+    }
+
     public String getApplicationName() {
         return applicationName;
     }
 
     public String getApplicationCode() {
         return applicationCode;
-    }
-
-    public static int getApplicationCodeLength() {
-        return applicationCodeLength;
-    }
-
-    public static void setApplicationCodeLength(int applicationCodeLength) {
-        ApplicationLayerModule.applicationCodeLength = applicationCodeLength;
     }
 
 }

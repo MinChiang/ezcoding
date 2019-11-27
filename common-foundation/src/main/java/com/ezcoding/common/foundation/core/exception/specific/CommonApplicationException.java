@@ -1,7 +1,7 @@
 package com.ezcoding.common.foundation.core.exception.specific;
 
+import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.exception.AbstractApplicationException;
-import com.ezcoding.common.foundation.util.ApplicationUtils;
 
 /**
  * @author MinChiang
@@ -10,10 +10,8 @@ import com.ezcoding.common.foundation.util.ApplicationUtils;
  */
 public class CommonApplicationException extends AbstractApplicationException {
 
-    public static final String APPLICATION_MODULE_CODE = "0000";
-
-    CommonApplicationException(String detailCode, String message, Throwable cause) {
-        super(ApplicationUtils.getApplicationMetadata().getCategoryFormat(), APPLICATION_MODULE_CODE, detailCode, message, cause);
+    CommonApplicationException(ModuleLayerModule moduleLayerModule, String detailCode, String message, Throwable cause) {
+        super(moduleLayerModule, detailCode, message, cause);
     }
 
 }

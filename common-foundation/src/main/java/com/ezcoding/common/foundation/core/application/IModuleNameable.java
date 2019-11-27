@@ -1,5 +1,7 @@
 package com.ezcoding.common.foundation.core.application;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -11,6 +13,7 @@ public interface IModuleNameable {
     String NAMEABLE_MODULE_SPLITTER = ":";
     String UNDER_LINE_SPLITTER = "_";
     String MIDDLE_LINE_SPLITTER = "-";
+    String DOT_SPLITTER = ".";
 
     /**
      * 系统号长度
@@ -28,9 +31,24 @@ public interface IModuleNameable {
     int FUNCTION_CODE_LENGTH = 4;
 
     /**
+     * 空缺内容填补字符
+     */
+    char FILL_CHAR = '0';
+
+    /**
      * 功能性号码总长度
      */
     int DETAIL_CODE_LENGHT = APPLICATION_CODE_LENGTH + MODULE_CODE_LENGTH + FUNCTION_CODE_LENGTH;
+
+    /**
+     * 默认的全局应用名称
+     */
+    String DEFAULT_APPLICATION_NAME = "application";
+
+    /**
+     * 默认的全局模块名称
+     */
+    String DEFAULT_MODULE_NAME = "module";
 
     /**
      * 获取模块整体路径
@@ -46,5 +64,22 @@ public interface IModuleNameable {
      * @return 唯一标志号码
      */
     String getCode();
+
+    /**
+     * 获取模块名称
+     *
+     * @return 模块名称
+     */
+    String getName();
+
+    /**
+     * 填充空缺的字符
+     *
+     * @param code 待填充的字符串
+     * @return 填充好的字符串
+     */
+    static String fillBlankChar(String code) {
+        return StringUtils.leftPad(code, APPLICATION_CODE_LENGTH, FILL_CHAR);
+    }
 
 }
