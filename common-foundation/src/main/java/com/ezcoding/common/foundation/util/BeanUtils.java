@@ -27,13 +27,13 @@ public class BeanUtils {
         OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.ALWAYS);
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         OBJECT_MAPPER.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
-        OBJECT_MAPPER.setLocale(Locale.CHINESE);
+        OBJECT_MAPPER.setLocale(Locale.SIMPLIFIED_CHINESE);
 
         OBJECT_MAPPER_WITHOUT_NULL = new ObjectMapper();
         OBJECT_MAPPER_WITHOUT_NULL.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         OBJECT_MAPPER_WITHOUT_NULL.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         OBJECT_MAPPER_WITHOUT_NULL.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
-        OBJECT_MAPPER_WITHOUT_NULL.setLocale(Locale.CHINESE);
+        OBJECT_MAPPER_WITHOUT_NULL.setLocale(Locale.SIMPLIFIED_CHINESE);
     }
 
     private BeanUtils() {

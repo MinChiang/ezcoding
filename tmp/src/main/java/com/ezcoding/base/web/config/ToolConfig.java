@@ -100,7 +100,7 @@ public class ToolConfig implements InitializingBean {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
-        objectMapper.setLocale(Locale.CHINESE);
+        objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
 
         //将long转化为string，解决序列化long精度丢失的问题
         SimpleModule simpleModule = new SimpleModule();
@@ -122,7 +122,7 @@ public class ToolConfig implements InitializingBean {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
-        objectMapper.setLocale(Locale.CHINESE);
+        objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
         //带上对应的@class标志
         objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
         return objectMapper;

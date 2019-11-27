@@ -80,7 +80,7 @@ public class GatewayToolConfig {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
-        objectMapper.setLocale(Locale.CHINESE);
+        objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
         return objectMapper;
     }
 
@@ -95,7 +95,7 @@ public class GatewayToolConfig {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
-        objectMapper.setLocale(Locale.CHINESE);
+        objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
         //带上对应的@class标志
         objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
         return objectMapper;
