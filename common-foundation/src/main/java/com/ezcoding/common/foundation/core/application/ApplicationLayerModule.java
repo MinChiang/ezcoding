@@ -2,6 +2,8 @@ package com.ezcoding.common.foundation.core.application;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 /**
  * 应用（服务）级别模块
  *
@@ -23,7 +25,7 @@ public class ApplicationLayerModule implements IModuleNameable {
         }
 
         this.applicationName = applicationName;
-        this.applicationCode = StringUtils.leftPad(applicationCode, APPLICATION_CODE_LENGTH, FILL_CHAR);;
+        this.applicationCode = StringUtils.leftPad(applicationCode, APPLICATION_CODE_LENGTH, FILL_CHAR);
     }
 
     @Override
@@ -47,6 +49,24 @@ public class ApplicationLayerModule implements IModuleNameable {
 
     public String getApplicationCode() {
         return applicationCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ApplicationLayerModule that = (ApplicationLayerModule) o;
+        return Objects.equals(applicationName, that.applicationName) &&
+                Objects.equals(applicationCode, that.applicationCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(applicationName, applicationCode);
     }
 
 }

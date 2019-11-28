@@ -1,4 +1,4 @@
-package com;
+package com.ezcoding.test;
 
 import com.ezcoding.starter.foundation.config.EnableEzcodingFoundation;
 import org.springframework.boot.SpringApplication;

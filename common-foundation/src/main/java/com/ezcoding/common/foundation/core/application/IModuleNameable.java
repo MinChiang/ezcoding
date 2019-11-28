@@ -41,16 +41,6 @@ public interface IModuleNameable {
     int DETAIL_CODE_LENGHT = APPLICATION_CODE_LENGTH + MODULE_CODE_LENGTH + FUNCTION_CODE_LENGTH;
 
     /**
-     * 默认的全局应用名称
-     */
-    String DEFAULT_APPLICATION_NAME = "application";
-
-    /**
-     * 默认的全局模块名称
-     */
-    String DEFAULT_MODULE_NAME = "module";
-
-    /**
      * 获取模块整体路径
      *
      * @param pathSplitter 路径分隔符

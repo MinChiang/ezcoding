@@ -2,6 +2,8 @@ package com.ezcoding.common.foundation.core.application;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -49,6 +51,27 @@ public class ModuleLayerModule extends ApplicationLayerModule {
     @Override
     public String getName() {
         return super.getName() + DOT_SPLITTER + moduleName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        ModuleLayerModule that = (ModuleLayerModule) o;
+        return Objects.equals(moduleName, that.moduleName) &&
+                Objects.equals(moduleCode, that.moduleCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), moduleName, moduleCode);
     }
 
 }

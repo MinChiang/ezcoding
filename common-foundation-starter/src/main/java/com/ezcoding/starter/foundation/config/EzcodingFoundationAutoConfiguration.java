@@ -148,7 +148,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 
     @Bean
     public AuthSettings authSettings() {
-        String message = messageSource.getMessage("user.code", null, Locale.getDefault());
         return ezcodingFoundationConfigBean.getAuth();
     }
 

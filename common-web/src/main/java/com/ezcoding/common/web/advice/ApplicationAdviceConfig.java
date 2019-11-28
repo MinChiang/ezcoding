@@ -1,7 +1,8 @@
 package com.ezcoding.common.web.advice;
 
 import com.ezcoding.common.foundation.core.exception.AbstractApplicationException;
-import com.ezcoding.common.foundation.core.exception.specific.CommonApplicationExceptionConstants;
+import com.ezcoding.common.foundation.core.exception.CommonApplicationException;
+import com.ezcoding.common.foundation.core.exception.ExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import org.slf4j.Logger;
@@ -19,6 +20,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.util.Set;
+
+import static com.ezcoding.common.foundation.core.exception.CommonApplicationException.*;
 
 /**
  * 程序统一错误管理器
@@ -41,7 +44,10 @@ public class ApplicationAdviceConfig {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("请求类型异常：", e);
         }
-        return this.messageBuilder.buildErrorResponseMessage(CommonApplicationExceptionConstants.COMMON_REQUEST_TYPE_ERROR, e.getCause());
+        return this.messageBuilder.buildErrorResponseMessage(
+                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_REQUEST_TYPE_ERROR),
+                e.getCause()
+        );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -50,7 +56,10 @@ public class ApplicationAdviceConfig {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("参数校验异常：", e);
         }
-        return this.messageBuilder.buildErrorResponseMessage(CommonApplicationExceptionConstants.COMMON_PARAM_VALIDATE_ERROR.instance().cause(e).build(), null);
+        return this.messageBuilder.buildErrorResponseMessage(
+                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().cause(e).build(),
+                null
+        );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -62,7 +71,10 @@ public class ApplicationAdviceConfig {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("参数校验异常：{}", result);
         }
-        return this.messageBuilder.buildErrorResponseMessage(CommonApplicationExceptionConstants.COMMON_PARAM_VALIDATE_ERROR.instance().param(result).build(), null);
+        return this.messageBuilder.buildErrorResponseMessage(
+                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().param(result).build(),
+                null
+        );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -75,13 +87,19 @@ public class ApplicationAdviceConfig {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("参数校验异常：{}", result);
         }
-        return this.messageBuilder.buildErrorResponseMessage(CommonApplicationExceptionConstants.COMMON_PARAM_VALIDATE_ERROR.instance().param(result).build(), null);
+        return this.messageBuilder.buildErrorResponseMessage(
+                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().param(result).build(),
+                null
+        );
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = NoHandlerFoundException.class)
     public ResponseMessage handleNoHandlerFoundException(NoHandlerFoundException e) throws IOException {
-        return this.messageBuilder.buildErrorResponseMessage(CommonApplicationExceptionConstants.COMMON_RESOURCE_NOT_FIND_ERROR, null);
+        return this.messageBuilder.buildErrorResponseMessage(
+                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_RESOURCE_NOT_FIND_ERROR),
+                null
+        );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

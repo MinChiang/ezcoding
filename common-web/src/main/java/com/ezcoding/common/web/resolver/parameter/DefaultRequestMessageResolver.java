@@ -1,6 +1,7 @@
 package com.ezcoding.common.web.resolver.parameter;
 
-import com.ezcoding.common.foundation.core.exception.specific.CommonApplicationExceptionConstants;
+import com.ezcoding.common.foundation.core.exception.CommonApplicationException;
+import com.ezcoding.common.foundation.core.exception.ExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.util.ConvertUtils;
 import com.ezcoding.common.web.resolver.JsonParam;
@@ -9,6 +10,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
+
+import static com.ezcoding.common.foundation.core.exception.CommonApplicationException.COMMON_PARAM_PARSE_ERROR;
 
 /**
  * @author MinChiang
@@ -38,7 +41,7 @@ public class DefaultRequestMessageResolver extends AbstractRequestMessageResolve
             try {
                 payload = payload.at(value);
             } catch (Exception e) {
-                throw CommonApplicationExceptionConstants.COMMON_PARAM_PARSE_ERROR.instance().param("未知的参数路径" + value).cause(e).build();
+                throw ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_PARSE_ERROR).instance().param("未知的参数路径" + value).cause(e).build();
             }
         }
         if (payload == null || payload.isMissingNode()) {
@@ -53,7 +56,7 @@ public class DefaultRequestMessageResolver extends AbstractRequestMessageResolve
             try {
                 result = this.objectMapper.convertValue(payload, javaType);
             } catch (Exception e) {
-                throw CommonApplicationExceptionConstants.COMMON_PARAM_PARSE_ERROR.instance().param("无法将" + payload + "转化为类型" + javaType).cause(e).build();
+                throw ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_PARSE_ERROR).instance().param("无法将" + payload + "转化为类型" + javaType).cause(e).build();
             }
         }
         return result;
