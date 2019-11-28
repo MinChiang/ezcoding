@@ -18,13 +18,6 @@ public interface IUser extends IUserIdentifiable {
     Long getId();
 
     /**
-     * 获取用户账号
-     *
-     * @return 用户账号
-     */
-    String getAccount();
-
-    /**
      * 获取用户名字
      *
      * @return 用户名字
@@ -37,20 +30,6 @@ public interface IUser extends IUserIdentifiable {
      * @return 用户性别
      */
     GenderEnum getGender();
-
-    /**
-     * 获取用户手机号
-     *
-     * @return 用户手机号
-     */
-    String getPhone();
-
-    /**
-     * 获取用户邮箱
-     *
-     * @return 用户邮箱
-     */
-    String getEmail();
 
     /**
      * 获取用户地址

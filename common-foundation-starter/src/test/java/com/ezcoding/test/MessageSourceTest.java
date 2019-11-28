@@ -1,5 +1,8 @@
 package com.ezcoding.test;
 
+import com.ezcoding.common.foundation.core.application.constants.ModuleConstants;
+import com.ezcoding.common.foundation.core.exception.CommonApplicationException;
+import com.ezcoding.common.foundation.core.exception.ExceptionBuilderFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +26,19 @@ public class MessageSourceTest {
 
     @Test
     public void testMessageSource() {
-        String message = messageSource.getMessage("user.code", null, Locale.SIMPLIFIED_CHINESE);
+        String message = messageSource.getMessage("notNull", new Object[]{"user.code"}, Locale.SIMPLIFIED_CHINESE);
         System.out.println(message);
+    }
+
+    @Test
+    public void testMessageSourceTranslator() {
+        CommonApplicationException build = ExceptionBuilderFactory
+                .register(CommonApplicationException.class, ModuleConstants.DEFAULT_MODULE_LAYER_MODULE, "10", "notNull", "haha")
+                .instance()
+                .params("user.code", "user.account")
+                .build();
+
+        System.out.println(build.toString());
     }
 
 }

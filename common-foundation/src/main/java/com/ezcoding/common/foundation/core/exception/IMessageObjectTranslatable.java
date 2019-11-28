@@ -12,9 +12,10 @@ public interface IMessageObjectTranslatable {
     /**
      * 翻译错误内容
      *
-     * @param params 参数内容
+     * @param template 内容模板
+     * @param params   参数内容
      * @return 翻译后的字符串
      */
-    String translate(String code, List<Object> params);
+    String translate(String template, List<Object> params);
 
 }
