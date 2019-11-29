@@ -59,7 +59,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     public void afterPropertiesSet() {
         ConvertUtils.init();
 
-        ExceptionBuilder.configTranslator(new MessageSourceTranslator(messageSource));
+//        ExceptionBuilder.configTranslator(new MessageSourceTranslator(messageSource));
     }
 
     @Primary

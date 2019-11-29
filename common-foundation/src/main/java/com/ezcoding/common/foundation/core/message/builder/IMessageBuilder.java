@@ -145,6 +145,7 @@ public interface IMessageBuilder {
      * 构造失败响应信息
      *
      * @param abstractApplicationException 程序异常
+     * @param payload                      返回内容
      * @return 失败响应信息
      * @throws IOException IO异常
      */
@@ -153,11 +154,30 @@ public interface IMessageBuilder {
     /**
      * 构造失败响应信息
      *
+     * @param businessException 程序异常
+     * @return 失败响应信息
+     * @throws IOException IO异常
+     */
+    <T> ResponseMessage<T> buildErrorResponseMessage(AbstractApplicationException businessException) throws IOException;
+
+    /**
+     * 构造失败响应信息
+     *
      * @param factory 程序异常工厂
+     * @param payload 返回内容
      * @return 失败响应信息
      * @throws IOException IO异常
      */
     <T> ResponseMessage<T> buildErrorResponseMessage(ExceptionBuilderFactory factory, T payload) throws IOException;
+
+    /**
+     * 构造失败响应信息
+     *
+     * @param factory 程序异常工厂
+     * @return 失败响应信息
+     * @throws IOException IO异常
+     */
+    <T> ResponseMessage<T> buildErrorResponseMessage(ExceptionBuilderFactory factory) throws IOException;
 
     /**
      * 构造响应信息字符串

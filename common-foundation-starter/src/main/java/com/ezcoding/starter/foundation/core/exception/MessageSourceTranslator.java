@@ -14,18 +14,37 @@ import java.util.Locale;
 public class MessageSourceTranslator implements IMessageObjectTranslatable {
 
     private MessageSource messageSource;
+    private LocaleResolvable localeResolvable = new DefaultLocaleResolver();
 
     public MessageSourceTranslator(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
+    public MessageSourceTranslator(MessageSource messageSource, LocaleResolvable localeResolvable) {
+        this.messageSource = messageSource;
+        this.localeResolvable = localeResolvable;
+    }
+
     @Override
     public String translate(String template, List<Object> params) {
         Object[] objects = null;
+        Locale locale = localeResolvable.resolve();
         if (params != null) {
-            objects = params.stream().map(param -> messageSource.getMessage(param.toString(), null, Locale.SIMPLIFIED_CHINESE)).toArray();
+            objects = params.stream().map(param -> messageSource.getMessage(param.toString(), null, locale)).toArray();
         }
-        return messageSource.getMessage(template, objects, Locale.SIMPLIFIED_CHINESE);
+        return messageSource.getMessage(template, objects, locale);
+    }
+
+    public MessageSource getMessageSource() {
+        return messageSource;
+    }
+
+    public LocaleResolvable getLocaleResolvable() {
+        return localeResolvable;
+    }
+
+    public void setLocaleResolvable(LocaleResolvable localeResolvable) {
+        this.localeResolvable = localeResolvable;
     }
 
 }

@@ -1,7 +1,7 @@
 package com.ezcoding.common.core.user.resolve;
 
 import com.ezcoding.common.core.user.model.IUser;
-import com.ezcoding.common.core.user.model.UserDTO;
+import com.ezcoding.common.core.user.model.User;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public class CurrentUserLoader implements IUserLoadable {
                 .stream()
                 .map(IUserLoadable::load)
                 .findFirst()
-                .orElse(new UserDTO());
+                .orElse(new User());
     }
 
     public static void registerLoaders(IUserLoadable loadable) {
@@ -82,7 +82,7 @@ public class CurrentUserLoader implements IUserLoadable {
 
         @Override
         public IUser load() {
-            return new UserDTO();
+            return new User();
         }
 
     }

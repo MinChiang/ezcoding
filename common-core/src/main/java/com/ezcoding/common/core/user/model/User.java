@@ -12,7 +12,7 @@ import java.util.Date;
  * @date 2019-01-05 10:21
  */
 @Data
-public class UserDTO implements IUser {
+public class User implements IUser {
 
     /**
      * 用户id

@@ -57,8 +57,7 @@ public class ApplicationAdviceConfig {
             LOGGER.error("参数校验异常：", e);
         }
         return this.messageBuilder.buildErrorResponseMessage(
-                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().cause(e).build(),
-                null
+                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().cause(e).build()
         );
     }
 
@@ -72,8 +71,7 @@ public class ApplicationAdviceConfig {
             LOGGER.error("参数校验异常：{}", result);
         }
         return this.messageBuilder.buildErrorResponseMessage(
-                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().param(result).build(),
-                null
+                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().param(result).build()
         );
     }
 
@@ -88,8 +86,7 @@ public class ApplicationAdviceConfig {
             LOGGER.error("参数校验异常：{}", result);
         }
         return this.messageBuilder.buildErrorResponseMessage(
-                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().param(result).build(),
-                null
+                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().param(result).build()
         );
     }
 
@@ -97,8 +94,7 @@ public class ApplicationAdviceConfig {
     @ExceptionHandler(value = NoHandlerFoundException.class)
     public ResponseMessage handleNoHandlerFoundException(NoHandlerFoundException e) throws IOException {
         return this.messageBuilder.buildErrorResponseMessage(
-                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_RESOURCE_NOT_FIND_ERROR),
-                null
+                ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_RESOURCE_NOT_FIND_ERROR)
         );
     }
 

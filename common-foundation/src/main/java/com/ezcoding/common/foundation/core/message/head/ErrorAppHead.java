@@ -6,6 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.util.List;
 
+import static com.ezcoding.common.foundation.core.application.IModuleNameable.DETAIL_CODE_LENGHT;
+
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -14,7 +16,7 @@ import java.util.List;
 public class ErrorAppHead extends ResponseAppHead implements Serializable {
 
     public static String defaultErrorMessage = "发生未知错误";
-    public static String defaultErrorCode = StringUtils.repeat("9", IModuleNameable.DETAIL_CODE_LENGHT);
+    public static String defaultErrorCode = StringUtils.repeat("9", DETAIL_CODE_LENGHT);
 
     public ErrorAppHead() {
         super(defaultErrorCode, defaultErrorMessage);

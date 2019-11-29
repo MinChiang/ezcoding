@@ -140,8 +140,18 @@ public class MessageBuilder implements IMessageBuilder {
     }
 
     @Override
+    public <T> ResponseMessage<T> buildErrorResponseMessage(AbstractApplicationException businessException) {
+        return this.buildErrorResponseMessage(businessException.getCode(), businessException.getMessage(), null);
+    }
+
+    @Override
     public <T> ResponseMessage<T> buildErrorResponseMessage(ExceptionBuilderFactory factory, T payload) {
         return this.buildErrorResponseMessage(factory.instance().build(), payload);
+    }
+
+    @Override
+    public <T> ResponseMessage<T> buildErrorResponseMessage(ExceptionBuilderFactory factory) {
+        return this.buildErrorResponseMessage(factory.instance().build(), null);
     }
 
     @Override

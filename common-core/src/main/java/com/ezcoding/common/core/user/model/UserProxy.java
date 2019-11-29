@@ -43,7 +43,7 @@ public class UserProxy implements IUser {
         synchronized (this) {
             //如果被代理对象中没有对应的用户编号，则直接空解析
             if (StringUtils.isEmpty(this.user.getCode())) {
-                this.user = new UserDTO();
+                this.user = new User();
                 this.resolved = true;
                 return this.user;
             }

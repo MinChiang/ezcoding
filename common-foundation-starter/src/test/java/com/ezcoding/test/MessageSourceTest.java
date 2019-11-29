@@ -26,8 +26,11 @@ public class MessageSourceTest {
 
     @Test
     public void testMessageSource() {
-        String message = messageSource.getMessage("notNull", new Object[]{"user.code"}, Locale.SIMPLIFIED_CHINESE);
+        String message = messageSource.getMessage("user.code", null, Locale.SIMPLIFIED_CHINESE);
         System.out.println(message);
+
+        String assertFalse = messageSource.getMessage("javax.validation.constraints.AssertFalse", null, Locale.SIMPLIFIED_CHINESE);
+        System.out.println(assertFalse);
     }
 
     @Test
