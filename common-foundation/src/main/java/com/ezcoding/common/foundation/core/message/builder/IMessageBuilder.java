@@ -1,7 +1,6 @@
 package com.ezcoding.common.foundation.core.message.builder;
 
-import com.ezcoding.common.foundation.core.exception.AbstractApplicationException;
-import com.ezcoding.common.foundation.core.exception.ExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.head.*;
@@ -111,7 +110,7 @@ public interface IMessageBuilder {
      * @return 成功响应信息
      * @throws IOException IO异常
      */
-    ResponseMessage buildSuccessResponseMessage() throws IOException;
+    ResponseMessage<?> buildSuccessResponseMessage() throws IOException;
 
     /**
      * 构造失败响应信息
@@ -119,7 +118,7 @@ public interface IMessageBuilder {
      * @return 失败响应信息
      * @throws IOException IO异常
      */
-    ResponseMessage buildErrorResponseMessage() throws IOException;
+    ResponseMessage<?> buildErrorResponseMessage() throws IOException;
 
     /**
      * 构造失败响应信息
@@ -144,12 +143,12 @@ public interface IMessageBuilder {
     /**
      * 构造失败响应信息
      *
-     * @param abstractApplicationException 程序异常
-     * @param payload                      返回内容
+     * @param applicationException 程序异常
+     * @param payload              返回内容
      * @return 失败响应信息
      * @throws IOException IO异常
      */
-    <T> ResponseMessage<T> buildErrorResponseMessage(AbstractApplicationException abstractApplicationException, T payload) throws IOException;
+    <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException applicationException, T payload) throws IOException;
 
     /**
      * 构造失败响应信息
@@ -158,26 +157,7 @@ public interface IMessageBuilder {
      * @return 失败响应信息
      * @throws IOException IO异常
      */
-    <T> ResponseMessage<T> buildErrorResponseMessage(AbstractApplicationException businessException) throws IOException;
-
-    /**
-     * 构造失败响应信息
-     *
-     * @param factory 程序异常工厂
-     * @param payload 返回内容
-     * @return 失败响应信息
-     * @throws IOException IO异常
-     */
-    <T> ResponseMessage<T> buildErrorResponseMessage(ExceptionBuilderFactory factory, T payload) throws IOException;
-
-    /**
-     * 构造失败响应信息
-     *
-     * @param factory 程序异常工厂
-     * @return 失败响应信息
-     * @throws IOException IO异常
-     */
-    <T> ResponseMessage<T> buildErrorResponseMessage(ExceptionBuilderFactory factory) throws IOException;
+    <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException businessException) throws IOException;
 
     /**
      * 构造响应信息字符串

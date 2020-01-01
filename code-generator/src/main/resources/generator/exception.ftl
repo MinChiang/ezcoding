@@ -1,6 +1,6 @@
 package ${componentPath};
 
-import com.ezcoding.common.foundation.core.exception.AbstractApplicationException;
+import com.ezcoding.common.foundation.core.exception.ApplicationException;
 
 /**
 * @author ${author}

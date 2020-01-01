@@ -1,7 +1,6 @@
 package com.ezcoding.common.foundation.core.message.builder;
 
-import com.ezcoding.common.foundation.core.exception.AbstractApplicationException;
-import com.ezcoding.common.foundation.core.exception.ExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.handler.IMessageBuilderHandler;
@@ -120,12 +119,12 @@ public class MessageBuilder implements IMessageBuilder {
     }
 
     @Override
-    public ResponseMessage buildSuccessResponseMessage() {
+    public ResponseMessage<?> buildSuccessResponseMessage() {
         return this.buildSuccessResponseMessage(null);
     }
 
     @Override
-    public ResponseMessage buildErrorResponseMessage() {
+    public ResponseMessage<?> buildErrorResponseMessage() {
         return this.buildErrorResponseMessage(ErrorAppHead.getDefaultErrorCode(), ErrorAppHead.getDefaultErrorMessage(), null);
     }
 
@@ -135,23 +134,13 @@ public class MessageBuilder implements IMessageBuilder {
     }
 
     @Override
-    public <T> ResponseMessage<T> buildErrorResponseMessage(AbstractApplicationException businessException, T payload) {
-        return this.buildErrorResponseMessage(businessException.getCode(), businessException.getMessage(), payload);
+    public <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException businessException, T payload) {
+        return this.buildErrorResponseMessage(businessException.getIdentification(), businessException.getMessage(), payload);
     }
 
     @Override
-    public <T> ResponseMessage<T> buildErrorResponseMessage(AbstractApplicationException businessException) {
-        return this.buildErrorResponseMessage(businessException.getCode(), businessException.getMessage(), null);
-    }
-
-    @Override
-    public <T> ResponseMessage<T> buildErrorResponseMessage(ExceptionBuilderFactory factory, T payload) {
-        return this.buildErrorResponseMessage(factory.instance().build(), payload);
-    }
-
-    @Override
-    public <T> ResponseMessage<T> buildErrorResponseMessage(ExceptionBuilderFactory factory) {
-        return this.buildErrorResponseMessage(factory.instance().build(), null);
+    public <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException businessException) {
+        return this.buildErrorResponseMessage(businessException.getIdentification(), businessException.getMessage(), null);
     }
 
     @Override

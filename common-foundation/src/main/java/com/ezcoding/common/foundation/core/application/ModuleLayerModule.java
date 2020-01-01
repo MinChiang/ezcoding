@@ -65,13 +65,12 @@ public class ModuleLayerModule extends ApplicationLayerModule {
             return false;
         }
         ModuleLayerModule that = (ModuleLayerModule) o;
-        return Objects.equals(moduleName, that.moduleName) &&
-                Objects.equals(moduleCode, that.moduleCode);
+        return moduleCode.equals(that.moduleCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), moduleName, moduleCode);
+        return Objects.hash(super.hashCode(), moduleCode);
     }
 
 }

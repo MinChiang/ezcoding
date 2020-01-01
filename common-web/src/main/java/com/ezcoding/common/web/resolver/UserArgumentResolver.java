@@ -4,7 +4,7 @@ import com.ezcoding.common.core.user.model.IUser;
 import com.ezcoding.common.core.user.resolve.CurrentUserLoader;
 import com.ezcoding.common.core.user.resolve.IUserProxyable;
 import com.ezcoding.common.foundation.core.exception.CommonApplicationException;
-import com.ezcoding.common.foundation.core.exception.ExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -43,7 +43,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         //校验当前是否必须含有登陆用户
         if (parameterAnnotation.required()) {
             if (user == null || StringUtils.isEmpty(user.getCode())) {
-                throw ExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_USER_NOT_LOGIN_ERROR).instance().build();
+                throw BaseModuleExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_USER_NOT_LOGIN_ERROR).instance().build();
             }
         }
 

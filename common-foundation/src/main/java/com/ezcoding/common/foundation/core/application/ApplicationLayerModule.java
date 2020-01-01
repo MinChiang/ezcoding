@@ -60,13 +60,12 @@ public class ApplicationLayerModule implements IModuleNameable {
             return false;
         }
         ApplicationLayerModule that = (ApplicationLayerModule) o;
-        return Objects.equals(applicationName, that.applicationName) &&
-                Objects.equals(applicationCode, that.applicationCode);
+        return applicationCode.equals(that.applicationCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(applicationName, applicationCode);
+        return Objects.hash(applicationCode);
     }
 
 }

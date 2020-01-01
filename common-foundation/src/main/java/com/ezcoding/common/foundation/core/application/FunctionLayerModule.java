@@ -65,13 +65,12 @@ public class FunctionLayerModule extends ModuleLayerModule {
             return false;
         }
         FunctionLayerModule that = (FunctionLayerModule) o;
-        return Objects.equals(functionName, that.functionName) &&
-                Objects.equals(functionCode, that.functionCode);
+        return functionCode.equals(that.functionCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), functionName, functionCode);
+        return Objects.hash(super.hashCode(), functionCode);
     }
 
 }

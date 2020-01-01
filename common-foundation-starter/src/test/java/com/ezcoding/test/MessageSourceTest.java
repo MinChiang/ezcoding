@@ -1,8 +1,8 @@
 package com.ezcoding.test;
 
-import com.ezcoding.common.foundation.core.application.constants.ModuleConstants;
-import com.ezcoding.common.foundation.core.exception.CommonApplicationException;
-import com.ezcoding.common.foundation.core.exception.ExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.ModuleExceptionIdentification;
+import com.ezcoding.starter.foundation.core.exception.MessageSourceTemplateExceptionBuilder;
+import com.ezcoding.starter.foundation.core.exception.ModuleExceptionBuilderFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Locale;
+import static com.ezcoding.starter.foundation.core.exception.ExceptionCodeGeneratorConstants.COMMON_NO_PERMISSION_ERROR;
 
 /**
  * @author MinChiang
@@ -25,23 +25,14 @@ public class MessageSourceTest {
     private MessageSource messageSource;
 
     @Test
-    public void testMessageSource() {
-        String message = messageSource.getMessage("user.code", null, Locale.SIMPLIFIED_CHINESE);
-        System.out.println(message);
-
-        String assertFalse = messageSource.getMessage("javax.validation.constraints.AssertFalse", null, Locale.SIMPLIFIED_CHINESE);
-        System.out.println(assertFalse);
-    }
-
-    @Test
     public void testMessageSourceTranslator() {
-        CommonApplicationException build = ExceptionBuilderFactory
-                .register(CommonApplicationException.class, ModuleConstants.DEFAULT_MODULE_LAYER_MODULE, "10", "notNull", "haha")
-                .instance()
-                .params("user.code", "user.account")
-                .build();
+        ModuleExceptionIdentification.setDefaultCodeLength(2);
+        ModuleExceptionIdentification.setDefaultFillChar('_');
 
-        System.out.println(build.toString());
+        ModuleExceptionBuilderFactory moduleExceptionBuilderFactory = new ModuleExceptionBuilderFactory(messageSource);
+        MessageSourceTemplateExceptionBuilder messageSourceTemplateExceptionBuilder = moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_NO_PERMISSION_ERROR, "user.template", "user.code", "user.account");
+        System.out.println(messageSourceTemplateExceptionBuilder.build().toString());
+
     }
 
 }

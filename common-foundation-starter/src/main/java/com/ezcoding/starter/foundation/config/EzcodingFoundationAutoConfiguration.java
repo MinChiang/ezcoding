@@ -1,6 +1,5 @@
 package com.ezcoding.starter.foundation.config;
 
-import com.ezcoding.common.foundation.core.exception.ExceptionBuilder;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
@@ -11,7 +10,6 @@ import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeUUIDProducer;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.util.ConvertUtils;
-import com.ezcoding.starter.foundation.core.exception.MessageSourceTranslator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DeserializationFeature;

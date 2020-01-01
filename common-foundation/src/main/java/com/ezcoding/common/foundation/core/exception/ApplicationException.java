@@ -1,0 +1,42 @@
+package com.ezcoding.common.foundation.core.exception;
+
+/**
+ * 业务定义异常
+ *
+ * @author MinChiang
+ * @version 1.0.0
+ * @date 2018-08-26 23:22
+ */
+public class ApplicationException extends RuntimeException implements IApplicationIdentifiable {
+
+    /**
+     * 错误标识
+     */
+    private final String identification;
+
+    public ApplicationException(String identification, String message, Throwable cause) {
+        super(message, cause);
+        this.identification = identification;
+    }
+
+    @Override
+    public String getIdentification() {
+        return this.identification;
+    }
+
+    @Override
+    public String getSummary() {
+        return getMessage();
+    }
+
+    @Override
+    public String toString() {
+        Throwable cause = getCause();
+        return "\n发生异常：" +
+                "\n\t指令代码：" +
+                getIdentification() +
+                "\n\t错误信息：" +
+                getLocalizedMessage();
+    }
+
+}
