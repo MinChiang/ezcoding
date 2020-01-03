@@ -61,10 +61,10 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         ConvertUtils.init();
-        configApplicationMetadata();
+        initApplicationMetadata();
     }
 
-    private void configApplicationMetadata() {
+    private void initApplicationMetadata() {
         MetadataConfigBean metadata = ezcodingFoundationConfigBean.getMetadata();
         ApplicationLayerModule.setApplicationCodeLength(metadata.getApplicationCodeLength());
         ApplicationLayerModule.setApplicationFillChar(metadata.getApplicationFillChar());
@@ -86,20 +86,20 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     public IUUIDProducer snowflakeUUIDProducer() {
 //        //高六位为微服务的服务对应序号，低4位为此类微服务对应的机器号
 //        int mechineId = (ApplicationUtils.getApplicationMetadata().getCategoryCode() << (SnowflakeUUIDProducer.MACHINE_BIT - GlobalConstants.Application.APPLICATION_CODE_BIT_LENGTH)) | ApplicationUtils.getApplicationMetadata().getCategoryNo();
-        long datacenterId = RandomUtils.nextLong(0, SnowflakeUUIDProducer.MAX_DATACENTER_NUM);
-        long machineId = RandomUtils.nextLong(0, SnowflakeUUIDProducer.MAX_MACHINE_NUM);
-//        if (ezcodingFoundationConfigBean.getMetadata() != null) {
-//            datacenterId = ezcodingFoundationConfigBean.getMetadata().getDataCenterNo();
-//            machineId = ezcodingFoundationConfigBean.getMetadata().getCategoryNo();
-//        }
+
+        Optional<MetadataConfigBean> metadata = Optional.ofNullable(ezcodingFoundationConfigBean.getMetadata());
+        Long datacenterId = metadata
+                .map(MetadataConfigBean::getDataCenterNo)
+                .orElseGet(() -> RandomUtils.nextLong(0, SnowflakeUUIDProducer.MAX_DATACENTER_NUM));
+        Long machineId = metadata
+                .map(MetadataConfigBean::getCategoryNo)
+                .orElseGet(() -> RandomUtils.nextLong(0, SnowflakeUUIDProducer.MAX_MACHINE_NUM));
         return new SnowflakeUUIDProducer(datacenterId, machineId);
     }
 
     @ConditionalOnMissingBean(OriginalUUIDProducer.class)
     @Bean("originalUUIDProducer")
     public IUUIDProducer originalUUIDProducer() {
-//        //高六位为微服务的服务对应序号，低4位为此类微服务对应的机器号
-//        int mechineId = (ApplicationUtils.getApplicationMetadata().getCategoryCode() << (SnowflakeUUIDProducer.MACHINE_BIT - GlobalConstants.Application.APPLICATION_CODE_BIT_LENGTH)) | ApplicationUtils.getApplicationMetadata().getCategoryNo();
         return OriginalUUIDProducer.getInstance();
     }
 
@@ -141,7 +141,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         MessageBuilder.setIdProducer(producer);
 
         MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
-
         MessageBuilder instance = MessageBuilder.getInstance();
         instance.setDefaultErrorResponseCode(message.getErrorResponseCode());
         instance.setDefaultSuccessResponseCode(message.getSuccessResponseCode());
