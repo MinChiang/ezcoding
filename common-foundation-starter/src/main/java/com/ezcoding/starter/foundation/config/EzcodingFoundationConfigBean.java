@@ -21,6 +21,6 @@ public class EzcodingFoundationConfigBean {
     private AuthSettings auth = new AuthSettings();
 
     @NestedConfigurationProperty
-    private MetadataConfigBean metadata;
+    private MetadataConfigBean metadata = new MetadataConfigBean();
 
 }

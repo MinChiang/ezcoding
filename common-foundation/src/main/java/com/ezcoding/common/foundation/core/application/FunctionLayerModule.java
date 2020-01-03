@@ -11,6 +11,9 @@ import java.util.Objects;
  */
 public class FunctionLayerModule extends ModuleLayerModule {
 
+    protected static int functionCodeLength = FUNCTION_CODE_LENGTH;
+    protected static char functionFillChar = FILL_CHAR;
+
     protected final String functionName;
     protected final String functionCode;
 
@@ -19,11 +22,11 @@ public class FunctionLayerModule extends ModuleLayerModule {
         if (StringUtils.isAnyEmpty(functionName, functionCode)) {
             throw new IllegalArgumentException("功能名称，功能码不能为空");
         }
-        if (functionCode.length() != FUNCTION_CODE_LENGTH) {
-            throw new IllegalArgumentException("模块码长度必须小于等于" + FUNCTION_CODE_LENGTH);
+        if (functionCode.length() != functionCodeLength) {
+            throw new IllegalArgumentException("模块码长度必须小于等于" + functionCodeLength);
         }
         this.functionName = functionName;
-        this.functionCode = StringUtils.leftPad(functionCode, FUNCTION_CODE_LENGTH, FILL_CHAR);
+        this.functionCode = StringUtils.leftPad(functionCode, functionCodeLength, functionFillChar);
     }
 
     public FunctionLayerModule(ModuleLayerModule moduleLayerModule, String functionName, String functionCode) {
@@ -71,6 +74,22 @@ public class FunctionLayerModule extends ModuleLayerModule {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), functionCode);
+    }
+
+    public static int getFunctionCodeLength() {
+        return functionCodeLength;
+    }
+
+    public static void setFunctionCodeLength(int functionCodeLength) {
+        FunctionLayerModule.functionCodeLength = functionCodeLength;
+    }
+
+    public static char getFunctionFillChar() {
+        return functionFillChar;
+    }
+
+    public static void setFunctionFillChar(char functionFillChar) {
+        FunctionLayerModule.functionFillChar = functionFillChar;
     }
 
 }

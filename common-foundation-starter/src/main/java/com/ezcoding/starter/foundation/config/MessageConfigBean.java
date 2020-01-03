@@ -1,10 +1,14 @@
 package com.ezcoding.starter.foundation.config;
 
-import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
-import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
-import com.ezcoding.common.foundation.core.message.head.PageInfo;
-import com.ezcoding.common.foundation.core.message.head.SuccessAppHead;
 import lombok.Data;
+
+import static com.ezcoding.common.foundation.core.message.builder.IMessageBuilder.*;
+import static com.ezcoding.common.foundation.core.message.head.ErrorAppHead.getDefaultErrorCode;
+import static com.ezcoding.common.foundation.core.message.head.ErrorAppHead.getDefaultErrorMessage;
+import static com.ezcoding.common.foundation.core.message.head.PageInfo.getDefaultCurrentPage;
+import static com.ezcoding.common.foundation.core.message.head.PageInfo.getDefaultPageSize;
+import static com.ezcoding.common.foundation.core.message.head.SuccessAppHead.getDefaultSuccessCode;
+import static com.ezcoding.common.foundation.core.message.head.SuccessAppHead.getDefaultSuceessMessage;
 
 /**
  * @author MinChiang
@@ -14,17 +18,17 @@ import lombok.Data;
 @Data
 public class MessageConfigBean {
 
-    private String readCharset = IMessageBuilder.DEFAULT_READ_CHARSET;
-    private String writeCharset = IMessageBuilder.DEFAULT_WRITE_CHARSET;
-    private String readMessageType = IMessageBuilder.DEFAULT_READ_MESSAGE_TYPE;
-    private String writeMessageType = IMessageBuilder.DEFAULT_WRITE_MESSAGE_TYPE;
+    private String readCharset = DEFAULT_READ_CHARSET;
+    private String writeCharset = DEFAULT_WRITE_CHARSET;
+    private String readMessageType = DEFAULT_READ_MESSAGE_TYPE;
+    private String writeMessageType = DEFAULT_WRITE_MESSAGE_TYPE;
 
-    private String errorResponseCode = ErrorAppHead.getDefaultErrorCode();
-    private String successResponseCode = SuccessAppHead.getDefaultSuccessCode();
-    private String errorResponseMessage = ErrorAppHead.getDefaultErrorMessage();
-    private String successResponseMessage = SuccessAppHead.getDefaultSuceessMessage();
+    private String errorResponseCode = getDefaultErrorCode();
+    private String successResponseCode = getDefaultSuccessCode();
+    private String errorResponseMessage = getDefaultErrorMessage();
+    private String successResponseMessage = getDefaultSuceessMessage();
 
-    private Integer currentPage = PageInfo.getDefaultCurrentPage();
-    private Integer pageSize = PageInfo.getDefaultPageSize();
+    private Integer currentPage = getDefaultCurrentPage();
+    private Integer pageSize = getDefaultPageSize();
 
 }

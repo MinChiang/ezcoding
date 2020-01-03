@@ -11,6 +11,9 @@ import java.util.Objects;
  */
 public class ModuleLayerModule extends ApplicationLayerModule {
 
+    protected static int moduleCodeLength = MODULE_CODE_LENGTH;
+    protected static char moduleFillChar = FILL_CHAR;
+
     protected final String moduleName;
     protected final String moduleCode;
 
@@ -19,11 +22,11 @@ public class ModuleLayerModule extends ApplicationLayerModule {
         if (StringUtils.isAnyEmpty(moduleName, moduleCode)) {
             throw new IllegalArgumentException("模块名称，模块码不能为空");
         }
-        if (moduleCode.length() > MODULE_CODE_LENGTH) {
-            throw new IllegalArgumentException("模块码长度必须小于等于" + MODULE_CODE_LENGTH);
+        if (moduleCode.length() > moduleCodeLength) {
+            throw new IllegalArgumentException("模块码长度必须小于等于" + moduleCodeLength);
         }
         this.moduleName = moduleName;
-        this.moduleCode = StringUtils.leftPad(moduleCode, MODULE_CODE_LENGTH, FILL_CHAR);
+        this.moduleCode = StringUtils.leftPad(moduleCode, moduleCodeLength, moduleFillChar);
     }
 
     public ModuleLayerModule(ApplicationLayerModule applicationLayerModule, String moduleName, String moduleCode) {
@@ -71,6 +74,22 @@ public class ModuleLayerModule extends ApplicationLayerModule {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), moduleCode);
+    }
+
+    public static int getModuleCodeLength() {
+        return moduleCodeLength;
+    }
+
+    public static void setModuleCodeLength(int moduleCodeLength) {
+        ModuleLayerModule.moduleCodeLength = moduleCodeLength;
+    }
+
+    public static char getModuleFillChar() {
+        return moduleFillChar;
+    }
+
+    public static void setModuleFillChar(char moduleFillChar) {
+        ModuleLayerModule.moduleFillChar = moduleFillChar;
     }
 
 }

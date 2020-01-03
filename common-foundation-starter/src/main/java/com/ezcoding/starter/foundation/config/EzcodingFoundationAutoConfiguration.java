@@ -1,5 +1,8 @@
 package com.ezcoding.starter.foundation.config;
 
+import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
+import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
+import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
@@ -10,6 +13,7 @@ import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeUUIDProducer;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.util.ConvertUtils;
+import com.ezcoding.starter.foundation.core.exception.ModuleExceptionBuilderFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -35,6 +39,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.nio.charset.Charset;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * @author MinChiang
@@ -56,8 +61,23 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         ConvertUtils.init();
+        configApplicationMetadata();
+    }
 
-//        ExceptionBuilder.configTranslator(new MessageSourceTranslator(messageSource));
+    private void configApplicationMetadata() {
+        MetadataConfigBean metadata = ezcodingFoundationConfigBean.getMetadata();
+        ApplicationLayerModule.setApplicationCodeLength(metadata.getApplicationCodeLength());
+        ApplicationLayerModule.setApplicationFillChar(metadata.getApplicationFillChar());
+        ModuleLayerModule.setModuleCodeLength(metadata.getModuleCodeLength());
+        ModuleLayerModule.setModuleFillChar(metadata.getModuleFillChar());
+        FunctionLayerModule.setFunctionCodeLength(metadata.getFunctionCodeLength());
+        FunctionLayerModule.setFunctionFillChar(metadata.getFunctionFillChar());
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ModuleExceptionBuilderFactory.class)
+    public ModuleExceptionBuilderFactory moduleExceptionBuilderFactory() {
+        return new ModuleExceptionBuilderFactory(messageSource);
     }
 
     @Primary
@@ -68,10 +88,10 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 //        int mechineId = (ApplicationUtils.getApplicationMetadata().getCategoryCode() << (SnowflakeUUIDProducer.MACHINE_BIT - GlobalConstants.Application.APPLICATION_CODE_BIT_LENGTH)) | ApplicationUtils.getApplicationMetadata().getCategoryNo();
         long datacenterId = RandomUtils.nextLong(0, SnowflakeUUIDProducer.MAX_DATACENTER_NUM);
         long machineId = RandomUtils.nextLong(0, SnowflakeUUIDProducer.MAX_MACHINE_NUM);
-        if (ezcodingFoundationConfigBean.getMetadata() != null) {
-            datacenterId = ezcodingFoundationConfigBean.getMetadata().getDataCenterNo();
-            machineId = ezcodingFoundationConfigBean.getMetadata().getCategoryNo();
-        }
+//        if (ezcodingFoundationConfigBean.getMetadata() != null) {
+//            datacenterId = ezcodingFoundationConfigBean.getMetadata().getDataCenterNo();
+//            machineId = ezcodingFoundationConfigBean.getMetadata().getCategoryNo();
+//        }
         return new SnowflakeUUIDProducer(datacenterId, machineId);
     }
 

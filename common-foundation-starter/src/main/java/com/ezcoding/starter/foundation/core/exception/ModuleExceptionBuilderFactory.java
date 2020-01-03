@@ -2,6 +2,7 @@ package com.ezcoding.starter.foundation.core.exception;
 
 import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.exception.IExceptionCodeGeneratable;
+import com.ezcoding.common.foundation.core.exception.TemplateExceptionCodeGenerator;
 import org.springframework.context.MessageSource;
 
 /**
@@ -17,12 +18,12 @@ public class ModuleExceptionBuilderFactory extends BaseModuleExceptionBuilderFac
         this.messageSource = messageSource;
     }
 
-    public MessageSourceTemplateExceptionBuilder messageSourceTemplateExceptionBuilder(IExceptionCodeGeneratable generator) {
-        return new MessageSourceTemplateExceptionBuilder(checkAndGenerate(generator), messageSource);
+    public MessageSourceTemplateExceptionBuilder messageSourceTemplateExceptionBuilder(IExceptionCodeGeneratable generator, String template, Object[] params) {
+        return new MessageSourceTemplateExceptionBuilder(checkAndGenerate(generator), messageSource).template(template).params(params);
     }
 
-    public MessageSourceTemplateExceptionBuilder messageSourceTemplateExceptionBuilder(IExceptionCodeGeneratable generator, String template, Object... params) {
-        return messageSourceTemplateExceptionBuilder(generator).template(template).params(params);
+    public MessageSourceTemplateExceptionBuilder messageSourceTemplateExceptionBuilder(TemplateExceptionCodeGenerator generator) {
+        return new MessageSourceTemplateExceptionBuilder(checkAndGenerate(generator), messageSource).template(generator.getTemplate());
     }
 
 }

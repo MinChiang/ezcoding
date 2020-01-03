@@ -22,7 +22,7 @@ public class BaseModuleExceptionBuilderFactory {
         return new ParamTemplateExceptionBuilder(checkAndGenerate(generator));
     }
 
-    public ParamTemplateExceptionBuilder paramTemplateExceptionBuilder(IExceptionCodeGeneratable generator, String template, Object... params) {
+    public ParamTemplateExceptionBuilder paramTemplateExceptionBuilder(IExceptionCodeGeneratable generator, String template, Object[] params) {
         return paramTemplateExceptionBuilder(generator).template(template).params(params);
     }
 

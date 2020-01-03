@@ -17,4 +17,8 @@ public class ExceptionCodeGeneratorFactory {
         return new ModuleExceptionCodeGenerator(moduleLayerModule, detailCode);
     }
 
+    public static TemplateExceptionCodeGenerator templateExceptionCodeGenerator(ModuleLayerModule moduleLayerModule, String detailCode, String template) {
+        return new TemplateExceptionCodeGenerator(moduleLayerModule, detailCode, template);
+    }
+
 }

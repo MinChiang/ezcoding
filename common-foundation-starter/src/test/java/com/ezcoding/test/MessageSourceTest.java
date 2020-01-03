@@ -1,6 +1,5 @@
 package com.ezcoding.test;
 
-import com.ezcoding.common.foundation.core.exception.ModuleExceptionIdentification;
 import com.ezcoding.starter.foundation.core.exception.MessageSourceTemplateExceptionBuilder;
 import com.ezcoding.starter.foundation.core.exception.ModuleExceptionBuilderFactory;
 import org.junit.Test;
@@ -26,12 +25,9 @@ public class MessageSourceTest {
 
     @Test
     public void testMessageSourceTranslator() {
-        ModuleExceptionIdentification.setDefaultCodeLength(2);
-        ModuleExceptionIdentification.setDefaultFillChar('_');
-
         ModuleExceptionBuilderFactory moduleExceptionBuilderFactory = new ModuleExceptionBuilderFactory(messageSource);
-        MessageSourceTemplateExceptionBuilder messageSourceTemplateExceptionBuilder = moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_NO_PERMISSION_ERROR, "user.template", "user.code", "user.account");
-        System.out.println(messageSourceTemplateExceptionBuilder.build().toString());
+        MessageSourceTemplateExceptionBuilder messageSourceTemplateExceptionBuilder = moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_NO_PERMISSION_ERROR);
+        System.out.println(messageSourceTemplateExceptionBuilder.params("user.code", "user.account").build().toString());
 
     }
 

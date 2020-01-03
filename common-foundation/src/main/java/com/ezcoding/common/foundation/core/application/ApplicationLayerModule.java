@@ -13,6 +13,9 @@ import java.util.Objects;
  */
 public class ApplicationLayerModule implements IModuleNameable {
 
+    protected static int applicationCodeLength = APPLICATION_CODE_LENGTH;
+    protected static char applicationFillChar = FILL_CHAR;
+
     protected final String applicationName;
     protected final String applicationCode;
 
@@ -20,12 +23,12 @@ public class ApplicationLayerModule implements IModuleNameable {
         if (StringUtils.isAnyEmpty(applicationName, applicationCode)) {
             throw new IllegalArgumentException("系统名称，系统码不能为空");
         }
-        if (applicationCode.length() > APPLICATION_CODE_LENGTH) {
-            throw new IllegalArgumentException("系统码长度必须小于等于" + APPLICATION_CODE_LENGTH);
+        if (applicationCode.length() > applicationCodeLength) {
+            throw new IllegalArgumentException("系统码长度必须小于等于" + applicationCodeLength);
         }
 
         this.applicationName = applicationName;
-        this.applicationCode = StringUtils.leftPad(applicationCode, APPLICATION_CODE_LENGTH, FILL_CHAR);
+        this.applicationCode = StringUtils.leftPad(applicationCode, applicationCodeLength, applicationFillChar);
     }
 
     @Override
@@ -66,6 +69,22 @@ public class ApplicationLayerModule implements IModuleNameable {
     @Override
     public int hashCode() {
         return Objects.hash(applicationCode);
+    }
+
+    public static int getApplicationCodeLength() {
+        return applicationCodeLength;
+    }
+
+    public static void setApplicationCodeLength(int applicationCodeLength) {
+        ApplicationLayerModule.applicationCodeLength = applicationCodeLength;
+    }
+
+    public static char getApplicationFillChar() {
+        return applicationFillChar;
+    }
+
+    public static void setApplicationFillChar(char applicationFillChar) {
+        ApplicationLayerModule.applicationFillChar = applicationFillChar;
     }
 
 }
