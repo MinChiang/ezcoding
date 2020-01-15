@@ -1,6 +1,5 @@
 package com.ezcoding.common.core.user.model;
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.ezcoding.common.foundation.util.EnumMappableUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -27,7 +26,6 @@ public enum GenderEnum {
      */
     FEMALE(2);
 
-    @EnumValue
     @JsonValue
     private final int id;
 
@@ -40,7 +38,7 @@ public enum GenderEnum {
     }
 
     @JsonCreator
-    public static GenderEnum from(int i) {
-        return EnumMappableUtils.map(i, GenderEnum.class);
+    public static GenderEnum from(int id) {
+        return EnumMappableUtils.map(id, GenderEnum.class);
     }
 }

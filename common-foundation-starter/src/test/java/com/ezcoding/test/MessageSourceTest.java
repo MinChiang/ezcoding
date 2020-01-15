@@ -1,7 +1,7 @@
 package com.ezcoding.test;
 
-import com.ezcoding.starter.foundation.core.exception.MessageSourceTemplateExceptionBuilder;
-import com.ezcoding.starter.foundation.core.exception.ModuleExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.MessageSourceTemplateExceptionBuilder;
+import com.ezcoding.common.foundation.core.exception.ModuleExceptionBuilderFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.ezcoding.starter.foundation.core.exception.ExceptionCodeGeneratorConstants.COMMON_NO_PERMISSION_ERROR;
+import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGeneratorConstants.COMMON_NO_PERMISSION_ERROR;
 
 /**
  * @author MinChiang

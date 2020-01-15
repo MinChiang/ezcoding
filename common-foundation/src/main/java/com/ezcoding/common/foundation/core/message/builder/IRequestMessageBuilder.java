@@ -30,5 +30,5 @@ public interface IRequestMessageBuilder<T extends IRequestMessageBuilder> {
      *
      * @return 构造后的请求报文
      */
-    RequestMessage build();
+    RequestMessage<?> build();
 }

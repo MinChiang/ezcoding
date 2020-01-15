@@ -29,17 +29,17 @@ public class FormMessageBuilderHandler implements IMessageBuilderHandler {
     }
 
     @Override
-    public byte[] message2Byte(ResponseMessage message) throws IOException {
+    public byte[] message2Byte(ResponseMessage<?> message) throws IOException {
         return new byte[0];
     }
 
     @Override
-    public String message2String(ResponseMessage message) throws IOException {
+    public String message2String(ResponseMessage<?> message) throws IOException {
         return null;
     }
 
     @Override
-    public byte[] message2Byte(ResponseMessage message, Charset charset) throws IOException {
+    public byte[] message2Byte(ResponseMessage<?> message, Charset charset) throws IOException {
         return new byte[0];
     }
 }

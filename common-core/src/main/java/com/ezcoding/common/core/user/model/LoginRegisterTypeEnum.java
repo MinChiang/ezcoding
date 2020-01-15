@@ -1,6 +1,5 @@
 package com.ezcoding.common.core.user.model;
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.ezcoding.common.foundation.util.EnumMappableUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -47,7 +46,6 @@ public enum LoginRegisterTypeEnum {
      */
     REGISTER(6);
 
-    @EnumValue
     @JsonValue
     private final int id;
 
@@ -60,8 +58,8 @@ public enum LoginRegisterTypeEnum {
     }
 
     @JsonCreator
-    public static LoginRegisterTypeEnum from(int i) {
-        return EnumMappableUtils.map(i, LoginRegisterTypeEnum.class);
+    public static LoginRegisterTypeEnum from(int id) {
+        return EnumMappableUtils.map(id, LoginRegisterTypeEnum.class);
     }
 
 }

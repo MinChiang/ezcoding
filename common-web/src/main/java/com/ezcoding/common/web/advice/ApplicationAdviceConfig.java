@@ -1,8 +1,7 @@
 package com.ezcoding.common.web.advice;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import com.ezcoding.common.foundation.core.exception.CommonApplicationException;
-import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.ModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import org.slf4j.Logger;
@@ -21,7 +20,7 @@ import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.util.Set;
 
-import static com.ezcoding.common.foundation.core.exception.CommonApplicationException.*;
+import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGeneratorConstants.*;
 
 /**
  * 程序统一错误管理器
@@ -37,33 +36,34 @@ public class ApplicationAdviceConfig {
 
     @Autowired
     private IMessageBuilder messageBuilder;
+    @Autowired
+    private ModuleExceptionBuilderFactory moduleExceptionBuilderFactory;
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
-    public ResponseMessage handleHttpRequestMethodNotSupportedExceptionException(HttpRequestMethodNotSupportedException e) throws IOException {
+    public ResponseMessage<?> handleHttpRequestMethodNotSupportedExceptionException(HttpRequestMethodNotSupportedException e) throws IOException {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("请求类型异常：", e);
         }
         return this.messageBuilder.buildErrorResponseMessage(
-                BaseModuleExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_REQUEST_TYPE_ERROR),
-                e.getCause()
+                moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_REQUEST_TYPE_ERROR).build()
         );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = IllegalArgumentException.class)
-    public ResponseMessage handleIllegalArgumentException(IllegalArgumentException e) throws IOException {
+    public ResponseMessage<?> handleIllegalArgumentException(IllegalArgumentException e) throws IOException {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("参数校验异常：", e);
         }
         return this.messageBuilder.buildErrorResponseMessage(
-                BaseModuleExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().cause(e).build()
+                moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_PARAM_VALIDATE_ERROR).build()
         );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = BindException.class)
-    public ResponseMessage handleBindException(BindException e) throws IOException {
+    public ResponseMessage<?> handleBindException(BindException e) throws IOException {
         StringBuilder sb = new StringBuilder();
         e.getAllErrors().forEach(er -> sb.append(er.getDefaultMessage()));
         String result = sb.toString();
@@ -71,13 +71,13 @@ public class ApplicationAdviceConfig {
             LOGGER.error("参数校验异常：{}", result);
         }
         return this.messageBuilder.buildErrorResponseMessage(
-                BaseModuleExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().param(result).build()
+                moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_PARAM_VALIDATE_ERROR).params(result).build()
         );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ConstraintViolationException.class)
-    public ResponseMessage handleConstraintViolationException(ConstraintViolationException e) throws IOException {
+    public ResponseMessage<?> handleConstraintViolationException(ConstraintViolationException e) throws IOException {
         Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
         StringBuilder stringBuilder = new StringBuilder();
         constraintViolations.forEach(c -> stringBuilder.append(c.getMessage()));
@@ -86,23 +86,23 @@ public class ApplicationAdviceConfig {
             LOGGER.error("参数校验异常：{}", result);
         }
         return this.messageBuilder.buildErrorResponseMessage(
-                BaseModuleExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_PARAM_VALIDATE_ERROR).instance().param(result).build()
+                moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_PARAM_VALIDATE_ERROR).params(result).build()
         );
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = NoHandlerFoundException.class)
-    public ResponseMessage handleNoHandlerFoundException(NoHandlerFoundException e) throws IOException {
+    public ResponseMessage<?> handleNoHandlerFoundException(NoHandlerFoundException e) throws IOException {
         return this.messageBuilder.buildErrorResponseMessage(
-                BaseModuleExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_RESOURCE_NOT_FIND_ERROR)
+                moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_RESOURCE_NOT_FIND_ERROR).build()
         );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ApplicationException.class)
-    public ResponseMessage handleBusinessException(ApplicationException e) throws IOException {
+    public ResponseMessage<?> handleBusinessException(ApplicationException e) throws IOException {
         if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("业务异常：", e);
+            LOGGER.error(e.toString());
         }
         return this.messageBuilder.buildErrorResponseMessage(e, null);
     }

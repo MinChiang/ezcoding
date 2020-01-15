@@ -15,11 +15,11 @@ public class ResponseMessageBuilder {
         return new ErrorResponseBuilder<>(body);
     }
 
-    public static SuccessResponseBuilder success() {
+    public static SuccessResponseBuilder<?> success() {
         return success(null);
     }
 
-    public static ErrorResponseBuilder error() {
+    public static ErrorResponseBuilder<?> error() {
         return error(null);
     }
 

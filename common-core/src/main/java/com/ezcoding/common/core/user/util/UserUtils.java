@@ -15,13 +15,15 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class UserUtils {
 
+    public static final String USER_AGENT_HEADER = "User-Agent";
+
     /**
      * 鉴别设备类型
      *
      * @return 设备类型
      */
     public static DeviceTypeEnum distinguishDeviceType(HttpServletRequest request) {
-        String header = request.getHeader("User-Agent");
+        String header = request.getHeader(USER_AGENT_HEADER);
         if (StringUtils.isEmpty(header)) {
             return DeviceTypeEnum.UNKNOWN;
         }
@@ -62,6 +64,10 @@ public class UserUtils {
             return LoginRegisterTypeEnum.from(Integer.parseInt((String) o));
         }
         return LoginRegisterTypeEnum.UNKNOWN;
+    }
+
+    public static String getUserAgentHeader() {
+        return USER_AGENT_HEADER;
     }
 
 }

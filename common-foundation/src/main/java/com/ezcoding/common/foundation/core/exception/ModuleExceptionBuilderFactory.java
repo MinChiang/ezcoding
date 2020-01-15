@@ -1,8 +1,5 @@
-package com.ezcoding.starter.foundation.core.exception;
+package com.ezcoding.common.foundation.core.exception;
 
-import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
-import com.ezcoding.common.foundation.core.exception.IExceptionCodeGeneratable;
-import com.ezcoding.common.foundation.core.exception.TemplateExceptionCodeGenerator;
 import org.springframework.context.MessageSource;
 
 /**

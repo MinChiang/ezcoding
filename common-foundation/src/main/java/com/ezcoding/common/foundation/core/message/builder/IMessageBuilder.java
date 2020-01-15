@@ -167,7 +167,7 @@ public interface IMessageBuilder {
      * @return 响应信息字符串
      * @throws IOException IO异常
      */
-    String buildResponseMessage(ResponseMessage responseMessage, MessageTypeEnum type) throws IOException;
+    String buildResponseMessage(ResponseMessage<?> responseMessage, MessageTypeEnum type) throws IOException;
 
     /**
      * 构造响应信息字节流
@@ -177,7 +177,7 @@ public interface IMessageBuilder {
      * @return 响应信息字节流
      * @throws IOException IO异常
      */
-    byte[] buildResponseMessage(ResponseMessage responseMessage, Charset charset) throws IOException;
+    byte[] buildResponseMessage(ResponseMessage<?> responseMessage, Charset charset) throws IOException;
 
     /**
      * 构造响应信息字节流
@@ -188,6 +188,6 @@ public interface IMessageBuilder {
      * @return 响应信息字节流
      * @throws IOException IO异常
      */
-    byte[] buildResponseMessage(ResponseMessage responseMessage, Charset charset, MessageTypeEnum type) throws IOException;
+    byte[] buildResponseMessage(ResponseMessage<?> responseMessage, Charset charset, MessageTypeEnum type) throws IOException;
 
 }

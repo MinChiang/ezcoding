@@ -1,4 +1,4 @@
-package com.ezcoding.starter.foundation.core.exception;
+package com.ezcoding.common.foundation.core.exception;
 
 import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;

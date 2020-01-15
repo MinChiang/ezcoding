@@ -1,6 +1,5 @@
 package com.ezcoding.common.core.user.model;
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.ezcoding.common.foundation.util.EnumMappableUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -27,7 +26,6 @@ public enum UserStatusEnum {
      */
     CANCELED(2);
 
-    @EnumValue
     @JsonValue
     private final int id;
 
@@ -40,8 +38,8 @@ public enum UserStatusEnum {
     }
 
     @JsonCreator
-    public static UserStatusEnum from(int i) {
-        return EnumMappableUtils.map(i, UserStatusEnum.class);
+    public static UserStatusEnum from(int id) {
+        return EnumMappableUtils.map(id, UserStatusEnum.class);
     }
 
 }

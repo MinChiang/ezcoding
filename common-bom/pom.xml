@@ -19,6 +19,8 @@
         <mysql.version>8.0.11</mysql.version>
         <seata.version>0.8.0</seata.version>
         <zookeeper.version>3.4.14</zookeeper.version>
+
+        <common-foundation.version>1.0.0-SNAPSHOT</common-foundation.version>
     </properties>
 
     <dependencyManagement>
@@ -184,6 +186,12 @@
                 <groupId>eu.bitwalker</groupId>
                 <artifactId>UserAgentUtils</artifactId>
                 <version>1.21</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.ezcoding</groupId>
+                <artifactId>common-foundation</artifactId>
+                <version>${common-foundation.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

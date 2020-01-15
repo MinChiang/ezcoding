@@ -1,9 +1,6 @@
-package com.ezcoding.starter.foundation.core.exception;
+package com.ezcoding.common.foundation.core.exception;
 
-import com.ezcoding.common.foundation.core.exception.ExceptionCodeGeneratorFactory;
-import com.ezcoding.common.foundation.core.exception.TemplateExceptionCodeGenerator;
-
-import static com.ezcoding.starter.foundation.core.exception.ModuleConstants.DEFAULT_MODULE_LAYER_MODULE;
+import static com.ezcoding.common.foundation.core.exception.ModuleConstants.DEFAULT_MODULE_LAYER_MODULE;
 
 /**
  * @author MinChiang

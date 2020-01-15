@@ -151,18 +151,18 @@ public class MessageBuilder implements IMessageBuilder {
     }
 
     @Override
-    public String buildResponseMessage(ResponseMessage responseMessage, MessageTypeEnum type) throws IOException {
+    public String buildResponseMessage(ResponseMessage<?> responseMessage, MessageTypeEnum type) throws IOException {
         IMessageBuilderHandler handler = handlerMap.getOrDefault(type, defaultMessageBuilder);
         return handler.message2String(responseMessage);
     }
 
     @Override
-    public byte[] buildResponseMessage(ResponseMessage responseMessage, Charset charset) throws IOException {
+    public byte[] buildResponseMessage(ResponseMessage<?> responseMessage, Charset charset) throws IOException {
         return buildResponseMessage(responseMessage, defaultWriteCharset, defaultWriteMessageType);
     }
 
     @Override
-    public byte[] buildResponseMessage(ResponseMessage responseMessage, Charset charset, MessageTypeEnum type) throws IOException {
+    public byte[] buildResponseMessage(ResponseMessage<?> responseMessage, Charset charset, MessageTypeEnum type) throws IOException {
         IMessageBuilderHandler handler = handlerMap.getOrDefault(type, defaultMessageBuilder);
         return handler.message2Byte(responseMessage, charset);
     }

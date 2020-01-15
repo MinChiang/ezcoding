@@ -11,14 +11,14 @@ import org.springframework.core.convert.converter.ConverterFactory;
  * @version 1.0.0
  * @date 2018-08-17 11:49
  */
-public class ObjectToEnumConverterFactory implements ConverterFactory<Object, Enum> {
+public class ObjectToEnumConverterFactory implements ConverterFactory<Object, Enum<?>> {
 
     @Override
-    public <T extends Enum> Converter<Object, T> getConverter(Class<T> targetType) {
+    public <T extends Enum<?>> Converter<Object, T> getConverter(Class<T> targetType) {
         return new ObjectToEnumConverter<>(targetType);
     }
 
-    private static class ObjectToEnumConverter<T extends Enum> implements Converter<Object, T> {
+    private static class ObjectToEnumConverter<T extends Enum<?>> implements Converter<Object, T> {
 
         private Class<T> targetClass;
 

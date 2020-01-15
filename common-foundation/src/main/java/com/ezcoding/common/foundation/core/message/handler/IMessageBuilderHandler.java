@@ -56,7 +56,7 @@ public interface IMessageBuilderHandler {
      * @return 字节流
      * @throws IOException IO异常
      */
-    byte[] message2Byte(ResponseMessage message) throws IOException;
+    byte[] message2Byte(ResponseMessage<?> message) throws IOException;
 
     /**
      * 响应信息转字符串
@@ -65,7 +65,7 @@ public interface IMessageBuilderHandler {
      * @return 字符串
      * @throws IOException IO异常
      */
-    String message2String(ResponseMessage message) throws IOException;
+    String message2String(ResponseMessage<?> message) throws IOException;
 
     /**
      * 响应信息转字节流
@@ -75,6 +75,6 @@ public interface IMessageBuilderHandler {
      * @return 字节流
      * @throws IOException IO异常
      */
-    byte[] message2Byte(ResponseMessage message, Charset charset) throws IOException;
+    byte[] message2Byte(ResponseMessage<?> message, Charset charset) throws IOException;
 
 }

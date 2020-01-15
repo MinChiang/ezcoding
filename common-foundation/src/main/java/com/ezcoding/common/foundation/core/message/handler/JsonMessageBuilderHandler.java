@@ -58,17 +58,17 @@ public class JsonMessageBuilderHandler implements IMessageBuilderHandler {
     }
 
     @Override
-    public byte[] message2Byte(ResponseMessage message) throws IOException {
+    public byte[] message2Byte(ResponseMessage<?> message) throws IOException {
         return this.message2Byte(message, CHARSET_WRITE_DEFAULT);
     }
 
     @Override
-    public String message2String(ResponseMessage message) throws JsonProcessingException {
+    public String message2String(ResponseMessage<?> message) throws JsonProcessingException {
         return objectMapper.writeValueAsString(message);
     }
 
     @Override
-    public byte[] message2Byte(ResponseMessage message, Charset charset) throws IOException {
+    public byte[] message2Byte(ResponseMessage<?> message, Charset charset) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(byteArrayOutputStream, charset);
         objectMapper.writeValue(outputStreamWriter, message);

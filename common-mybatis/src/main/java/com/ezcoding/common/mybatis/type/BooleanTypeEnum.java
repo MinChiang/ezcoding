@@ -35,8 +35,8 @@ public enum BooleanTypeEnum {
     }
 
     @JsonCreator
-    public static BooleanTypeEnum from(int i) {
-        return EnumMappableUtils.map(i, BooleanTypeEnum.class);
+    public static BooleanTypeEnum from(int id) {
+        return EnumMappableUtils.map(id, BooleanTypeEnum.class);
     }
 
 }

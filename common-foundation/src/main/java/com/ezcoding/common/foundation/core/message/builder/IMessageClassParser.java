@@ -20,7 +20,7 @@ public interface IMessageClassParser {
      * @return 解析的对象
      * @throws IOException 对象解析异常
      */
-    <T> T parse(RequestMessage message, Class<T> clz) throws IOException;
+    <T> T parse(RequestMessage<?> message, Class<T> clz) throws IOException;
 
     /**
      * 根据请求报文解析成对应的包装类数组
@@ -30,6 +30,6 @@ public interface IMessageClassParser {
      * @return 待解析的类
      * @throws IOException 对象解析异常
      */
-    Object[] parse(RequestMessage message, Class[] clzs) throws IOException;
+    Object[] parse(RequestMessage<?> message, Class<?>[] clzs) throws IOException;
 
 }

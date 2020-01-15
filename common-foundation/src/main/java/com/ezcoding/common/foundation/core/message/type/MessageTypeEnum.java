@@ -33,8 +33,8 @@ public enum MessageTypeEnum {
     }
 
     @JsonCreator
-    public static MessageTypeEnum from(String i) {
-        return EnumMappableUtils.map(i, MessageTypeEnum.class);
+    public static MessageTypeEnum from(String id) {
+        return EnumMappableUtils.map(id, MessageTypeEnum.class);
     }
 
 }

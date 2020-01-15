@@ -3,16 +3,12 @@ package com.ezcoding.common.web.resolver;
 import com.ezcoding.common.core.user.model.IUser;
 import com.ezcoding.common.core.user.resolve.CurrentUserLoader;
 import com.ezcoding.common.core.user.resolve.IUserProxyable;
-import com.ezcoding.common.foundation.core.exception.CommonApplicationException;
-import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-
-import static com.ezcoding.common.foundation.core.exception.CommonApplicationException.COMMON_USER_NOT_LOGIN_ERROR;
 
 /**
  * @author MinChiang
@@ -41,9 +37,10 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
         CurrentUser parameterAnnotation = parameter.getParameterAnnotation(CurrentUser.class);
         //校验当前是否必须含有登陆用户
+        assert parameterAnnotation != null;
         if (parameterAnnotation.required()) {
             if (user == null || StringUtils.isEmpty(user.getCode())) {
-                throw BaseModuleExceptionBuilderFactory.lookupByAlias(CommonApplicationException.class, COMMON_USER_NOT_LOGIN_ERROR).instance().build();
+                throw new RuntimeException("用户未登录");
             }
         }
 

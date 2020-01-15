@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class EnumMappableUtils {
 
-    private static Map<Class<?>, Map<Object, ? extends Enum>> CLASS_OBJECT_ENUM_MAPPING = new ConcurrentHashMap<>();
-    private static Map<Class<?>, Map<String, ? extends Enum>> CLASS_OBJECT_ENUM_MAPPING_IGNORE_TYPE = new ConcurrentHashMap<>();
+    private static Map<Class<?>, Map<Object, ? extends Enum<?>>> CLASS_OBJECT_ENUM_MAPPING = new ConcurrentHashMap<>();
+    private static Map<Class<?>, Map<String, ? extends Enum<?>>> CLASS_OBJECT_ENUM_MAPPING_IGNORE_TYPE = new ConcurrentHashMap<>();
 
     /**
      * 获取枚举映射的枚举类型
@@ -28,7 +28,7 @@ public class EnumMappableUtils {
      * @return 被映射后的枚举实例
      */
     public static <T extends Enum<T>> T map(Object object, Class<T> enumClass) {
-        Map<Object, ? extends Enum> serializableEnumMap = CLASS_OBJECT_ENUM_MAPPING.get(enumClass);
+        Map<Object, ? extends Enum<?>> serializableEnumMap = CLASS_OBJECT_ENUM_MAPPING.get(enumClass);
         if (serializableEnumMap == null) {
             createMapping(enumClass);
             serializableEnumMap = CLASS_OBJECT_ENUM_MAPPING.get(enumClass);
@@ -44,8 +44,8 @@ public class EnumMappableUtils {
      * @param <T>       被映射后的枚举实例
      * @return 被映射后的枚举实例
      */
-    public static <T extends Enum> T mapIgnoreType(Object object, Class<T> enumClass) {
-        Map<String, ? extends Enum> serializableEnumMap = CLASS_OBJECT_ENUM_MAPPING_IGNORE_TYPE.get(enumClass);
+    public static <T extends Enum<?>> T mapIgnoreType(Object object, Class<T> enumClass) {
+        Map<String, ? extends Enum<?>> serializableEnumMap = CLASS_OBJECT_ENUM_MAPPING_IGNORE_TYPE.get(enumClass);
         if (serializableEnumMap == null) {
             createMapping(enumClass);
             serializableEnumMap = CLASS_OBJECT_ENUM_MAPPING_IGNORE_TYPE.get(enumClass);
@@ -59,11 +59,11 @@ public class EnumMappableUtils {
      * @param enumClass 被映射的枚举类型
      * @param <T>       被映射的枚举类型
      */
-    private static <T extends Enum> void createMapping(Class<T> enumClass) {
+    private static <T extends Enum<?>> void createMapping(Class<T> enumClass) {
         Field field = null;
         Method method = null;
-        Map<Object, Enum> mapping = new HashMap<>();
-        Map<String, Enum> mappingIgnoreType = new HashMap<>();
+        Map<Object, Enum<?>> mapping = new HashMap<>();
+        Map<String, Enum<?>> mappingIgnoreType = new HashMap<>();
 
         Field[] declaredFields = enumClass.getDeclaredFields();
         Method[] methods = enumClass.getMethods();
@@ -89,12 +89,11 @@ public class EnumMappableUtils {
         for (T t : enumClass.getEnumConstants()) {
             try {
 
-                Object key = null;
+                Object key;
 
                 if (field != null) {
                     field.setAccessible(true);
                     key = field.get(t);
-                    field.setAccessible(false);
                 } else if (method != null) {
                     key = method.invoke(t, (Object[]) null);
                 } else {

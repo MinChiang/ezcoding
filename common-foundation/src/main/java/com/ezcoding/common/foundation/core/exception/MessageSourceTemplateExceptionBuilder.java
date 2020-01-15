@@ -1,6 +1,5 @@
-package com.ezcoding.starter.foundation.core.exception;
+package com.ezcoding.common.foundation.core.exception;
 
-import com.ezcoding.common.foundation.core.exception.AbstractTemplateExceptionBuilder;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.context.MessageSource;
