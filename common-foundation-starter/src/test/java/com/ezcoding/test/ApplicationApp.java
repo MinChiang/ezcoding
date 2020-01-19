@@ -1,6 +1,6 @@
 package com.ezcoding.test;
 
-import com.ezcoding.starter.foundation.config.EnableEzcodingFoundation;
+import com.ezcoding.common.foundation.starter.EnableEzcodingFoundation;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

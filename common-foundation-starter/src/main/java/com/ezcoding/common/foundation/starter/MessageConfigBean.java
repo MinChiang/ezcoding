@@ -1,4 +1,4 @@
-package com.ezcoding.starter.foundation.config;
+package com.ezcoding.common.foundation.starter;
 
 import lombok.Data;
 

@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 /**
+ * 功能级别模块
+ *
  * @author MinChiang
  * @version 1.0.0
  * @date 2019-11-10 13:54

@@ -31,7 +31,6 @@ public class ApplicationException extends RuntimeException implements IApplicati
 
     @Override
     public String toString() {
-        Throwable cause = getCause();
         return "\n发生异常：" +
                 "\n\t指令代码：" +
                 getIdentification() +

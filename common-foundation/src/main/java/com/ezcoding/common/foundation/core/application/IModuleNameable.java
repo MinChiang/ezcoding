@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.application;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -61,15 +59,5 @@ public interface IModuleNameable {
      * @return 模块名称
      */
     String getName();
-
-    /**
-     * 填充空缺的字符
-     *
-     * @param code 待填充的字符串
-     * @return 填充好的字符串
-     */
-    static String fillBlankChar(String code) {
-        return StringUtils.leftPad(code, APPLICATION_CODE_LENGTH, FILL_CHAR);
-    }
 
 }
