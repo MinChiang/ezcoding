@@ -1,11 +1,13 @@
 package com.ezcoding.common.foundation.core.exception.processor;
 
+import java.util.HashMap;
+
 /**
  * @author MinChiang
  * @version 1.0.0
  * @date 2020-01-17 10:34
  */
-public class ProcessContext {
+public class ProcessContext extends HashMap<String, Object> {
 
     /**
      * 是否成功被处理标志

@@ -36,18 +36,18 @@ public class ApplicationLayerModuleProcessor extends AbstractLayerModuleProcesso
     }
 
     @Override
-    public ProcessContext process(ApplicationException applicationException) {
+    public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
         String moduleCode = applicationException
                 .getIdentification()
                 .substring(ApplicationLayerModule.getApplicationCodeLength(), ApplicationLayerModule.getApplicationCodeLength() + ModuleLayerModule.getModuleCodeLength());
         ModuleLayerModuleProcessor moduleLayerModuleProcessor = moduleLayerModuleProcessors.get(moduleCode);
         ProcessContext result;
         if (moduleLayerModuleProcessor == null) {
-            result = defaultProcessor.process(applicationException);
+            result = defaultProcessor.process(applicationException, processContext);
         } else {
-            result = moduleLayerModuleProcessor.process(applicationException);
+            result = moduleLayerModuleProcessor.process(applicationException, processContext);
             if (!result.isProcessed()) {
-                result = defaultProcessor.process(applicationException);
+                result = defaultProcessor.process(applicationException, processContext);
             }
         }
         return result;

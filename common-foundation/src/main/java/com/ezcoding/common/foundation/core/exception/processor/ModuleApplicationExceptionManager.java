@@ -19,24 +19,31 @@ public class ModuleApplicationExceptionManager extends AbstractApplicationExcept
     private Map<String, ApplicationLayerModuleProcessor> applicationLayerModuleProcessors = new ConcurrentHashMap<>(0);
     private AbstractLayerModuleProcessor defaultProcessor = new EmptyApplicationExceptionProcessor();
 
+    public ModuleApplicationExceptionManager(AbstractLayerModuleProcessor defaultProcessor) {
+        this.defaultProcessor = defaultProcessor;
+    }
+
+    public ModuleApplicationExceptionManager() {
+    }
+
     @Override
     public boolean canProcessible(ApplicationException applicationException) {
         return false;
     }
 
     @Override
-    public ProcessContext process(ApplicationException applicationException) {
+    public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
         String applicationCode = applicationException
                 .getIdentification()
                 .substring(0, ApplicationLayerModule.getApplicationCodeLength());
         ApplicationLayerModuleProcessor applicationLayerModuleProcessor = applicationLayerModuleProcessors.get(applicationCode);
         ProcessContext result;
         if (applicationLayerModuleProcessor == null) {
-            result = defaultProcessor.process(applicationException);
+            result = defaultProcessor.process(applicationException, processContext);
         } else {
-            result = applicationLayerModuleProcessor.process(applicationException);
+            result = applicationLayerModuleProcessor.process(applicationException, processContext);
             if (!result.isProcessed()) {
-                result = defaultProcessor.process(applicationException);
+                result = defaultProcessor.process(applicationException, processContext);
             }
         }
         return result;

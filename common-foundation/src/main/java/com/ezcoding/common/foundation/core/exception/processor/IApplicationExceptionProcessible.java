@@ -21,8 +21,9 @@ public interface IApplicationExceptionProcessible {
      * 处理错误
      *
      * @param applicationException 程序错误
+     * @param processContext       处理上下文
      * @return 处理结果上下文
      */
-    ProcessContext process(ApplicationException applicationException);
+    ProcessContext process(ApplicationException applicationException, ProcessContext processContext);
 
 }

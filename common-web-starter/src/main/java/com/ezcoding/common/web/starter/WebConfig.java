@@ -1,8 +1,11 @@
-package com.ezcoding.starter.web;
+package com.ezcoding.common.web.starter;
 
 import com.ezcoding.common.core.user.resolve.CurrentUserLoader;
 import com.ezcoding.common.core.user.resolve.IUserProxyable;
+import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
+import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
+import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
 import com.ezcoding.common.web.error.ApplicationErrorController;
 import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
 import com.ezcoding.common.web.filter.FilterConstants;
@@ -31,9 +34,11 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
@@ -58,6 +63,8 @@ public class WebConfig implements WebMvcConfigurer {
     private CurrentUserLoader currentUserLoader;
     @Autowired
     private IUserProxyable userProxyable;
+    @Autowired
+    private AbstractApplicationExceptionManager applicationExceptionManager;
 
     private void registerParameterResolver(List<IRequestMessageParameterResolvable> resolvables) {
         resolvables.add(new ReqeustMessageResolver());
@@ -127,6 +134,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public ApplicationErrorController basicErrorController(ErrorAttributes errorAttributes, ServerProperties serverProperties, List<ErrorViewResolver> errorViewResolvers) {
         return new ApplicationErrorController(errorAttributes, serverProperties.getError(), errorViewResolvers);
+    }
+
+    @Override
+    public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+        resolvers.add(0, new ApplicationExceptionResolver(applicationExceptionManager, HttpStatus.INTERNAL_SERVER_ERROR, ErrorAppHead.getDefaultErrorMessage()));
     }
 
     @Configuration

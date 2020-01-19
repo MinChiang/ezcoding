@@ -30,14 +30,13 @@ public class SimpleApplicationExceptionManager extends AbstractApplicationExcept
     }
 
     @Override
-    public ProcessContext process(ApplicationException applicationException) {
-        ProcessContext processContext = new ProcessContext();
+    public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
         Optional
                 .of(applicationException.getIdentification())
                 .map(processors::get)
                 .filter(p -> p.canProcessible(applicationException))
                 .ifPresent(p -> {
-                    p.process(applicationException);
+                    p.process(applicationException, processContext);
                     processContext.setProcessed(true);
                 });
         return processContext;

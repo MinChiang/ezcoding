@@ -37,7 +37,7 @@ public class ModuleLayerModuleProcessor extends AbstractLayerModuleProcessor {
     }
 
     @Override
-    public ProcessContext process(ApplicationException applicationException) {
+    public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
         int startInclude = ApplicationLayerModule.getApplicationCodeLength() + ModuleLayerModule.getModuleCodeLength();
         int endExclude = startInclude + FunctionLayerModule.getFunctionCodeLength();
         String functionCode = applicationException
@@ -46,11 +46,11 @@ public class ModuleLayerModuleProcessor extends AbstractLayerModuleProcessor {
         FunctionLayerModuleProcessor functionLayerModuleProcessor = functionLayerModuleProcessors.get(functionCode);
         ProcessContext result;
         if (functionLayerModuleProcessor == null) {
-            result = defaultProcessor.process(applicationException);
+            result = defaultProcessor.process(applicationException, processContext);
         } else {
-            result = functionLayerModuleProcessor.process(applicationException);
+            result = functionLayerModuleProcessor.process(applicationException, processContext);
             if (!result.isProcessed()) {
-                result = defaultProcessor.process(applicationException);
+                result = defaultProcessor.process(applicationException, processContext);
             }
         }
         return result;

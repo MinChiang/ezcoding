@@ -10,10 +10,9 @@ import com.ezcoding.common.foundation.core.exception.ApplicationException;
 public class EmptyApplicationExceptionProcessor extends AbstractLayerModuleProcessor {
 
     @Override
-    public ProcessContext process(ApplicationException applicationException) {
-        ProcessContext context = new ProcessContext();
-        context.setProcessed(true);
-        return context;
+    public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
+        processContext.setProcessed(true);
+        return processContext;
     }
 
 }

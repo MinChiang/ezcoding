@@ -4,6 +4,7 @@ import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
 import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.exception.ModuleExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.processor.*;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
@@ -38,8 +39,12 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+
+import static com.ezcoding.common.foundation.core.exception.ModuleConstants.DEFAULT_APPLICATION_LAYER_MODULE;
+import static com.ezcoding.common.foundation.core.exception.ModuleConstants.DEFAULT_MODULE_LAYER_MODULE;
 
 /**
  * @author MinChiang
@@ -182,6 +187,19 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                 .messageInterpolator(localeContextMessageInterpolator)
                 .buildValidatorFactory();
         return validatorFactory.getValidator();
+    }
+
+    @ConditionalOnMissingBean(AbstractApplicationExceptionManager.class)
+    @Bean
+    public ModuleApplicationExceptionManager moduleApplicationExceptionManager() {
+        ModuleApplicationExceptionManager moduleApplicationExceptionManager = new ModuleApplicationExceptionManager();
+        registerDefaultProcessor(moduleApplicationExceptionManager);
+        return moduleApplicationExceptionManager;
+    }
+
+    private void registerDefaultProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager) {
+        moduleApplicationExceptionManager.registerApplicationProcessor(DEFAULT_APPLICATION_LAYER_MODULE, new ApplicationLayerModuleProcessor());
+        moduleApplicationExceptionManager.registerModuleProcessor(DEFAULT_MODULE_LAYER_MODULE, new ModuleLayerModuleProcessor());
     }
 
 }
