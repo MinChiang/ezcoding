@@ -1,5 +1,6 @@
 package com.ezcoding.common.web.error;
 
+import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
 import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
@@ -28,10 +29,16 @@ public class ApplicationErrorController extends BasicErrorController {
 
     @Override
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
-        Map<String, Object> body = getErrorAttributes(request,
-                isIncludeStackTrace(request, MediaType.ALL));
+        Map<String, Object> body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
         HttpStatus status = getStatus(request);
-        ResponseMessage<Map<String, Object>> responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new ErrorAppHead(), body);
+        ApplicationException applicationException = (ApplicationException) body.get("applicationException");
+        String returnCode = ErrorAppHead.getDefaultErrorCode();
+        String returnMessage = ErrorAppHead.getDefaultErrorMessage();
+        if (applicationException != null) {
+            returnCode = applicationException.getIdentification();
+            returnMessage = applicationException.getSummary();
+        }
+        ResponseMessage<Map<String, Object>> responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), null);
         return new ResponseEntity<>(responseMessage.toMap(), status);
     }
 

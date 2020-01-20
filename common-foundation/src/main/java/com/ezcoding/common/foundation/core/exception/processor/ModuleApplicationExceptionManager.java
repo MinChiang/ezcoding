@@ -7,6 +7,7 @@ import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -60,10 +61,24 @@ public class ModuleApplicationExceptionManager extends AbstractApplicationExcept
      *
      * @param applicationLayerModule 服务模块
      * @param processor              错误处理器
+     * @param defaultProcessor       默认层级处理器
      */
-    public void registerApplicationProcessor(ApplicationLayerModule applicationLayerModule, ApplicationLayerModuleProcessor processor) {
+    public void registerApplicationProcessor(ApplicationLayerModule applicationLayerModule, ApplicationLayerModuleProcessor processor, AbstractLayerModuleProcessor defaultProcessor) {
         checkParams(applicationLayerModule, processor);
         applicationLayerModuleProcessors.put(applicationLayerModule.getApplicationCode(), processor);
+        Optional
+                .ofNullable(defaultProcessor)
+                .ifPresent(d -> this.defaultProcessor = d);
+    }
+
+    /**
+     * 注册应用级别的错误处理器
+     *
+     * @param applicationLayerModule 服务模块
+     * @param processor              错误处理器
+     */
+    public void registerApplicationProcessor(ApplicationLayerModule applicationLayerModule, ApplicationLayerModuleProcessor processor) {
+        registerApplicationProcessor(applicationLayerModule, processor, null);
     }
 
     /**

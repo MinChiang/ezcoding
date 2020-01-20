@@ -4,7 +4,10 @@ import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
 import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.exception.ModuleExceptionBuilderFactory;
-import com.ezcoding.common.foundation.core.exception.processor.*;
+import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
+import com.ezcoding.common.foundation.core.exception.processor.ApplicationLayerModuleProcessor;
+import com.ezcoding.common.foundation.core.exception.processor.ModuleApplicationExceptionManager;
+import com.ezcoding.common.foundation.core.exception.processor.ModuleLayerModuleProcessor;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
@@ -20,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.spi.resourceloading.ResourceBundleLocator;
@@ -59,6 +63,8 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
     @Autowired
     private MessageSource messageSource;
+    @Autowired(required = false)
+    private List<IApplicationExceptionProcessorRegister> registers;
 
     /**
      * 注册默认分页类型
@@ -194,12 +200,26 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     public ModuleApplicationExceptionManager moduleApplicationExceptionManager() {
         ModuleApplicationExceptionManager moduleApplicationExceptionManager = new ModuleApplicationExceptionManager();
         registerDefaultProcessor(moduleApplicationExceptionManager);
+        if (CollectionUtils.isNotEmpty(this.registers)) {
+            registerExtraProcessor(moduleApplicationExceptionManager, this.registers);
+        }
         return moduleApplicationExceptionManager;
     }
 
     private void registerDefaultProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager) {
         moduleApplicationExceptionManager.registerApplicationProcessor(DEFAULT_APPLICATION_LAYER_MODULE, new ApplicationLayerModuleProcessor());
         moduleApplicationExceptionManager.registerModuleProcessor(DEFAULT_MODULE_LAYER_MODULE, new ModuleLayerModuleProcessor());
+    }
+
+    private void registerExtraProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager, List<IApplicationExceptionProcessorRegister> registers) {
+        if (CollectionUtils.isNotEmpty(registers)) {
+            registers
+                    .forEach(register -> {
+                        register.registerApplicationProcessor(moduleApplicationExceptionManager);
+                        register.registerModuleProcessor(moduleApplicationExceptionManager);
+                        register.registerFunctionProcessor(moduleApplicationExceptionManager);
+                    });
+        }
     }
 
 }

@@ -1,19 +1,17 @@
 package com.ezcoding.common.web.starter;
 
-import com.ezcoding.common.core.user.resolve.CurrentUserLoader;
-import com.ezcoding.common.core.user.resolve.IUserProxyable;
 import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
+import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
-import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
 import com.ezcoding.common.web.error.ApplicationErrorController;
+import com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes;
 import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
 import com.ezcoding.common.web.filter.FilterConstants;
 import com.ezcoding.common.web.filter.IApplicationContextValueFetchable;
 import com.ezcoding.common.web.resolver.JsonMessageMethodProcessor;
 import com.ezcoding.common.web.resolver.JsonPageMethodProcessor;
 import com.ezcoding.common.web.resolver.JsonRequestMessageResolver;
-import com.ezcoding.common.web.resolver.UserArgumentResolver;
 import com.ezcoding.common.web.resolver.parameter.*;
 import com.ezcoding.common.web.resolver.returnValue.IResponseMessageReturnValueResolvable;
 import com.ezcoding.common.web.resolver.returnValue.ResponseAppHeadResolver;
@@ -59,10 +57,10 @@ public class WebConfig implements WebMvcConfigurer {
     private IMessageBuilder messageBuilder;
     @Autowired
     private List<HttpMessageConverter<?>> messageConverters;
-    @Autowired
-    private CurrentUserLoader currentUserLoader;
-    @Autowired
-    private IUserProxyable userProxyable;
+    //    @Autowired
+//    private CurrentUserLoader currentUserLoader;
+//    @Autowired
+//    private IUserProxyable userProxyable;
     @Autowired
     private AbstractApplicationExceptionManager applicationExceptionManager;
 
@@ -105,9 +103,9 @@ public class WebConfig implements WebMvcConfigurer {
         return new JsonPageMethodProcessor(jsonRequestMessageResolver());
     }
 
-    private UserArgumentResolver userArgumentResolver() {
-        return new UserArgumentResolver(currentUserLoader, userProxyable);
-    }
+//    private UserArgumentResolver userArgumentResolver() {
+//        return new UserArgumentResolver(currentUserLoader, userProxyable);
+//    }
 
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
@@ -118,7 +116,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(jsonMessageMethodProcessor());
         argumentResolvers.add(jsonPageMethodProcessor());
-        argumentResolvers.add(userArgumentResolver());
+//        argumentResolvers.add(userArgumentResolver());
     }
 
     @Bean
@@ -141,9 +139,14 @@ public class WebConfig implements WebMvcConfigurer {
         resolvers.add(0, new ApplicationExceptionResolver(applicationExceptionManager, HttpStatus.INTERNAL_SERVER_ERROR, ErrorAppHead.getDefaultErrorMessage()));
     }
 
+    @Bean
+    public ApplicationExceptionErrorAttributes applicationExceptionErrorAttributes() {
+        return new ApplicationExceptionErrorAttributes();
+    }
+
     @Configuration
     @AutoConfigureAfter(RequestMappingHandlerAdapter.class)
-    private static class WebLastConfig implements InitializingBean, BeanFactoryAware {
+    public static class WebLastConfig implements InitializingBean, BeanFactoryAware {
 
         private BeanFactory beanFactory;
 

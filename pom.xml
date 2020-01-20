@@ -21,6 +21,8 @@
 
         <module>common-foundation-starter</module>
         <module>common-web-starter</module>
+
+        <module>common-test-starter</module>
     </modules>
 
     <properties>

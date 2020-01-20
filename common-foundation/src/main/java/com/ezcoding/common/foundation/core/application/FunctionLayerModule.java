@@ -24,7 +24,7 @@ public class FunctionLayerModule extends ModuleLayerModule {
         if (StringUtils.isAnyEmpty(functionName, functionCode)) {
             throw new IllegalArgumentException("功能名称，功能码不能为空");
         }
-        if (functionCode.length() != functionCodeLength) {
+        if (functionCode.length() > functionCodeLength) {
             throw new IllegalArgumentException("模块码长度必须小于等于" + functionCodeLength);
         }
         this.functionName = functionName;
