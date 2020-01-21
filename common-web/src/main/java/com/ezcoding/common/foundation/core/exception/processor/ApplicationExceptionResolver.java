@@ -65,6 +65,9 @@ public class ApplicationExceptionResolver extends AbstractHandlerExceptionResolv
                     .<String, Object>builder()
                     .put(KEY_APPLICATION_EXPCETION, ex)
                     .build();
+
+            //自动打印业务错误信息
+            ex.printStackTrace();
             return new ModelAndView(null, model, null);
         } catch (IOException e) {
             e.printStackTrace();

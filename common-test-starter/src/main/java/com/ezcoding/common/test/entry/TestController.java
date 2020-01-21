@@ -45,4 +45,10 @@ public class TestController {
         throw moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_RESOURCE_NOT_FIND_ERROR).params("xixi", "haha").build();
     }
 
+    @GetMapping("5")
+    @JsonResult
+    public String test5() {
+        throw moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_RESOURCE_NOT_FIND_ERROR).params("xixi", "haha").build();
+    }
+
 }
