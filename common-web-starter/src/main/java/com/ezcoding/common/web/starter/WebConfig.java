@@ -2,6 +2,7 @@ package com.ezcoding.common.web.starter;
 
 import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
 import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
+import com.ezcoding.common.foundation.core.exception.processor.WebEmptyApplicationExceptionProcessor;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
 import com.ezcoding.common.web.error.ApplicationErrorController;
@@ -142,6 +143,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public ApplicationExceptionErrorAttributes applicationExceptionErrorAttributes() {
         return new ApplicationExceptionErrorAttributes();
+    }
+
+    @Bean(value = {"defaultLayerModuleProcessor", "webEmptyApplicationExceptionProcessor"})
+    public WebEmptyApplicationExceptionProcessor webEmptyApplicationExceptionProcessor() {
+        return new WebEmptyApplicationExceptionProcessor();
     }
 
     @Configuration

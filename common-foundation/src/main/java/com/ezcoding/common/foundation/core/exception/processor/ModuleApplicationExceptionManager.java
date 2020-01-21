@@ -21,10 +21,13 @@ public class ModuleApplicationExceptionManager extends AbstractApplicationExcept
     private AbstractLayerModuleProcessor defaultProcessor = new EmptyApplicationExceptionProcessor();
 
     public ModuleApplicationExceptionManager(AbstractLayerModuleProcessor defaultProcessor) {
-        this.defaultProcessor = defaultProcessor;
+        Optional
+                .ofNullable(defaultProcessor)
+                .ifPresent(processor -> this.defaultProcessor = processor);
     }
 
     public ModuleApplicationExceptionManager() {
+        this(null);
     }
 
     @Override

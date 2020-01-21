@@ -2,10 +2,7 @@ package com.ezcoding.common.test.config;
 
 import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import com.ezcoding.common.foundation.core.exception.processor.FunctionLayerModuleProcessor;
-import com.ezcoding.common.foundation.core.exception.processor.ModuleApplicationExceptionManager;
-import com.ezcoding.common.foundation.core.exception.processor.ProcessContext;
-import com.ezcoding.common.foundation.core.exception.processor.WebProcessContext;
+import com.ezcoding.common.foundation.core.exception.processor.*;
 import com.ezcoding.common.foundation.starter.IApplicationExceptionProcessorRegister;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,22 +18,22 @@ import static com.ezcoding.common.foundation.core.exception.ModuleConstants.DEFA
 public class TestApplicationExceptionProcessorRegister implements IApplicationExceptionProcessorRegister {
 
     @Override
-    public void registerApplicationProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager) {
+    public void registerApplicationProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager, AbstractLayerModuleProcessor defaultProcessor) {
     }
 
     @Override
-    public void registerModuleProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager) {
+    public void registerModuleProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager, AbstractLayerModuleProcessor defaultProcessor) {
 
     }
 
     @Override
-    public void registerFunctionProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager) {
+    public void registerFunctionProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager, AbstractLayerModuleProcessor defaultProcessor) {
         moduleApplicationExceptionManager.registerFunctionProcessor(
                 new FunctionLayerModule(DEFAULT_MODULE_LAYER_MODULE, "11", "1"),
                 new FunctionLayerModuleProcessor() {
                     @Override
                     public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
-                        if(processContext instanceof WebProcessContext){
+                        if (processContext instanceof WebProcessContext) {
                             HttpServletResponse response = ((WebProcessContext) processContext).getResponse();
                             try {
                                 response.sendError(200, "11111");
@@ -47,7 +44,8 @@ public class TestApplicationExceptionProcessorRegister implements IApplicationEx
                         }
                         return processContext;
                     }
-                }
+                },
+                defaultProcessor
         );
 
         moduleApplicationExceptionManager.registerFunctionProcessor(
@@ -55,7 +53,7 @@ public class TestApplicationExceptionProcessorRegister implements IApplicationEx
                 new FunctionLayerModuleProcessor() {
                     @Override
                     public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
-                        if(processContext instanceof WebProcessContext){
+                        if (processContext instanceof WebProcessContext) {
                             HttpServletResponse response = ((WebProcessContext) processContext).getResponse();
                             try {
                                 response.sendError(200, "22222");
@@ -66,7 +64,8 @@ public class TestApplicationExceptionProcessorRegister implements IApplicationEx
                         }
                         return processContext;
                     }
-                }
+                },
+                defaultProcessor
         );
     }
 

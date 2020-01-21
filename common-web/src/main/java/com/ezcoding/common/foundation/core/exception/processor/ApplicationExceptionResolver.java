@@ -56,7 +56,7 @@ public class ApplicationExceptionResolver extends AbstractHandlerExceptionResolv
 
                 String message = Optional
                         .ofNullable(processContext.getReturnSummary())
-                        .orElseGet(() -> defaultMessage == null ? ErrorAppHead.defaultErrorMessage : defaultMessage);
+                        .orElseGet(() -> defaultMessage == null ? ErrorAppHead.getDefaultErrorMessage() : defaultMessage);
 
                 response.sendError(value, message);
             }

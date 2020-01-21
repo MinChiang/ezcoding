@@ -7,8 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGeneratorConstants.COMMON_PARAM_VALIDATE_ERROR;
-import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGeneratorConstants.COMMON_REQUEST_TYPE_ERROR;
+import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGeneratorConstants.*;
 
 /**
  * @author MinChiang
@@ -32,6 +31,18 @@ public class TestController {
     @JsonResult
     public String test2() {
         throw moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_REQUEST_TYPE_ERROR).build();
+    }
+
+    @GetMapping("3")
+    @JsonResult
+    public String test3() {
+        throw new NullPointerException("fuck");
+    }
+
+    @GetMapping("4")
+    @JsonResult
+    public String test4() {
+        throw moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_RESOURCE_NOT_FIND_ERROR).params("xixi", "haha").build();
     }
 
 }

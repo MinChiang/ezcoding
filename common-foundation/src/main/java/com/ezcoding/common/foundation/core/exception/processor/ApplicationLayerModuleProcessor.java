@@ -22,9 +22,9 @@ public class ApplicationLayerModuleProcessor extends AbstractLayerModuleProcesso
         if (moduleLayerModuleProcessors != null && moduleLayerModuleProcessors.size() > 0) {
             this.moduleLayerModuleProcessors.putAll(moduleLayerModuleProcessors);
         }
-        this.defaultProcessor = Optional
+        Optional
                 .ofNullable(defaultProcessor)
-                .orElse(new EmptyApplicationExceptionProcessor());
+                .ifPresent(processor -> this.defaultProcessor = processor);
     }
 
     public ApplicationLayerModuleProcessor(AbstractLayerModuleProcessor defaultProcessor) {

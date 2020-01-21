@@ -4,10 +4,7 @@ import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
 import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.exception.ModuleExceptionBuilderFactory;
-import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
-import com.ezcoding.common.foundation.core.exception.processor.ApplicationLayerModuleProcessor;
-import com.ezcoding.common.foundation.core.exception.processor.ModuleApplicationExceptionManager;
-import com.ezcoding.common.foundation.core.exception.processor.ModuleLayerModuleProcessor;
+import com.ezcoding.common.foundation.core.exception.processor.*;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
@@ -29,6 +26,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.spi.resourceloading.ResourceBundleLocator;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
@@ -63,8 +61,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
     @Autowired
     private MessageSource messageSource;
-    @Autowired(required = false)
-    private List<IApplicationExceptionProcessorRegister> registers;
 
     /**
      * 注册默认分页类型
@@ -197,27 +193,31 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 
     @ConditionalOnMissingBean(AbstractApplicationExceptionManager.class)
     @Bean
-    public ModuleApplicationExceptionManager moduleApplicationExceptionManager() {
-        ModuleApplicationExceptionManager moduleApplicationExceptionManager = new ModuleApplicationExceptionManager();
-        registerDefaultProcessor(moduleApplicationExceptionManager);
-        if (CollectionUtils.isNotEmpty(this.registers)) {
-            registerExtraProcessor(moduleApplicationExceptionManager, this.registers);
+    public ModuleApplicationExceptionManager moduleApplicationExceptionManager(@Autowired(required = false) @Qualifier(value = "defaultLayerModuleProcessor") AbstractLayerModuleProcessor defaultProcessor,
+                                                                               @Autowired(required = false) List<IApplicationExceptionProcessorRegister> registers) {
+        ModuleApplicationExceptionManager moduleApplicationExceptionManager = new ModuleApplicationExceptionManager(defaultProcessor);
+        registerDefaultProcessor(moduleApplicationExceptionManager, defaultProcessor);
+        if (CollectionUtils.isNotEmpty(registers)) {
+            registerExtraProcessor(moduleApplicationExceptionManager, registers, defaultProcessor);
         }
         return moduleApplicationExceptionManager;
     }
 
-    private void registerDefaultProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager) {
-        moduleApplicationExceptionManager.registerApplicationProcessor(DEFAULT_APPLICATION_LAYER_MODULE, new ApplicationLayerModuleProcessor());
-        moduleApplicationExceptionManager.registerModuleProcessor(DEFAULT_MODULE_LAYER_MODULE, new ModuleLayerModuleProcessor());
+    private void registerDefaultProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager,
+                                          AbstractLayerModuleProcessor defaultProcessor) {
+        moduleApplicationExceptionManager.registerApplicationProcessor(DEFAULT_APPLICATION_LAYER_MODULE, new ApplicationLayerModuleProcessor(defaultProcessor));
+        moduleApplicationExceptionManager.registerModuleProcessor(DEFAULT_MODULE_LAYER_MODULE, new ModuleLayerModuleProcessor(defaultProcessor));
     }
 
-    private void registerExtraProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager, List<IApplicationExceptionProcessorRegister> registers) {
+    private void registerExtraProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager,
+                                        List<IApplicationExceptionProcessorRegister> registers,
+                                        AbstractLayerModuleProcessor defaultProcessor) {
         if (CollectionUtils.isNotEmpty(registers)) {
             registers
                     .forEach(register -> {
-                        register.registerApplicationProcessor(moduleApplicationExceptionManager);
-                        register.registerModuleProcessor(moduleApplicationExceptionManager);
-                        register.registerFunctionProcessor(moduleApplicationExceptionManager);
+                        register.registerApplicationProcessor(moduleApplicationExceptionManager, defaultProcessor);
+                        register.registerModuleProcessor(moduleApplicationExceptionManager, defaultProcessor);
+                        register.registerFunctionProcessor(moduleApplicationExceptionManager, defaultProcessor);
                     });
         }
     }
