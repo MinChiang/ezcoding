@@ -3,7 +3,7 @@ package com.ezcoding.common.test.config;
 import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.exception.processor.*;
-import com.ezcoding.common.foundation.starter.IApplicationExceptionProcessorRegister;
+import com.ezcoding.common.foundation.starter.IApplicationExceptionProcessorConfigurer;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import static com.ezcoding.common.foundation.core.exception.ModuleConstants.DEFA
  * @version 1.0.0
  * @date 2020-01-20 14:13
  */
-public class TestApplicationExceptionProcessorRegister implements IApplicationExceptionProcessorRegister {
+public class TestApplicationExceptionProcessorConfigurer implements IApplicationExceptionProcessorConfigurer {
 
     @Override
     public void registerApplicationProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager, AbstractLayerModuleProcessor defaultProcessor) {

@@ -194,7 +194,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @ConditionalOnMissingBean(AbstractApplicationExceptionManager.class)
     @Bean
     public ModuleApplicationExceptionManager moduleApplicationExceptionManager(@Autowired(required = false) @Qualifier(value = "defaultLayerModuleProcessor") AbstractLayerModuleProcessor defaultProcessor,
-                                                                               @Autowired(required = false) List<IApplicationExceptionProcessorRegister> registers) {
+                                                                               @Autowired(required = false) List<IApplicationExceptionProcessorConfigurer> registers) {
         ModuleApplicationExceptionManager moduleApplicationExceptionManager = new ModuleApplicationExceptionManager(defaultProcessor);
         registerDefaultProcessor(moduleApplicationExceptionManager, defaultProcessor);
         if (CollectionUtils.isNotEmpty(registers)) {
@@ -210,7 +210,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     }
 
     private void registerExtraProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager,
-                                        List<IApplicationExceptionProcessorRegister> registers,
+                                        List<IApplicationExceptionProcessorConfigurer> registers,
                                         AbstractLayerModuleProcessor defaultProcessor) {
         if (CollectionUtils.isNotEmpty(registers)) {
             registers

@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 public class TestConfig {
 
     @Bean
-    public TestApplicationExceptionProcessorRegister testApplicationExceptionProcessorRegister() {
-        return new TestApplicationExceptionProcessorRegister();
+    public TestApplicationExceptionProcessorConfigurer testApplicationExceptionProcessorRegister() {
+        return new TestApplicationExceptionProcessorConfigurer();
     }
 
 }

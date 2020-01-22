@@ -1,10 +1,9 @@
 package com.ezcoding.common.web.starter;
 
-import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
-import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
+import com.ezcoding.common.core.user.resolve.CompositeUserLoader;
+import com.ezcoding.common.core.user.resolve.IUserProxyable;
 import com.ezcoding.common.foundation.core.exception.processor.WebEmptyApplicationExceptionProcessor;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
-import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
 import com.ezcoding.common.web.error.ApplicationErrorController;
 import com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes;
 import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
@@ -13,6 +12,7 @@ import com.ezcoding.common.web.filter.IApplicationContextValueFetchable;
 import com.ezcoding.common.web.resolver.JsonMessageMethodProcessor;
 import com.ezcoding.common.web.resolver.JsonPageMethodProcessor;
 import com.ezcoding.common.web.resolver.JsonRequestMessageResolver;
+import com.ezcoding.common.web.resolver.UserArgumentResolver;
 import com.ezcoding.common.web.resolver.parameter.*;
 import com.ezcoding.common.web.resolver.returnValue.IResponseMessageReturnValueResolvable;
 import com.ezcoding.common.web.resolver.returnValue.ResponseAppHeadResolver;
@@ -33,11 +33,9 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
@@ -50,7 +48,7 @@ import java.util.List;
  * @date 2019-11-20 11:19
  */
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -58,12 +56,10 @@ public class WebConfig implements WebMvcConfigurer {
     private IMessageBuilder messageBuilder;
     @Autowired
     private List<HttpMessageConverter<?>> messageConverters;
-    //    @Autowired
-//    private CurrentUserLoader currentUserLoader;
-//    @Autowired
-//    private IUserProxyable userProxyable;
     @Autowired
-    private AbstractApplicationExceptionManager applicationExceptionManager;
+    private CompositeUserLoader compositeUserLoader;
+    @Autowired
+    private IUserProxyable userProxyable;
 
     private void registerParameterResolver(List<IRequestMessageParameterResolvable> resolvables) {
         resolvables.add(new ReqeustMessageResolver());
@@ -104,9 +100,9 @@ public class WebConfig implements WebMvcConfigurer {
         return new JsonPageMethodProcessor(jsonRequestMessageResolver());
     }
 
-//    private UserArgumentResolver userArgumentResolver() {
-//        return new UserArgumentResolver(currentUserLoader, userProxyable);
-//    }
+    private UserArgumentResolver userArgumentResolver() {
+        return new UserArgumentResolver(compositeUserLoader, userProxyable);
+    }
 
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
@@ -117,7 +113,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(jsonMessageMethodProcessor());
         argumentResolvers.add(jsonPageMethodProcessor());
-//        argumentResolvers.add(userArgumentResolver());
+        argumentResolvers.add(userArgumentResolver());
     }
 
     @Bean
@@ -135,16 +131,16 @@ public class WebConfig implements WebMvcConfigurer {
         return new ApplicationErrorController(errorAttributes, serverProperties.getError(), errorViewResolvers);
     }
 
-    @Override
-    public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-        resolvers.add(0, new ApplicationExceptionResolver(applicationExceptionManager, HttpStatus.INTERNAL_SERVER_ERROR, ErrorAppHead.getDefaultErrorMessage()));
-    }
-
     @Bean
     public ApplicationExceptionErrorAttributes applicationExceptionErrorAttributes() {
         return new ApplicationExceptionErrorAttributes();
     }
 
+    /**
+     * 此类覆盖common-starter中的emptyApplicationExceptionProcessor
+     *
+     * @return web容器空执行器
+     */
     @Bean(value = {"defaultLayerModuleProcessor", "webEmptyApplicationExceptionProcessor"})
     public WebEmptyApplicationExceptionProcessor webEmptyApplicationExceptionProcessor() {
         return new WebEmptyApplicationExceptionProcessor();

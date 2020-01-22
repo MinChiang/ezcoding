@@ -7,14 +7,14 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Map;
 
+import static com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver.KEY_APPLICATION_EXPCETION;
+
 /**
  * @author MinChiang
  * @version 1.0.0
  * @date 2020-01-20 15:25
  */
 public class ApplicationExceptionErrorAttributes extends DefaultErrorAttributes {
-
-    public static final String KEY_APPLICATION_EXPCETION = "com.ezcoding.common.foundation.core.exception.ApplicationException";
 
     public ApplicationExceptionErrorAttributes() {
         this(false);

@@ -1,9 +1,8 @@
 package com.ezcoding.common.core.user.resolve;
 
 import com.ezcoding.common.core.user.model.IUser;
-import com.ezcoding.common.core.user.model.User;
-import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,15 +11,11 @@ import java.util.Optional;
  * @version 1.0.0
  * @date 2018-12-11 10:34
  */
-public class CurrentUserLoader implements IUserLoadable {
+public class CompositeUserLoader implements IUserLoadable {
 
-    private static final List<IUserLoadable> LOADERS = Lists.newArrayList(new EmptyUserLoader());
+    private List<IUserLoadable> loaders = new ArrayList<>(0);
 
-    private CurrentUserLoader() {
-    }
-
-    public static CurrentUserLoader getInstance() {
-        return UserResolverUtilsHolder.INSTANCE;
+    private CompositeUserLoader() {
     }
 
 //    /**
@@ -56,35 +51,23 @@ public class CurrentUserLoader implements IUserLoadable {
 
     @Override
     public IUser load() {
-        return LOADERS
+        return loaders
                 .stream()
                 .map(IUserLoadable::load)
                 .findFirst()
-                .orElse(new User());
-    }
-
-    public static void registerLoaders(IUserLoadable loadable) {
-        Optional
-                .of(loadable)
-                .ifPresent(LOADERS::add);
-    }
-
-    private static final class UserResolverUtilsHolder {
-
-        private static final CurrentUserLoader INSTANCE = new CurrentUserLoader();
-
+                .orElse(null);
     }
 
     /**
-     * 空用户加载器
+     * 注册用户加载器
+     *
+     * @param index  注册的位置
+     * @param loader 需要注册的加载器
      */
-    private static final class EmptyUserLoader implements IUserLoadable {
-
-        @Override
-        public IUser load() {
-            return new User();
-        }
-
+    public void registerLoader(int index, IUserLoadable loader) {
+        Optional
+                .of(loader)
+                .ifPresent(ld -> loaders.add(index, ld));
     }
 
 }

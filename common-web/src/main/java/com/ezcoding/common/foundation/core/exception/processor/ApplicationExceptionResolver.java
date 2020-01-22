@@ -13,14 +13,14 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes.KEY_APPLICATION_EXPCETION;
-
 /**
  * @author MinChiang
  * @version 1.0.0
  * @date 2020-01-19 14:54
  */
 public class ApplicationExceptionResolver extends AbstractHandlerExceptionResolver {
+
+    public static final String KEY_APPLICATION_EXPCETION = "com.ezcoding.common.foundation.core.exception.ApplicationException";
 
     private IApplicationExceptionProcessible processor;
 

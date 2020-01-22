@@ -8,7 +8,7 @@ import com.ezcoding.common.foundation.core.exception.processor.ModuleApplication
  * @version 1.0.0
  * @date 2020-01-20 14:02
  */
-public interface IApplicationExceptionProcessorRegister {
+public interface IApplicationExceptionProcessorConfigurer {
 
     /**
      * 注册服务级别错误处理器
