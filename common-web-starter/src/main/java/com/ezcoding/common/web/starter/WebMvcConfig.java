@@ -1,6 +1,7 @@
 package com.ezcoding.common.web.starter;
 
 import com.ezcoding.common.core.user.resolve.CompositeUserLoader;
+import com.ezcoding.common.core.user.resolve.IUserLoadable;
 import com.ezcoding.common.core.user.resolve.IUserProxyable;
 import com.ezcoding.common.foundation.core.exception.processor.WebEmptyApplicationExceptionProcessor;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
@@ -41,6 +42,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author MinChiang
@@ -56,9 +58,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private IMessageBuilder messageBuilder;
     @Autowired
     private List<HttpMessageConverter<?>> messageConverters;
-    @Autowired
-    private CompositeUserLoader compositeUserLoader;
-    @Autowired
+    @Autowired(required = false)
+    private List<IApplicationWebConfigurer> applicationWebConfigurers;
+    @Autowired(required = false)
     private IUserProxyable userProxyable;
 
     private void registerParameterResolver(List<IRequestMessageParameterResolvable> resolvables) {
@@ -100,8 +102,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return new JsonPageMethodProcessor(jsonRequestMessageResolver());
     }
 
+    private IUserLoadable compositeUserLoader() {
+        List<IUserLoadable> loaders = Lists.newArrayList();
+        Optional
+                .ofNullable(this.applicationWebConfigurers)
+                .ifPresent(configurers -> configurers.forEach(configurer -> configurer.registerUserLoaders(loaders)));
+        return new CompositeUserLoader(loaders);
+    }
+
     private UserArgumentResolver userArgumentResolver() {
-        return new UserArgumentResolver(compositeUserLoader, userProxyable);
+        return new UserArgumentResolver(this.compositeUserLoader(), userProxyable);
     }
 
     @Override
@@ -117,8 +127,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public FilterRegistrationBean<ApplicationContextHolderFilter> applicationContextHolderFilter(List<IApplicationContextValueFetchable> settables) {
-        ApplicationContextHolderFilter applicationContextHolderFilter = new ApplicationContextHolderFilter(settables);
+    public FilterRegistrationBean<ApplicationContextHolderFilter> applicationContextHolderFilter() {
+        List<IApplicationContextValueFetchable> fetchers = Lists.newLinkedList();
+        Optional
+                .ofNullable(this.applicationWebConfigurers)
+                .ifPresent(configures -> configures.forEach(configurer -> configurer.registerApplicationContextFetchers(fetchers)));
+        ApplicationContextHolderFilter applicationContextHolderFilter = new ApplicationContextHolderFilter(fetchers);
         FilterRegistrationBean<ApplicationContextHolderFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(applicationContextHolderFilter);
         registrationBean.setName(FilterConstants.Name.APPLICATION_CONTEXT_HOLDER_NAME);

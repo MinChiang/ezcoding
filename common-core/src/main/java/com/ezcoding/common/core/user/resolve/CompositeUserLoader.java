@@ -15,7 +15,10 @@ public class CompositeUserLoader implements IUserLoadable {
 
     private List<IUserLoadable> loaders = new ArrayList<>(0);
 
-    private CompositeUserLoader() {
+    public CompositeUserLoader(List<IUserLoadable> loaders) {
+        Optional
+                .ofNullable(loaders)
+                .ifPresent(lds -> this.loaders.addAll(lds));
     }
 
 //    /**

@@ -1,6 +1,7 @@
 package com.ezcoding.common.web.resolver;
 
 import com.ezcoding.common.core.user.model.IUser;
+import com.ezcoding.common.core.user.model.UserProxy;
 import com.ezcoding.common.core.user.resolve.CompositeUserLoader;
 import com.ezcoding.common.core.user.resolve.IUserLoadable;
 import com.ezcoding.common.core.user.resolve.IUserProxyable;
@@ -48,7 +49,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         switch (parameterAnnotation.type()) {
             case AUTO:
             case PROXY:
-                user = proxy.load(user);
+                user = new UserProxy(user, this.proxy);
                 break;
             case AUTH:
                 break;

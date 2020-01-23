@@ -1,5 +1,6 @@
 package com.ezcoding.common.core.user.model;
 
+import com.ezcoding.common.core.user.resolve.IUserLoadable;
 import com.ezcoding.common.core.user.resolve.IUserProxyable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,22 +14,26 @@ import java.util.Date;
  * @version 1.0.0
  * @date 2018-12-11 9:21
  */
-public class UserProxy implements IUser {
+public class UserProxy implements IUser, IUserLoadable {
 
     /**
      * 标志user类是否已经被解析实例化
      */
     private boolean resolved;
 
-    private static IUserProxyable loader;
+    /**
+     * 用户额外加载器
+     */
+    private IUserProxyable proxy;
 
     /**
      * 真实的user对象
      */
     private IUser user;
 
-    public UserProxy(IUser user) {
+    public UserProxy(IUser user, IUserProxyable proxy) {
         this.user = user;
+        this.proxy = proxy;
         this.resolved = false;
     }
 
@@ -48,19 +53,10 @@ public class UserProxy implements IUser {
                 return this.user;
             }
 
-            this.user = loader.load(this.user);
+            this.user = this.load();
             this.resolved = true;
         }
         return this.user;
-    }
-
-    /**
-     * 配置用户加载器
-     *
-     * @param loader 用户加载器
-     */
-    public static void configLoader(IUserProxyable loader) {
-        UserProxy.loader = loader;
     }
 
     @Override
@@ -141,6 +137,11 @@ public class UserProxy implements IUser {
     @Override
     public Collection<String> getRoles() {
         return this.user.getRoles();
+    }
+
+    @Override
+    public IUser load() {
+        return proxy.load(this);
     }
 
 }
