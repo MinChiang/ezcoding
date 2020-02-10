@@ -71,12 +71,6 @@
             <artifactId>commons-beanutils</artifactId>
         </dependency>
 
-        <!-- JWT -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-        </dependency>
-
         <!-- Google -->
         <dependency>
             <groupId>com.github.penggle</groupId>

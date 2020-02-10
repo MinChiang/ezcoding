@@ -1,6 +1,6 @@
-package com.ezcoding.common.foundation.core.tools.jwt;
+package com.ezcoding.common.web.jwt;
 
-import com.ezcoding.common.foundation.core.constant.GlobalConstants;
+import org.springframework.http.HttpHeaders;
 
 /**
  * @author MinChiang
@@ -9,8 +9,15 @@ import com.ezcoding.common.foundation.core.constant.GlobalConstants;
  */
 public class AuthSettings {
 
-    public static final String DEFAULT_HEADER = "Authorization";
-    public static final long DEFAULT_EXPIRATION = 604800L;
+    /**
+     * 默认请求头
+     */
+    public static final String DEFAULT_HEADER = HttpHeaders.AUTHORIZATION;
+
+    /**
+     * 默认过期时间
+     */
+    public static final long DEFAULT_EXPIRATION = 7 * 24 * 60 * 60;
 
     private String header = DEFAULT_HEADER;
     private long expiration = DEFAULT_EXPIRATION;
@@ -30,4 +37,5 @@ public class AuthSettings {
     public void setExpiration(long expiration) {
         this.expiration = expiration;
     }
+
 }

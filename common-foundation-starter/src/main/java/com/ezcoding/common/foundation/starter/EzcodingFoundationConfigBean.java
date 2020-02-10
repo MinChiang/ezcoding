@@ -1,6 +1,5 @@
 package com.ezcoding.common.foundation.starter;
 
-import com.ezcoding.common.foundation.core.tools.jwt.AuthSettings;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -16,9 +15,6 @@ public class EzcodingFoundationConfigBean {
 
     @NestedConfigurationProperty
     private MessageConfigBean message = new MessageConfigBean();
-
-    @NestedConfigurationProperty
-    private AuthSettings auth = new AuthSettings();
 
     @NestedConfigurationProperty
     private MetadataConfigBean metadata = new MetadataConfigBean();

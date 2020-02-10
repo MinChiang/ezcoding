@@ -1,4 +1,4 @@
-package com.ezcoding.common.foundation.core.tools.jwt;
+package com.ezcoding.common.web.jwt;
 
 import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class TokenTools {
 
-    private static final Long EXPIRATION_DEFAULT = 604800L;
+    private static final Long EXPIRATION_DEFAULT = AuthSettings.DEFAULT_EXPIRATION;
     private static final String SUBJECT_DEFAULT = "subject";
     private static final String ISSUER_DEFAULT = "issuer";
     private static final String SECRET_DEFAULT = "secret";
@@ -234,4 +234,5 @@ public class TokenTools {
     public void setIdProducer(IUUIDProducer idProducer) {
         this.idProducer = idProducer;
     }
+
 }

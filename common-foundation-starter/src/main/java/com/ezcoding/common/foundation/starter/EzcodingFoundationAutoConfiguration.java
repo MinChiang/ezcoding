@@ -9,7 +9,6 @@ import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
 import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
-import com.ezcoding.common.foundation.core.tools.jwt.AuthSettings;
 import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeUUIDProducer;
@@ -20,6 +19,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.hibernate.validator.HibernateValidator;
@@ -110,6 +111,13 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         return OriginalUUIDProducer.getInstance();
     }
 
+    private void customObjectMapperConfig(ObjectMapper objectMapper) {
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        simpleModule.addSerializer(long.class, ToStringSerializer.instance);
+        objectMapper.registerModule(simpleModule);
+    }
+
     @Primary
     @Bean
     public ObjectMapper objectMapper() {
@@ -118,6 +126,8 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
         objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
+
+        this.customObjectMapperConfig(objectMapper);
         return objectMapper;
     }
 
@@ -134,8 +144,10 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
         objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
+
         //带上对应的@class标志
         objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+        this.customObjectMapperConfig(objectMapper);
         return objectMapper;
     }
 
@@ -164,11 +176,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         return instance;
     }
 
-    @Bean
-    public AuthSettings authSettings() {
-        return ezcodingFoundationConfigBean.getAuth();
-    }
-
     /**
      * 1.默认读取ValidationMessages.properties中的内容，注意此文件需要使用UTF-8进行编码
      * 2.开启快速校验模式，当遇到第一个校验失败时马上返回
@@ -192,7 +199,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     }
 
     @ConditionalOnMissingBean(AbstractApplicationExceptionManager.class)
-    @Bean
+    @Bean("defaultExceptionManager")
     public ModuleApplicationExceptionManager moduleApplicationExceptionManager(@Autowired(required = false) @Qualifier(value = "defaultLayerModuleProcessor") AbstractLayerModuleProcessor defaultProcessor,
                                                                                @Autowired(required = false) List<IApplicationExceptionProcessorConfigurer> registers) {
         ModuleApplicationExceptionManager moduleApplicationExceptionManager = new ModuleApplicationExceptionManager(defaultProcessor);

@@ -3,13 +3,10 @@ package com.ezcoding.common.web.starter;
 import com.ezcoding.common.core.user.resolve.CompositeUserLoader;
 import com.ezcoding.common.core.user.resolve.IUserLoadable;
 import com.ezcoding.common.core.user.resolve.IUserProxyable;
-import com.ezcoding.common.foundation.core.exception.processor.WebEmptyApplicationExceptionProcessor;
+import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
+import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
-import com.ezcoding.common.web.error.ApplicationErrorController;
-import com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes;
-import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
-import com.ezcoding.common.web.filter.FilterConstants;
-import com.ezcoding.common.web.filter.IApplicationContextValueFetchable;
+import com.ezcoding.common.web.jwt.AuthSettings;
 import com.ezcoding.common.web.resolver.JsonMessageMethodProcessor;
 import com.ezcoding.common.web.resolver.JsonPageMethodProcessor;
 import com.ezcoding.common.web.resolver.JsonRequestMessageResolver;
@@ -21,26 +18,16 @@ import com.ezcoding.common.web.resolver.returnValue.ResponseMessageResolver;
 import com.ezcoding.common.web.resolver.returnValue.ResponseSystemHeadResolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.error.ErrorAttributes;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import java.util.ArrayList;
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +49,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private List<IApplicationWebConfigurer> applicationWebConfigurers;
     @Autowired(required = false)
     private IUserProxyable userProxyable;
+    @Autowired
+    private EzcodingWebConfigBean ezcodingWebConfigBean;
+    @Resource(name = "defaultExceptionManager")
+    private AbstractApplicationExceptionManager defaultExceptionManager;
 
     private void registerParameterResolver(List<IRequestMessageParameterResolvable> resolvables) {
         resolvables.add(new ReqeustMessageResolver());
@@ -126,75 +117,26 @@ public class WebMvcConfig implements WebMvcConfigurer {
         argumentResolvers.add(userArgumentResolver());
     }
 
-    @Bean
-    public FilterRegistrationBean<ApplicationContextHolderFilter> applicationContextHolderFilter() {
-        List<IApplicationContextValueFetchable> fetchers = Lists.newLinkedList();
-        Optional
-                .ofNullable(this.applicationWebConfigurers)
-                .ifPresent(configures -> configures.forEach(configurer -> configurer.registerApplicationContextFetchers(fetchers)));
-        ApplicationContextHolderFilter applicationContextHolderFilter = new ApplicationContextHolderFilter(fetchers);
-        FilterRegistrationBean<ApplicationContextHolderFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(applicationContextHolderFilter);
-        registrationBean.setName(FilterConstants.Name.APPLICATION_CONTEXT_HOLDER_NAME);
-        registrationBean.setOrder(FilterConstants.Order.APPLICATION_CONTEXT_HOLDER_ORDER);
-        return registrationBean;
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        AuthSettings authSettings = ezcodingWebConfigBean.getAuthSettings();
+        //允许跨域标识
+        registry
+                .addMapping("/**")
+                .allowedHeaders("*")
+                .allowedMethods("*")
+                .allowedOrigins("*")
+                //当进行跨域请求时，前端APP只能获取默认的几个header，此时需要设置Access-Control-Expose-Headers的值
+                .exposedHeaders(authSettings.getHeader())
+                .allowCredentials(true);
     }
 
-    @Bean
-    public ApplicationErrorController basicErrorController(ErrorAttributes errorAttributes, ServerProperties serverProperties, List<ErrorViewResolver> errorViewResolvers) {
-        return new ApplicationErrorController(errorAttributes, serverProperties.getError(), errorViewResolvers);
-    }
-
-    @Bean
-    public ApplicationExceptionErrorAttributes applicationExceptionErrorAttributes() {
-        return new ApplicationExceptionErrorAttributes();
-    }
-
-    /**
-     * 此类覆盖common-starter中的emptyApplicationExceptionProcessor
-     *
-     * @return web容器空执行器
-     */
-    @Bean(value = {"defaultLayerModuleProcessor", "webEmptyApplicationExceptionProcessor"})
-    public WebEmptyApplicationExceptionProcessor webEmptyApplicationExceptionProcessor() {
-        return new WebEmptyApplicationExceptionProcessor();
-    }
-
-    @Configuration
-    @AutoConfigureAfter(RequestMappingHandlerAdapter.class)
-    public static class WebLastConfig implements InitializingBean, BeanFactoryAware {
-
-        private BeanFactory beanFactory;
-
-        @Override
-        public void afterPropertiesSet() {
-            RequestMappingHandlerAdapter adapter = beanFactory.getBean(RequestMappingHandlerAdapter.class);
-
-            List<HandlerMethodReturnValueHandler> customReturnValueHandlers = adapter.getCustomReturnValueHandlers();
-            List<HandlerMethodReturnValueHandler> returnValueHandlers = adapter.getReturnValueHandlers();
-            if (CollectionUtils.isNotEmpty(customReturnValueHandlers) && CollectionUtils.isNotEmpty(returnValueHandlers)) {
-                //returnValueHandlers为不可变对象，需要重新设置一个新的list进行设置
-                List<HandlerMethodReturnValueHandler> dest = new ArrayList<>(returnValueHandlers);
-                dest.removeAll(customReturnValueHandlers);
-                dest.addAll(0, customReturnValueHandlers);
-                adapter.setReturnValueHandlers(dest);
-            }
-
-            List<HandlerMethodArgumentResolver> customArgumentResolvers = adapter.getCustomArgumentResolvers();
-            List<HandlerMethodArgumentResolver> argumentResolvers = adapter.getArgumentResolvers();
-            if (CollectionUtils.isNotEmpty(customArgumentResolvers) && CollectionUtils.isNotEmpty(argumentResolvers)) {
-                List<HandlerMethodArgumentResolver> dest = new ArrayList<>(argumentResolvers);
-                dest.removeAll(customArgumentResolvers);
-                dest.addAll(0, customArgumentResolvers);
-                adapter.setArgumentResolvers(dest);
-            }
+    @Override
+    public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+        if (defaultExceptionManager != null) {
+            ApplicationExceptionResolver applicationExceptionResolver = new ApplicationExceptionResolver(defaultExceptionManager);
+            resolvers.add(0, applicationExceptionResolver);
         }
-
-        @Override
-        public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-            this.beanFactory = beanFactory;
-        }
-
     }
 
 }
