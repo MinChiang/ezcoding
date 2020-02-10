@@ -2,11 +2,12 @@ package com.ezcoding.common.test.config;
 
 import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import com.ezcoding.common.foundation.core.exception.processor.*;
+import com.ezcoding.common.foundation.core.exception.processor.AbstractLayerModuleProcessor;
+import com.ezcoding.common.foundation.core.exception.processor.ModuleApplicationExceptionManager;
+import com.ezcoding.common.foundation.core.exception.processor.WebFunctionLayerModuleProcessor;
+import com.ezcoding.common.foundation.core.exception.processor.WebProcessContext;
 import com.ezcoding.common.foundation.starter.IApplicationExceptionProcessorConfigurer;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.springframework.http.HttpStatus;
 
 import static com.ezcoding.common.foundation.core.exception.ModuleConstants.DEFAULT_MODULE_LAYER_MODULE;
 
@@ -30,19 +31,11 @@ public class TestApplicationExceptionProcessorConfigurer implements IApplication
     public void registerFunctionProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager, AbstractLayerModuleProcessor defaultProcessor) {
         moduleApplicationExceptionManager.registerFunctionProcessor(
                 new FunctionLayerModule(DEFAULT_MODULE_LAYER_MODULE, "11", "1"),
-                new FunctionLayerModuleProcessor() {
+                new WebFunctionLayerModuleProcessor() {
                     @Override
-                    public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
-                        if (processContext instanceof WebProcessContext) {
-                            HttpServletResponse response = ((WebProcessContext) processContext).getResponse();
-                            try {
-                                response.sendError(200, "11111");
-                                processContext.setProcessed(true);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        return processContext;
+                    public void doProcess(ApplicationException applicationException, WebProcessContext processContext) {
+                        processContext.setHttpStatus(HttpStatus.LOCKED);
+                        processContext.setReturnSummary("111111111111111111111111");
                     }
                 },
                 defaultProcessor
@@ -50,19 +43,11 @@ public class TestApplicationExceptionProcessorConfigurer implements IApplication
 
         moduleApplicationExceptionManager.registerFunctionProcessor(
                 new FunctionLayerModule(DEFAULT_MODULE_LAYER_MODULE, "22", "2"),
-                new FunctionLayerModuleProcessor() {
+                new WebFunctionLayerModuleProcessor() {
                     @Override
-                    public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
-                        if (processContext instanceof WebProcessContext) {
-                            HttpServletResponse response = ((WebProcessContext) processContext).getResponse();
-                            try {
-                                response.sendError(200, "22222");
-                                processContext.setProcessed(true);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        return processContext;
+                    public void doProcess(ApplicationException applicationException, WebProcessContext processContext) {
+                        processContext.setHttpStatus(HttpStatus.OK);
+                        processContext.setReturnSummary("222222222222222222222");
                     }
                 },
                 defaultProcessor

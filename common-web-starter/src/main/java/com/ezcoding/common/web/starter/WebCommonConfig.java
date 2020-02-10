@@ -1,6 +1,7 @@
 package com.ezcoding.common.web.starter;
 
 import com.ezcoding.common.foundation.core.exception.processor.WebEmptyApplicationExceptionProcessor;
+import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
 import com.ezcoding.common.web.error.ApplicationErrorController;
 import com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes;
 import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
@@ -23,6 +24,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
@@ -83,7 +85,7 @@ public class WebCommonConfig {
      */
     @Bean(value = {"defaultLayerModuleProcessor", "webEmptyApplicationExceptionProcessor"})
     public WebEmptyApplicationExceptionProcessor webEmptyApplicationExceptionProcessor() {
-        return new WebEmptyApplicationExceptionProcessor();
+        return new WebEmptyApplicationExceptionProcessor(HttpStatus.INTERNAL_SERVER_ERROR, ErrorAppHead.getDefaultErrorMessage());
     }
 
     @Configuration

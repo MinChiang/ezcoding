@@ -44,22 +44,18 @@ public class ApplicationExceptionResolver extends AbstractHandlerExceptionResolv
             return null;
         }
 
+        WebProcessContext processContext = createProcessContextWithDefaultValue(request, response, handler);
+        processContext = (WebProcessContext) processor.process((ApplicationException) ex, processContext);
+
+        HttpStatus status = Optional
+                .ofNullable(processContext.getHttpStatus())
+                .orElseGet(() -> defaultHttpStatus == null ? HttpStatus.INTERNAL_SERVER_ERROR : defaultHttpStatus);
+        String message = Optional
+                .ofNullable(processContext.getReturnSummary())
+                .orElseGet(() -> defaultMessage == null ? ErrorAppHead.getDefaultErrorMessage() : defaultMessage);
+
         try {
-            WebProcessContext processContext = createProcessContextWithDefaultValue(request, response, handler);
-            processContext = (WebProcessContext) processor.process((ApplicationException) ex, processContext);
-
-            if (!processContext.isProcessed()) {
-                int value = Optional
-                        .ofNullable(processContext.getHttpStatus())
-                        .orElseGet(() -> defaultHttpStatus == null ? HttpStatus.INTERNAL_SERVER_ERROR : defaultHttpStatus)
-                        .value();
-
-                String message = Optional
-                        .ofNullable(processContext.getReturnSummary())
-                        .orElseGet(() -> defaultMessage == null ? ErrorAppHead.getDefaultErrorMessage() : defaultMessage);
-
-                response.sendError(value, message);
-            }
+            response.sendError(status.value(), message);
 
             Map<String, ?> model = ImmutableMap
                     .<String, Object>builder()
@@ -68,7 +64,7 @@ public class ApplicationExceptionResolver extends AbstractHandlerExceptionResolv
 
             //自动打印业务错误信息
             ex.printStackTrace();
-            return new ModelAndView(null, model, null);
+            return new ModelAndView(null, model, status);
         } catch (IOException e) {
             e.printStackTrace();
         }

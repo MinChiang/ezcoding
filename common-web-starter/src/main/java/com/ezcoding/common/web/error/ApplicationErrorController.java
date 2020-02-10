@@ -32,14 +32,34 @@ public class ApplicationErrorController extends BasicErrorController {
         Map<String, Object> body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
         HttpStatus status = getStatus(request);
         ApplicationException applicationException = (ApplicationException) body.get("applicationException");
-        String returnCode = ErrorAppHead.getDefaultErrorCode();
-        String returnMessage = ErrorAppHead.getDefaultErrorMessage();
+
+        String returnCode;
+        String returnMessage;
         if (applicationException != null) {
-            returnCode = applicationException.getIdentification();
             returnMessage = applicationException.getSummary();
+            returnCode = applicationException.getIdentification();
+        } else {
+            returnMessage = ErrorAppHead.getDefaultErrorMessage();
+            returnCode = ErrorAppHead.getDefaultErrorCode();
         }
-        ResponseMessage<Map<String, Object>> responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), null);
+
+        String errorMesssage = getErrorMesssage(request);
+        ResponseMessage<Map<String, Object>> responseMessage = new ResponseMessage<>(
+                new ResponseSystemHead(),
+                new ErrorAppHead(returnCode, errorMesssage == null ? returnMessage : errorMesssage),
+                null
+        );
         return new ResponseEntity<>(responseMessage.toMap(), status);
+    }
+
+    /**
+     * 获取错误信息
+     *
+     * @param request 请求实体
+     * @return 请求中的错误内容
+     */
+    private String getErrorMesssage(HttpServletRequest request) {
+        return (String) request.getAttribute("javax.servlet.error.message");
     }
 
 }
