@@ -3,7 +3,7 @@ package com.ezcoding.common.foundation.starter;
 import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
 import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
-import com.ezcoding.common.foundation.core.exception.ModuleExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.exception.processor.*;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
@@ -83,9 +83,9 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     }
 
     @Bean
-    @ConditionalOnMissingBean(ModuleExceptionBuilderFactory.class)
-    public ModuleExceptionBuilderFactory moduleExceptionBuilderFactory() {
-        return new ModuleExceptionBuilderFactory(messageSource);
+    @ConditionalOnMissingBean(BaseModuleExceptionBuilderFactory.class)
+    public BaseModuleExceptionBuilderFactory baseModuleExceptionBuilderFactory() {
+        return new BaseModuleExceptionBuilderFactory();
     }
 
     @Primary

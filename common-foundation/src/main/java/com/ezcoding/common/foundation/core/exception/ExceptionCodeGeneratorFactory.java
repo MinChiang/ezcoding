@@ -1,6 +1,6 @@
 package com.ezcoding.common.foundation.core.exception;
 
-import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
+import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 
 /**
  * @author MinChiang
@@ -9,16 +9,12 @@ import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
  */
 public class ExceptionCodeGeneratorFactory {
 
-    public static ModuleExceptionCodeGenerator moduleExceptionCodeGenerator(ModuleExceptionIdentification moduleExceptionIdentification) {
-        return moduleExceptionCodeGenerator(moduleExceptionIdentification.getModuleLayerModule(), moduleExceptionIdentification.getDetailCode());
+    public static ModuleExceptionCodeGenerator moduleExceptionCodeGenerator(FunctionLayerModule functionLayerModule) {
+        return new ModuleExceptionCodeGenerator(functionLayerModule);
     }
 
-    public static ModuleExceptionCodeGenerator moduleExceptionCodeGenerator(ModuleLayerModule moduleLayerModule, String detailCode) {
-        return new ModuleExceptionCodeGenerator(moduleLayerModule, detailCode);
-    }
-
-    public static TemplateExceptionCodeGenerator templateExceptionCodeGenerator(ModuleLayerModule moduleLayerModule, String detailCode, String template) {
-        return new TemplateExceptionCodeGenerator(moduleLayerModule, detailCode, template);
+    public static TemplateExceptionCodeGenerator templateExceptionCodeGenerator(FunctionLayerModule functionLayerModule, String template) {
+        return new TemplateExceptionCodeGenerator(functionLayerModule, template);
     }
 
 }

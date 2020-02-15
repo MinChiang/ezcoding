@@ -1,6 +1,5 @@
 package com.ezcoding.common.test.config;
 
-import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.exception.processor.AbstractLayerModuleProcessor;
 import com.ezcoding.common.foundation.core.exception.processor.ModuleApplicationExceptionManager;
@@ -9,7 +8,8 @@ import com.ezcoding.common.foundation.core.exception.processor.WebProcessContext
 import com.ezcoding.common.foundation.starter.IApplicationExceptionProcessorConfigurer;
 import org.springframework.http.HttpStatus;
 
-import static com.ezcoding.common.foundation.core.exception.ModuleConstants.DEFAULT_MODULE_LAYER_MODULE;
+import static com.ezcoding.common.foundation.core.exception.CommonExceptionConstants.COMMON_PARAM_VALIDATE_ERROR;
+import static com.ezcoding.common.foundation.core.exception.CommonExceptionConstants.COMMON_REQUEST_TYPE_ERROR;
 
 /**
  * @author MinChiang
@@ -30,7 +30,7 @@ public class TestApplicationExceptionProcessorConfigurer implements IApplication
     @Override
     public void registerFunctionProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager, AbstractLayerModuleProcessor defaultProcessor) {
         moduleApplicationExceptionManager.registerFunctionProcessor(
-                new FunctionLayerModule(DEFAULT_MODULE_LAYER_MODULE, "11", "1"),
+                COMMON_PARAM_VALIDATE_ERROR,
                 new WebFunctionLayerModuleProcessor() {
                     @Override
                     public void doProcess(ApplicationException applicationException, WebProcessContext processContext) {
@@ -42,7 +42,7 @@ public class TestApplicationExceptionProcessorConfigurer implements IApplication
         );
 
         moduleApplicationExceptionManager.registerFunctionProcessor(
-                new FunctionLayerModule(DEFAULT_MODULE_LAYER_MODULE, "22", "2"),
+                COMMON_REQUEST_TYPE_ERROR,
                 new WebFunctionLayerModuleProcessor() {
                     @Override
                     public void doProcess(ApplicationException applicationException, WebProcessContext processContext) {

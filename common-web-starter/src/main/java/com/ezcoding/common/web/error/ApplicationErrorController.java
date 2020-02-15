@@ -1,9 +1,9 @@
 package com.ezcoding.common.web.error;
 
-import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
 import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
+import com.ezcoding.common.foundation.util.BeanUtils;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+
+import static com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes.KEY_APPLICATION_EXCEPTION_IDENTIFICATION;
 
 /**
  * @author MinChiang
@@ -31,35 +33,17 @@ public class ApplicationErrorController extends BasicErrorController {
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
         Map<String, Object> body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
         HttpStatus status = getStatus(request);
-        ApplicationException applicationException = (ApplicationException) body.get("applicationException");
 
-        String returnCode;
-        String returnMessage;
-        if (applicationException != null) {
-            returnMessage = applicationException.getSummary();
-            returnCode = applicationException.getIdentification();
-        } else {
-            returnMessage = ErrorAppHead.getDefaultErrorMessage();
-            returnCode = ErrorAppHead.getDefaultErrorCode();
-        }
-
-        String errorMesssage = getErrorMesssage(request);
         ResponseMessage<Map<String, Object>> responseMessage = new ResponseMessage<>(
                 new ResponseSystemHead(),
-                new ErrorAppHead(returnCode, errorMesssage == null ? returnMessage : errorMesssage),
+                new ErrorAppHead(
+                        (String) body.getOrDefault(KEY_APPLICATION_EXCEPTION_IDENTIFICATION, ErrorAppHead.getDefaultErrorCode()),
+                        (String) body.getOrDefault("message", ErrorAppHead.getDefaultErrorMessage())
+                ),
                 null
         );
-        return new ResponseEntity<>(responseMessage.toMap(), status);
-    }
-
-    /**
-     * 获取错误信息
-     *
-     * @param request 请求实体
-     * @return 请求中的错误内容
-     */
-    private String getErrorMesssage(HttpServletRequest request) {
-        return (String) request.getAttribute("javax.servlet.error.message");
+        Map<String, Object> map = BeanUtils.beanToMap(responseMessage, false);
+        return new ResponseEntity<>(map, status);
     }
 
 }

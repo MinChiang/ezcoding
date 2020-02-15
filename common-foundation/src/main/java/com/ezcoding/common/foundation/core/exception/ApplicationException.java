@@ -12,10 +12,10 @@ public class ApplicationException extends RuntimeException implements IApplicati
     /**
      * 错误标识
      */
-    private final String identification;
+    protected final String identification;
 
-    public ApplicationException(String identification, String message, Throwable cause) {
-        super(message, cause);
+    public ApplicationException(String identification, String printMessage, Throwable cause) {
+        super(printMessage, cause);
         this.identification = identification;
     }
 

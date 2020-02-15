@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.starter;
 
-import com.ezcoding.common.foundation.core.exception.processor.WebEmptyApplicationExceptionProcessor;
-import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
+import com.ezcoding.common.foundation.core.exception.processor.ModuleExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.processor.WebDefaultApplicationExceptionProcessor;
 import com.ezcoding.common.web.error.ApplicationErrorController;
 import com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes;
 import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolve
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -40,10 +41,17 @@ import java.util.Optional;
  */
 @Configuration
 @EnableConfigurationProperties(EzcodingWebConfigBean.class)
-public class WebCommonConfig {
+public class WebCommonConfig implements InitializingBean {
 
     @Autowired(required = false)
     private List<IApplicationWebConfigurer> applicationWebConfigurers;
+    @Autowired
+    private MessageSource messageSource;
+
+    @Override
+    public void afterPropertiesSet() {
+        ModuleExceptionBuilderFactory.setMessageSource(messageSource);
+    }
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
@@ -83,9 +91,9 @@ public class WebCommonConfig {
      *
      * @return web容器空执行器
      */
-    @Bean(value = {"defaultLayerModuleProcessor", "webEmptyApplicationExceptionProcessor"})
-    public WebEmptyApplicationExceptionProcessor webEmptyApplicationExceptionProcessor() {
-        return new WebEmptyApplicationExceptionProcessor(HttpStatus.INTERNAL_SERVER_ERROR, ErrorAppHead.getDefaultErrorMessage());
+    @Bean(value = {"defaultLayerModuleProcessor", "webDefaultApplicationExceptionProcessor"})
+    public WebDefaultApplicationExceptionProcessor webDefaultApplicationExceptionProcessor() {
+        return new WebDefaultApplicationExceptionProcessor(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Configuration

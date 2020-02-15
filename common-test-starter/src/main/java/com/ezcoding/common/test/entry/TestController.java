@@ -1,8 +1,7 @@
 package com.ezcoding.common.test.entry;
 
-import com.ezcoding.common.foundation.core.exception.ModuleExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.processor.ModuleExceptionBuilderFactory;
 import com.ezcoding.common.web.resolver.JsonResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,19 +17,16 @@ import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGenerat
 @RequestMapping("/test")
 public class TestController {
 
-    @Autowired
-    private ModuleExceptionBuilderFactory moduleExceptionBuilderFactory;
-
     @GetMapping("1")
     @JsonResult
     public String test1() {
-        throw moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_PARAM_VALIDATE_ERROR).build();
+        throw ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).build();
     }
 
     @GetMapping("2")
     @JsonResult
     public String test2() {
-        throw moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_REQUEST_TYPE_ERROR).build();
+        throw ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_REQUEST_TYPE_ERROR).build();
     }
 
     @GetMapping("3")
@@ -42,13 +38,13 @@ public class TestController {
     @GetMapping("4")
     @JsonResult
     public String test4() {
-        throw moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_RESOURCE_NOT_FIND_ERROR).params("xixi", "haha").build();
+        throw ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_RESOURCE_NOT_FIND_ERROR).params("xixi", "haha").build();
     }
 
     @GetMapping("5")
     @JsonResult
     public String test5() {
-        throw moduleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(COMMON_RESOURCE_NOT_FIND_ERROR).params("xixi", "haha").build();
+        throw ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_USER_NOT_LOGIN_ERROR).params("xixi", "haha").build();
     }
 
 }

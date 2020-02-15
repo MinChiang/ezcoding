@@ -5,5 +5,6 @@ package com.ezcoding.common.foundation.core.message;
  * @version 1.0.0
  * @date 2019-08-26 23:37
  */
-public interface IMessage extends Mappable {
+public interface IMessage {
+
 }

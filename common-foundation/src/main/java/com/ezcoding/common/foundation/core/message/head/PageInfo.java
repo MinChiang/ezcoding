@@ -1,6 +1,5 @@
 package com.ezcoding.common.foundation.core.message.head;
 
-import com.ezcoding.common.foundation.core.message.Mappable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -10,7 +9,7 @@ import java.io.Serializable;
  * @version 1.0.0
  * @date 2018-07-14 17:08
  */
-public class PageInfo implements Cloneable, Serializable, Mappable {
+public class PageInfo implements Cloneable, Serializable {
 
     /**
      * 当前页码

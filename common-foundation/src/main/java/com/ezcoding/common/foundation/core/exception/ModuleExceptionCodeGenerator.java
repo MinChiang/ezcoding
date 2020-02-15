@@ -1,37 +1,26 @@
 package com.ezcoding.common.foundation.core.exception;
 
-import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
-import org.apache.commons.lang3.StringUtils;
+import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 
 /**
  * @author MinChiang
  * @version 1.0.0
  * @date 2019-12-28 21:36
  */
-public class ModuleExceptionCodeGenerator extends ModuleExceptionIdentification implements IExceptionCodeGeneratable {
+public class ModuleExceptionCodeGenerator implements IExceptionCodeGeneratable {
 
     /**
-     * 标识号
+     * 功能模块
      */
-    private String identification;
+    protected FunctionLayerModule functionLayerModule;
 
-    public ModuleExceptionCodeGenerator(ModuleLayerModule moduleLayerModule, String detailCode) {
-        super(moduleLayerModule, detailCode);
-        this.identification = innerGenerate();
-    }
-
-    /**
-     * 生成唯一编号
-     *
-     * @return 生成的唯一编号
-     */
-    private String innerGenerate() {
-        return moduleLayerModule.getCode() + StringUtils.leftPad(detailCode, defaultCodeLength, defaultFillChar);
+    public ModuleExceptionCodeGenerator(FunctionLayerModule functionLayerModule) {
+        this.functionLayerModule = functionLayerModule;
     }
 
     @Override
     public String generate() {
-        return this.identification;
+        return functionLayerModule.getCode();
     }
 
     @Override

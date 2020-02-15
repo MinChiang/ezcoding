@@ -1,9 +1,8 @@
 package com.ezcoding.common.foundation.util;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.springframework.core.io.ClassPathResource;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -34,16 +33,9 @@ public class KeyUtils {
      * -----BEGIN PUBLIC KEY-----
      * -----END PUBLIC KEY-----
      */
-    private static byte[] readKey(String path) {
-        try {
-            ClassPathResource resource = new ClassPathResource(path);
-            List<String> lines = IOUtils.readLines(resource.getInputStream(), StandardCharsets.UTF_8);
-            String collect = String.join("", lines.subList(1, lines.size() - 1));
-            return Base64.getDecoder().decode(collect);
-        } catch (IOException ignored) {
-
-        }
-        return null;
+    private static byte[] readKey(String path) throws IOException {
+        String content = loadKey(path);
+        return Base64.getDecoder().decode(content);
     }
 
     /**
@@ -52,7 +44,7 @@ public class KeyUtils {
      * @param file 待读取的文件
      * @return 读取的私钥
      */
-    public static PrivateKey loadPrivatekey(String file) {
+    public static PrivateKey loadPrivatekey(String file) throws IOException {
         byte[] privateContent = readKey(file);
         if (privateContent != null) {
             try {
@@ -72,7 +64,7 @@ public class KeyUtils {
      * @param file 待读取的文件
      * @return 读取的公钥
      */
-    public static PublicKey loadPublickey(String file) {
+    public static PublicKey loadPublickey(String file) throws IOException {
         byte[] publicContent = readKey(file);
         if (publicContent != null) {
             try {
@@ -113,8 +105,12 @@ public class KeyUtils {
      * @return 读取的内容
      */
     public static String loadKey(String file) throws IOException {
-        ClassPathResource resource = new ClassPathResource(file);
-        List<String> lines = FileUtils.readLines(resource.getFile(), StandardCharsets.UTF_8);
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream is = classLoader.getResourceAsStream(file);
+        if (is == null) {
+            throw new FileNotFoundException(file + "文件不存在");
+        }
+        List<String> lines = IOUtils.readLines(is, StandardCharsets.UTF_8);
         return String.join("", lines.subList(1, lines.size() - 1));
     }
 
