@@ -115,7 +115,7 @@ public class ModuleApplicationExceptionManager extends AbstractApplicationExcept
      * @param processor           错误处理器
      * @param defaultProcessor    默认层级处理器
      */
-    public void registerFunctionProcessor(FunctionLayerModule functionLayerModule, FunctionLayerModuleProcessor processor, AbstractLayerModuleProcessor defaultProcessor) {
+    public void registerFunctionProcessor(FunctionLayerModule functionLayerModule, AbstractFunctionLayerModuleProcessor processor, AbstractLayerModuleProcessor defaultProcessor) {
         checkParams(functionLayerModule, processor);
         applicationLayerModuleProcessors
                 .computeIfAbsent(functionLayerModule.getApplicationCode(), (key) -> new ApplicationLayerModuleProcessor(null))
@@ -130,7 +130,7 @@ public class ModuleApplicationExceptionManager extends AbstractApplicationExcept
      * @param functionLayerModule 功能模块
      * @param processor           错误处理器
      */
-    public void registerFunctionProcessor(FunctionLayerModule functionLayerModule, FunctionLayerModuleProcessor processor) {
+    public void registerFunctionProcessor(FunctionLayerModule functionLayerModule, AbstractFunctionLayerModuleProcessor processor) {
         registerFunctionProcessor(functionLayerModule, processor, null);
     }
 

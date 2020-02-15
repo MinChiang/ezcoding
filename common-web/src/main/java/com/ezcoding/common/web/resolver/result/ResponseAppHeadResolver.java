@@ -1,4 +1,4 @@
-package com.ezcoding.common.web.resolver.returnValue;
+package com.ezcoding.common.web.resolver.result;
 
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.head.ResponseAppHead;

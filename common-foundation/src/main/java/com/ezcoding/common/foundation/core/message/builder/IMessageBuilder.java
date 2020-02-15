@@ -125,6 +125,7 @@ public interface IMessageBuilder {
      *
      * @param returnCode    响应结果号码
      * @param returnMessage 响应信息内容
+     * @param payload       返回内容
      * @return 失败响应信息
      * @throws IOException IO异常
      */
@@ -135,6 +136,7 @@ public interface IMessageBuilder {
      *
      * @param returnCode    响应结果号码
      * @param returnMessage 响应信息内容数组
+     * @param payload       返回内容
      * @return 失败响应信息
      * @throws IOException IO异常
      */

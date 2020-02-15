@@ -5,7 +5,7 @@ import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
 import com.ezcoding.common.foundation.core.message.head.SuccessAppHead;
 import com.ezcoding.common.web.resolver.parameter.IRequestMessageParameterResolvable;
-import com.ezcoding.common.web.resolver.returnValue.IResponseMessageReturnValueResolvable;
+import com.ezcoding.common.web.resolver.result.IResponseMessageReturnValueResolvable;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;

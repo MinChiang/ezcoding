@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
  * @version 1.0.0
  * @date 2020-02-15 11:45
  */
-public class WebDefaultApplicationExceptionProcessor extends WebFunctionLayerModuleProcessor {
+public class WebDefaultApplicationExceptionProcessor extends AbstractWebFunctionLayerModuleProcessor {
 
     private HttpStatus defaultStatus;
 

@@ -16,10 +16,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ModuleLayerModuleProcessor extends AbstractLayerModuleProcessor {
 
-    private Map<String, FunctionLayerModuleProcessor> functionLayerModuleProcessors = new ConcurrentHashMap<>(0);
+    private Map<String, AbstractFunctionLayerModuleProcessor> functionLayerModuleProcessors = new ConcurrentHashMap<>(0);
     private AbstractLayerModuleProcessor defaultProcessor = new EmptyApplicationExceptionProcessor();
 
-    public ModuleLayerModuleProcessor(Map<String, FunctionLayerModuleProcessor> functionLayerModuleProcessors, AbstractLayerModuleProcessor defaultProcessor) {
+    public ModuleLayerModuleProcessor(Map<String, AbstractFunctionLayerModuleProcessor> functionLayerModuleProcessors, AbstractLayerModuleProcessor defaultProcessor) {
         if (functionLayerModuleProcessors != null && functionLayerModuleProcessors.size() > 0) {
             this.functionLayerModuleProcessors.putAll(functionLayerModuleProcessors);
         }
@@ -43,12 +43,12 @@ public class ModuleLayerModuleProcessor extends AbstractLayerModuleProcessor {
         String functionCode = applicationException
                 .getIdentification()
                 .substring(startInclude, endExclude);
-        FunctionLayerModuleProcessor functionLayerModuleProcessor = functionLayerModuleProcessors.get(functionCode);
+        AbstractFunctionLayerModuleProcessor abstractFunctionLayerModuleProcessor = functionLayerModuleProcessors.get(functionCode);
         ProcessContext result;
-        if (functionLayerModuleProcessor == null) {
+        if (abstractFunctionLayerModuleProcessor == null) {
             result = defaultProcessor.process(applicationException, processContext);
         } else {
-            result = functionLayerModuleProcessor.process(applicationException, processContext);
+            result = abstractFunctionLayerModuleProcessor.process(applicationException, processContext);
             if (!result.isProcessed()) {
                 result = defaultProcessor.process(applicationException, processContext);
             }
@@ -56,15 +56,15 @@ public class ModuleLayerModuleProcessor extends AbstractLayerModuleProcessor {
         return result;
     }
 
-    public void registerProcessors(Map<String, FunctionLayerModuleProcessor> processors) {
+    public void registerProcessors(Map<String, AbstractFunctionLayerModuleProcessor> processors) {
         this.functionLayerModuleProcessors.putAll(processors);
     }
 
-    public void registerProcessor(String functionCode, FunctionLayerModuleProcessor processor) {
+    public void registerProcessor(String functionCode, AbstractFunctionLayerModuleProcessor processor) {
         this.functionLayerModuleProcessors.put(functionCode, processor);
     }
 
-    public Map<String, FunctionLayerModuleProcessor> getFunctionLayerModuleProcessors() {
+    public Map<String, AbstractFunctionLayerModuleProcessor> getFunctionLayerModuleProcessors() {
         return functionLayerModuleProcessors;
     }
 

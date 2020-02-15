@@ -2,8 +2,8 @@ package com.ezcoding.common.test.config;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.exception.processor.AbstractLayerModuleProcessor;
+import com.ezcoding.common.foundation.core.exception.processor.AbstractWebFunctionLayerModuleProcessor;
 import com.ezcoding.common.foundation.core.exception.processor.ModuleApplicationExceptionManager;
-import com.ezcoding.common.foundation.core.exception.processor.WebFunctionLayerModuleProcessor;
 import com.ezcoding.common.foundation.core.exception.processor.WebProcessContext;
 import com.ezcoding.common.foundation.starter.IApplicationExceptionProcessorConfigurer;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class TestApplicationExceptionProcessorConfigurer implements IApplication
     public void registerFunctionProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager, AbstractLayerModuleProcessor defaultProcessor) {
         moduleApplicationExceptionManager.registerFunctionProcessor(
                 COMMON_PARAM_VALIDATE_ERROR,
-                new WebFunctionLayerModuleProcessor() {
+                new AbstractWebFunctionLayerModuleProcessor() {
                     @Override
                     public void doProcess(ApplicationException applicationException, WebProcessContext processContext) {
                         processContext.setHttpStatus(HttpStatus.LOCKED);
@@ -43,7 +43,7 @@ public class TestApplicationExceptionProcessorConfigurer implements IApplication
 
         moduleApplicationExceptionManager.registerFunctionProcessor(
                 COMMON_REQUEST_TYPE_ERROR,
-                new WebFunctionLayerModuleProcessor() {
+                new AbstractWebFunctionLayerModuleProcessor() {
                     @Override
                     public void doProcess(ApplicationException applicationException, WebProcessContext processContext) {
                         processContext.setHttpStatus(HttpStatus.OK);

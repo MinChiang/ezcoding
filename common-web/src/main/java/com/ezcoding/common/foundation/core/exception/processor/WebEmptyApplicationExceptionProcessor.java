@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
  * @version 1.0.0
  * @date 2020-01-21 17:03
  */
-public class WebEmptyApplicationExceptionProcessor extends WebFunctionLayerModuleProcessor {
+public class WebEmptyApplicationExceptionProcessor extends AbstractWebFunctionLayerModuleProcessor {
 
     private HttpStatus defaultStatus;
     private String defaultReturnSummary;

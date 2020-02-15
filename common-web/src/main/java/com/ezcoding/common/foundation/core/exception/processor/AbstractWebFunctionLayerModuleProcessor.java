@@ -7,7 +7,7 @@ import com.ezcoding.common.foundation.core.exception.ApplicationException;
  * @version 1.0.0
  * @date 2020-02-10 16:41
  */
-public abstract class WebFunctionLayerModuleProcessor extends FunctionLayerModuleProcessor {
+public abstract class AbstractWebFunctionLayerModuleProcessor extends AbstractFunctionLayerModuleProcessor {
 
     /**
      * 执行对应的处理步骤

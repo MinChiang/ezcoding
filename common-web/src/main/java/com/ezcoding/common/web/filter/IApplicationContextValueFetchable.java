@@ -15,6 +15,7 @@ public interface IApplicationContextValueFetchable {
      *
      * @param request  请求
      * @param response 响应
+     * @return 需要设置的对象值
      */
     Object fetch(HttpServletRequest request, HttpServletResponse response);
 

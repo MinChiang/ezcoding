@@ -91,7 +91,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @Primary
     @ConditionalOnMissingBean(SnowflakeUUIDProducer.class)
     @Bean("snowflakeUUIDProducer")
-    public IUUIDProducer snowflakeUUIDProducer() {
+    public IUUIDProducer snowflakeUuidProducer() {
 //        //高六位为微服务的服务对应序号，低4位为此类微服务对应的机器号
 //        int mechineId = (ApplicationUtils.getApplicationMetadata().getCategoryCode() << (SnowflakeUUIDProducer.MACHINE_BIT - GlobalConstants.Application.APPLICATION_CODE_BIT_LENGTH)) | ApplicationUtils.getApplicationMetadata().getCategoryNo();
 
@@ -107,7 +107,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 
     @ConditionalOnMissingBean(OriginalUUIDProducer.class)
     @Bean("originalUUIDProducer")
-    public IUUIDProducer originalUUIDProducer() {
+    public IUUIDProducer originalUuidProducer() {
         return OriginalUUIDProducer.getInstance();
     }
 

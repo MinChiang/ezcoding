@@ -23,7 +23,7 @@ public class NetworkUtils {
      * @param request 请求
      * @return 真实的ip地址
      */
-    public static String getIPAddress(HttpServletRequest request) {
+    public static String getIpAddress(HttpServletRequest request) {
         String ip = null;
 
         //X-Forwarded-For：Squid 服务代理

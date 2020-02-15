@@ -1,4 +1,4 @@
-package com.ezcoding.common.web.resolver.returnValue;
+package com.ezcoding.common.web.resolver.result;
 
 /**
  * @author MinChiang

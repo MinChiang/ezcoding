@@ -10,6 +10,7 @@ public interface IExceptionBuilder extends IApplicationIdentifiable {
     /**
      * 构建异常
      *
+     * @param cause 错误原因
      * @return 异常实例
      */
     ApplicationException build(Throwable cause);

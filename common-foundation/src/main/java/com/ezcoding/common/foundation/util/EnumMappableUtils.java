@@ -62,8 +62,8 @@ public class EnumMappableUtils {
     private static <T extends Enum<?>> void createMapping(Class<T> enumClass) {
         Field field = null;
         Method method = null;
-        Map<Object, Enum<?>> mapping = new HashMap<>();
-        Map<String, Enum<?>> mappingIgnoreType = new HashMap<>();
+        Map<Object, Enum<?>> mapping = new HashMap<>(0);
+        Map<String, Enum<?>> mappingIgnoreType = new HashMap<>(0);
 
         Field[] declaredFields = enumClass.getDeclaredFields();
         Method[] methods = enumClass.getMethods();
