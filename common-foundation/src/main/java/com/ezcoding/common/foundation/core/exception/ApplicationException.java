@@ -1,5 +1,8 @@
 package com.ezcoding.common.foundation.core.exception;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 业务定义异常
  *
@@ -14,9 +17,23 @@ public class ApplicationException extends RuntimeException implements IApplicati
      */
     protected final String identification;
 
-    public ApplicationException(String identification, String printMessage, Throwable cause) {
+    /**
+     * 错误上下文
+     */
+    protected final Map<String, Object> context;
+
+    public ApplicationException(String identification, String printMessage, Throwable cause, Map<String, Object> context) {
         super(printMessage, cause);
         this.identification = identification;
+        this.context = context;
+    }
+
+    public ApplicationException(String identification, String printMessage, Throwable cause) {
+        this(identification, printMessage, cause, new HashMap<>(0));
+    }
+
+    public Map<String, Object> getContext() {
+        return context;
     }
 
     @Override
@@ -34,6 +51,8 @@ public class ApplicationException extends RuntimeException implements IApplicati
         return "\n发生异常：" +
                 "\n\t指令代码：" +
                 getIdentification() +
+                "\n\t上下文内容：" +
+                getContext().toString() +
                 "\n\t错误信息：" +
                 getLocalizedMessage();
     }

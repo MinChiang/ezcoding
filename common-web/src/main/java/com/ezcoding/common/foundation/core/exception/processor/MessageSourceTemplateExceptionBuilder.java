@@ -84,4 +84,20 @@ public class MessageSourceTemplateExceptionBuilder extends AbstractTemplateExcep
         return this;
     }
 
+    public MessageSource getMessageSource() {
+        return messageSource;
+    }
+
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
 }

@@ -2,6 +2,8 @@ package com.ezcoding.common.foundation.core.exception;
 
 import org.springframework.http.HttpStatus;
 
+import java.util.HashMap;
+
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -20,7 +22,7 @@ public class WebApplicationException extends ApplicationException {
     protected String returnMessage;
 
     public WebApplicationException(String identification, String printMessage, String returnMessage, HttpStatus returnStatus, Throwable cause) {
-        super(identification, printMessage, cause);
+        super(identification, printMessage, cause, new HashMap<>(0));
         this.returnMessage = returnMessage;
         this.returnStatus = returnStatus;
     }

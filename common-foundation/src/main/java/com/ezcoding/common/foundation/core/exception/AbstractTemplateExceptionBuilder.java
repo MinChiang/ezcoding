@@ -1,7 +1,7 @@
 package com.ezcoding.common.foundation.core.exception;
 
-import com.google.common.collect.Lists;
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,10 +19,44 @@ public abstract class AbstractTemplateExceptionBuilder extends AbstractException
     /**
      * 参数内容
      */
-    protected List<Object> params = Lists.newLinkedList();
+    protected List<Object> params = new ArrayList<>(0);
 
     public AbstractTemplateExceptionBuilder(String identification) {
         super(identification);
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
+    public List<Object> getParams() {
+        return params;
+    }
+
+    public void setParams(List<Object> params) {
+        this.params = params;
+    }
+
+    /**
+     * 添加参数
+     *
+     * @param params 被添加的参数
+     */
+    public void addParams(List<Object> params) {
+        this.params.addAll(params);
+    }
+
+    /**
+     * 添加参数
+     *
+     * @param params 被添加的参数
+     */
+    public void addParams(Object[] params) {
+        this.params.addAll(Arrays.asList(params));
     }
 
 }
