@@ -1,6 +1,6 @@
 package com.ezcoding.common.test.entry;
 
-import com.ezcoding.common.foundation.core.exception.processor.ModuleExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
 import com.ezcoding.common.web.resolver.JsonResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +20,13 @@ public class TestController {
     @GetMapping("1")
     @JsonResult
     public String test1() {
-        throw ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).build();
+        throw WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).build();
     }
 
     @GetMapping("2")
     @JsonResult
     public String test2() {
-        throw ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_REQUEST_TYPE_ERROR).build();
+        throw WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_REQUEST_TYPE_ERROR).build();
     }
 
     @GetMapping("3")
@@ -38,13 +38,13 @@ public class TestController {
     @GetMapping("4")
     @JsonResult
     public String test4() {
-        throw ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_RESOURCE_NOT_FIND_ERROR).params("xixi", "haha").build();
+        throw WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_RESOURCE_NOT_FIND_ERROR).params("xixi", "haha").build();
     }
 
     @GetMapping("5")
     @JsonResult
     public String test5() {
-        throw ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_USER_NOT_LOGIN_ERROR).params("xixi", "haha").build();
+        throw WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_USER_NOT_LOGIN_ERROR).params("xixi", "haha").build();
     }
 
 }

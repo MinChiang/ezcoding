@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.advice;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import com.ezcoding.common.foundation.core.exception.processor.ModuleExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class ApplicationAdviceConfig {
             LOGGER.error("请求类型异常：", e);
         }
         return this.messageBuilder.buildErrorResponseMessage(
-                ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_REQUEST_TYPE_ERROR).build()
+                WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_REQUEST_TYPE_ERROR).build()
         );
     }
 
@@ -55,7 +55,7 @@ public class ApplicationAdviceConfig {
             LOGGER.error("参数校验异常：", e);
         }
         return this.messageBuilder.buildErrorResponseMessage(
-                ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).build()
+                WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).build()
         );
     }
 
@@ -69,7 +69,7 @@ public class ApplicationAdviceConfig {
             LOGGER.error("参数校验异常：{}", result);
         }
         return this.messageBuilder.buildErrorResponseMessage(
-                ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).params(result).build()
+                WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).params(result).build()
         );
     }
 
@@ -84,7 +84,7 @@ public class ApplicationAdviceConfig {
             LOGGER.error("参数校验异常：{}", result);
         }
         return this.messageBuilder.buildErrorResponseMessage(
-                ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).params(result).build()
+                WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).params(result).build()
         );
     }
 
@@ -92,7 +92,7 @@ public class ApplicationAdviceConfig {
     @ExceptionHandler(value = NoHandlerFoundException.class)
     public ResponseMessage<?> handleNoHandlerFoundException(NoHandlerFoundException e) throws IOException {
         return this.messageBuilder.buildErrorResponseMessage(
-                ModuleExceptionBuilderFactory.messageSourceTemplateExceptionBuilder(GEN_COMMON_RESOURCE_NOT_FIND_ERROR).build()
+                WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_RESOURCE_NOT_FIND_ERROR).build()
         );
     }
 

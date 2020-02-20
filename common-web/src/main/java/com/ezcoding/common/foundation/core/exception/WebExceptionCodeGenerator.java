@@ -15,8 +15,13 @@ public class WebExceptionCodeGenerator extends TemplateExceptionCodeGenerator {
      */
     private HttpStatus httpStatus;
 
-    public WebExceptionCodeGenerator(FunctionLayerModule functionLayerModule, String template) {
+    public WebExceptionCodeGenerator(FunctionLayerModule functionLayerModule, String template, HttpStatus httpStatus) {
         super(functionLayerModule, template);
+        this.httpStatus = httpStatus;
+    }
+
+    public WebExceptionCodeGenerator(FunctionLayerModule functionLayerModule, String template) {
+        this(functionLayerModule, template, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     public HttpStatus getHttpStatus() {

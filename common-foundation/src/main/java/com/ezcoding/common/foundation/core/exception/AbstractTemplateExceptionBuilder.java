@@ -3,6 +3,7 @@ package com.ezcoding.common.foundation.core.exception;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author MinChiang
@@ -14,31 +15,37 @@ public abstract class AbstractTemplateExceptionBuilder extends AbstractException
     /**
      * 模板内容
      */
-    protected String template;
+    public static final String KEY_TEMPLATE = "template";
 
     /**
      * 参数内容
      */
-    protected List<Object> params = new ArrayList<>(0);
+    public static final String KEY_PARAMS = "params";
 
-    public AbstractTemplateExceptionBuilder(String identification) {
+    public AbstractTemplateExceptionBuilder(String identification, String template) {
+        this(identification, template, null);
+    }
+
+    public AbstractTemplateExceptionBuilder(String identification, String template, List<Object> params) {
         super(identification);
+        setTemplate(Optional.of(template).get());
+        setParams(params == null ? new ArrayList<>(0) : params);
     }
 
     public String getTemplate() {
-        return template;
+        return getAndCastContextObject(KEY_TEMPLATE);
     }
 
     public void setTemplate(String template) {
-        this.template = template;
+        setObject(KEY_TEMPLATE, template);
     }
 
     public List<Object> getParams() {
-        return params;
+        return getAndCastContextObject(KEY_PARAMS);
     }
 
     public void setParams(List<Object> params) {
-        this.params = params;
+        setObject(KEY_PARAMS, params);
     }
 
     /**
@@ -47,7 +54,7 @@ public abstract class AbstractTemplateExceptionBuilder extends AbstractException
      * @param params 被添加的参数
      */
     public void addParams(List<Object> params) {
-        this.params.addAll(params);
+        this.getParams().addAll(params);
     }
 
     /**
@@ -55,8 +62,8 @@ public abstract class AbstractTemplateExceptionBuilder extends AbstractException
      *
      * @param params 被添加的参数
      */
-    public void addParams(Object[] params) {
-        this.params.addAll(Arrays.asList(params));
+    public void addParams(Object... params) {
+        this.getParams().addAll(Arrays.asList(params));
     }
 
 }

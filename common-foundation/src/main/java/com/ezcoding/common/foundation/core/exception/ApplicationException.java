@@ -51,8 +51,6 @@ public class ApplicationException extends RuntimeException implements IApplicati
         return "\n发生异常：" +
                 "\n\t指令代码：" +
                 getIdentification() +
-                "\n\t上下文内容：" +
-                getContext().toString() +
                 "\n\t错误信息：" +
                 getLocalizedMessage();
     }

@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.starter;
 
-import com.ezcoding.common.foundation.core.exception.processor.ModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.exception.processor.WebDefaultApplicationExceptionProcessor;
+import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
 import com.ezcoding.common.web.error.ApplicationErrorController;
 import com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes;
 import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
@@ -25,7 +25,6 @@ import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
@@ -50,7 +49,7 @@ public class WebCommonConfig implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        ModuleExceptionBuilderFactory.setMessageSource(messageSource);
+        WebExceptionBuilderFactory.setMessageSource(messageSource);
     }
 
     @Bean
@@ -93,7 +92,7 @@ public class WebCommonConfig implements InitializingBean {
      */
     @Bean(value = {"defaultLayerModuleProcessor", "webDefaultApplicationExceptionProcessor"})
     public WebDefaultApplicationExceptionProcessor webDefaultApplicationExceptionProcessor() {
-        return new WebDefaultApplicationExceptionProcessor(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new WebDefaultApplicationExceptionProcessor();
     }
 
     @Configuration

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author MinChiang
@@ -16,12 +17,15 @@ public class ParamTemplateExceptionBuilder extends AbstractTemplateExceptionBuil
     private static final String PREFIX = "{";
     private static final String SUFFIX = "}";
 
-    public ParamTemplateExceptionBuilder(String identification) {
-        super(identification);
+    public ParamTemplateExceptionBuilder(String identification, String template) {
+        super(identification, template);
     }
 
     @Override
     public String getSummary() {
+        List<Object> params = this.getParams();
+        String template = this.getTemplate();
+
         if (template == null || CollectionUtils.isEmpty(params)) {
             return template;
         }
@@ -40,7 +44,7 @@ public class ParamTemplateExceptionBuilder extends AbstractTemplateExceptionBuil
      * @return 实例对象
      */
     public ParamTemplateExceptionBuilder template(String template) {
-        this.template = template;
+        setTemplate(template);
         return this;
     }
 
@@ -54,7 +58,7 @@ public class ParamTemplateExceptionBuilder extends AbstractTemplateExceptionBuil
         if (ArrayUtils.isEmpty(params)) {
             return this;
         }
-        this.params.addAll(Arrays.asList(params));
+        this.getParams().addAll(Arrays.asList(params));
         return this;
     }
 

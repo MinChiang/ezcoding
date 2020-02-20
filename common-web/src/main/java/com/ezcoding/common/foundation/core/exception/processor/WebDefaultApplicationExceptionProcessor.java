@@ -10,24 +10,10 @@ import org.springframework.http.HttpStatus;
  */
 public class WebDefaultApplicationExceptionProcessor extends AbstractWebFunctionLayerModuleProcessor {
 
-    private HttpStatus defaultStatus;
-
     @Override
     public void doProcess(ApplicationException applicationException, WebProcessContext processContext) {
-        processContext.setHttpStatus(defaultStatus == null ? HttpStatus.INTERNAL_SERVER_ERROR : defaultStatus);
+        processContext.setHttpStatus((HttpStatus) applicationException.getContext().get(WebExceptionBuilder.KEY_HTTP_STATUS));
         processContext.setReturnSummary(applicationException.getSummary());
-    }
-
-    public WebDefaultApplicationExceptionProcessor(HttpStatus defaultStatus) {
-        this.defaultStatus = defaultStatus;
-    }
-
-    public HttpStatus getDefaultStatus() {
-        return defaultStatus;
-    }
-
-    public void setDefaultStatus(HttpStatus defaultStatus) {
-        this.defaultStatus = defaultStatus;
     }
 
 }

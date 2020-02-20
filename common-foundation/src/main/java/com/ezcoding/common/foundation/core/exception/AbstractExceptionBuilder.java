@@ -57,4 +57,15 @@ public abstract class AbstractExceptionBuilder implements IExceptionBuilder {
         return context.get(key);
     }
 
+    /**
+     * 从容器中获取并且强制转换成目标类型
+     *
+     * @param key 需要获取的键
+     * @param <T> 目标类型
+     * @return 需要获取的值
+     */
+    public <T> T getAndCastContextObject(String key) {
+        return (T) getObject(key);
+    }
+
 }
