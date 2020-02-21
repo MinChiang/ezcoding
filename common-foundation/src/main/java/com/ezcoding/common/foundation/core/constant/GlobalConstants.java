@@ -1,8 +1,9 @@
 package com.ezcoding.common.foundation.core.constant;
 
 import com.ezcoding.common.foundation.core.application.IModuleNameable;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableBiMap;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author MinChiang
@@ -122,16 +123,15 @@ public class GlobalConstants {
         /**
          * 服务名 <--> 模块id映射关系
          */
-        public static final BiMap<String, Integer> SERVICE_NAME_APPLICATION_CODE_MAPPING =
-                ImmutableBiMap
-                        .<String, Integer>builder()
-                        .put(COMMON, COMMON_APPLICATION_CODE)
-                        .put(GATEWAY, GATEWAY_APPLICATION_CODE)
-                        .put(AUTH, AUTH_APPLICATION_CODE)
-                        .put(FACILITY, FACILITY_APPLICATION_CODE)
-                        .put(ACCOUNT, ACCOUNT_APPLICATION_CODE)
-                        .build();
+        public static final Map<String, Integer> SERVICE_NAME_APPLICATION_CODE_MAPPING = new HashMap<>();
 
+        static {
+            SERVICE_NAME_APPLICATION_CODE_MAPPING.put(COMMON, COMMON_APPLICATION_CODE);
+            SERVICE_NAME_APPLICATION_CODE_MAPPING.put(GATEWAY, GATEWAY_APPLICATION_CODE);
+            SERVICE_NAME_APPLICATION_CODE_MAPPING.put(AUTH, AUTH_APPLICATION_CODE);
+            SERVICE_NAME_APPLICATION_CODE_MAPPING.put(FACILITY, FACILITY_APPLICATION_CODE);
+            SERVICE_NAME_APPLICATION_CODE_MAPPING.put(ACCOUNT, ACCOUNT_APPLICATION_CODE);
+        }
     }
 
 }

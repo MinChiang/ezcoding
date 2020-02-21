@@ -21,19 +21,19 @@ public class OriginalVerificationCodeGenerator extends AbstractImageVerification
     @Override
     public VerificationCode generate() throws IOException {
 
-        BufferedImage bufferedImage = new BufferedImage(width, heigth, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = bufferedImage.createGraphics();
         //填充背景
         graphics.setColor(new Color(255, 255, 255));
-        graphics.fillRect(0, 0, width, heigth);
+        graphics.fillRect(0, 0, width, height);
 
         //设置字体
-        int fontSize = (int) (heigth * 0.8);
+        int fontSize = (int) (height * 0.8);
         Font font = new Font("Algerian", Font.ITALIC, fontSize);
         graphics.setFont(font);
 
         //随机生成字符
-        int yLoc = (int) (heigth * 0.85);
+        int yLoc = (int) (height * 0.85);
         int xLoc = (int) (width / length);
         char[] chars = new char[length];
         for (int i = 0; i < length; i++) {
@@ -56,7 +56,7 @@ public class OriginalVerificationCodeGenerator extends AbstractImageVerification
         ImageVerificationCode verificationCode = new ImageVerificationCode();
         verificationCode.setData(baos.toByteArray());
         verificationCode.setCode(new String(chars));
-        verificationCode.setHeight(heigth);
+        verificationCode.setHeight(height);
         verificationCode.setWidth(width);
         verificationCode.setCodeLength(length);
         return verificationCode;

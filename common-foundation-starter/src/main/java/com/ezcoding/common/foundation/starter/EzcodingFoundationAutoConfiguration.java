@@ -111,13 +111,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         return OriginalUUIDProducer.getInstance();
     }
 
-    private void customObjectMapperConfig(ObjectMapper objectMapper) {
-        SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
-        simpleModule.addSerializer(long.class, ToStringSerializer.instance);
-        objectMapper.registerModule(simpleModule);
-    }
-
     @Primary
     @Bean
     public ObjectMapper objectMapper() {
@@ -127,8 +120,20 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
         objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
 
-        this.customObjectMapperConfig(objectMapper);
+//        this.customObjectMapperConfig(objectMapper);
         return objectMapper;
+    }
+
+    /**
+     * 制定objectMapper特性
+     *
+     * @param objectMapper 需要指定特性的objectMapper
+     */
+    private void customObjectMapperConfig(ObjectMapper objectMapper) {
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        simpleModule.addSerializer(long.class, ToStringSerializer.instance);
+        objectMapper.registerModule(simpleModule);
     }
 
     /**

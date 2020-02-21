@@ -32,7 +32,7 @@ public class KapatchaImageVerificationCodeGenerator extends AbstractImageVerific
         properties.setProperty("kaptcha.border.color", "105,179,90");
         properties.setProperty("kaptcha.textproducer.font.color", "blue");
         properties.setProperty("kaptcha.image.width", String.valueOf(width));
-        properties.setProperty("kaptcha.image.height", String.valueOf(heigth));
+        properties.setProperty("kaptcha.image.height", String.valueOf(height));
         properties.setProperty("kaptcha.textproducer.font.size", "30");
         properties.setProperty("kaptcha.session.key", "code");
         properties.setProperty("kaptcha.textproducer.char.length", "4");

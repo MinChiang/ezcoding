@@ -1,9 +1,8 @@
 package com.ezcoding.common.core.user.model;
 
-import com.google.common.collect.Sets;
-
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 
 /**
  * @author MinChiang
@@ -95,7 +94,7 @@ public class User implements IUser {
     /**
      * 拥有的权限
      */
-    private Collection<String> roles = Sets.newHashSet();
+    private Collection<String> roles = new HashSet<>(0);
 
     @Override
     public Long getId() {

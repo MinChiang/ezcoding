@@ -10,19 +10,19 @@ public abstract class AbstractImageVerificationCodeGenerator extends AbstractLim
     /**
      * 高度（像素）
      */
-    protected int heigth = 50;
+    protected int height = 50;
 
     /**
      * 长度（像素）
      */
     protected int width = 100;
 
-    public int getHeigth() {
-        return heigth;
+    public int getHeight() {
+        return height;
     }
 
-    public void setHeigth(int heigth) {
-        this.heigth = heigth;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public int getWidth() {

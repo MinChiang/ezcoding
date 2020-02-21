@@ -1,8 +1,8 @@
 package com.ezcoding.common.foundation.core.message.builder;
 
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +13,7 @@ import java.util.List;
 public class ErrorResponseBuilder<T> extends AbstractBodyBuilder<T> {
 
     private String errorCode;
-    private List<String> errorMessage = Lists.newArrayList();
+    private List<String> errorMessage = new ArrayList<>(0);
 
     ErrorResponseBuilder(T body) {
         super(body);

@@ -1,7 +1,6 @@
 package com.ezcoding.common.foundation.util;
 
-import com.google.common.collect.Lists;
-
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -29,7 +28,7 @@ public class AssembleUtils {
     public static class AssembleMapper<S, T> {
 
         private T target;
-        private List<FunctionAndBiConsumerMapping<S, ?, T>> mappings = Lists.newLinkedList();
+        private List<FunctionAndBiConsumerMapping<S, ?, T>> mappings = new LinkedList<>();
 
         private AssembleMapper(T target) {
             this.target = target;

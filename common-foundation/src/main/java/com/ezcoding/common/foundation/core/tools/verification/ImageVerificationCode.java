@@ -34,4 +34,5 @@ public class ImageVerificationCode extends VerificationCode {
     public void setCodeLength(int codeLength) {
         this.codeLength = codeLength;
     }
+
 }
