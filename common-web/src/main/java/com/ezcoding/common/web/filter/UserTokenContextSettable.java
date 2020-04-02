@@ -1,6 +1,7 @@
 package com.ezcoding.common.web.filter;
 
 import com.ezcoding.common.foundation.core.constant.GlobalConstants;
+import com.ezcoding.common.web.jwt.AuthSettings;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class UserTokenContextSettable implements IApplicationContextValueFetchable {
 
-    private String header = GlobalConstants.Header.AUTHORIZATION;
+    private String header = AuthSettings.DEFAULT_HEADER;
 
     public UserTokenContextSettable() {
     }
@@ -28,7 +29,7 @@ public class UserTokenContextSettable implements IApplicationContextValueFetchab
 
     @Override
     public String key() {
-        return GlobalConstants.Context.TOKEN;
+        return ApplicationContextValueConstants.TOKEN;
     }
 
 }

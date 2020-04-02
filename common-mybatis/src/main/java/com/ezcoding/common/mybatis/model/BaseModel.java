@@ -3,7 +3,6 @@ package com.ezcoding.common.mybatis.model;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,7 +14,6 @@ import java.util.Date;
  * @version 1.0.0
  * @date 2018-09-30 9:49
  */
-@Data
 public abstract class BaseModel implements Serializable {
 
     /**
@@ -47,5 +45,45 @@ public abstract class BaseModel implements Serializable {
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     protected Date modifyTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
 
 }

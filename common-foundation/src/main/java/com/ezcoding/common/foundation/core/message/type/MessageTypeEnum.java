@@ -1,8 +1,11 @@
 package com.ezcoding.common.foundation.core.message.type;
 
-import com.ezcoding.common.foundation.util.EnumMappableUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author MinChiang
@@ -21,6 +24,32 @@ public enum MessageTypeEnum {
      */
     XML("text/xml");
 
+    private static final Map<String, MessageTypeEnum> ALL = new HashMap<String, MessageTypeEnum>();
+
+    static {
+        for (Field field : MessageTypeEnum.class.getDeclaredFields()) {
+            if (field.getType().equals(MessageTypeEnum.class)) {
+                try {
+                    MessageTypeEnum instance = (MessageTypeEnum) field.get(null);
+                    ALL.put(instance.type, instance);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * 转换
+     *
+     * @param id id
+     * @return 对应类别
+     */
+    @JsonCreator
+    public static MessageTypeEnum from(String id) {
+        return ALL.get(id);
+    }
+
     @JsonValue
     private final String type;
 
@@ -30,11 +59,6 @@ public enum MessageTypeEnum {
 
     public String getType() {
         return type;
-    }
-
-    @JsonCreator
-    public static MessageTypeEnum from(String id) {
-        return EnumMappableUtils.map(id, MessageTypeEnum.class);
     }
 
 }

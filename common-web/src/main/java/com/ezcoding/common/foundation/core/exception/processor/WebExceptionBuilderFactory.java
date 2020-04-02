@@ -18,27 +18,6 @@ public class WebExceptionBuilderFactory extends BaseModuleExceptionBuilderFactor
      */
     private static MessageSource messageSource;
 
-//    /**
-//     * 生成国际化的错误构造器
-//     *
-//     * @param generator 生成器
-//     * @param template  模板
-//     * @return 国际化的错误构造器
-//     */
-//    public static WebExceptionBuilder webExceptionBuilder(IExceptionCodeGeneratable generator, String template) {
-//        return new WebExceptionBuilder(checkAndGenerateIdentification(generator), template, messageSource);
-//    }
-//
-//    /**
-//     * 生成国际化的错误构造器
-//     *
-//     * @param generator 生成器
-//     * @return 国际化的错误构造器
-//     */
-//    public static WebExceptionBuilder webExceptionBuilder(TemplateExceptionCodeGenerator generator) {
-//        return webExceptionBuilder(generator, generator.getTemplate());
-//    }
-
     /**
      * 生成可替换参数的错误构造器
      *

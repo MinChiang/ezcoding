@@ -8,7 +8,6 @@ import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
 import com.ezcoding.common.web.filter.FilterConstants;
 import com.ezcoding.common.web.filter.IApplicationContextValueFetchable;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -30,6 +29,7 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +63,7 @@ public class WebCommonConfig implements InitializingBean {
 
     @Bean
     public FilterRegistrationBean<ApplicationContextHolderFilter> applicationContextHolderFilter() {
-        List<IApplicationContextValueFetchable> fetchers = Lists.newLinkedList();
+        List<IApplicationContextValueFetchable> fetchers = new LinkedList<>();
         Optional
                 .ofNullable(this.applicationWebConfigurers)
                 .ifPresent(configures -> configures.forEach(configurer -> configurer.registerApplicationContextFetchers(fetchers)));

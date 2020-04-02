@@ -1,6 +1,6 @@
 package com.ezcoding.common.web.starter;
 
-import com.ezcoding.common.core.user.resolve.IUserLoadable;
+import com.ezcoding.common.web.user.IUserLoadable;
 import com.ezcoding.common.web.filter.IApplicationContextValueFetchable;
 
 import java.util.List;

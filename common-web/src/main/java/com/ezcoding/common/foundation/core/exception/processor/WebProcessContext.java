@@ -1,6 +1,5 @@
 package com.ezcoding.common.foundation.core.exception.processor;
 
-import com.ezcoding.common.foundation.core.exception.processor.ProcessContext;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;

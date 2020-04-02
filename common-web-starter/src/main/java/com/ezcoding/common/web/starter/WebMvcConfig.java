@@ -1,8 +1,5 @@
 package com.ezcoding.common.web.starter;
 
-import com.ezcoding.common.core.user.resolve.CompositeUserLoader;
-import com.ezcoding.common.core.user.resolve.IUserLoadable;
-import com.ezcoding.common.core.user.resolve.IUserProxyable;
 import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
 import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
@@ -16,8 +13,10 @@ import com.ezcoding.common.web.resolver.result.IResponseMessageReturnValueResolv
 import com.ezcoding.common.web.resolver.result.ResponseAppHeadResolver;
 import com.ezcoding.common.web.resolver.result.ResponseMessageResolver;
 import com.ezcoding.common.web.resolver.result.ResponseSystemHeadResolver;
+import com.ezcoding.common.web.user.CompositeUserLoader;
+import com.ezcoding.common.web.user.IUserLoadable;
+import com.ezcoding.common.web.user.IUserProxyable;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -28,6 +27,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,8 +78,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private JsonMessageMethodProcessor jsonMessageMethodProcessor() {
         JsonMessageMethodProcessor jsonMessageMethodProcessor = new JsonMessageMethodProcessor(messageConverters, jsonRequestMessageResolver());
 
-        List<IRequestMessageParameterResolvable> parameterResolvers = Lists.newArrayList();
-        List<IResponseMessageReturnValueResolvable> returnValueResolvers = Lists.newArrayList();
+        List<IRequestMessageParameterResolvable> parameterResolvers = new ArrayList<>();
+        List<IResponseMessageReturnValueResolvable> returnValueResolvers = new ArrayList<>();
         this.registerParameterResolver(parameterResolvers);
         this.registerReturnValueResolvers(returnValueResolvers);
 
@@ -94,7 +94,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     private IUserLoadable compositeUserLoader() {
-        List<IUserLoadable> loaders = Lists.newArrayList();
+        List<IUserLoadable> loaders = new ArrayList<>();
         Optional
                 .ofNullable(this.applicationWebConfigurers)
                 .ifPresent(configurers -> configurers.forEach(configurer -> configurer.registerUserLoaders(loaders)));

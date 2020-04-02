@@ -1,6 +1,5 @@
 package com.ezcoding.common.foundation.starter;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
@@ -9,7 +8,6 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  * @version 1.0.0
  * @date 2019-11-11 10:09
  */
-@Data
 @ConfigurationProperties("ezcoding.foundation")
 public class EzcodingFoundationConfigBean {
 
@@ -18,5 +16,21 @@ public class EzcodingFoundationConfigBean {
 
     @NestedConfigurationProperty
     private MetadataConfigBean metadata = new MetadataConfigBean();
+
+    public MessageConfigBean getMessage() {
+        return message;
+    }
+
+    public void setMessage(MessageConfigBean message) {
+        this.message = message;
+    }
+
+    public MetadataConfigBean getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(MetadataConfigBean metadata) {
+        this.metadata = metadata;
+    }
 
 }

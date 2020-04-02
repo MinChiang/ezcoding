@@ -1,8 +1,11 @@
 package com.ezcoding.common.core.user.model;
 
-import com.ezcoding.common.foundation.util.EnumMappableUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author MinChiang
@@ -46,6 +49,26 @@ public enum DeviceTypeEnum {
      */
     WEARABLE(6);
 
+    private static final Map<Integer, DeviceTypeEnum> ALL = new HashMap<Integer, DeviceTypeEnum>();
+
+    static {
+        for (Field field : DeviceTypeEnum.class.getDeclaredFields()) {
+            if (field.getType().equals(DeviceTypeEnum.class)) {
+                try {
+                    DeviceTypeEnum instance = (DeviceTypeEnum) field.get(null);
+                    ALL.put(instance.id, instance);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    @JsonCreator
+    public static DeviceTypeEnum from(int id) {
+        return ALL.get(id);
+    }
+
     @JsonValue
     private final int id;
 
@@ -55,11 +78,6 @@ public enum DeviceTypeEnum {
 
     public int getId() {
         return id;
-    }
-
-    @JsonCreator
-    public static DeviceTypeEnum from(int id) {
-        return EnumMappableUtils.map(id, DeviceTypeEnum.class);
     }
 
 }

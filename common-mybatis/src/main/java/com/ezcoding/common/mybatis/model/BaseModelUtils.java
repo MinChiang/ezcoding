@@ -55,57 +55,6 @@ public class BaseModelUtils {
         return baseModel;
     }
 
-//    /**
-//     * 填充创建的字段
-//     *
-//     * @param baseModel 被填充的对象
-//     * @param <T>       被填充的类型
-//     * @return 被填充的对象
-//     */
-//    public static <T extends BaseModel> T fillCreateField(@NotNull T baseModel) {
-//        IUser user = UserResolver.getInstance().currentUser();
-//        if (user != null) {
-//            baseModel.setCreator(user.getCode());
-//        }
-//        baseModel.setCreateTime(new Date());
-//        return baseModel;
-//    }
-//
-//    /**
-//     * 填充更新的字段
-//     *
-//     * @param baseModel 被填充的对象
-//     * @param <T>       被填充的类型
-//     * @return 被填充的对象
-//     */
-//    public static <T extends BaseModel> T fillModifyField(@NotNull T baseModel) {
-//        IUser user = UserResolver.getInstance().currentUser();
-//        if (user != null) {
-//            baseModel.setModifier(user.getCode());
-//        }
-//        baseModel.setModifyTime(new Date());
-//        return baseModel;
-//    }
-//
-//    /**
-//     * 填充创建的字段
-//     *
-//     * @param baseModel 被填充的对象
-//     * @param <T>       被填充的类型
-//     * @return 被填充的对象
-//     */
-//    public static <T extends BaseModel> T fillAllField(@NotNull T baseModel) {
-//        IUser user = UserResolver.getInstance().currentUser();
-//        Date now = new Date();
-//        if (user != null) {
-//            baseModel.setCreator(user.getCode());
-//            baseModel.setModifier(user.getCode());
-//        }
-//        baseModel.setCreateTime(now);
-//        baseModel.setModifyTime(now);
-//        return baseModel;
-//    }
-
     /**
      * 填充创建的字段
      *

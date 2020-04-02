@@ -2,7 +2,6 @@ package com.ezcoding.common.web.jwt;
 
 import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
-import com.google.common.collect.Maps;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -14,10 +13,7 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author MinChiang
@@ -26,10 +22,10 @@ import java.util.Map;
  */
 public class TokenTools {
 
-    private static final Long EXPIRATION_DEFAULT = AuthSettings.DEFAULT_EXPIRATION;
-    private static final String SUBJECT_DEFAULT = "subject";
-    private static final String ISSUER_DEFAULT = "issuer";
-    private static final String SECRET_DEFAULT = "secret";
+    public static final Long EXPIRATION_DEFAULT = AuthSettings.DEFAULT_EXPIRATION;
+    public static final String SUBJECT_DEFAULT = "subject";
+    public static final String ISSUER_DEFAULT = "issuer";
+    public static final String SECRET_DEFAULT = "secret";
 
     private Long expiration = EXPIRATION_DEFAULT;
     private String subject = SUBJECT_DEFAULT;
@@ -103,7 +99,7 @@ public class TokenTools {
      * @return token
      */
     public String generateToken(String name, Object obj) {
-        Map<String, Object> map = Maps.newHashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put(name, obj);
         return generateToken(map);
     }
@@ -159,7 +155,7 @@ public class TokenTools {
      */
     public Map<String, Object> parseTokenToMap(String token) {
         Claims claims = parseToken(token);
-        Map<String, Object> map = Maps.newHashMap();
+        Map<String, Object> map = new HashMap<>();
         for (Map.Entry<String, Object> entry : claims.entrySet()) {
             map.put(entry.getKey(), entry.getValue());
         }

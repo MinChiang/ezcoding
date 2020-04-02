@@ -7,7 +7,6 @@ import com.ezcoding.common.foundation.core.message.head.SuccessAppHead;
 import com.ezcoding.common.web.resolver.parameter.IRequestMessageParameterResolvable;
 import com.ezcoding.common.web.resolver.result.IResponseMessageReturnValueResolvable;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -25,6 +24,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -40,8 +40,8 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
 
     private Validator validator;
     private JsonRequestMessageResolver jsonRequestMessageResolver;
-    private List<IResponseMessageReturnValueResolvable> returnValueResolvables = Lists.newLinkedList();
-    private List<IRequestMessageParameterResolvable> parameterResolvables = Lists.newLinkedList();
+    private List<IResponseMessageReturnValueResolvable> returnValueResolvables = new ArrayList<>();
+    private List<IRequestMessageParameterResolvable> parameterResolvables = new ArrayList<>();
 
     public JsonMessageMethodProcessor(List<HttpMessageConverter<?>> converters,
                                       JsonRequestMessageResolver jsonRequestMessageResolver) {
@@ -99,13 +99,16 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
         //标识请求是否已经在该方法内完成处理
         mavContainer.setRequestHandled(true);
 
-        ResponseMessage<Object> responseMessage
-                = returnValueResolvables
-                .stream()
-                .filter(resolver -> resolver.match(returnValue.getClass()))
-                .map(resolver -> resolver.resolveReturnValue(returnValue, returnType))
-                .findFirst()
-                .orElse(new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), returnValue));
+        ResponseMessage<Object> responseMessage = null;
+        if (returnValue == null) {
+            responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), returnValue);
+        } else {
+            responseMessage = this.returnValueResolvables.stream()
+                    .filter(resolver -> resolver.match(returnValue.getClass()))
+                    .map(resolver -> resolver.resolveReturnValue(returnValue, returnType))
+                    .findFirst()
+                    .orElse(new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), returnValue));
+        }
 
         ServletServerHttpRequest inputMessage = this.createInputMessage(webRequest);
         ServletServerHttpResponse outputMessage = this.createOutputMessage(webRequest);

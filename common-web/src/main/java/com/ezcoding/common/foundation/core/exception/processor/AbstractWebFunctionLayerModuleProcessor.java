@@ -1,7 +1,6 @@
 package com.ezcoding.common.foundation.core.exception.processor;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import org.springframework.http.HttpStatus;
 
 /**
  * @author MinChiang

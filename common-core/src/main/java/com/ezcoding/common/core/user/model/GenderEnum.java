@@ -1,8 +1,11 @@
 package com.ezcoding.common.core.user.model;
 
-import com.ezcoding.common.foundation.util.EnumMappableUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author MinChiang
@@ -26,6 +29,32 @@ public enum GenderEnum {
      */
     FEMALE(2);
 
+    private static final Map<Integer, GenderEnum> ALL = new HashMap<Integer, GenderEnum>();
+
+    static {
+        for (Field field : GenderEnum.class.getDeclaredFields()) {
+            if (field.getType().equals(GenderEnum.class)) {
+                try {
+                    GenderEnum instance = (GenderEnum) field.get(null);
+                    ALL.put(instance.id, instance);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * 转换
+     *
+     * @param id id
+     * @return 对应类别
+     */
+    @JsonCreator
+    public static GenderEnum from(int id) {
+        return ALL.get(id);
+    }
+
     @JsonValue
     private final int id;
 
@@ -37,8 +66,4 @@ public enum GenderEnum {
         return id;
     }
 
-    @JsonCreator
-    public static GenderEnum from(int id) {
-        return EnumMappableUtils.map(id, GenderEnum.class);
-    }
 }

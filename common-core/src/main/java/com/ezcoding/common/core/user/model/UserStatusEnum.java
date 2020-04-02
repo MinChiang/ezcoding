@@ -1,8 +1,11 @@
 package com.ezcoding.common.core.user.model;
 
-import com.ezcoding.common.foundation.util.EnumMappableUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author MinChiang
@@ -26,6 +29,32 @@ public enum UserStatusEnum {
      */
     CANCELED(2);
 
+    private static final Map<Integer, UserStatusEnum> ALL = new HashMap<Integer, UserStatusEnum>();
+
+    static {
+        for (Field field : UserStatusEnum.class.getDeclaredFields()) {
+            if (field.getType().equals(UserStatusEnum.class)) {
+                try {
+                    UserStatusEnum instance = (UserStatusEnum) field.get(null);
+                    ALL.put(instance.id, instance);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * 转换
+     *
+     * @param id id
+     * @return 对应类别
+     */
+    @JsonCreator
+    public static UserStatusEnum from(int id) {
+        return ALL.get(id);
+    }
+
     @JsonValue
     private final int id;
 
@@ -35,11 +64,6 @@ public enum UserStatusEnum {
 
     public int getId() {
         return id;
-    }
-
-    @JsonCreator
-    public static UserStatusEnum from(int id) {
-        return EnumMappableUtils.map(id, UserStatusEnum.class);
     }
 
 }

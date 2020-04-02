@@ -13,39 +13,6 @@ import java.util.Map;
 public class GlobalConstants {
 
     /**
-     * 请求头等信息
-     */
-    public static final class Header {
-
-        public static final String AUTHORIZATION = "Authorization";
-
-        public static final String XID = "XID";
-
-    }
-
-    /**
-     * 上下文存取key
-     */
-    public static final class Context {
-
-        public static final String TOKEN = "token";
-
-        public static final String LOGIN_TYPE = "loginType";
-
-        public static final String DEVICE_TYPE = "deviceType";
-
-    }
-
-    /**
-     * 系统固有角色
-     */
-    public static final class Role {
-
-        public static final String ADMIN = "admin";
-
-    }
-
-    /**
      * 服务应用级别层面参数
      */
     public static final class Application {
@@ -93,7 +60,7 @@ public class GlobalConstants {
         /**
          * 用户微服务模块
          */
-        public static final String ACCOUNT = "account";
+        public static final String USER = "user";
 
         /**
          * 系统基本模块
@@ -118,7 +85,7 @@ public class GlobalConstants {
         /**
          * 用户微服务模块
          */
-        public static final int ACCOUNT_APPLICATION_CODE = 4;
+        public static final int USER_APPLICATION_CODE = 4;
 
         /**
          * 服务名 <--> 模块id映射关系
@@ -130,7 +97,7 @@ public class GlobalConstants {
             SERVICE_NAME_APPLICATION_CODE_MAPPING.put(GATEWAY, GATEWAY_APPLICATION_CODE);
             SERVICE_NAME_APPLICATION_CODE_MAPPING.put(AUTH, AUTH_APPLICATION_CODE);
             SERVICE_NAME_APPLICATION_CODE_MAPPING.put(FACILITY, FACILITY_APPLICATION_CODE);
-            SERVICE_NAME_APPLICATION_CODE_MAPPING.put(ACCOUNT, ACCOUNT_APPLICATION_CODE);
+            SERVICE_NAME_APPLICATION_CODE_MAPPING.put(USER, USER_APPLICATION_CODE);
         }
     }
 

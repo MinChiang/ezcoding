@@ -1,7 +1,5 @@
 package com.ezcoding.common.web.resolver;
 
-import com.ezcoding.common.foundation.core.message.head.PageInfo;
-
 import java.lang.annotation.*;
 
 /**

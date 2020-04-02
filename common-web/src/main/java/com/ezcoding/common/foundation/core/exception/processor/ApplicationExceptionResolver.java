@@ -2,7 +2,6 @@ package com.ezcoding.common.foundation.core.exception.processor;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
-import com.google.common.collect.ImmutableMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;
@@ -10,6 +9,7 @@ import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -62,10 +62,8 @@ public class ApplicationExceptionResolver extends AbstractHandlerExceptionResolv
                     processContext.isProcessed() ? processMessage : ((ApplicationException) ex).getSummary()
             );
 
-            Map<String, ?> model = ImmutableMap
-                    .<String, Object>builder()
-                    .put(KEY_APPLICATION_EXPCETION, ex)
-                    .build();
+            Map<String, Exception> model = new HashMap<>();
+            model.put(KEY_APPLICATION_EXPCETION, ex);
 
             //自动打印业务错误信息
             ex.printStackTrace();
