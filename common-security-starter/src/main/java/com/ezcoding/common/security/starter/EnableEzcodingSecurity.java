@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 @EnableEzcodingWeb
-@Import({MethodSecurityAutoConfiguration.class, ResourceServerAutoConfiguration.class, SecurityAdviceConfig.class})
+@Import({MethodSecurityAutoConfiguration.class, ResourceServerAutoConfiguration.class, SecurityAdviceConfig.class, SecurityUserAutoConfiguration.class})
 public @interface EnableEzcodingSecurity {
 
 }

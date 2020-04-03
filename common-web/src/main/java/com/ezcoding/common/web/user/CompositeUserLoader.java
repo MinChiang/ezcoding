@@ -1,6 +1,6 @@
 package com.ezcoding.common.web.user;
 
-import com.ezcoding.common.core.user.model.IUser;
+import com.ezcoding.common.core.user.model.IUserIdentifiable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,39 +21,8 @@ public class CompositeUserLoader implements IUserLoadable {
                 .ifPresent(lds -> this.loaders.addAll(lds));
     }
 
-//    /**
-//     * 根据上下文获取当前的用户，使用代理对象
-//     *
-//     * @return 当前用户
-//     */
-//    public IUser currentUserWithProxy(IUser target) {
-//        return new UserProxy(target == null ? createEmptyUser() : target);
-//    }
-//
-//    /**
-//     * 根据上下文获取当前的用户，不使用代理对象
-//     *
-//     * @return 当前用户
-//     */
-//    public IUser currentUser() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        UserDTO userDTO = new UserDTO();
-//        userDTO.setCode(authentication.getName());
-//        userDTO.setAuthorities(authentication.getAuthorities());
-//        return userDTO;
-//    }
-//
-//    /**
-//     * 获取空用户
-//     *
-//     * @return 空用户
-//     */
-//    private IUser createEmptyUser() {
-//        return new UserDTO();
-//    }
-
     @Override
-    public IUser load() {
+    public IUserIdentifiable load() {
         return loaders
                 .stream()
                 .map(IUserLoadable::load)

@@ -12,11 +12,6 @@ import java.util.HashSet;
 public class User implements IUser {
 
     /**
-     * 用户id
-     */
-    private Long id;
-
-    /**
      * 用户编号
      */
     private String code;
@@ -96,13 +91,14 @@ public class User implements IUser {
      */
     private Collection<String> roles = new HashSet<>(0);
 
-    @Override
-    public Long getId() {
-        return id;
+    public User() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public User(String code, String account, String phone, String email) {
+        this.code = code;
+        this.account = account;
+        this.phone = phone;
+        this.email = email;
     }
 
     @Override

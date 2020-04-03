@@ -1,6 +1,7 @@
 package com.ezcoding.common.web.user;
 
 import com.ezcoding.common.core.user.model.IUser;
+import com.ezcoding.common.core.user.model.IUserIdentifiable;
 
 /**
  * @author MinChiang
@@ -15,6 +16,6 @@ public interface IUserProxyable {
      * @param target 被代理的对象（含有部分对象信息）
      * @return 加载的用户
      */
-    IUser load(IUser target);
+    IUser load(IUserIdentifiable target);
 
 }

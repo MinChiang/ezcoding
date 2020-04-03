@@ -11,13 +11,6 @@ import java.util.Date;
 public interface IUser extends IUserIdentifiable {
 
     /**
-     * 获取用户id
-     *
-     * @return 用户id
-     */
-    Long getId();
-
-    /**
      * 获取用户名字
      *
      * @return 用户名字

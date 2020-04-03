@@ -1,6 +1,6 @@
 package com.ezcoding.common.web.user;
 
-import com.ezcoding.common.core.user.model.IUser;
+import com.ezcoding.common.core.user.model.IUserIdentifiable;
 
 /**
  * @author MinChiang
@@ -14,6 +14,6 @@ public interface IUserLoadable {
      *
      * @return 加载的用户
      */
-    IUser load();
+    IUserIdentifiable load();
 
 }

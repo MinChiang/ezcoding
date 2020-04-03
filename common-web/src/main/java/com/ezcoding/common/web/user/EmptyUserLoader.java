@@ -1,6 +1,6 @@
 package com.ezcoding.common.web.user;
 
-import com.ezcoding.common.core.user.model.IUser;
+import com.ezcoding.common.core.user.model.IUserIdentifiable;
 import com.ezcoding.common.core.user.model.User;
 
 /**
@@ -11,7 +11,7 @@ import com.ezcoding.common.core.user.model.User;
 public class EmptyUserLoader implements IUserLoadable {
 
     @Override
-    public IUser load() {
+    public IUserIdentifiable load() {
         return new User();
     }
 

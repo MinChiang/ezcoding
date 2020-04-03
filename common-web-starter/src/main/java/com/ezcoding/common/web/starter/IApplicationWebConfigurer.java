@@ -1,7 +1,9 @@
 package com.ezcoding.common.web.starter;
 
-import com.ezcoding.common.web.user.IUserLoadable;
 import com.ezcoding.common.web.filter.IApplicationContextValueFetchable;
+import com.ezcoding.common.web.resolver.parameter.IRequestMessageParameterResolvable;
+import com.ezcoding.common.web.resolver.result.IResponseMessageReturnValueResolvable;
+import com.ezcoding.common.web.user.IUserLoadable;
 
 import java.util.List;
 
@@ -27,6 +29,24 @@ public interface IApplicationWebConfigurer {
      * @param loaders 用户加载器
      */
     default void registerUserLoaders(List<IUserLoadable> loaders) {
+
+    }
+
+    /**
+     * 注册额外的请求报文参数解析器
+     *
+     * @param resolver 解析器列表
+     */
+    default void registerRequestMessageParameterResolvers(List<IRequestMessageParameterResolvable> resolver) {
+
+    }
+
+    /**
+     * 注册额外的请求报文返回解析器
+     *
+     * @param resolver 解析器列表
+     */
+    default void registerResponseMessageReturnValueResolvers(List<IResponseMessageReturnValueResolvable> resolver) {
 
     }
 

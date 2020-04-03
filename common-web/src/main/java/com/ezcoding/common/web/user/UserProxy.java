@@ -2,8 +2,8 @@ package com.ezcoding.common.web.user;
 
 import com.ezcoding.common.core.user.model.GenderEnum;
 import com.ezcoding.common.core.user.model.IUser;
+import com.ezcoding.common.core.user.model.IUserIdentifiable;
 import com.ezcoding.common.core.user.model.User;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
 import java.util.Date;
@@ -15,12 +15,12 @@ import java.util.Date;
  * @version 1.0.0
  * @date 2018-12-11 9:21
  */
-public class UserProxy implements IUser, IUserLoadable {
+public class UserProxy implements IUser {
 
     /**
      * 标志user类是否已经被解析实例化
      */
-    private boolean resolved;
+    private boolean resolved = false;
 
     /**
      * 用户额外加载器
@@ -32,10 +32,14 @@ public class UserProxy implements IUser, IUserLoadable {
      */
     private IUser user;
 
-    public UserProxy(IUser user, IUserProxyable proxy) {
-        this.user = user;
+    /**
+     * 被代理的对象
+     */
+    private IUserIdentifiable identifiable;
+
+    public UserProxy(IUserIdentifiable identifiable, IUserProxyable proxy) {
+        this.identifiable = identifiable;
         this.proxy = proxy;
-        this.resolved = false;
     }
 
     /**
@@ -47,32 +51,41 @@ public class UserProxy implements IUser, IUserLoadable {
         }
 
         synchronized (this) {
-            //如果被代理对象中没有对应的用户编号，则直接空解析
-            if (StringUtils.isEmpty(this.user.getCode())) {
-                this.user = new User();
-                this.resolved = true;
+            this.resolved = true;
+
+            //如果被代理对象中没有对应的需要检索的字段，则直返回空
+            if (identifiable.getCode() == null ||
+                    identifiable.getAccount() == null ||
+                    identifiable.getEmail() == null ||
+                    identifiable.getPhone() == null) {
+                this.user = new User(identifiable.getCode(), identifiable.getAccount(), identifiable.getPhone(), identifiable.getEmail());
                 return this.user;
             }
 
-            this.user = this.load();
-            this.resolved = true;
+            this.user = proxy.load(this);
         }
+
         return this.user;
     }
 
     @Override
-    public Long getId() {
-        return this.loadUser().getId();
-    }
-
-    @Override
     public String getCode() {
-        return this.user.getCode();
+        return this.identifiable.getCode() == null ? this.user.getCode() : this.identifiable.getCode();
     }
 
     @Override
     public String getAccount() {
-        return this.loadUser().getAccount();
+        return this.identifiable.getAccount() == null ? this.loadUser().getAccount() : this.identifiable.getAccount();
+    }
+
+    @Override
+    public String getPhone() {
+        return this.identifiable.getPhone() == null ? this.loadUser().getPhone() : this.identifiable.getPhone();
+    }
+
+    @Override
+    public String getEmail() {
+        return this.identifiable.getEmail() == null ? this.loadUser().getEmail() : this.identifiable.getEmail();
     }
 
     @Override
@@ -83,16 +96,6 @@ public class UserProxy implements IUser, IUserLoadable {
     @Override
     public GenderEnum getGender() {
         return this.loadUser().getGender();
-    }
-
-    @Override
-    public String getPhone() {
-        return this.loadUser().getPhone();
-    }
-
-    @Override
-    public String getEmail() {
-        return this.loadUser().getEmail();
     }
 
     @Override
@@ -138,11 +141,6 @@ public class UserProxy implements IUser, IUserLoadable {
     @Override
     public Collection<String> getRoles() {
         return this.user.getRoles();
-    }
-
-    @Override
-    public IUser load() {
-        return proxy.load(this);
     }
 
 }

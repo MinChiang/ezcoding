@@ -33,11 +33,6 @@ public class StandardAccessTokenConverter extends DefaultAccessTokenConverter {
      */
     final String IAT = "iat";
 
-    /**
-     * 签发人
-     */
-    private String issName;
-
     @Override
     public Map<String, ?> convertAccessToken(OAuth2AccessToken token, OAuth2Authentication authentication) {
         Map<String, Object> response = (Map<String, Object>) super.convertAccessToken(token, authentication);

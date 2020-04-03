@@ -116,12 +116,6 @@
             <artifactId>jackson-annotations</artifactId>
         </dependency>
 
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
         <!-- Apache Commons -->
         <dependency>
             <groupId>org.apache.commons</groupId>

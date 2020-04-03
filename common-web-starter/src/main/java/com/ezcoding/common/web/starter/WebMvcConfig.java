@@ -14,6 +14,7 @@ import com.ezcoding.common.web.resolver.result.ResponseAppHeadResolver;
 import com.ezcoding.common.web.resolver.result.ResponseMessageResolver;
 import com.ezcoding.common.web.resolver.result.ResponseSystemHeadResolver;
 import com.ezcoding.common.web.user.CompositeUserLoader;
+import com.ezcoding.common.web.user.EmptyUserLoader;
 import com.ezcoding.common.web.user.IUserLoadable;
 import com.ezcoding.common.web.user.IUserProxyable;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,14 +55,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Resource(name = "defaultExceptionManager")
     private AbstractApplicationExceptionManager defaultExceptionManager;
 
-    private void registerParameterResolver(List<IRequestMessageParameterResolvable> resolvables) {
+    private void registerDefaultParameterResolver(List<IRequestMessageParameterResolvable> resolvables) {
         resolvables.add(new ReqeustMessageResolver());
         resolvables.add(new RequestSystemHeadResolver());
         resolvables.add(new ResquestAppHeadResolver());
         resolvables.add(new DefaultRequestMessageResolver(objectMapper));
     }
 
-    private void registerReturnValueResolvers(List<IResponseMessageReturnValueResolvable> resolvables) {
+    private void registerDefaultReturnValueResolvers(List<IResponseMessageReturnValueResolvable> resolvables) {
         resolvables.add(new ResponseMessageResolver());
         resolvables.add(new ResponseSystemHeadResolver());
         resolvables.add(new ResponseAppHeadResolver());
@@ -80,8 +81,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         List<IRequestMessageParameterResolvable> parameterResolvers = new ArrayList<>();
         List<IResponseMessageReturnValueResolvable> returnValueResolvers = new ArrayList<>();
-        this.registerParameterResolver(parameterResolvers);
-        this.registerReturnValueResolvers(returnValueResolvers);
+        this.registerDefaultParameterResolver(parameterResolvers);
+        this.registerDefaultReturnValueResolvers(returnValueResolvers);
+
+        Optional
+                .ofNullable(this.applicationWebConfigurers)
+                .ifPresent(configures -> configures.forEach(configurer -> {
+                    configurer.registerRequestMessageParameterResolvers(parameterResolvers);
+                    configurer.registerResponseMessageReturnValueResolvers(returnValueResolvers);
+                }));
 
         jsonMessageMethodProcessor.registerParameterResolvables(parameterResolvers);
         jsonMessageMethodProcessor.registerReturnValueResolvables(returnValueResolvers);
@@ -98,11 +106,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
         Optional
                 .ofNullable(this.applicationWebConfigurers)
                 .ifPresent(configurers -> configurers.forEach(configurer -> configurer.registerUserLoaders(loaders)));
+        //注册默认的用户加载器
+        loaders.add(new EmptyUserLoader());
         return new CompositeUserLoader(loaders);
     }
 
     private UserArgumentResolver userArgumentResolver() {
-        return new UserArgumentResolver(this.compositeUserLoader(), userProxyable);
+        return new UserArgumentResolver(compositeUserLoader(), userProxyable);
     }
 
     @Override
