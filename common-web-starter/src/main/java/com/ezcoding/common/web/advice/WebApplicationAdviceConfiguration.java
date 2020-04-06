@@ -33,10 +33,10 @@ import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGenerat
  */
 @Configuration
 @RestControllerAdvice
-@Import(WebApplicationAdviceConfig.class)
-public class WebApplicationAdviceConfig {
+@Import(WebApplicationAdviceConfiguration.class)
+public class WebApplicationAdviceConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebApplicationAdviceConfig.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebApplicationAdviceConfiguration.class);
 
     @Autowired
     private IMessageBuilder messageBuilder;

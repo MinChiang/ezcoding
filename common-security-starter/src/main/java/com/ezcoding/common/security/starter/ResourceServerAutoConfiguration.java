@@ -1,8 +1,10 @@
 package com.ezcoding.common.security.starter;
 
+import com.ezcoding.common.security.accessTokenConverter.StandardAccessTokenConverter;
 import com.ezcoding.common.security.authority.CustomUserAuthenticationConverter;
-import com.ezcoding.common.security.entryPoint.CustomOAuth2AuthenticationEntryPoint;
+import com.ezcoding.common.security.entrypoint.Oauth2AuthenticationEntryPoint;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,7 +13,6 @@ import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -28,6 +29,9 @@ import java.nio.charset.StandardCharsets;
 @EnableResourceServer
 public class ResourceServerAutoConfiguration extends ResourceServerConfigurerAdapter {
 
+    @Autowired
+    private EzcodingSecurityConfigBean ezcodingSecurityConfigBean;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
@@ -40,25 +44,26 @@ public class ResourceServerAutoConfiguration extends ResourceServerConfigurerAda
     }
 
     private String getVerifierKey() throws IOException {
-        ClassPathResource resource = new ClassPathResource("key/rsa_public_key.pem");
+        ClassPathResource resource = new ClassPathResource(ezcodingSecurityConfigBean.getPublicKey());
         return IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8);
     }
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws IOException {
-        DefaultAccessTokenConverter defaultAccessTokenConverter = new DefaultAccessTokenConverter();
-        defaultAccessTokenConverter.setUserTokenConverter(new CustomUserAuthenticationConverter());
+//        DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
+        StandardAccessTokenConverter accessTokenConverter = new StandardAccessTokenConverter();
+        accessTokenConverter.setUserTokenConverter(new CustomUserAuthenticationConverter());
 
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
         jwtAccessTokenConverter.setVerifier(new RsaVerifier(this.getVerifierKey()));
-        jwtAccessTokenConverter.setAccessTokenConverter(defaultAccessTokenConverter);
+        jwtAccessTokenConverter.setAccessTokenConverter(accessTokenConverter);
 
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(new JwtTokenStore(jwtAccessTokenConverter));
 
         resources
                 .tokenServices(defaultTokenServices)
-                .authenticationEntryPoint(new CustomOAuth2AuthenticationEntryPoint());
+                .authenticationEntryPoint(new Oauth2AuthenticationEntryPoint());
     }
 
 }

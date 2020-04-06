@@ -29,7 +29,7 @@ public class DefaultRequestMessageResolver extends AbstractRequestMessageResolve
     public Object resolveReturnValue(RequestMessage<JsonNode> requestMessage, JsonParam parameterAnnotation, MethodParameter methodParameter) {
         JsonNode payload = requestMessage.getPayload();
         String value = parameterAnnotation.value();
-        Object result = null;
+        Object result;
         if (StringUtils.isNotBlank(value)) {
             if (!value.startsWith(PATH_PREFIX)) {
                 value = (PATH_PREFIX + value);

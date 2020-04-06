@@ -1,9 +1,6 @@
 package com.ezcoding.common.web.user;
 
-import com.ezcoding.common.core.user.model.GenderEnum;
-import com.ezcoding.common.core.user.model.IUser;
-import com.ezcoding.common.core.user.model.IUserIdentifiable;
-import com.ezcoding.common.core.user.model.User;
+import com.ezcoding.common.core.user.model.*;
 
 import java.util.Collection;
 import java.util.Date;
@@ -86,6 +83,16 @@ public class UserProxy implements IUser {
     @Override
     public String getEmail() {
         return this.identifiable.getEmail() == null ? this.loadUser().getEmail() : this.identifiable.getEmail();
+    }
+
+    @Override
+    public LoginRegisterTypeEnum getLoginType() {
+        return this.user.getLoginType();
+    }
+
+    @Override
+    public DeviceTypeEnum getDeviceType() {
+        return this.user.getDeviceType();
     }
 
     @Override

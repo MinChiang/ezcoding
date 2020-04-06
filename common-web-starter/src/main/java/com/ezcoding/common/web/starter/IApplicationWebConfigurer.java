@@ -24,7 +24,16 @@ public interface IApplicationWebConfigurer {
     }
 
     /**
-     * 注册额外的用户加载器
+     * 注册额外的用户加载器（不使用默认的加载器）
+     *
+     * @param loaders 用户加载器
+     */
+    default void configUserLoaders(List<IUserLoadable> loaders) {
+
+    }
+
+    /**
+     * 注册额外的用户加载器（使用默认的加载器）
      *
      * @param loaders 用户加载器
      */

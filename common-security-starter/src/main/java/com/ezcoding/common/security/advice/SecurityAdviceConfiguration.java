@@ -24,9 +24,9 @@ import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGenerat
  */
 @Configuration
 @RestControllerAdvice
-public class SecurityAdviceConfig {
+public class SecurityAdviceConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityAdviceConfig.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityAdviceConfiguration.class);
 
     @Autowired
     private IMessageBuilder messageBuilder;

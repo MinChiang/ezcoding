@@ -91,6 +91,16 @@ public class User implements IUser {
      */
     private Collection<String> roles = new HashSet<>(0);
 
+    /**
+     * 登录类型
+     */
+    private LoginRegisterTypeEnum loginType;
+
+    /**
+     * 登录设备类型
+     */
+    private DeviceTypeEnum deviceType;
+
     public User() {
     }
 
@@ -242,6 +252,24 @@ public class User implements IUser {
 
     public void setRoles(Collection<String> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public LoginRegisterTypeEnum getLoginType() {
+        return this.loginType;
+    }
+
+    public void setLoginType(LoginRegisterTypeEnum loginType) {
+        this.loginType = loginType;
+    }
+
+    @Override
+    public DeviceTypeEnum getDeviceType() {
+        return this.deviceType;
+    }
+
+    public void setDeviceType(DeviceTypeEnum deviceType) {
+        this.deviceType = deviceType;
     }
 
 }

@@ -40,7 +40,7 @@ import java.util.Optional;
  */
 @Configuration
 @EnableConfigurationProperties(EzcodingWebConfigBean.class)
-public class WebCommonConfig implements InitializingBean {
+public class WebCommonConfiguration implements InitializingBean {
 
     @Autowired(required = false)
     private List<IApplicationWebConfigurer> applicationWebConfigurers;

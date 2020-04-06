@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2020-04-03 17:54
  */
 @Configuration
-public class SecurityUserAutoConfiguration implements IApplicationWebConfigurer {
+public class SecurityCommonConfiguration implements IApplicationWebConfigurer {
 
     @Override
     public void registerUserLoaders(List<IUserLoadable> loaders) {

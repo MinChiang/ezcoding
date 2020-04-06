@@ -38,7 +38,7 @@ import java.util.Optional;
  * @date 2019-11-20 11:19
  */
 @Configuration
-public class WebMvcConfig implements WebMvcConfigurer {
+public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -103,9 +103,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private IUserLoadable compositeUserLoader() {
         List<IUserLoadable> loaders = new ArrayList<>();
-        Optional
-                .ofNullable(this.applicationWebConfigurers)
-                .ifPresent(configurers -> configurers.forEach(configurer -> configurer.registerUserLoaders(loaders)));
+        Optional<List<IApplicationWebConfigurer>> applicationWebConfigurers = Optional.ofNullable(this.applicationWebConfigurers);
+        applicationWebConfigurers.ifPresent(configurers -> {
+            configurers.forEach(configurer -> configurer.configUserLoaders(loaders));
+            if (loaders.isEmpty()) {
+                configurers.forEach(configurer -> configurer.registerUserLoaders(loaders));
+            }
+        });
         //注册默认的用户加载器
         loaders.add(new EmptyUserLoader());
         return new CompositeUserLoader(loaders);

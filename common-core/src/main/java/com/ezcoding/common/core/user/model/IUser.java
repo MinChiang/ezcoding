@@ -8,7 +8,7 @@ import java.util.Date;
  * @version 1.0.0
  * @date 2019-01-04 10:07
  */
-public interface IUser extends IUserIdentifiable {
+public interface IUser extends IUserIdentifiable, ILoginInfoPreservable {
 
     /**
      * 获取用户名字

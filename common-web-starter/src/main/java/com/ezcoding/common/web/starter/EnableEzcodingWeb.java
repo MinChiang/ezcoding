@@ -1,7 +1,6 @@
 package com.ezcoding.common.web.starter;
 
 import com.ezcoding.common.foundation.starter.EnableEzcodingFoundation;
-import com.ezcoding.common.foundation.starter.EzcodingFoundationAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -15,7 +14,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 @EnableEzcodingFoundation
-@Import({WebCommonConfig.class, WebMvcConfig.class})
+@Import({WebCommonConfiguration.class, WebMvcConfiguration.class})
 public @interface EnableEzcodingWeb {
 
 }

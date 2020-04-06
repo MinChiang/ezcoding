@@ -1,8 +1,11 @@
 package com.ezcoding.common.web;
 
+import com.ezcoding.common.core.user.model.DeviceTypeEnum;
+import com.ezcoding.common.core.user.model.ILoginInfoPreservable;
 import com.ezcoding.common.core.user.model.IUserIdentifiable;
+import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
+import com.ezcoding.common.security.authentication.UserAuthentication;
 import com.ezcoding.common.web.user.EmptyUserLoader;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
@@ -14,17 +17,32 @@ public class SecurityUserLoader extends EmptyUserLoader {
 
     @Override
     public IUserIdentifiable load() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String code = authentication.getName();
-        return new User(code);
+        UserAuthentication authentication = (UserAuthentication) SecurityContextHolder.getContext().getAuthentication();
+        return new User(authentication.getName(), authentication.getLoginType(), authentication.getDeviceType());
     }
 
-    private static class User implements IUserIdentifiable {
+    private static class User implements IUserIdentifiable, ILoginInfoPreservable {
 
         private String code;
 
-        public User(String code) {
+        private LoginRegisterTypeEnum loginTye;
+
+        private DeviceTypeEnum deviceType;
+
+        public User(String code, LoginRegisterTypeEnum loginTye, DeviceTypeEnum deviceType) {
             this.code = code;
+            this.loginTye = loginTye;
+            this.deviceType = deviceType;
+        }
+
+        @Override
+        public LoginRegisterTypeEnum getLoginType() {
+            return this.loginTye;
+        }
+
+        @Override
+        public DeviceTypeEnum getDeviceType() {
+            return this.deviceType;
         }
 
         @Override

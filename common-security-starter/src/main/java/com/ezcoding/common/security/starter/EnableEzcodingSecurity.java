@@ -1,7 +1,8 @@
 package com.ezcoding.common.security.starter;
 
-import com.ezcoding.common.security.advice.SecurityAdviceConfig;
+import com.ezcoding.common.security.advice.SecurityAdviceConfiguration;
 import com.ezcoding.common.web.starter.EnableEzcodingWeb;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -15,7 +16,8 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 @EnableEzcodingWeb
-@Import({MethodSecurityAutoConfiguration.class, ResourceServerAutoConfiguration.class, SecurityAdviceConfig.class, SecurityUserAutoConfiguration.class})
+@Import({MethodSecurityAutoConfiguration.class, ResourceServerAutoConfiguration.class, SecurityAdviceConfiguration.class, SecurityCommonConfiguration.class})
+@EnableConfigurationProperties(EzcodingSecurityConfigBean.class)
 public @interface EnableEzcodingSecurity {
 
 }
