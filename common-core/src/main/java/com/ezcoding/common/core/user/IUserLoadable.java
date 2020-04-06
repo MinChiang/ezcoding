@@ -1,6 +1,4 @@
-package com.ezcoding.common.web.user;
-
-import com.ezcoding.common.core.user.model.IUserIdentifiable;
+package com.ezcoding.common.core.user;
 
 /**
  * @author MinChiang

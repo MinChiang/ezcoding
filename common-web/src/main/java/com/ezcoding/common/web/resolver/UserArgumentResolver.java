@@ -1,9 +1,9 @@
 package com.ezcoding.common.web.resolver;
 
 import com.ezcoding.common.core.user.model.IUser;
-import com.ezcoding.common.core.user.model.IUserIdentifiable;
+import com.ezcoding.common.core.user.IUserIdentifiable;
 import com.ezcoding.common.web.user.CompositeUserLoader;
-import com.ezcoding.common.web.user.IUserLoadable;
+import com.ezcoding.common.core.user.IUserLoadable;
 import com.ezcoding.common.web.user.IUserProxyable;
 import com.ezcoding.common.web.user.UserProxy;
 import org.apache.commons.lang3.StringUtils;

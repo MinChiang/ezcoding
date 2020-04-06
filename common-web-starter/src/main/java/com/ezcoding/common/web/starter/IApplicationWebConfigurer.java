@@ -3,7 +3,7 @@ package com.ezcoding.common.web.starter;
 import com.ezcoding.common.web.filter.IApplicationContextValueFetchable;
 import com.ezcoding.common.web.resolver.parameter.IRequestMessageParameterResolvable;
 import com.ezcoding.common.web.resolver.result.IResponseMessageReturnValueResolvable;
-import com.ezcoding.common.web.user.IUserLoadable;
+import com.ezcoding.common.core.user.IUserLoadable;
 
 import java.util.List;
 

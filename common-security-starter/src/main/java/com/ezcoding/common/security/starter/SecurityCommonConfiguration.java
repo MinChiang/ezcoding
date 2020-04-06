@@ -2,7 +2,7 @@ package com.ezcoding.common.security.starter;
 
 import com.ezcoding.common.web.SecurityUserLoader;
 import com.ezcoding.common.web.starter.IApplicationWebConfigurer;
-import com.ezcoding.common.web.user.IUserLoadable;
+import com.ezcoding.common.core.user.IUserLoadable;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;

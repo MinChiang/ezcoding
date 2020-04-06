@@ -1,4 +1,7 @@
-package com.ezcoding.common.core.user.model;
+package com.ezcoding.common.core.user;
+
+import com.ezcoding.common.core.user.model.DeviceTypeEnum;
+import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
 
 /**
  * @author MinChiang

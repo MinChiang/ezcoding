@@ -1,11 +1,11 @@
 package com.ezcoding.common.web;
 
 import com.ezcoding.common.core.user.model.DeviceTypeEnum;
-import com.ezcoding.common.core.user.model.ILoginInfoPreservable;
-import com.ezcoding.common.core.user.model.IUserIdentifiable;
+import com.ezcoding.common.core.user.ILoginInfoPreservable;
+import com.ezcoding.common.core.user.IUserIdentifiable;
 import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
 import com.ezcoding.common.security.authentication.UserAuthentication;
-import com.ezcoding.common.web.user.EmptyUserLoader;
+import com.ezcoding.common.core.user.EmptyUserLoader;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**

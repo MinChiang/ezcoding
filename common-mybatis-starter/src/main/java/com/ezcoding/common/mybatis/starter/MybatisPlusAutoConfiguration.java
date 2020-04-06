@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import com.ezcoding.common.core.user.IUserLoadable;
 import com.ezcoding.common.mybatis.enums.BooleanTypeEnum;
+import com.ezcoding.common.mybatis.handler.BaseModelMetaObjectHandler;
 import com.ezcoding.common.mybatis.type.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ibatis.plugin.Interceptor;
@@ -33,6 +35,8 @@ public class MybatisPlusAutoConfiguration {
 
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired(required = false)
+    private IUserLoadable loader;
 
     /**
      * 分页插件
@@ -66,14 +70,41 @@ public class MybatisPlusAutoConfiguration {
         return interceptors.toArray(new Interceptor[0]);
     }
 
-//    /**
-//     * 自动注入处理器
-//     *
-//     * @return 自动注入处理器
-//     */
-//    private BaseModelMetaObjectHandler baseModelMetaObjectHandler() {
-//        return new BaseModelMetaObjectHandler();
-//    }
+    /**
+     * 注册额外的类型处理器
+     *
+     * @return 额外类型处理器列表
+     */
+    private List<TypeHandler<?>> baseTypeHandlers() {
+        ArrayList<TypeHandler<?>> typeHandlers = new ArrayList<>();
+
+        JsonTypeHandler jsonTypeHandler = new JsonTypeHandler();
+        jsonTypeHandler.setObjectMapper(this.objectMapper);
+        typeHandlers.add(jsonTypeHandler);
+
+        UserStatusEnumHandler userStatusEnumHandler = new UserStatusEnumHandler();
+        typeHandlers.add(userStatusEnumHandler);
+
+        GenderEnumHandler genderEnumHandler = new GenderEnumHandler();
+        typeHandlers.add(genderEnumHandler);
+
+        DeviceTypeEnumHandler deviceTypeEnumHandler = new DeviceTypeEnumHandler();
+        typeHandlers.add(deviceTypeEnumHandler);
+
+        LoginRegisterTypeEnumHandler loginRegisterTypeEnumHandler = new LoginRegisterTypeEnumHandler();
+        typeHandlers.add(loginRegisterTypeEnumHandler);
+
+        return typeHandlers;
+    }
+
+    /**
+     * 自动注入处理器
+     *
+     * @return 自动注入处理器
+     */
+    private BaseModelMetaObjectHandler baseModelMetaObjectHandler() {
+        return new BaseModelMetaObjectHandler(this.loader);
+    }
 
     @Bean
     public MybatisSqlSessionFactoryBean mybatisSqlSessionFactoryBean(DataSource dataSource) throws IOException {
@@ -105,7 +136,9 @@ public class MybatisPlusAutoConfiguration {
         dbConfig.setLogicNotDeleteValue(String.valueOf(BooleanTypeEnum.FALSE.getId()));
         globalConfig.setDbConfig(dbConfig);
         //设置自动注入元数据
-//        globalConfig.setMetaObjectHandler(this.baseModelMetaObjectHandler());
+        if (this.loader != null) {
+            globalConfig.setMetaObjectHandler(this.baseModelMetaObjectHandler());
+        }
         //关闭标签
         globalConfig.setBanner(false);
         return globalConfig;
@@ -115,33 +148,6 @@ public class MybatisPlusAutoConfiguration {
         MybatisConfiguration mybatisConfiguration = new MybatisConfiguration();
         mybatisConfiguration.setMapUnderscoreToCamelCase(true);
         return mybatisConfiguration;
-    }
-
-    /**
-     * 注册额外的类型处理器
-     *
-     * @return 额外类型处理器列表
-     */
-    private List<TypeHandler<?>> baseTypeHandlers() {
-        ArrayList<TypeHandler<?>> typeHandlers = new ArrayList<>();
-
-        JsonTypeHandler jsonTypeHandler = new JsonTypeHandler();
-        jsonTypeHandler.setObjectMapper(this.objectMapper);
-        typeHandlers.add(jsonTypeHandler);
-
-        UserStatusEnumHandler userStatusEnumHandler = new UserStatusEnumHandler();
-        typeHandlers.add(userStatusEnumHandler);
-
-        GenderEnumHandler genderEnumHandler = new GenderEnumHandler();
-        typeHandlers.add(genderEnumHandler);
-
-        DeviceTypeEnumHandler deviceTypeEnumHandler = new DeviceTypeEnumHandler();
-        typeHandlers.add(deviceTypeEnumHandler);
-
-        LoginRegisterTypeEnumHandler loginRegisterTypeEnumHandler = new LoginRegisterTypeEnumHandler();
-        typeHandlers.add(loginRegisterTypeEnumHandler);
-
-        return typeHandlers;
     }
 
 }

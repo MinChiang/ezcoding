@@ -1,4 +1,4 @@
-package com.ezcoding.common.core.user.model;
+package com.ezcoding.common.core.user;
 
 /**
  * @author MinChiang

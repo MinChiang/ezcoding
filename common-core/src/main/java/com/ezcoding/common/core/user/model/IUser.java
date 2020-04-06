@@ -1,5 +1,8 @@
 package com.ezcoding.common.core.user.model;
 
+import com.ezcoding.common.core.user.ILoginInfoPreservable;
+import com.ezcoding.common.core.user.IUserIdentifiable;
+
 import java.util.Collection;
 import java.util.Date;
 

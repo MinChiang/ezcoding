@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.user;
 
 import com.ezcoding.common.core.user.model.IUser;
-import com.ezcoding.common.core.user.model.IUserIdentifiable;
+import com.ezcoding.common.core.user.IUserIdentifiable;
 
 /**
  * @author MinChiang
