@@ -82,6 +82,7 @@ public class AuthenticationController {
         Map<String, Object> map = new HashMap<>();
         map.put("tag", tag);
         map.put("receipt", receipt);
+        map.put("test", 1L);
 
         return ResponseMessageBuilder.success(map).build();
     }
