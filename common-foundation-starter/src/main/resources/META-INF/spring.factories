@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ezcoding.common.foundation.starter.EzcodingFoundationAutoConfiguration

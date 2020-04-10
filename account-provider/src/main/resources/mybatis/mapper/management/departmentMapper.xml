@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezcoding.module.management.dao.DepartmentMapper">
+
+    <select id="listRolesByDepartment" resultType="com.ezcoding.module.management.bean.model.Role">
+        select
+            ar.id,
+            ar.code,
+            ar.name,
+            ar.comment,
+            ar.creator,
+            ar.create_time,
+            ar.modifier,
+            ar.modify_time,
+            ar.status
+        from
+            account_role ar
+            left join account_department_role adr on ar.id = adr.role_id
+            left join account_department ad on adr.department_id = ad.id
+        where
+            ad.id in
+            <foreach collection="departmentIds" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+            and ad.status = ${@com.ezcoding.api.account.management.bean.model.DepartmentStatusEnum@RUNNING.id}
+    </select>
+
+    <select id="findDepartmentByUser"
+            resultType="com.ezcoding.module.management.bean.model.Department">
+        select
+            ad.id,
+            ad.parent_id,
+            ad.code,
+            ad.name,
+            ad.comment,
+            ad.level,
+            ad.is_leaf,
+            ad.path,
+            ad.status,
+            ad.group_id,
+            ad.creator,
+            ad.create_time,
+            ad.modifier,
+            ad.modify_time
+        from
+            account_department ad
+            left join account_user_department aud on ad.id = aud.department_id
+        where
+            aud.user_code = #{user}
+            and ad.status = ${@com.ezcoding.api.account.management.bean.model.DepartmentStatusEnum@RUNNING.id}
+    </select>
+
+</mapper>

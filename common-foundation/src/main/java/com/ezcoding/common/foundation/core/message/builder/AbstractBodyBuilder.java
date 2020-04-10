@@ -13,4 +13,7 @@ public abstract class AbstractBodyBuilder<T> implements IMessageBuildable<T> {
         this.body = body;
     }
 
+    AbstractBodyBuilder() {
+    }
+
 }

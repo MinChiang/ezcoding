@@ -24,6 +24,9 @@
         <module>common-web-starter</module>
         <module>common-mybatis-starter</module>
         <module>common-security-starter</module>
+
+        <module>account-api</module>
+        <module>account-provider</module>
     </modules>
 
     <properties>

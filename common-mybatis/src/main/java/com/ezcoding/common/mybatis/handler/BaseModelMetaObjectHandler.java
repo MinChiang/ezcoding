@@ -32,7 +32,7 @@ public class BaseModelMetaObjectHandler implements MetaObjectHandler {
                 .ofNullable(loader)
                 .map(IUserLoadable::load)
                 .map(IUserIdentifiable::getAccount)
-                .get();
+                .orElse(null);
     }
 
     @Override

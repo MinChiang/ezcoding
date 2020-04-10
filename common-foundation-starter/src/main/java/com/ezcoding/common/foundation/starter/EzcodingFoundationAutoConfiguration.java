@@ -29,6 +29,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -56,12 +57,11 @@ import static com.ezcoding.common.foundation.core.exception.ModuleConstants.DEFA
  */
 @Configuration
 @EnableConfigurationProperties(EzcodingFoundationConfigBean.class)
+@ConditionalOnProperty(prefix = "ezcoding.foundation", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 
     @Autowired
     private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
-    @Autowired
-    private MessageSource messageSource;
 
     /**
      * 注册默认分页类型
@@ -111,19 +111,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         return OriginalUUIDProducer.getInstance();
     }
 
-    @Primary
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
-        objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
-
-//        this.customObjectMapperConfig(objectMapper);
-        return objectMapper;
-    }
-
     /**
      * 制定objectMapper特性
      *
@@ -134,6 +121,20 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
         simpleModule.addSerializer(long.class, ToStringSerializer.instance);
         objectMapper.registerModule(simpleModule);
+    }
+
+    @Primary
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
+        objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
+
+        this.customObjectMapperConfig(objectMapper);
+        return objectMapper;
     }
 
     /**
@@ -188,8 +189,9 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
      *
      * @return 校验器
      */
+    @ConditionalOnMissingBean(Validator.class)
     @Bean
-    public Validator validator() {
+    public Validator validator(MessageSource messageSource) {
         ResourceBundleLocator resourceBundleLocator = new MessageSourceResourceBundleLocator(messageSource);
         MessageInterpolator messageInterpolator = new PrependMessageInterpolator(resourceBundleLocator);
         MessageInterpolator localeContextMessageInterpolator = new LocaleContextMessageInterpolator(messageInterpolator);

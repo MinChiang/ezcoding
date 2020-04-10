@@ -7,6 +7,10 @@ import com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes;
 import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
 import com.ezcoding.common.web.filter.FilterConstants;
 import com.ezcoding.common.web.filter.IApplicationContextValueFetchable;
+import com.ezcoding.common.web.user.IUserProxyable;
+import com.ezcoding.common.web.user.RemoteUserProxy;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeansException;
@@ -15,6 +19,7 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -24,14 +29,12 @@ import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author MinChiang
@@ -46,6 +49,8 @@ public class WebCommonConfiguration implements InitializingBean {
     private List<IApplicationWebConfigurer> applicationWebConfigurers;
     @Autowired
     private MessageSource messageSource;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public void afterPropertiesSet() {
@@ -58,6 +63,10 @@ public class WebCommonConfiguration implements InitializingBean {
         return jacksonObjectMapperBuilder -> {
             jacksonObjectMapperBuilder.serializerByType(Long.TYPE, ToStringSerializer.instance);
             jacksonObjectMapperBuilder.serializerByType(long.class, ToStringSerializer.instance);
+
+            jacksonObjectMapperBuilder.serializationInclusion(JsonInclude.Include.NON_NULL);
+            jacksonObjectMapperBuilder.failOnUnknownProperties(false);
+            jacksonObjectMapperBuilder.locale(Locale.SIMPLIFIED_CHINESE);
         };
     }
 
@@ -93,6 +102,17 @@ public class WebCommonConfiguration implements InitializingBean {
     @Bean(value = {"defaultLayerModuleProcessor", "webDefaultApplicationExceptionProcessor"})
     public WebDefaultApplicationExceptionProcessor webDefaultApplicationExceptionProcessor() {
         return new WebDefaultApplicationExceptionProcessor();
+    }
+
+//    @Bean
+//    public MappingJackson2HttpMessageConverter customMappingJackson2HttpMessageConverter() {
+//        return new MappingJackson2HttpMessageConverter(objectMapper);
+//    }
+
+    @Bean
+    @ConditionalOnMissingBean(IUserProxyable.class)
+    public IUserProxyable userProxy() {
+        return new RemoteUserProxy();
     }
 
     @Configuration

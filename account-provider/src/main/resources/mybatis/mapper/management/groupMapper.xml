@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezcoding.module.management.dao.GroupMapper">
+
+    <select id="selectRolesByGroup" resultType="com.ezcoding.module.management.bean.model.Role">
+        select
+            ar.id,
+            ar.code,
+            ar.name,
+            ar.comment,
+            ar.creator,
+            ar.create_time,
+            ar.modifier,
+            ar.modify_time,
+            ar.status
+        from
+            account_role ar
+            inner join account_group_role agr on ar.id = agr.group_id
+            inner join account_group_user agu on agr.group_id = agu.group_id
+        where
+            agu.user_code = #{user}
+    </select>
+
+</mapper>

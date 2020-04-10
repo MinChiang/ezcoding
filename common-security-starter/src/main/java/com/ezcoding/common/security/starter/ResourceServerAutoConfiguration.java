@@ -5,6 +5,7 @@ import com.ezcoding.common.security.authority.CustomUserAuthenticationConverter;
 import com.ezcoding.common.security.entrypoint.Oauth2AuthenticationEntryPoint;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,7 @@ import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.error.DefaultOAuth2ExceptionRenderer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -31,6 +33,8 @@ public class ResourceServerAutoConfiguration extends ResourceServerConfigurerAda
 
     @Autowired
     private EzcodingSecurityConfigBean ezcodingSecurityConfigBean;
+    @Autowired
+    private HttpMessageConverters httpMessageConverters;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -61,9 +65,14 @@ public class ResourceServerAutoConfiguration extends ResourceServerConfigurerAda
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(new JwtTokenStore(jwtAccessTokenConverter));
 
+        DefaultOAuth2ExceptionRenderer defaultOAuth2ExceptionRenderer = new DefaultOAuth2ExceptionRenderer();
+        defaultOAuth2ExceptionRenderer.setMessageConverters(httpMessageConverters.getConverters());
+        Oauth2AuthenticationEntryPoint oauth2AuthenticationEntryPoint = new Oauth2AuthenticationEntryPoint();
+        oauth2AuthenticationEntryPoint.setExceptionRenderer(defaultOAuth2ExceptionRenderer);
+
         resources
                 .tokenServices(defaultTokenServices)
-                .authenticationEntryPoint(new Oauth2AuthenticationEntryPoint());
+                .authenticationEntryPoint(oauth2AuthenticationEntryPoint);
     }
 
 }

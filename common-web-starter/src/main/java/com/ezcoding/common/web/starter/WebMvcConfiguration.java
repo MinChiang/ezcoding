@@ -1,5 +1,7 @@
 package com.ezcoding.common.web.starter;
 
+import com.ezcoding.common.core.user.EmptyUserLoader;
+import com.ezcoding.common.core.user.IUserLoadable;
 import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
 import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
 import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
@@ -14,13 +16,11 @@ import com.ezcoding.common.web.resolver.result.ResponseAppHeadResolver;
 import com.ezcoding.common.web.resolver.result.ResponseMessageResolver;
 import com.ezcoding.common.web.resolver.result.ResponseSystemHeadResolver;
 import com.ezcoding.common.web.user.CompositeUserLoader;
-import com.ezcoding.common.core.user.EmptyUserLoader;
-import com.ezcoding.common.core.user.IUserLoadable;
 import com.ezcoding.common.web.user.IUserProxyable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -45,10 +45,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Autowired
     private IMessageBuilder messageBuilder;
     @Autowired
-    private List<HttpMessageConverter<?>> messageConverters;
+    private HttpMessageConverters httpMessageConverters;
     @Autowired(required = false)
     private List<IApplicationWebConfigurer> applicationWebConfigurers;
-    @Autowired(required = false)
+    @Autowired
     private IUserProxyable userProxyable;
     @Autowired
     private EzcodingWebConfigBean ezcodingWebConfigBean;
@@ -77,7 +77,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     private JsonMessageMethodProcessor jsonMessageMethodProcessor() {
-        JsonMessageMethodProcessor jsonMessageMethodProcessor = new JsonMessageMethodProcessor(messageConverters, jsonRequestMessageResolver());
+        JsonMessageMethodProcessor jsonMessageMethodProcessor = new JsonMessageMethodProcessor(httpMessageConverters.getConverters(), jsonRequestMessageResolver());
 
         List<IRequestMessageParameterResolvable> parameterResolvers = new ArrayList<>();
         List<IResponseMessageReturnValueResolvable> returnValueResolvers = new ArrayList<>();

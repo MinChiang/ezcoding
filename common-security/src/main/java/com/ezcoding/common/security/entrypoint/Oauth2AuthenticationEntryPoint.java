@@ -1,6 +1,7 @@
 package com.ezcoding.common.security.entrypoint;
 
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.message.builder.ResponseMessageBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 
@@ -16,7 +17,10 @@ public class Oauth2AuthenticationEntryPoint extends OAuth2AuthenticationEntryPoi
     @Override
     protected ResponseEntity<?> enhanceResponse(ResponseEntity<?> response, Exception exception) {
         ResponseEntity<?> responseEntity = super.enhanceResponse(response, exception);
-        return new ResponseEntity<Object>(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_TOKEN_PARSE_ERROR),
+        exception.printStackTrace();
+
+        return new ResponseEntity<Object>(
+                ResponseMessageBuilder.error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_TOKEN_PARSE_ERROR).build()).build(),
                 responseEntity.getHeaders(),
                 responseEntity.getStatusCode()
         );

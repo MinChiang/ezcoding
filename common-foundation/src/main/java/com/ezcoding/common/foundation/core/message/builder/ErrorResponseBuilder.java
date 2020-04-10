@@ -19,6 +19,9 @@ public class ErrorResponseBuilder<T> extends AbstractBodyBuilder<T> {
         super(body);
     }
 
+    public ErrorResponseBuilder() {
+    }
+
     public ErrorResponseBuilder<T> errorCode(String errorCode) {
         this.errorCode = errorCode;
         return this;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ezcoding.module.management.dao.UserDepartmentMapper">
+
+    <delete id="deleteByUserCode">
+        delete from account_user_department where user_code in
+        <foreach collection="users" item="code" separator="," open="(" close=")">
+            #{code}
+        </foreach>
+    </delete>
+
+</mapper>
