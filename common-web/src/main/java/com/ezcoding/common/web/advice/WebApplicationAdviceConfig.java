@@ -30,9 +30,9 @@ import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGenerat
  * @date 2018-08-17 13:57
  */
 @RestControllerAdvice
-public class ApplicationAdviceConfig {
+public class WebApplicationAdviceConfig {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationAdviceConfig.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebApplicationAdviceConfig.class);
 
     @Autowired
     private IMessageBuilder messageBuilder;

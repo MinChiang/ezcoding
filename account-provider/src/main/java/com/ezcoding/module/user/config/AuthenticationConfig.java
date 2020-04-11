@@ -1,12 +1,11 @@
 package com.ezcoding.module.user.config;
 
+import com.ezcoding.common.foundation.util.ObjectMapperUtils;
 import com.ezcoding.common.web.starter.EzcodingWebConfigBean;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ezcoding.extend.user.KickOutHandler;
 import com.ezcoding.module.user.service.IAuthorizationService;
 import com.ezcoding.module.user.service.impl.AuthorizationImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -28,9 +27,9 @@ public class AuthenticationConfig {
     @Autowired
     private AuthorizationServerEndpointsConfiguration authorizationServerEndpointsConfiguration;
 
-    @Autowired
-    @Qualifier("serializableObjectMapper")
-    private ObjectMapper objectMapper;
+//    @Autowired
+//    @Qualifier("serializableObjectMapper")
+//    private ObjectMapper objectMapper;
 
     @Autowired
     private EzcodingWebConfigBean ezcodingWebConfigBean;
@@ -50,7 +49,7 @@ public class AuthenticationConfig {
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
         Jackson2JsonRedisSerializer<Date> objectJackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Date.class);
-        objectJackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+        objectJackson2JsonRedisSerializer.setObjectMapper(ObjectMapperUtils.persist());
         template.setValueSerializer(objectJackson2JsonRedisSerializer);
         template.afterPropertiesSet();
         return template;

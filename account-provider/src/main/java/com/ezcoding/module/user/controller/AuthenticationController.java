@@ -72,7 +72,9 @@ public class AuthenticationController {
      */
     @PostMapping("message")
     @JsonResult
-    public ResponseMessage<?> generateMessageCode(@JsonParam("tag") @NotNull(message = "{user.tag}") String tag) {
+    public ResponseMessage<?> generateMessageCode(@JsonParam("tag") @NotNull(message = "{user.tag}") String tag,
+                                                  @JsonParam("test") Long test,
+                                                  @JsonParam("test2") long test2) {
         // 校验手机号是否已注册
         AssertUtils.mustFalse(userService.exist(User.create().phone(tag)), () -> WebExceptionBuilderFactory.webExceptionBuilder(GEN_USER_EXIST_ERROR).build());
 

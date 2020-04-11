@@ -26,6 +26,11 @@ public class DefaultRequestMessageResolver extends AbstractRequestMessageResolve
     }
 
     @Override
+    public boolean match(Class<?> targetClass) {
+        return true;
+    }
+
+    @Override
     public Object resolveReturnValue(RequestMessage<JsonNode> requestMessage, JsonParam parameterAnnotation, MethodParameter methodParameter) {
         JsonNode payload = requestMessage.getPayload();
         String value = parameterAnnotation.value();
@@ -45,7 +50,8 @@ public class DefaultRequestMessageResolver extends AbstractRequestMessageResolve
             if (parameterAnnotation.required()) {
                 throw new IllegalArgumentException("方法" + methodParameter.getMethod() + "参数" + methodParameter.getParameterName() + "为必输");
             }
-            result = ConvertUtils.convert(parameterAnnotation.defaultValue(), methodParameter.getParameterType());
+            String defaultValue = parameterAnnotation.defaultValue();
+            result = defaultValue.length() > 0 ? ConvertUtils.convert(defaultValue, methodParameter.getParameterType()) : null;
         } else {
             //解决参数类型中的泛型问题
             JavaType javaType = this.objectMapper.constructType(methodParameter.getGenericParameterType());

@@ -14,13 +14,7 @@ import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeUUIDProducer;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.util.ConvertUtils;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.hibernate.validator.HibernateValidator;
@@ -44,7 +38,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import static com.ezcoding.common.foundation.core.exception.ModuleConstants.DEFAULT_APPLICATION_LAYER_MODULE;
@@ -111,52 +104,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         return OriginalUUIDProducer.getInstance();
     }
 
-    /**
-     * 制定objectMapper特性
-     *
-     * @param objectMapper 需要指定特性的objectMapper
-     */
-    private void customObjectMapperConfig(ObjectMapper objectMapper) {
-        SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
-        simpleModule.addSerializer(long.class, ToStringSerializer.instance);
-        objectMapper.registerModule(simpleModule);
-    }
-
-    @Primary
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
-        objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
-
-        this.customObjectMapperConfig(objectMapper);
-        return objectMapper;
-    }
-
-    /**
-     * 用于序列化使用
-     *
-     * @return json序列化器
-     */
-    @ConditionalOnMissingBean(name = "serializableObjectMapper")
-    @Bean(value = "serializableObjectMapper")
-    public ObjectMapper serializableObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
-        objectMapper.setLocale(Locale.SIMPLIFIED_CHINESE);
-
-        //带上对应的@class标志
-        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
-        this.customObjectMapperConfig(objectMapper);
-        return objectMapper;
-    }
-
     @ConditionalOnMissingBean(IMessageBuilder.class)
     @Bean
     public MessageBuilder messageBuilder(ObjectMapper objectMapper, IUUIDProducer producer) {
@@ -180,29 +127,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         instance.setDefaultWriteMessageType(MessageTypeEnum.valueOf(message.getWriteMessageType()));
 
         return instance;
-    }
-
-    /**
-     * 1.默认读取ValidationMessages.properties中的内容，注意此文件需要使用UTF-8进行编码
-     * 2.开启快速校验模式，当遇到第一个校验失败时马上返回
-     * 3.使用PrependMessageInterpolator默认消息插值模板，若想使用默认的消息插值方式，则在payload里面添加对应的Default.class
-     *
-     * @return 校验器
-     */
-    @ConditionalOnMissingBean(Validator.class)
-    @Bean
-    public Validator validator(MessageSource messageSource) {
-        ResourceBundleLocator resourceBundleLocator = new MessageSourceResourceBundleLocator(messageSource);
-        MessageInterpolator messageInterpolator = new PrependMessageInterpolator(resourceBundleLocator);
-        MessageInterpolator localeContextMessageInterpolator = new LocaleContextMessageInterpolator(messageInterpolator);
-
-        ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
-                .configure()
-                //开启快速校验，只抛出第一个检测到的异常
-                .failFast(true)
-                .messageInterpolator(localeContextMessageInterpolator)
-                .buildValidatorFactory();
-        return validatorFactory.getValidator();
     }
 
     @ConditionalOnMissingBean(AbstractApplicationExceptionManager.class)

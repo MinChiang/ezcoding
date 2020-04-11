@@ -10,15 +10,11 @@ import com.ezcoding.common.web.filter.IApplicationContextValueFetchable;
 import com.ezcoding.common.web.user.IUserProxyable;
 import com.ezcoding.common.web.user.RemoteUserProxy;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
@@ -29,12 +25,11 @@ import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 /**
  * @author MinChiang
@@ -49,8 +44,6 @@ public class WebCommonConfiguration implements InitializingBean {
     private List<IApplicationWebConfigurer> applicationWebConfigurers;
     @Autowired
     private MessageSource messageSource;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Override
     public void afterPropertiesSet() {
@@ -59,14 +52,16 @@ public class WebCommonConfiguration implements InitializingBean {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
-        //将long转化为string，解决序列化long精度丢失的问题
         return jacksonObjectMapperBuilder -> {
-            jacksonObjectMapperBuilder.serializerByType(Long.TYPE, ToStringSerializer.instance);
+            //将long转化为string，解决序列化long精度丢失的问题
             jacksonObjectMapperBuilder.serializerByType(long.class, ToStringSerializer.instance);
+            jacksonObjectMapperBuilder.serializerByType(Long.TYPE, ToStringSerializer.instance);
+            jacksonObjectMapperBuilder.serializerByType(Long.class, ToStringSerializer.instance);
 
             jacksonObjectMapperBuilder.serializationInclusion(JsonInclude.Include.NON_NULL);
-            jacksonObjectMapperBuilder.failOnUnknownProperties(false);
-            jacksonObjectMapperBuilder.locale(Locale.SIMPLIFIED_CHINESE);
+            jacksonObjectMapperBuilder.featuresToDisable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            jacksonObjectMapperBuilder.featuresToEnable(MapperFeature.PROPAGATE_TRANSIENT_MARKER);
+            jacksonObjectMapperBuilder.locale(Locale.getDefault());
         };
     }
 
@@ -104,52 +99,10 @@ public class WebCommonConfiguration implements InitializingBean {
         return new WebDefaultApplicationExceptionProcessor();
     }
 
-//    @Bean
-//    public MappingJackson2HttpMessageConverter customMappingJackson2HttpMessageConverter() {
-//        return new MappingJackson2HttpMessageConverter(objectMapper);
-//    }
-
     @Bean
     @ConditionalOnMissingBean(IUserProxyable.class)
     public IUserProxyable userProxy() {
         return new RemoteUserProxy();
-    }
-
-    @Configuration
-    @AutoConfigureAfter(RequestMappingHandlerAdapter.class)
-    public static class WebLastConfig implements InitializingBean, BeanFactoryAware {
-
-        private BeanFactory beanFactory;
-
-        @Override
-        public void afterPropertiesSet() {
-            RequestMappingHandlerAdapter adapter = beanFactory.getBean(RequestMappingHandlerAdapter.class);
-
-            List<HandlerMethodReturnValueHandler> customReturnValueHandlers = adapter.getCustomReturnValueHandlers();
-            List<HandlerMethodReturnValueHandler> returnValueHandlers = adapter.getReturnValueHandlers();
-            if (CollectionUtils.isNotEmpty(customReturnValueHandlers) && CollectionUtils.isNotEmpty(returnValueHandlers)) {
-                //returnValueHandlers为不可变对象，需要重新设置一个新的list进行设置
-                List<HandlerMethodReturnValueHandler> dest = new ArrayList<>(returnValueHandlers);
-                dest.removeAll(customReturnValueHandlers);
-                dest.addAll(0, customReturnValueHandlers);
-                adapter.setReturnValueHandlers(dest);
-            }
-
-            List<HandlerMethodArgumentResolver> customArgumentResolvers = adapter.getCustomArgumentResolvers();
-            List<HandlerMethodArgumentResolver> argumentResolvers = adapter.getArgumentResolvers();
-            if (CollectionUtils.isNotEmpty(customArgumentResolvers) && CollectionUtils.isNotEmpty(argumentResolvers)) {
-                List<HandlerMethodArgumentResolver> dest = new ArrayList<>(argumentResolvers);
-                dest.removeAll(customArgumentResolvers);
-                dest.addAll(0, customArgumentResolvers);
-                adapter.setArgumentResolvers(dest);
-            }
-        }
-
-        @Override
-        public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-            this.beanFactory = beanFactory;
-        }
-
     }
 
 }

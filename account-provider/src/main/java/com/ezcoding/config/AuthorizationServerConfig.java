@@ -1,6 +1,7 @@
 package com.ezcoding.config;
 
 import com.ezcoding.common.constant.UserModuleConstants;
+import com.ezcoding.common.foundation.util.ObjectMapperUtils;
 import com.ezcoding.common.security.accessTokenConverter.StandardAccessTokenConverter;
 import com.ezcoding.common.security.authority.CustomUserAuthenticationConverter;
 import com.ezcoding.common.security.entrypoint.Oauth2AuthenticationEntryPoint;
@@ -60,9 +61,9 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
     private ClientDetailsMapper clientDetailsMapper;
     @Autowired
     private RedisConnectionFactory factory;
-    @Autowired
-    @Qualifier("serializableObjectMapper")
-    private ObjectMapper objectMapper;
+//    @Autowired
+//    @Qualifier("serializableObjectMapper")
+//    private ObjectMapper objectMapper;
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
@@ -91,7 +92,7 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
         template.setConnectionFactory(factory);
         template.setKeySerializer(new StringRedisSerializer());
         Jackson2JsonRedisSerializer<ClientDetails> objectJackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(ClientDetails.class);
-        objectJackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+        objectJackson2JsonRedisSerializer.setObjectMapper(ObjectMapperUtils.persist());
         template.setValueSerializer(objectJackson2JsonRedisSerializer);
         template.afterPropertiesSet();
         return template;
@@ -102,7 +103,7 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
         template.setConnectionFactory(factory);
         template.setKeySerializer(new StringRedisSerializer());
         Jackson2JsonRedisSerializer<OAuth2Authentication> objectJackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(OAuth2Authentication.class);
-        objectJackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+        objectJackson2JsonRedisSerializer.setObjectMapper(ObjectMapperUtils.persist());
         template.setValueSerializer(objectJackson2JsonRedisSerializer);
         template.afterPropertiesSet();
         return template;
