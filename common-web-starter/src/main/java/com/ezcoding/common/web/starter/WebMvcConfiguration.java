@@ -58,8 +58,6 @@ import java.util.Optional;
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
-    //    @Autowired
-//    private ObjectMapper objectMapper;
     @Autowired
     private IMessageBuilder messageBuilder;
     @Autowired
@@ -93,9 +91,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public JsonMessageMethodProcessor jsonMessageMethodProcessor(Validator validator) {
+    public JsonMessageMethodProcessor jsonMessageMethodProcessor() {
         JsonMessageMethodProcessor jsonMessageMethodProcessor = new JsonMessageMethodProcessor(httpMessageConverters.getConverters(), jsonRequestMessageResolver());
-        Optional.ofNullable(validator).ifPresent(jsonMessageMethodProcessor::setValidator);
 
         List<IRequestMessageParameterResolvable> parameterResolvers = new ArrayList<>();
         List<IResponseMessageReturnValueResolvable> returnValueResolvers = new ArrayList<>();

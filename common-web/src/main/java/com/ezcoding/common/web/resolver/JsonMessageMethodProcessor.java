@@ -13,21 +13,16 @@ import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author MinChiang
@@ -38,7 +33,6 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonMessageMethodProcessor.class);
 
-    private Validator validator;
     private JsonRequestMessageResolver jsonRequestMessageResolver;
     private List<IResponseMessageReturnValueResolvable> returnValueResolvables = new ArrayList<>();
     private List<IRequestMessageParameterResolvable> parameterResolvables = new ArrayList<>();
@@ -47,13 +41,6 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
                                       JsonRequestMessageResolver jsonRequestMessageResolver) {
         super(converters);
         this.jsonRequestMessageResolver = jsonRequestMessageResolver;
-    }
-
-    public JsonMessageMethodProcessor(List<HttpMessageConverter<?>> converters,
-                                      JsonRequestMessageResolver jsonRequestMessageResolver,
-                                      Validator validator) {
-        this(converters, jsonRequestMessageResolver);
-        this.validator = validator;
     }
 
     @Override
@@ -82,11 +69,6 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
                 .orElseThrow(() -> new RuntimeException("未配置默认的参数解析器"));
         Object result = resolvable.resolveReturnValue(requestMessage, parameter.getParameterAnnotation(JsonParam.class), parameter);
 
-        //参数校验，校验不通过直接返回异常
-        if (this.validator != null) {
-            this.validateArgument(parameter, result);
-        }
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("获取到的值为: {}", result);
         }
@@ -113,23 +95,6 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
         ServletServerHttpRequest inputMessage = this.createInputMessage(webRequest);
         ServletServerHttpResponse outputMessage = this.createOutputMessage(webRequest);
         this.writeWithMessageConverters(responseMessage, returnType, inputMessage, outputMessage);
-    }
-
-    /**
-     * 校验传入的参数
-     *
-     * @param methodParameter 方法和参数信息
-     * @param object          待校验的参数
-     */
-    private void validateArgument(MethodParameter methodParameter, Object object) {
-        if (methodParameter.hasParameterAnnotation(Validated.class)) {
-            Validated validated = methodParameter.getParameterAnnotation(Validated.class);
-            Class<?>[] groups = validated.value();
-            Set<ConstraintViolation<Object>> validate = this.validator.validate(object, groups);
-            if (validate.size() > 0) {
-                throw new ConstraintViolationException(validate);
-            }
-        }
     }
 
     /**
@@ -178,14 +143,6 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
             return;
         }
         parameterResolvables.addAll(resolvers);
-    }
-
-    public Validator getValidator() {
-        return this.validator;
-    }
-
-    public void setValidator(Validator validator) {
-        this.validator = validator;
     }
 
 }

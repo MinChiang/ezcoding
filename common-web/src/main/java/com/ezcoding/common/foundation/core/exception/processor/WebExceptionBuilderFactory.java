@@ -25,7 +25,7 @@ public class WebExceptionBuilderFactory extends BaseModuleExceptionBuilderFactor
      * @return 可替换参数的构造器
      */
     public static WebExceptionBuilder webExceptionBuilder(WebExceptionCodeGenerator webExceptionCodeGenerator) {
-        WebExceptionBuilder webExceptionBuilder = new WebExceptionBuilder(checkAndGenerateIdentification(webExceptionCodeGenerator), webExceptionCodeGenerator.getTemplate(), getMessageSource());
+        WebExceptionBuilder webExceptionBuilder = new WebExceptionBuilder(checkAndGenerateIdentification(webExceptionCodeGenerator), webExceptionCodeGenerator.getTemplate(), messageSource);
         webExceptionBuilder.setHttpStatus(webExceptionCodeGenerator.getHttpStatus());
         return webExceptionBuilder;
     }
@@ -40,7 +40,7 @@ public class WebExceptionBuilderFactory extends BaseModuleExceptionBuilderFactor
      * @return 可替换参数的构造器
      */
     public static WebExceptionBuilder webExceptionBuilder(IExceptionCodeGeneratable generator, String template, Object[] params, HttpStatus httpStatus) {
-        WebExceptionBuilder webExceptionBuilder = new WebExceptionBuilder(checkAndGenerateIdentification(generator), template, getMessageSource());
+        WebExceptionBuilder webExceptionBuilder = new WebExceptionBuilder(checkAndGenerateIdentification(generator), template, messageSource);
         webExceptionBuilder.addParams(params);
         webExceptionBuilder.setHttpStatus(httpStatus);
         return webExceptionBuilder;
