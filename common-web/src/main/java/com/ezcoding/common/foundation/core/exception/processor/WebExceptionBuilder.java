@@ -51,9 +51,17 @@ public class WebExceptionBuilder extends AbstractTemplateExceptionBuilder {
         if (CollectionUtils.isNotEmpty(params)) {
             translate = new Object[params.size()];
             for (int i = 0; i < params.size(); i++) {
-                String p = params.get(i).toString();
-                String message = messageSource.getMessage(p, null, p, locale);
-                translate[i] = message;
+                Object o = params.get(i);
+                String code;
+                if (o instanceof WebParamBuilder) {
+                    code = ((WebParamBuilder) o).build(messageSource, locale);
+                } else {
+                    code = o.toString();
+                }
+
+                if (code != null) {
+                    translate[i] = messageSource.getMessage(code, null, code, locale);
+                }
             }
         }
         return messageSource.getMessage(template, translate, locale);
@@ -100,6 +108,16 @@ public class WebExceptionBuilder extends AbstractTemplateExceptionBuilder {
      */
     public WebExceptionBuilder httpStatus(HttpStatus httpStatus) {
         setHttpStatus(httpStatus);
+        return this;
+    }
+
+    /**
+     * 添加参数
+     *
+     * @param webParamBuilders 被添加的参数
+     */
+    public WebExceptionBuilder addParams(WebParamBuilder... webParamBuilders) {
+        addParams((Object[]) webParamBuilders);
         return this;
     }
 
