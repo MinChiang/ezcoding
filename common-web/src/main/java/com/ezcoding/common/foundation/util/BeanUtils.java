@@ -13,6 +13,7 @@ import java.util.*;
  * @version 1.0.0
  * @date 2018-08-19 14:54
  */
+@Deprecated
 public class BeanUtils {
 
     private static final ObjectMapper OBJECT_MAPPER;
@@ -124,4 +125,5 @@ public class BeanUtils {
     private static class ListTypeReference extends TypeReference<List<Object>> {
 
     }
+
 }

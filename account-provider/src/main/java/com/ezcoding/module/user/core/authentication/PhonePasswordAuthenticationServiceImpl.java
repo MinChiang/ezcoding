@@ -1,12 +1,12 @@
 package com.ezcoding.module.user.core.authentication;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
 import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.common.security.authentication.AbstractLoginInfoPreservableAuthentication;
 import com.ezcoding.extend.spring.security.authentication.PhonePasswordAuthentication;
 import com.ezcoding.module.user.bean.model.User;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Map;
@@ -23,6 +23,11 @@ public class PhonePasswordAuthenticationServiceImpl extends AbstractAuthenticati
 
     private PasswordEncoder passwordEncoder;
 
+    public PhonePasswordAuthenticationServiceImpl(AuthenticationManager authenticationManager, IBasicUserService basicUserService, PasswordEncoder passwordEncoder) {
+        super(authenticationManager, basicUserService);
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @Override
     public AbstractLoginInfoPreservableAuthentication createAuthentication(Map<String, ?> context) {
         String phone = (String) context.get(PHONE_KEY);
@@ -37,8 +42,9 @@ public class PhonePasswordAuthenticationServiceImpl extends AbstractAuthenticati
         String password = (String) context.get(PASSWORD_KEY);
         AssertUtils.mustFalse(StringUtils.isAnyBlank(phone, password), () -> WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).build());
 
-        AssertUtils.mustNull(userMapper.selectOne(Wrappers.query(User.create().phone(phone))), () -> WebExceptionBuilderFactory.webExceptionBuilder(GEN_USER_EXIST_ERROR).build());
-        return User.create().phone(phone).password(passwordEncoder.encode(password));
+        User user = User.create().phone(phone);
+        AssertUtils.mustFalse(basicUserService.exist(user), () -> WebExceptionBuilderFactory.webExceptionBuilder(GEN_USER_EXIST_ERROR).build());
+        return user.password(passwordEncoder.encode(password));
     }
 
     public PasswordEncoder getPasswordEncoder() {

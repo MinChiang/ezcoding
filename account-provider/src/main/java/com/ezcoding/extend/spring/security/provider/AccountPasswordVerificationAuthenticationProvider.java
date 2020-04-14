@@ -1,5 +1,7 @@
 package com.ezcoding.extend.spring.security.provider;
 
+import com.ezcoding.common.core.user.IUserIdentifiable;
+import com.ezcoding.common.core.user.model.UserIdentification;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
 import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.extend.spring.security.authentication.AccountPasswordVerificationAuthentication;
@@ -45,8 +47,10 @@ public class AccountPasswordVerificationAuthenticationProvider extends AbstractL
     }
 
     @Override
-    User createUserExample(AccountPasswordVerificationAuthentication authentication) {
-        return User.create().account(authentication.getAccount());
+    IUserIdentifiable createIdentification(AccountPasswordVerificationAuthentication authentication) {
+        UserIdentification userIdentification = new UserIdentification();
+        userIdentification.setAccount(authentication.getAccount());
+        return userIdentification;
     }
 
     @Override

@@ -52,10 +52,7 @@ public class UserProxy implements IUser {
             this.resolved = true;
 
             //如果被代理对象中没有对应的需要检索的字段，则直返回空
-            if (identifiable.getCode() == null ||
-                    identifiable.getAccount() == null ||
-                    identifiable.getEmail() == null ||
-                    identifiable.getPhone() == null) {
+            if (!identifiable.identifiable()) {
                 this.user = new User(identifiable.getCode(), identifiable.getAccount(), identifiable.getPhone(), identifiable.getEmail());
                 return this.user;
             }

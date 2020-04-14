@@ -1,8 +1,9 @@
 package com.ezcoding.module.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ezcoding.common.core.user.IUserIdentifiable;
 import com.ezcoding.common.core.user.model.UserStatusEnum;
-import com.ezcoding.api.account.user.bean.dto.UserModifyDTO;
+import com.ezcoding.api.account.user.bean.dto.UserModificationDTO;
 import com.ezcoding.module.user.bean.model.User;
 import com.ezcoding.module.user.bean.model.VerificationInfo;
 
@@ -16,9 +17,9 @@ public interface IUserService extends IService<User> {
     /**
      * 更新或者插入用户信息
      *
-     * @param userModifyDTO 用户信息
+     * @param userModificationDTO 用户信息
      */
-    void modifyInfo(UserModifyDTO userModifyDTO);
+    void modifyInfo(UserModificationDTO userModificationDTO);
 
     /**
      * 判断用户是否存在
@@ -26,7 +27,14 @@ public interface IUserService extends IService<User> {
      * @param user 需要判断的用户实体
      * @return 用户是否存在
      */
-    boolean exist(User user);
+    boolean exist(IUserIdentifiable user);
+
+    /**
+     * 根据用户唯一信息加载用户
+     * @param user 用户唯一信息
+     * @return 加载到的用户
+     */
+    User loadByIdentificationInfo(IUserIdentifiable user);
 
     /**
      * 发送验证码短信

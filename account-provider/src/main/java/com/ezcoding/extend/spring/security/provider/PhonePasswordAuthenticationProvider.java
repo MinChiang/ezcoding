@@ -1,5 +1,7 @@
 package com.ezcoding.extend.spring.security.provider;
 
+import com.ezcoding.common.core.user.IUserIdentifiable;
+import com.ezcoding.common.core.user.model.UserIdentification;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
 import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.extend.spring.security.authentication.PhonePasswordAuthentication;
@@ -44,8 +46,10 @@ public class PhonePasswordAuthenticationProvider extends AbstractLoginTypeAuthen
     }
 
     @Override
-    User createUserExample(PhonePasswordAuthentication authentication) {
-        return User.create().phone(authentication.getPhone());
+    IUserIdentifiable createIdentification(PhonePasswordAuthentication authentication) {
+        UserIdentification userIdentification = new UserIdentification();
+        userIdentification.setPhone(authentication.getPhone());
+        return userIdentification;
     }
 
     public PasswordEncoder getPasswordEncoder() {

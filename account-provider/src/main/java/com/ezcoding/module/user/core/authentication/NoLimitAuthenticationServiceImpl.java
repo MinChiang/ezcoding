@@ -3,6 +3,7 @@ package com.ezcoding.module.user.core.authentication;
 import com.ezcoding.common.security.authentication.AbstractLoginInfoPreservableAuthentication;
 import com.ezcoding.extend.spring.security.authentication.NoLimitAuthentication;
 import com.ezcoding.module.user.bean.model.User;
+import org.springframework.security.authentication.AuthenticationManager;
 
 import java.util.Map;
 
@@ -12,6 +13,10 @@ import java.util.Map;
  * @date 2019-04-02 10:39
  */
 public class NoLimitAuthenticationServiceImpl extends AbstractAuthenticationService {
+
+    public NoLimitAuthenticationServiceImpl(AuthenticationManager authenticationManager, IBasicUserService basicUserService) {
+        super(authenticationManager, basicUserService);
+    }
 
     @Override
     public AbstractLoginInfoPreservableAuthentication createAuthentication(Map<String, ?> context) {

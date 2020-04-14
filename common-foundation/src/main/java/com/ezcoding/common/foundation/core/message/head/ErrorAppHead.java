@@ -3,6 +3,7 @@ package com.ezcoding.common.foundation.core.message.head;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import static com.ezcoding.common.foundation.core.application.IModuleNameable.DETAIL_CODE_LENGHT;
@@ -22,11 +23,11 @@ public class ErrorAppHead extends ResponseAppHead implements Serializable {
     }
 
     public ErrorAppHead(String returnCode, String returnMessage) {
-        super(returnCode, returnMessage);
+        super(returnCode == null ? defaultErrorCode : returnCode, returnMessage == null ? defaultErrorMessage : returnMessage);
     }
 
-    public ErrorAppHead(String returnCode, List<String> returnMessage) {
-        super(returnCode, returnMessage);
+    public ErrorAppHead(String returnCode, List<String> returnMessages) {
+        super(returnCode == null ? defaultErrorCode : returnCode, returnMessages == null || returnMessages.isEmpty() ? Collections.singletonList(defaultErrorMessage) : returnMessages);
     }
 
     public static String getDefaultErrorCode() {

@@ -3,6 +3,7 @@ package com.ezcoding.module.user.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ezcoding.api.account.user.bean.dto.UserDetailResultDTO;
 import com.ezcoding.api.account.user.bean.model.UserFieldDetailEnum;
+import com.ezcoding.common.core.user.IUserIdentifiable;
 import com.ezcoding.module.user.bean.model.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -37,9 +38,9 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 根据给定的用户条件筛选出唯一用户
      *
-     * @param user 用户条件
+     * @param user 用户可检索信息
      * @return 唯一的用户信息
      */
-    User selectAuthenticationDetailByCondition(@Param("user") User user);
+    User selectAuthenticationDetailByCondition(@Param("user") IUserIdentifiable user);
 
 }

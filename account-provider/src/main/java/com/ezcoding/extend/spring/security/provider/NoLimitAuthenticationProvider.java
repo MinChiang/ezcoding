@@ -1,5 +1,7 @@
 package com.ezcoding.extend.spring.security.provider;
 
+import com.ezcoding.common.core.user.IUserIdentifiable;
+import com.ezcoding.common.core.user.model.UserIdentification;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
 import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.extend.spring.security.authentication.NoLimitAuthentication;
@@ -21,8 +23,10 @@ public class NoLimitAuthenticationProvider extends AbstractLoginTypeAuthenticati
     }
 
     @Override
-    User createUserExample(NoLimitAuthentication authentication) {
-        return User.create().code(authentication.getPrincipal());
+    IUserIdentifiable createIdentification(NoLimitAuthentication authentication) {
+        UserIdentification userIdentification = new UserIdentification();
+        userIdentification.setCode(authentication.getCode());
+        return userIdentification;
     }
 
     @Override

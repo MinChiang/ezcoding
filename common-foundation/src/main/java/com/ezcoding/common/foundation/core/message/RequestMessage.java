@@ -13,9 +13,12 @@ import java.io.Serializable;
  */
 public class RequestMessage<T> extends AbstractMessage<T> implements Serializable {
 
-    @JsonProperty(value = "sysHead")
+    public static final String SYS_HEAD = "sysHead";
+    public static final String APP_HEAD = "appHead";
+    
+    @JsonProperty(value = SYS_HEAD)
     protected RequestSystemHead systemHead;
-    @JsonProperty(value = "appHead")
+    @JsonProperty(value = APP_HEAD)
     protected RequestAppHead appHead;
 
     public RequestMessage() {
@@ -42,4 +45,5 @@ public class RequestMessage<T> extends AbstractMessage<T> implements Serializabl
     public void setAppHead(RequestAppHead appHead) {
         this.appHead = appHead;
     }
+
 }

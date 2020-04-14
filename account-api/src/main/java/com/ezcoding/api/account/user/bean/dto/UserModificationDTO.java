@@ -13,7 +13,7 @@ import java.util.Date;
  * @version 1.0.0
  * @date 2019-01-22 13:53
  */
-public class UserModifyDTO {
+public class UserModificationDTO {
 
     /**
      * 用户编号
@@ -70,12 +70,12 @@ public class UserModifyDTO {
     /**
      * 省份
      */
-    private Long province;
+    private Integer province;
 
     /**
      * 城市
      */
-    private Long city;
+    private Integer city;
 
     public String getCode() {
         return code;
@@ -149,19 +149,19 @@ public class UserModifyDTO {
         this.description = description;
     }
 
-    public Long getProvince() {
+    public Integer getProvince() {
         return province;
     }
 
-    public void setProvince(Long province) {
+    public void setProvince(Integer province) {
         this.province = province;
     }
 
-    public Long getCity() {
+    public Integer getCity() {
         return city;
     }
 
-    public void setCity(Long city) {
+    public void setCity(Integer city) {
         this.city = city;
     }
 

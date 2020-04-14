@@ -1,18 +1,20 @@
 package com.ezcoding.module.user.controller;
 
 import com.ezcoding.common.core.user.model.IUser;
-import com.ezcoding.common.foundation.util.BeanUtils;
+import com.ezcoding.common.core.user.model.UserIdentification;
+import com.ezcoding.common.foundation.core.message.ResponseMessage;
+import com.ezcoding.common.foundation.core.message.builder.ResponseMessageBuilder;
+import com.ezcoding.common.foundation.core.message.builder.SuccessResponseBuilder;
 import com.ezcoding.common.web.resolver.CurrentUser;
 import com.ezcoding.common.web.resolver.JsonParam;
 import com.ezcoding.common.web.resolver.JsonResult;
-import com.ezcoding.api.account.user.bean.dto.UserExistDTO;
-import com.ezcoding.module.user.bean.model.User;
+import com.ezcoding.module.user.bean.assembler.UserIdentificationUserAssembler;
 import com.ezcoding.module.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
@@ -23,7 +25,7 @@ import javax.validation.constraints.NotNull;
  */
 @Validated
 @RestController
-@RequestMapping("user")
+@RequestMapping("users")
 public class UserController {
 
     @Autowired
@@ -32,15 +34,14 @@ public class UserController {
     /**
      * 校验用户是否存在(失焦自动触发)
      *
-     * @param userExistDTO 用户信息
+     * @param userIdentification 用户信息
      * @return 校验用户是否存在
      */
-    @PostMapping("exist")
+    @GetMapping("exist")
     @JsonResult
-    public boolean exist(@JsonParam UserExistDTO userExistDTO) {
-        User user = BeanUtils.copy(userExistDTO, User.class);
+    public boolean exist(UserIdentification userIdentification) {
         // 校验唯一信息
-        return userService.exist(user);
+        return userService.exist(UserIdentificationUserAssembler.to(userIdentification));
     }
 
     /**
@@ -49,11 +50,19 @@ public class UserController {
      * @param user    被踢出的用户
      * @param handler 操作人
      */
-    @PostMapping("kickOut")
-    @JsonResult
+    @DeleteMapping("kickOut")
     public void kickOut(@JsonParam("codes") String user,
                         @CurrentUser @NotNull(message = "{user.code}") IUser handler) {
+        String address = handler.getAddress();
         userService.kickOut(user);
+    }
+
+    @GetMapping("test")
+    @ResponseBody
+    public ResponseEntity test(AuthenticationPrincipal authenticationPrincipal) {
+        System.out.println(authenticationPrincipal);
+        ResponseMessage<String> fuckyou = ResponseMessageBuilder.success("fuckyou").build();
+        return ResponseEntity.ok(fuckyou);
     }
 
 }

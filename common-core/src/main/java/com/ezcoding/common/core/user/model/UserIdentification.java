@@ -1,4 +1,4 @@
-package com.ezcoding.api.account.user.bean.dto;
+package com.ezcoding.common.core.user.model;
 
 import com.ezcoding.common.core.user.IUserIdentifiable;
 
@@ -7,7 +7,7 @@ import com.ezcoding.common.core.user.IUserIdentifiable;
  * @version 1.0.0
  * @date 2020-03-23 14:36
  */
-public class UserExistDTO implements IUserIdentifiable {
+public class UserIdentification implements IUserIdentifiable {
 
     /**
      * 用户编号

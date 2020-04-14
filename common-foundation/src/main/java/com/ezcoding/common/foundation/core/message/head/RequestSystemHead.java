@@ -13,11 +13,14 @@ import java.io.Serializable;
  */
 public class RequestSystemHead extends AbstractSystemHead implements Serializable {
 
+    public static final String CONSUMER_ID = "consumerId";
+    public static final String CONSUMER_SEQUENCE_NO = "consumerSequenceNo";
+    
     private static IUUIDProducer sequenceNoProducer = OriginalUUIDProducer.getInstance();
 
-    @JsonProperty(value = "consumerId")
+    @JsonProperty(value = CONSUMER_ID)
     protected String consumerId;
-    @JsonProperty(value = "consumerSequenceNo")
+    @JsonProperty(value = CONSUMER_SEQUENCE_NO)
     protected String consumerSequenceNo;
 
     public RequestSystemHead() {
@@ -52,4 +55,5 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
     public void setConsumerSequenceNo(String consumerSequenceNo) {
         this.consumerSequenceNo = consumerSequenceNo;
     }
+
 }

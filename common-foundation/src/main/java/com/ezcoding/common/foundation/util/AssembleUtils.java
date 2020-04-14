@@ -15,22 +15,27 @@ public class AssembleUtils {
     /**
      * 实例化装配映射器
      *
-     * @param <T> 需要创建的目标类型
+     * @param <S>    原类型
+     * @param <T>    需要创建的目标类型
+     * @param src    原类型对象
+     * @param target 目标类型对象
      * @return 装配映射器
      */
-    public static <S, T> AssembleMapper<S, T> instance(T target) {
-        if (target == null) {
-            throw new RuntimeException("目标对象不能为空");
+    public static <S, T> AssembleMapper<S, T> instance(S src, T target) {
+        if (src == null || target == null) {
+            throw new RuntimeException("源对象和目标对象不能为空");
         }
-        return new AssembleMapper<>(target);
+        return new AssembleMapper<>(src, target);
     }
 
     public static class AssembleMapper<S, T> {
 
+        private S src;
         private T target;
-        private List<FunctionAndBiConsumerMapping<S, ?, T>> mappings = new LinkedList<>();
+        private List<FunctionAndBiConsumerMapping<S, T>> mappings = new LinkedList<>();
 
-        private AssembleMapper(T target) {
+        private AssembleMapper(S src, T target) {
+            this.src = src;
             this.target = target;
         }
 
@@ -50,26 +55,21 @@ public class AssembleUtils {
         /**
          * 装配
          *
-         * @param source 装配原料
          * @return 装配输出
          */
-        public T assemble(S source) {
-            if (source == null || target == null) {
-                return null;
-            }
-
-            for (FunctionAndBiConsumerMapping mapping : mappings) {
-                mapping.biConsumer.accept(target, mapping.function.apply(source));
+        public T assemble() {
+            for (FunctionAndBiConsumerMapping mapping : this.mappings) {
+                mapping.biConsumer.accept(target, mapping.function.apply(src));
             }
             return target;
         }
 
-        private static class FunctionAndBiConsumerMapping<S, K, T> {
+        private static class FunctionAndBiConsumerMapping<S, T> {
 
-            Function<S, K> function;
-            BiConsumer<T, K> biConsumer;
+            Function<S, ?> function;
+            BiConsumer<T, ?> biConsumer;
 
-            FunctionAndBiConsumerMapping(Function<S, K> function, BiConsumer<T, K> biConsumer) {
+            FunctionAndBiConsumerMapping(Function<S, ?> function, BiConsumer<T, ?> biConsumer) {
                 this.function = function;
                 this.biConsumer = biConsumer;
             }

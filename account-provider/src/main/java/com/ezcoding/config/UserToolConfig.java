@@ -3,6 +3,7 @@ package com.ezcoding.config;
 import com.ezcoding.common.foundation.core.tools.verification.NumberVerificationCodeGenerator;
 import com.ezcoding.common.foundation.core.tools.verification.OriginalVerificationCodeGenerator;
 import com.ezcoding.extend.user.LocalUserProxy;
+import com.ezcoding.module.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,16 +37,6 @@ public class UserToolConfig {
         NumberVerificationCodeGenerator numberVerificationCodeGenerator = new NumberVerificationCodeGenerator();
         numberVerificationCodeGenerator.setLength(defaultVerficationCodeLength);
         return numberVerificationCodeGenerator;
-    }
-
-    /**
-     * 覆盖对应获取用户信息的远程调用
-     *
-     * @return 用户代理
-     */
-    @Bean
-    public LocalUserProxy localUserProxy() {
-        return new LocalUserProxy();
     }
 
 }

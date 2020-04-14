@@ -27,10 +27,6 @@ public class AuthenticationConfig {
     @Autowired
     private AuthorizationServerEndpointsConfiguration authorizationServerEndpointsConfiguration;
 
-//    @Autowired
-//    @Qualifier("serializableObjectMapper")
-//    private ObjectMapper objectMapper;
-
     @Autowired
     private EzcodingWebConfigBean ezcodingWebConfigBean;
 

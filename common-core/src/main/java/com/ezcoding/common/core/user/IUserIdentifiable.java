@@ -35,4 +35,16 @@ public interface IUserIdentifiable {
      */
     String getEmail();
 
+    /**
+     * 是否有唯一用户鉴别属性
+     *
+     * @return 是否有唯一用户鉴别属性
+     */
+    default boolean identifiable() {
+        return getCode() != null ||
+                getAccount() != null ||
+                getPhone() != null ||
+                getEmail() == null;
+    }
+
 }

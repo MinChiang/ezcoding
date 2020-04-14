@@ -11,7 +11,9 @@ import java.io.Serializable;
  */
 public abstract class AbstractMessage<T> implements IMessage, Serializable {
 
-    @JsonProperty(value = "body")
+    public static final String BODY = "body";
+    
+    @JsonProperty(value = BODY)
     protected T payload;
 
     public AbstractMessage() {
@@ -28,4 +30,5 @@ public abstract class AbstractMessage<T> implements IMessage, Serializable {
     public void setPayload(T payload) {
         this.payload = payload;
     }
+
 }

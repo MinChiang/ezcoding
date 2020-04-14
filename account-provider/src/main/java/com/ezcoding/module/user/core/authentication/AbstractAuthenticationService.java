@@ -5,7 +5,6 @@ import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
 import com.ezcoding.common.security.authentication.AbstractLoginInfoPreservableAuthentication;
 import com.ezcoding.module.user.bean.model.User;
-import com.ezcoding.module.user.dao.UserMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,10 +19,15 @@ import java.util.*;
  */
 public abstract class AbstractAuthenticationService implements IAuthenticationService, IRegisterSuccessHandler, ILoginSuccessHandler {
 
-    protected UserMapper userMapper;
-    private AuthenticationManager authenticationManager;
-    private List<IRegisterSuccessHandler> registerHandlers = new ArrayList<>();
-    private List<ILoginSuccessHandler> loginHandlers = new ArrayList<>();
+    protected AuthenticationManager authenticationManager;
+    protected IBasicUserService basicUserService;
+    protected List<IRegisterSuccessHandler> registerHandlers = new ArrayList<>();
+    protected List<ILoginSuccessHandler> loginHandlers = new ArrayList<>();
+
+    public AbstractAuthenticationService(AuthenticationManager authenticationManager, IBasicUserService basicUserService) {
+        this.authenticationManager = authenticationManager;
+        this.basicUserService = basicUserService;
+    }
 
     @Override
     public AbstractLoginInfoPreservableAuthentication login(Map<String, ?> context) {
@@ -40,7 +44,7 @@ public abstract class AbstractAuthenticationService implements IAuthenticationSe
         //填充用户信息
         fillBlankContent(user);
         //插入用户
-        userMapper.insert(user);
+        basicUserService.persist(user);
         //触发注册成功钩子函数
         onRegisterSuccess(context, user);
         return user;
@@ -127,14 +131,6 @@ public abstract class AbstractAuthenticationService implements IAuthenticationSe
      */
     public abstract User checkAndCreateUser(Map<String, ?> context);
 
-    public UserMapper getUserMapper() {
-        return userMapper;
-    }
-
-    public void setUserMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
-
     public AuthenticationManager getAuthenticationManager() {
         return authenticationManager;
     }
@@ -157,6 +153,14 @@ public abstract class AbstractAuthenticationService implements IAuthenticationSe
 
     public void setLoginHandlers(List<ILoginSuccessHandler> loginHandlers) {
         this.loginHandlers = loginHandlers;
+    }
+
+    public IBasicUserService getBasicUserService() {
+        return basicUserService;
+    }
+
+    public void setBasicUserService(IBasicUserService basicUserService) {
+        this.basicUserService = basicUserService;
     }
 
 }

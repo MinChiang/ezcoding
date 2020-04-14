@@ -12,15 +12,21 @@ import java.io.Serializable;
  */
 public class AbstractSystemHead implements IHead, Serializable {
 
-    @JsonProperty(value = "terminalMac")
+    public static final String TERMINAL_MAC = "terminalMac";
+    public static final String TRANSACTION_DATE = "transactionDate";
+    public static final String MD5 = "md5";
+    public static final String TRANSACTION_TYPE = "transactionType";
+    public static final String VERSION = "version";
+
+    @JsonProperty(value = TERMINAL_MAC)
     protected String terminalMac;
-    @JsonProperty(value = "transactionDate")
+    @JsonProperty(value = TRANSACTION_DATE)
     protected long transactionDate;
-    @JsonProperty(value = "md5")
+    @JsonProperty(value = MD5)
     protected String md5;
-    @JsonProperty(value = "transactionType")
+    @JsonProperty(value = TRANSACTION_TYPE)
     protected TransactionTypeEnum transactionType;
-    @JsonProperty(value = "version")
+    @JsonProperty(value = VERSION)
     protected String version;
 
     public AbstractSystemHead() {
@@ -67,4 +73,5 @@ public class AbstractSystemHead implements IHead, Serializable {
     public void setVersion(String version) {
         this.version = version;
     }
+
 }

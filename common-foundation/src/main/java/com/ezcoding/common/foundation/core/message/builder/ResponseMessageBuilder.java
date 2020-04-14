@@ -13,20 +13,20 @@ public class ResponseMessageBuilder {
         return new SuccessResponseBuilder<>(body);
     }
 
-    public static <T> ErrorResponseBuilder<T> error(T body) {
-        return new ErrorResponseBuilder<>(body);
-    }
-
-    public static <T> ErrorResponseBuilder<T> error(ApplicationException exception) {
-        return (ErrorResponseBuilder<T>) new ErrorResponseBuilder<>().errorCode(exception.getIdentification()).errorMessage(exception.getSummary());
-    }
-
     public static SuccessResponseBuilder<?> success() {
         return success(null);
     }
 
+    public static <T> ErrorResponseBuilder<T> error(T body) {
+        return new ErrorResponseBuilder<>(body);
+    }
+
+    public static <T> ErrorResponseBuilder<?> error(ApplicationException exception) {
+        return new ErrorResponseBuilder<>().errorCode(exception.getIdentification()).errorMessage(exception.getSummary());
+    }
+
     public static ErrorResponseBuilder<?> error() {
-        return error(null);
+        return new ErrorResponseBuilder<>();
     }
 
 }

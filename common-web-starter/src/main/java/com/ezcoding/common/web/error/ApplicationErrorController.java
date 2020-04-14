@@ -3,7 +3,6 @@ package com.ezcoding.common.web.error;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
 import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
-import com.ezcoding.common.foundation.util.BeanUtils;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -13,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,15 +34,12 @@ public class ApplicationErrorController extends BasicErrorController {
         Map<String, Object> body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
         HttpStatus status = getStatus(request);
 
-        ResponseMessage<Map<String, Object>> responseMessage = new ResponseMessage<>(
-                new ResponseSystemHead(),
-                new ErrorAppHead(
-                        (String) body.getOrDefault(KEY_APPLICATION_EXCEPTION_IDENTIFICATION, ErrorAppHead.getDefaultErrorCode()),
-                        (String) body.getOrDefault("message", ErrorAppHead.getDefaultErrorMessage())
-                ),
-                null
-        );
-        Map<String, Object> map = BeanUtils.beanToMap(responseMessage, false);
+        Map<String, Object> map = new HashMap<>();
+        map.put(ResponseMessage.SYS_HEAD, new ResponseSystemHead());
+        map.put(ResponseMessage.APP_HEAD, new ErrorAppHead(
+                (String) body.getOrDefault(KEY_APPLICATION_EXCEPTION_IDENTIFICATION, ErrorAppHead.getDefaultErrorCode()),
+                (String) body.getOrDefault("message", ErrorAppHead.getDefaultErrorMessage())
+        ));
         return new ResponseEntity<>(map, status);
     }
 

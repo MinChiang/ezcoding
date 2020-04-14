@@ -1,5 +1,6 @@
 package com.ezcoding.extend.spring.security.provider;
 
+import com.ezcoding.common.core.user.IUserIdentifiable;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
 import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.common.security.authentication.AbstractLoginInfoPreservableAuthentication;
@@ -37,7 +38,7 @@ public abstract class AbstractLoginTypeAuthenticationProvider<A extends Abstract
      * @param authentication 用户凭证
      * @return 唯一确定用户信息的用户模板
      */
-    abstract User createUserExample(A authentication);
+    abstract IUserIdentifiable createIdentification(A authentication);
 
     /**
      * 校验身份的前置基本认证
@@ -67,9 +68,11 @@ public abstract class AbstractLoginTypeAuthenticationProvider<A extends Abstract
         //前置校验，以免基本信息缺失导致多次加载数据库
         preCheck(abstractLoginInfoPreservableAuthentication);
 
-        //根据能够唯一确定用户的用户信息查询出用户所有的基本信息9
-        User user = createUserExample(abstractLoginInfoPreservableAuthentication);
-        user = userDetailsService.loadUserByExample(user);
+        //根据能够唯一确定用户的用户信息查询出用户所有的基本信息
+        IUserIdentifiable identification = createIdentification(abstractLoginInfoPreservableAuthentication);
+
+        //补全用户信息
+        User user = userDetailsService.loadUserByExample(identification);
         AssertUtils.mustNotNull(user, () -> WebExceptionBuilderFactory.webExceptionBuilder(GEN_USER_NOT_EXIST_ERROR).build());
 
         //校验登陆权限

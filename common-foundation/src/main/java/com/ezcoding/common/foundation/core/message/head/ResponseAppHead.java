@@ -3,7 +3,7 @@ package com.ezcoding.common.foundation.core.message.head;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
     @JsonProperty(value = "returnCode")
     protected String returnCode;
     @JsonProperty(value = "returnMessage")
-    protected List<String> returnMessage;
+    protected List<String> returnMessages;
 
     public ResponseAppHead() {
     }
@@ -25,20 +25,19 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
         super(pageInfo);
     }
 
-    public ResponseAppHead(PageInfo pageInfo, String returnCode, List<String> returnMessage) {
+    public ResponseAppHead(PageInfo pageInfo, String returnCode, List<String> returnMessages) {
         this.returnCode = returnCode;
-        this.returnMessage = returnMessage;
+        this.returnMessages = returnMessages;
         this.pageInfo = pageInfo;
     }
 
-    public ResponseAppHead(String returnCode, List<String> returnMessage) {
-        this(null, returnCode, returnMessage);
+    public ResponseAppHead(String returnCode, List<String> returnMessages) {
+        this(null, returnCode, returnMessages);
     }
 
     public ResponseAppHead(PageInfo pageInfo, String returnCode, String returnMessage) {
         this.returnCode = returnCode;
-        this.returnMessage = new ArrayList<>();
-        this.returnMessage.add(returnMessage);
+        this.returnMessages = Collections.singletonList(returnMessage);
         this.pageInfo = pageInfo;
     }
 
@@ -54,12 +53,12 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
         this.returnCode = returnCode;
     }
 
-    public List<String> getReturnMessage() {
-        return returnMessage;
+    public List<String> getReturnMessages() {
+        return returnMessages;
     }
 
-    public void setReturnMessage(List<String> returnMessage) {
-        this.returnMessage = returnMessage;
+    public void setReturnMessages(List<String> returnMessages) {
+        this.returnMessages = returnMessages;
     }
 
 }

@@ -1,6 +1,5 @@
 package com.ezcoding.module.user.core.authentication;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
 import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.common.security.authentication.AbstractLoginInfoPreservableAuthentication;
@@ -9,6 +8,7 @@ import com.ezcoding.module.user.bean.model.CheckVerificationInfo;
 import com.ezcoding.module.user.bean.model.User;
 import com.ezcoding.module.user.core.verification.RedisVerificationServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.AuthenticationManager;
 
 import java.util.Map;
 
@@ -24,6 +24,11 @@ import static com.ezcoding.module.user.exception.AccountUserExceptionConstants.G
 public class PhoneMessageCodeAuthenticationServiceImpl extends AbstractAuthenticationService {
 
     private RedisVerificationServiceImpl numberVerificationService;
+
+    public PhoneMessageCodeAuthenticationServiceImpl(AuthenticationManager authenticationManager, IBasicUserService basicUserService, RedisVerificationServiceImpl numberVerificationService) {
+        super(authenticationManager, basicUserService);
+        this.numberVerificationService = numberVerificationService;
+    }
 
     @Override
     public AbstractLoginInfoPreservableAuthentication createAuthentication(Map<String, ?> context) {
@@ -47,8 +52,10 @@ public class PhoneMessageCodeAuthenticationServiceImpl extends AbstractAuthentic
 
         CheckVerificationInfo checkVerificationInfo = new CheckVerificationInfo(receipt, phone, verificationCode);
         AssertUtils.mustTrue(numberVerificationService.check(checkVerificationInfo), () -> WebExceptionBuilderFactory.webExceptionBuilder(GEN_USER_MESSAGE_CODE_NOT_VALID_ERROR).build());
-        AssertUtils.mustNull(userMapper.selectOne(Wrappers.query(User.create().phone(phone))), () -> WebExceptionBuilderFactory.webExceptionBuilder(GEN_USER_EXIST_ERROR).build());
-        return User.create().phone(phone);
+
+        User user = User.create().phone(phone);
+        AssertUtils.mustFalse(basicUserService.exist(user), () -> WebExceptionBuilderFactory.webExceptionBuilder(GEN_USER_EXIST_ERROR).build());
+        return user;
     }
 
     public RedisVerificationServiceImpl getNumberVerificationService() {

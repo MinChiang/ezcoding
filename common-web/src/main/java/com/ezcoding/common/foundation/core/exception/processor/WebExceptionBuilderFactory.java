@@ -35,13 +35,11 @@ public class WebExceptionBuilderFactory extends BaseModuleExceptionBuilderFactor
      *
      * @param generator  生成器
      * @param template   模板
-     * @param params     替换参数
      * @param httpStatus 响应状态码
      * @return 可替换参数的构造器
      */
-    public static WebExceptionBuilder webExceptionBuilder(IExceptionCodeGeneratable generator, String template, Object[] params, HttpStatus httpStatus) {
+    public static WebExceptionBuilder webExceptionBuilder(IExceptionCodeGeneratable generator, String template, HttpStatus httpStatus) {
         WebExceptionBuilder webExceptionBuilder = new WebExceptionBuilder(checkAndGenerateIdentification(generator), template, messageSource);
-        webExceptionBuilder.addParams(params);
         webExceptionBuilder.setHttpStatus(httpStatus);
         return webExceptionBuilder;
     }

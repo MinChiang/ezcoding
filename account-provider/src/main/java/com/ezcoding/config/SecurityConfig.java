@@ -4,12 +4,12 @@ import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
 import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.verification.NumberVerificationCodeGenerator;
 import com.ezcoding.common.foundation.core.tools.verification.OriginalVerificationCodeGenerator;
-import com.ezcoding.common.web.starter.EzcodingWebConfigBean;
 import com.ezcoding.extend.spring.security.failureHandler.CustomAuthenticationFailureHandler;
 import com.ezcoding.extend.spring.security.filter.MultipleAuthenticationFilter;
 import com.ezcoding.extend.spring.security.provider.*;
 import com.ezcoding.extend.spring.security.successHandler.LoginRecordSuccessHandler;
 import com.ezcoding.extend.spring.security.successHandler.SuccessHandlerChain;
+import com.ezcoding.extend.user.LocalUserProxy;
 import com.ezcoding.module.management.service.RoleService;
 import com.ezcoding.module.user.bean.model.VerificationInfo;
 import com.ezcoding.module.user.core.authentication.*;
@@ -24,7 +24,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -36,14 +35,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author MinChiang
@@ -65,15 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource(name = "numberVerificationService")
     private RedisVerificationServiceImpl numberVerificationService;
     @Autowired
-    private EzcodingWebConfigBean ezcodingWebConfigBean;
-
-    @Bean
-    public ICustomUserDetailsService customUserDetailsService() {
-        UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();
-        userDetailsService.setRoleService(roleService);
-        userDetailsService.setUserMapper(userMapper);
-        return userDetailsService;
-    }
+    private IBasicUserService basicUserService;
+    @Autowired
+    private ICustomUserDetailsService customUserDetailsService;
 
     @Bean
     public RedisTemplate<String, VerificationInfo> verificationInfoRedisTemplate(RedisConnectionFactory factory, ObjectMapper objectMapper) {
@@ -107,23 +94,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) {
         AccountPasswordAuthenticationProvider accountPasswordAuthenticationProvider = new AccountPasswordAuthenticationProvider();
         accountPasswordAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        accountPasswordAuthenticationProvider.setUserDetailsService(customUserDetailsService());
+        accountPasswordAuthenticationProvider.setUserDetailsService(customUserDetailsService);
 
         AccountPasswordVerificationAuthenticationProvider accountPasswordVerificationAuthenticationProvider = new AccountPasswordVerificationAuthenticationProvider();
         accountPasswordVerificationAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         accountPasswordVerificationAuthenticationProvider.setImageVerificationService(imageVerificationService);
-        accountPasswordVerificationAuthenticationProvider.setUserDetailsService(customUserDetailsService());
+        accountPasswordVerificationAuthenticationProvider.setUserDetailsService(customUserDetailsService);
 
         PhoneMessageCodeAuthenticationProvider phoneMessageCodeAuthenticationProvider = new PhoneMessageCodeAuthenticationProvider();
         phoneMessageCodeAuthenticationProvider.setNumberVerificationService(numberVerificationService);
-        phoneMessageCodeAuthenticationProvider.setUserDetailsService(customUserDetailsService());
+        phoneMessageCodeAuthenticationProvider.setUserDetailsService(customUserDetailsService);
 
         PhonePasswordAuthenticationProvider phonePasswordAuthenticationProvider = new PhonePasswordAuthenticationProvider();
         phonePasswordAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        phonePasswordAuthenticationProvider.setUserDetailsService(customUserDetailsService());
+        phonePasswordAuthenticationProvider.setUserDetailsService(customUserDetailsService);
 
         NoLimitAuthenticationProvider noLimitAuthenticationProvider = new NoLimitAuthenticationProvider();
-        noLimitAuthenticationProvider.setUserDetailsService(customUserDetailsService());
+        noLimitAuthenticationProvider.setUserDetailsService(customUserDetailsService);
 
         auth
                 .authenticationProvider(accountPasswordAuthenticationProvider)
@@ -133,7 +120,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(noLimitAuthenticationProvider);
     }
 
-    private MultipleAuthenticationFilter multipleAuthenticationFilter(AuthenticationManager authenticationManager) {
+    private MultipleAuthenticationFilter multipleAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
         CustomAuthenticationFailureHandler customAuthenticationFailureHandler = new CustomAuthenticationFailureHandler("http://www.zhihu.com");
 
         SuccessHandlerChain successHandlerChain = new SuccessHandlerChain();
@@ -142,7 +129,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         MultipleAuthenticationFilter multipleAuthenticationFilter = new MultipleAuthenticationFilter("/oauth/authorize");
         multipleAuthenticationFilter.setAuthenticationFailureHandler(customAuthenticationFailureHandler);
-        multipleAuthenticationFilter.setAuthenticationService(compositeAuthenticationService(authenticationManager));
+        multipleAuthenticationFilter.setAuthenticationService(compositeAuthenticationService());
         multipleAuthenticationFilter.setContinueChainBeforeSuccessfulAuthentication(true);
         multipleAuthenticationFilter.setAllowSessionCreation(false);
         multipleAuthenticationFilter.setAuthenticationSuccessHandler(successHandlerChain);
@@ -171,24 +158,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedOrigins(Collections.singletonList("*"));
-        configuration.setAllowedMethods(Collections.singletonList("*"));
-
-        List<String> headers = new ArrayList<>();
-        headers.add(ezcodingWebConfigBean.getAuthSettings().getHeader());
-        headers.add(HttpHeaders.CACHE_CONTROL);
-        headers.add(HttpHeaders.CONTENT_TYPE);
-        configuration.setAllowedHeaders(headers);
-
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
-
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -196,30 +165,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public CompositeAuthenticationServiceImpl compositeAuthenticationService(AuthenticationManager authenticationManager) {
-        AccountPasswordAuthenticationServiceImpl accountPasswordAuthenticationService = new AccountPasswordAuthenticationServiceImpl();
-        accountPasswordAuthenticationService.setAuthenticationManager(authenticationManager);
-        accountPasswordAuthenticationService.setUserMapper(userMapper);
-        accountPasswordAuthenticationService.setPasswordEncoder(passwordEncoder());
+    public CompositeAuthenticationServiceImpl compositeAuthenticationService() throws Exception {
+        AuthenticationManager authenticationManager = authenticationManagerBean();
+        PasswordEncoder passwordEncoder = passwordEncoder();
 
-        PhonePasswordAuthenticationServiceImpl phonePasswordAuthenticationService = new PhonePasswordAuthenticationServiceImpl();
-        phonePasswordAuthenticationService.setAuthenticationManager(authenticationManager);
-        phonePasswordAuthenticationService.setUserMapper(userMapper);
-        phonePasswordAuthenticationService.setPasswordEncoder(passwordEncoder());
-
-        PhoneMessageCodeAuthenticationServiceImpl phoneMessageCodeAuthenticationService = new PhoneMessageCodeAuthenticationServiceImpl();
-        phoneMessageCodeAuthenticationService.setAuthenticationManager(authenticationManager);
-        phoneMessageCodeAuthenticationService.setUserMapper(userMapper);
-        phoneMessageCodeAuthenticationService.setNumberVerificationService(numberVerificationService);
-
-        AccountPasswordVerificationAuthenticationServiceImpl accountPasswordVerificationAuthenticationService = new AccountPasswordVerificationAuthenticationServiceImpl();
-        accountPasswordVerificationAuthenticationService.setAuthenticationManager(authenticationManager);
-        accountPasswordVerificationAuthenticationService.setUserMapper(userMapper);
-        accountPasswordVerificationAuthenticationService.setImageVerificationService(imageVerificationService);
-
-        NoLimitAuthenticationServiceImpl noLimitAuthenticationService = new NoLimitAuthenticationServiceImpl();
-        noLimitAuthenticationService.setAuthenticationManager(authenticationManager);
-        noLimitAuthenticationService.setUserMapper(userMapper);
+        AccountPasswordAuthenticationServiceImpl accountPasswordAuthenticationService = new AccountPasswordAuthenticationServiceImpl(authenticationManager, basicUserService, passwordEncoder);
+        PhonePasswordAuthenticationServiceImpl phonePasswordAuthenticationService = new PhonePasswordAuthenticationServiceImpl(authenticationManager, basicUserService, passwordEncoder);
+        PhoneMessageCodeAuthenticationServiceImpl phoneMessageCodeAuthenticationService = new PhoneMessageCodeAuthenticationServiceImpl(authenticationManager, basicUserService, numberVerificationService);
+        AccountPasswordVerificationAuthenticationServiceImpl accountPasswordVerificationAuthenticationService = new AccountPasswordVerificationAuthenticationServiceImpl(authenticationManager, basicUserService, imageVerificationService);
+        NoLimitAuthenticationServiceImpl noLimitAuthenticationService = new NoLimitAuthenticationServiceImpl(authenticationManager, basicUserService);
 
         CompositeAuthenticationServiceImpl compositeAuthenticationService = new CompositeAuthenticationServiceImpl();
 
@@ -235,6 +189,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         compositeAuthenticationService.registerService(LoginRegisterTypeEnum.ACCOUNT_PASSWORD_VERIFICATION_CODE, accountPasswordVerificationAuthenticationService);
 
         return compositeAuthenticationService;
+    }
+
+    /**
+     * 覆盖对应获取用户信息的远程调用
+     *
+     * @return 用户代理
+     */
+    @Bean
+    public LocalUserProxy localUserProxy(UserMapper userMapper) {
+        return new LocalUserProxy(userMapper);
     }
 
 }

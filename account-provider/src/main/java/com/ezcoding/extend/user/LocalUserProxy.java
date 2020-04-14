@@ -3,6 +3,10 @@ package com.ezcoding.extend.user;
 import com.ezcoding.common.core.user.IUserIdentifiable;
 import com.ezcoding.common.core.user.model.IUser;
 import com.ezcoding.common.web.user.IUserProxyable;
+import com.ezcoding.module.user.bean.model.User;
+import com.ezcoding.module.user.dao.UserMapper;
+
+import java.util.Optional;
 
 /**
  * @author MinChiang
@@ -11,9 +15,21 @@ import com.ezcoding.common.web.user.IUserProxyable;
  */
 public class LocalUserProxy implements IUserProxyable {
 
+    private UserMapper userMapper;
+
+    public LocalUserProxy(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
     @Override
     public IUser load(IUserIdentifiable target) {
-        return null;
+        User account = User
+                .create()
+                .code(target.getCode())
+                .phone(target.getPhone())
+                .email(target.getEmail())
+                .account(target.getAccount());
+        return Optional.ofNullable(userMapper.selectAuthenticationDetailByCondition(account)).orElse(new User());
     }
 
 }

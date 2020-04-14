@@ -1,5 +1,6 @@
 package com.ezcoding.module.user.core.authentication;
 
+import com.ezcoding.common.core.user.IUserIdentifiable;
 import com.ezcoding.module.user.bean.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -13,9 +14,9 @@ public interface ICustomUserDetailsService extends UserDetailsService {
     /**
      * 加载用户所有基本信息
      *
-     * @param user 用户样例
+     * @param identification 用户可检索唯一信息
      * @return 用户所有基本信息
      */
-    User loadUserByExample(User user);
+    User loadUserByExample(IUserIdentifiable identification);
 
 }
