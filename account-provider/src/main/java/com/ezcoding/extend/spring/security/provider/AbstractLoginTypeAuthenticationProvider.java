@@ -22,7 +22,11 @@ import static com.ezcoding.module.user.exception.AccountUserExceptionConstants.G
  */
 public abstract class AbstractLoginTypeAuthenticationProvider<A extends AbstractLoginInfoPreservableAuthentication> implements AuthenticationProvider {
 
-    private ICustomUserDetailsService userDetailsService;
+    protected ICustomUserDetailsService userDetailsService;
+
+    public AbstractLoginTypeAuthenticationProvider(ICustomUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     /**
      * 内部身份认证接口

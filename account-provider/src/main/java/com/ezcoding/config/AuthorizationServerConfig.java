@@ -10,10 +10,8 @@ import com.ezcoding.extend.spring.security.code.RedisAuthorizationCodeServices;
 import com.ezcoding.extend.spring.security.detailservice.ClientDetailsServiceImpl;
 import com.ezcoding.extend.spring.security.tokenService.CustomTokenServicce;
 import com.ezcoding.module.user.dao.ClientDetailsMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -61,9 +59,6 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
     private ClientDetailsMapper clientDetailsMapper;
     @Autowired
     private RedisConnectionFactory factory;
-//    @Autowired
-//    @Qualifier("serializableObjectMapper")
-//    private ObjectMapper objectMapper;
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
@@ -77,6 +72,7 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
         defaultOAuth2ExceptionRenderer.setMessageConverters(httpMessageConverters.getConverters());
         Oauth2AuthenticationEntryPoint oauth2AuthenticationEntryPoint = new Oauth2AuthenticationEntryPoint();
         oauth2AuthenticationEntryPoint.setExceptionRenderer(defaultOAuth2ExceptionRenderer);
+
         security
                 //关闭/oauth/token_key验证端点权限访问
                 .tokenKeyAccess("permitAll()")
@@ -161,9 +157,6 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws IOException {
-//        DefaultAccessTokenConverter defaultAccessTokenConverter = new DefaultAccessTokenConverter();
-//        defaultAccessTokenConverter.setUserTokenConverter(new CustomUserAuthenticationConverter());
-
         StandardAccessTokenConverter standardAccessTokenConverter = new StandardAccessTokenConverter();
         standardAccessTokenConverter.setUserTokenConverter(new CustomUserAuthenticationConverter());
 

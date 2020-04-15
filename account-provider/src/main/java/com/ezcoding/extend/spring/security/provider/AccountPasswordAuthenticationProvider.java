@@ -6,6 +6,7 @@ import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuild
 import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.extend.spring.security.authentication.AccountPasswordAuthentication;
 import com.ezcoding.module.user.bean.model.User;
+import com.ezcoding.module.user.core.authentication.ICustomUserDetailsService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -19,7 +20,12 @@ import static com.ezcoding.module.user.exception.AccountUserExceptionConstants.G
  */
 public class AccountPasswordAuthenticationProvider extends AbstractLoginTypeAuthenticationProvider<AccountPasswordAuthentication> {
 
-    private PasswordEncoder passwordEncoder;
+    protected PasswordEncoder passwordEncoder;
+
+    public AccountPasswordAuthenticationProvider(ICustomUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        super(userDetailsService);
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     void postCheck(AccountPasswordAuthentication accountPasswordAuthentication, User user) {

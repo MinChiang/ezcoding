@@ -6,6 +6,7 @@ import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuild
 import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.extend.spring.security.authentication.NoLimitAuthentication;
 import com.ezcoding.module.user.bean.model.User;
+import com.ezcoding.module.user.core.authentication.ICustomUserDetailsService;
 import org.apache.commons.lang3.StringUtils;
 
 import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGeneratorConstants.GEN_COMMON_PARAM_VALIDATE_ERROR;
@@ -16,6 +17,10 @@ import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGenerat
  * @date 2019-04-02 9:57
  */
 public class NoLimitAuthenticationProvider extends AbstractLoginTypeAuthenticationProvider<NoLimitAuthentication> {
+
+    public NoLimitAuthenticationProvider(ICustomUserDetailsService userDetailsService) {
+        super(userDetailsService);
+    }
 
     @Override
     void postCheck(NoLimitAuthentication loginTypeAuthentication, User user) {

@@ -21,6 +21,8 @@ public class EzcodingSecurityConfigBean {
     @NestedConfigurationProperty
     private String publicKey = PUBLIC_KEY_PATH;
 
+    private String defaultFailureUrl;
+
     public String getPrivateKey() {
         return privateKey;
     }
@@ -35,6 +37,14 @@ public class EzcodingSecurityConfigBean {
 
     public void setPublicKey(String publicKey) {
         this.publicKey = publicKey;
+    }
+
+    public String getDefaultFailureUrl() {
+        return defaultFailureUrl;
+    }
+
+    public void setDefaultFailureUrl(String defaultFailureUrl) {
+        this.defaultFailureUrl = defaultFailureUrl;
     }
 
 }

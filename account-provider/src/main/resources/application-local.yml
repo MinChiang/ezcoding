@@ -127,3 +127,6 @@ mybatis-plus:
     map-underscore-to-camel-case: true
   mapper-locations: "classpath*:mybatis/mapper/**/*.xml"
   type-handlers-package: com.ezcoding.common.mybatis.type
+ezcoding:
+  security:
+    default-failure-url: "http://www.zhihu.com"

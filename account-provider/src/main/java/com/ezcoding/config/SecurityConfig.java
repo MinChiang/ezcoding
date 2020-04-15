@@ -1,34 +1,23 @@
 package com.ezcoding.config;
 
 import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
-import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
-import com.ezcoding.common.foundation.core.tools.verification.NumberVerificationCodeGenerator;
-import com.ezcoding.common.foundation.core.tools.verification.OriginalVerificationCodeGenerator;
+import com.ezcoding.common.security.starter.EzcodingSecurityConfigBean;
 import com.ezcoding.extend.spring.security.failureHandler.CustomAuthenticationFailureHandler;
 import com.ezcoding.extend.spring.security.filter.MultipleAuthenticationFilter;
 import com.ezcoding.extend.spring.security.provider.*;
 import com.ezcoding.extend.spring.security.successHandler.LoginRecordSuccessHandler;
 import com.ezcoding.extend.spring.security.successHandler.SuccessHandlerChain;
-import com.ezcoding.extend.user.LocalUserProxy;
-import com.ezcoding.module.management.service.RoleService;
-import com.ezcoding.module.user.bean.model.VerificationInfo;
 import com.ezcoding.module.user.core.authentication.*;
 import com.ezcoding.module.user.core.verification.RedisVerificationServiceImpl;
 import com.ezcoding.module.user.dao.LoginInfoMapper;
-import com.ezcoding.module.user.dao.UserMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,80 +26,58 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * @author MinChiang
  * @version 1.0.0
  * @date 2018-08-25 0:36
  */
-@EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserMapper userMapper;
-    @Autowired
     private LoginInfoMapper loginInfoMapper;
     @Autowired
-    private RoleService roleService;
+    private IBasicUserService basicUserService;
     @Resource(name = "imageVerificationService")
     private RedisVerificationServiceImpl imageVerificationService;
     @Resource(name = "numberVerificationService")
     private RedisVerificationServiceImpl numberVerificationService;
     @Autowired
-    private IBasicUserService basicUserService;
-    @Autowired
     private ICustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private EzcodingSecurityConfigBean ezcodingSecurityConfigBean;
+
+    private MultipleAuthenticationFilter multipleAuthenticationFilter() throws Exception {
+        SuccessHandlerChain successHandlerChain = new SuccessHandlerChain();
+        successHandlerChain.addAuthenticationSuccessHandler(new LoginRecordSuccessHandler(loginInfoMapper));
+        successHandlerChain.addAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler());
+
+        MultipleAuthenticationFilter multipleAuthenticationFilter = new MultipleAuthenticationFilter("/oauth/authorize");
+        Optional.ofNullable(ezcodingSecurityConfigBean.getDefaultFailureUrl()).ifPresent(url -> multipleAuthenticationFilter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler(url)));
+        multipleAuthenticationFilter.setAuthenticationService(compositeAuthenticationService());
+        multipleAuthenticationFilter.setContinueChainBeforeSuccessfulAuthentication(true);
+        multipleAuthenticationFilter.setAllowSessionCreation(false);
+        multipleAuthenticationFilter.setAuthenticationSuccessHandler(successHandlerChain);
+        return multipleAuthenticationFilter;
+    }
 
     @Bean
-    public RedisTemplate<String, VerificationInfo> verificationInfoRedisTemplate(RedisConnectionFactory factory, ObjectMapper objectMapper) {
-        RedisTemplate<String, VerificationInfo> template = new RedisTemplate<>();
-        template.setConnectionFactory(factory);
-        template.setKeySerializer(new StringRedisSerializer());
-        Jackson2JsonRedisSerializer<VerificationInfo> objectJackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<VerificationInfo>(VerificationInfo.class);
-        objectJackson2JsonRedisSerializer.setObjectMapper(objectMapper);
-        template.setValueSerializer(objectJackson2JsonRedisSerializer);
-        return template;
-    }
-
-    @Bean(name = "imageVerificationService")
-    public RedisVerificationServiceImpl imageVerificationService(RedisTemplate<String, VerificationInfo> verificationInfoRedisTemplate, OriginalVerificationCodeGenerator originalVerificationCodeGenerator) {
-        RedisVerificationServiceImpl redisVerificationServiceImpl = new RedisVerificationServiceImpl();
-        redisVerificationServiceImpl.setRedisTemplate(verificationInfoRedisTemplate);
-        redisVerificationServiceImpl.setVerificationCodeGenerator(originalVerificationCodeGenerator);
-        return redisVerificationServiceImpl;
-    }
-
-    @Bean(name = "numberVerificationService")
-    public RedisVerificationServiceImpl numberVerificationService(RedisTemplate<String, VerificationInfo> verificationInfoRedisTemplate, NumberVerificationCodeGenerator numberVerificationCodeGenerator, IUUIDProducer producer) {
-        RedisVerificationServiceImpl redisVerificationServiceImpl = new RedisVerificationServiceImpl();
-        redisVerificationServiceImpl.setRedisTemplate(verificationInfoRedisTemplate);
-        redisVerificationServiceImpl.setVerificationCodeGenerator(numberVerificationCodeGenerator);
-        redisVerificationServiceImpl.setReceiptProducer(producer);
-        return redisVerificationServiceImpl;
+    @ConditionalOnMissingBean
+    protected PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
-        AccountPasswordAuthenticationProvider accountPasswordAuthenticationProvider = new AccountPasswordAuthenticationProvider();
-        accountPasswordAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        accountPasswordAuthenticationProvider.setUserDetailsService(customUserDetailsService);
+        PasswordEncoder passwordEncoder = passwordEncoder();
 
-        AccountPasswordVerificationAuthenticationProvider accountPasswordVerificationAuthenticationProvider = new AccountPasswordVerificationAuthenticationProvider();
-        accountPasswordVerificationAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        accountPasswordVerificationAuthenticationProvider.setImageVerificationService(imageVerificationService);
-        accountPasswordVerificationAuthenticationProvider.setUserDetailsService(customUserDetailsService);
-
-        PhoneMessageCodeAuthenticationProvider phoneMessageCodeAuthenticationProvider = new PhoneMessageCodeAuthenticationProvider();
-        phoneMessageCodeAuthenticationProvider.setNumberVerificationService(numberVerificationService);
-        phoneMessageCodeAuthenticationProvider.setUserDetailsService(customUserDetailsService);
-
-        PhonePasswordAuthenticationProvider phonePasswordAuthenticationProvider = new PhonePasswordAuthenticationProvider();
-        phonePasswordAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        phonePasswordAuthenticationProvider.setUserDetailsService(customUserDetailsService);
-
-        NoLimitAuthenticationProvider noLimitAuthenticationProvider = new NoLimitAuthenticationProvider();
-        noLimitAuthenticationProvider.setUserDetailsService(customUserDetailsService);
+        AccountPasswordAuthenticationProvider accountPasswordAuthenticationProvider = new AccountPasswordAuthenticationProvider(customUserDetailsService, passwordEncoder);
+        AccountPasswordVerificationAuthenticationProvider accountPasswordVerificationAuthenticationProvider = new AccountPasswordVerificationAuthenticationProvider(customUserDetailsService, imageVerificationService, passwordEncoder);
+        PhoneMessageCodeAuthenticationProvider phoneMessageCodeAuthenticationProvider = new PhoneMessageCodeAuthenticationProvider(customUserDetailsService, numberVerificationService);
+        PhonePasswordAuthenticationProvider phonePasswordAuthenticationProvider = new PhonePasswordAuthenticationProvider(customUserDetailsService, passwordEncoder);
+        NoLimitAuthenticationProvider noLimitAuthenticationProvider = new NoLimitAuthenticationProvider(customUserDetailsService);
 
         auth
                 .authenticationProvider(accountPasswordAuthenticationProvider)
@@ -120,31 +87,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(noLimitAuthenticationProvider);
     }
 
-    private MultipleAuthenticationFilter multipleAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
-        CustomAuthenticationFailureHandler customAuthenticationFailureHandler = new CustomAuthenticationFailureHandler("http://www.zhihu.com");
-
-        SuccessHandlerChain successHandlerChain = new SuccessHandlerChain();
-        successHandlerChain.addAuthenticationSuccessHandler(new LoginRecordSuccessHandler(loginInfoMapper));
-        successHandlerChain.addAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler());
-
-        MultipleAuthenticationFilter multipleAuthenticationFilter = new MultipleAuthenticationFilter("/oauth/authorize");
-        multipleAuthenticationFilter.setAuthenticationFailureHandler(customAuthenticationFailureHandler);
-        multipleAuthenticationFilter.setAuthenticationService(compositeAuthenticationService());
-        multipleAuthenticationFilter.setContinueChainBeforeSuccessfulAuthentication(true);
-        multipleAuthenticationFilter.setAllowSessionCreation(false);
-        multipleAuthenticationFilter.setAuthenticationSuccessHandler(successHandlerChain);
-        return multipleAuthenticationFilter;
-    }
-
-    @Bean
-    protected PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        AuthenticationManager authenticationManager = authenticationManager();
-        MultipleAuthenticationFilter multipleAuthenticationFilter = multipleAuthenticationFilter(authenticationManager);
+        MultipleAuthenticationFilter multipleAuthenticationFilter = multipleAuthenticationFilter();
 
         http
                 .addFilterAfter(multipleAuthenticationFilter, BasicAuthenticationFilter.class)
@@ -189,16 +134,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         compositeAuthenticationService.registerService(LoginRegisterTypeEnum.ACCOUNT_PASSWORD_VERIFICATION_CODE, accountPasswordVerificationAuthenticationService);
 
         return compositeAuthenticationService;
-    }
-
-    /**
-     * 覆盖对应获取用户信息的远程调用
-     *
-     * @return 用户代理
-     */
-    @Bean
-    public LocalUserProxy localUserProxy(UserMapper userMapper) {
-        return new LocalUserProxy(userMapper);
     }
 
 }

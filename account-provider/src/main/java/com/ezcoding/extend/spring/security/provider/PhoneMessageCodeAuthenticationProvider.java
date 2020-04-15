@@ -7,6 +7,7 @@ import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.extend.spring.security.authentication.PhoneMessageCodeAuthentication;
 import com.ezcoding.module.user.bean.model.CheckVerificationInfo;
 import com.ezcoding.module.user.bean.model.User;
+import com.ezcoding.module.user.core.authentication.ICustomUserDetailsService;
 import com.ezcoding.module.user.core.verification.RedisVerificationServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 
@@ -20,7 +21,12 @@ import static com.ezcoding.module.user.exception.AccountUserExceptionConstants.G
  */
 public class PhoneMessageCodeAuthenticationProvider extends AbstractLoginTypeAuthenticationProvider<PhoneMessageCodeAuthentication> {
 
-    private RedisVerificationServiceImpl numberVerificationService;
+    protected RedisVerificationServiceImpl numberVerificationService;
+
+    public PhoneMessageCodeAuthenticationProvider(ICustomUserDetailsService userDetailsService, RedisVerificationServiceImpl numberVerificationService) {
+        super(userDetailsService);
+        this.numberVerificationService = numberVerificationService;
+    }
 
     @Override
     protected void preCheck(PhoneMessageCodeAuthentication phoneMessageCodeAuthentication) {

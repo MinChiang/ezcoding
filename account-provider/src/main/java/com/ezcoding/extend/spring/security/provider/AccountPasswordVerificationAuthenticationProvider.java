@@ -7,6 +7,7 @@ import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.extend.spring.security.authentication.AccountPasswordVerificationAuthentication;
 import com.ezcoding.module.user.bean.model.CheckVerificationInfo;
 import com.ezcoding.module.user.bean.model.User;
+import com.ezcoding.module.user.core.authentication.ICustomUserDetailsService;
 import com.ezcoding.module.user.core.verification.RedisVerificationServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,8 +23,14 @@ import static com.ezcoding.module.user.exception.AccountUserExceptionConstants.G
  */
 public class AccountPasswordVerificationAuthenticationProvider extends AbstractLoginTypeAuthenticationProvider<AccountPasswordVerificationAuthentication> {
 
-    private RedisVerificationServiceImpl imageVerificationService;
-    private PasswordEncoder passwordEncoder;
+    protected RedisVerificationServiceImpl imageVerificationService;
+    protected PasswordEncoder passwordEncoder;
+
+    public AccountPasswordVerificationAuthenticationProvider(ICustomUserDetailsService userDetailsService, RedisVerificationServiceImpl imageVerificationService, PasswordEncoder passwordEncoder) {
+        super(userDetailsService);
+        this.imageVerificationService = imageVerificationService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public boolean supports(Class<?> authentication) {
