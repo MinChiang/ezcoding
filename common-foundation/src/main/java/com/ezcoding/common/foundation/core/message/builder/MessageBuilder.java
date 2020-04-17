@@ -9,7 +9,6 @@ import com.ezcoding.common.foundation.core.message.head.*;
 import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
-import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,11 +76,9 @@ public class MessageBuilder implements IMessageBuilder {
 
     @Override
     public <T> RequestMessage<T> buildRequestMessage(InputStream is, Class<T> cls, Charset charset, MessageTypeEnum type) {
-        byte[] bytes;
         try {
-            bytes = IOUtils.toByteArray(is);
             IMessageBuilderHandler handler = handlerMap.getOrDefault(type, defaultMessageBuilder);
-            return handler.byte2Message(bytes, charset, cls);
+            return handler.byte2Message(is, charset, cls);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -119,13 +116,13 @@ public class MessageBuilder implements IMessageBuilder {
     }
 
     @Override
-    public ResponseMessage<?> buildSuccessResponseMessage() {
+    public <T> ResponseMessage<T> buildSuccessResponseMessage() {
         return this.buildSuccessResponseMessage(null);
     }
 
     @Override
-    public ResponseMessage<?> buildErrorResponseMessage() {
-        return this.buildErrorResponseMessage(ErrorAppHead.getDefaultErrorCode(), ErrorAppHead.getDefaultErrorMessage(), null);
+    public <T> ResponseMessage<T> buildErrorResponseMessage() {
+        return this.buildErrorResponseMessage(ErrorAppHead.getDefaultErrorCode(), ErrorAppHead.getDefaultErrorMessage());
     }
 
     @Override
@@ -141,6 +138,13 @@ public class MessageBuilder implements IMessageBuilder {
     @Override
     public <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException businessException) {
         return this.buildErrorResponseMessage(businessException.getIdentification(), businessException.getMessage(), null);
+    }
+
+    @Override
+    public <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage) {
+        ArrayList<String> strings = new ArrayList<>(1);
+        strings.add(returnMessage);
+        return this.buildErrorResponseMessage(returnCode, strings, null);
     }
 
     @Override

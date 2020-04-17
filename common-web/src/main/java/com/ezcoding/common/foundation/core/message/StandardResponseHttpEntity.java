@@ -27,12 +27,4 @@ public class StandardResponseHttpEntity<T> extends ResponseEntity<ResponseMessag
         super(body, headers, status);
     }
 
-    public StandardResponseHttpEntity(T payload, HttpStatus status) {
-        super(new ResponseMessage<>(payload), status);
-    }
-
-    public StandardResponseHttpEntity(T payload, MultiValueMap<String, String> headers, HttpStatus status) {
-        super(new ResponseMessage<>(payload), headers, status);
-    }
-
 }

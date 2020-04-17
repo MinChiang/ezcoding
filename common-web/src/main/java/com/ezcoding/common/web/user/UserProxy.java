@@ -5,6 +5,7 @@ import com.ezcoding.common.core.user.model.*;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * user代理对象
@@ -65,22 +66,30 @@ public class UserProxy implements IUser {
 
     @Override
     public String getCode() {
-        return this.identifiable.getCode() == null ? this.user.getCode() : this.identifiable.getCode();
+        return Optional
+                .ofNullable(this.identifiable.getCode())
+                .orElseGet(() -> Optional.ofNullable(this.user).map(IUser::getCode).orElse(null));
     }
 
     @Override
     public String getAccount() {
-        return this.identifiable.getAccount() == null ? this.loadUser().getAccount() : this.identifiable.getAccount();
+        return Optional
+                .ofNullable(this.identifiable.getAccount())
+                .orElseGet(() -> Optional.ofNullable(this.user).map(IUser::getAccount).orElse(null));
     }
 
     @Override
     public String getPhone() {
-        return this.identifiable.getPhone() == null ? this.loadUser().getPhone() : this.identifiable.getPhone();
+        return Optional
+                .ofNullable(this.identifiable.getPhone())
+                .orElseGet(() -> Optional.ofNullable(this.user).map(IUser::getPhone).orElse(null));
     }
 
     @Override
     public String getEmail() {
-        return this.identifiable.getEmail() == null ? this.loadUser().getEmail() : this.identifiable.getEmail();
+        return Optional
+                .ofNullable(this.identifiable.getEmail())
+                .orElseGet(() -> Optional.ofNullable(this.user).map(IUser::getEmail).orElse(null));
     }
 
     @Override

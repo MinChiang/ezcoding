@@ -110,7 +110,7 @@ public interface IMessageBuilder {
      * @return 成功响应信息
      * @throws IOException IO异常
      */
-    ResponseMessage<?> buildSuccessResponseMessage() throws IOException;
+    <T> ResponseMessage<T> buildSuccessResponseMessage() throws IOException;
 
     /**
      * 构造失败响应信息
@@ -118,7 +118,7 @@ public interface IMessageBuilder {
      * @return 失败响应信息
      * @throws IOException IO异常
      */
-    ResponseMessage<?> buildErrorResponseMessage() throws IOException;
+    <T> ResponseMessage<T> buildErrorResponseMessage() throws IOException;
 
     /**
      * 构造失败响应信息
@@ -151,6 +151,14 @@ public interface IMessageBuilder {
      * @throws IOException IO异常
      */
     <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException applicationException, T payload) throws IOException;
+
+    /**
+     * 构造失败响应信息
+     * @param returnCode 返回码
+     * @param returnMessage 返回内容
+     * @return 失败响应信息
+     */
+    <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage);
 
     /**
      * 构造失败响应信息

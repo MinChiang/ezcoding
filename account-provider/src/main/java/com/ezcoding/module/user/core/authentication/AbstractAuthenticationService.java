@@ -42,7 +42,7 @@ public abstract class AbstractAuthenticationService implements IAuthenticationSe
         //校验并且生成默认用户
         User user = checkAndCreateUser(context);
         //填充用户信息
-        fillBlankContent(user);
+        postCreateUser(user);
         //插入用户
         basicUserService.persist(user);
         //触发注册成功钩子函数
@@ -55,7 +55,8 @@ public abstract class AbstractAuthenticationService implements IAuthenticationSe
      *
      * @param user 用户
      */
-    public void fillBlankContent(User user) {
+    protected void postCreateUser(User user) {
+        //生成用户code
         user.code(OriginalUUIDProducer.getInstance().produce());
         String defaultName = "用户" + DateFormatUtils.format(new Date(), "yyyyMMddhhmmss");
         if (StringUtils.isBlank(user.getAccount())) {

@@ -4,6 +4,7 @@ import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 
 /**
@@ -48,6 +49,17 @@ public interface IMessageBuilderHandler {
      * @throws IOException IO异常
      */
     <T> RequestMessage<T> byte2Message(byte[] bytes, Charset charset, Class<T> cls) throws IOException;
+
+    /**
+     * 字节流转请求信息
+     *
+     * @param is      待转换的字节流
+     * @param charset 字节流编码格式
+     * @param cls     载体类型
+     * @return 请求信息
+     * @throws IOException IO异常
+     */
+    <T> RequestMessage<T> byte2Message(InputStream is, Charset charset, Class<T> cls) throws IOException;
 
     /**
      * 响应信息转字节流

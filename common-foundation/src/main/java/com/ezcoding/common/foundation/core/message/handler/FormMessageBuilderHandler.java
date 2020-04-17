@@ -4,6 +4,7 @@ import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 
 /**
@@ -25,6 +26,11 @@ public class FormMessageBuilderHandler implements IMessageBuilderHandler {
 
     @Override
     public <T> RequestMessage<T> byte2Message(byte[] bytes, Charset charset, Class<T> cls) throws IOException {
+        return null;
+    }
+
+    @Override
+    public <T> RequestMessage<T> byte2Message(InputStream is, Charset charset, Class<T> cls) throws IOException {
         return null;
     }
 

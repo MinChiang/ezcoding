@@ -66,23 +66,6 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
     @Autowired
     private HttpMessageConverters httpMessageConverters;
 
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) {
-        DefaultOAuth2ExceptionRenderer defaultOAuth2ExceptionRenderer = new DefaultOAuth2ExceptionRenderer();
-        defaultOAuth2ExceptionRenderer.setMessageConverters(httpMessageConverters.getConverters());
-        Oauth2AuthenticationEntryPoint oauth2AuthenticationEntryPoint = new Oauth2AuthenticationEntryPoint();
-        oauth2AuthenticationEntryPoint.setExceptionRenderer(defaultOAuth2ExceptionRenderer);
-
-        security
-                //关闭/oauth/token_key验证端点权限访问
-                .tokenKeyAccess("permitAll()")
-                //开启/oauth/check_token验证端点认证访问权限
-                .checkTokenAccess("isAuthenticated()")
-                .allowFormAuthenticationForClients()
-                .passwordEncoder(passwordEncoder)
-                .authenticationEntryPoint(oauth2AuthenticationEntryPoint);
-    }
-
     private RedisTemplate<String, ClientDetails> clientDetailsRedisTemplate() {
         RedisTemplate<String, ClientDetails> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
@@ -150,6 +133,23 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
     }
 
     @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) {
+        DefaultOAuth2ExceptionRenderer defaultOAuth2ExceptionRenderer = new DefaultOAuth2ExceptionRenderer();
+        defaultOAuth2ExceptionRenderer.setMessageConverters(httpMessageConverters.getConverters());
+        Oauth2AuthenticationEntryPoint oauth2AuthenticationEntryPoint = new Oauth2AuthenticationEntryPoint();
+        oauth2AuthenticationEntryPoint.setExceptionRenderer(defaultOAuth2ExceptionRenderer);
+
+        security
+                //关闭/oauth/token_key验证端点权限访问
+                .tokenKeyAccess("permitAll()")
+                //开启/oauth/check_token验证端点认证访问权限
+                .checkTokenAccess("isAuthenticated()")
+                .allowFormAuthenticationForClients()
+                .passwordEncoder(passwordEncoder)
+                .authenticationEntryPoint(oauth2AuthenticationEntryPoint);
+    }
+
+    @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients
                 .withClientDetails(clientDetailsService());
@@ -167,7 +167,12 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
 
         JwtTokenStore jwtTokenStore = new JwtTokenStore(jwtAccessTokenConverter);
 
-        AuthorizationServerTokenServices authorizationServerTokenServices = customTokenServices(clientDetailsService(), userDetailsService, jwtAccessTokenConverter, jwtTokenStore);
+        AuthorizationServerTokenServices authorizationServerTokenServices = customTokenServices(
+                clientDetailsService(),
+                userDetailsService,
+                jwtAccessTokenConverter,
+                jwtTokenStore
+        );
 
         endpoints
                 .tokenStore(jwtTokenStore)
@@ -175,7 +180,6 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
                 .authorizationCodeServices(redisAuthorizationCodeServices())
                 .userDetailsService(userDetailsService)
                 .tokenServices(authorizationServerTokenServices);
-
     }
 
 }

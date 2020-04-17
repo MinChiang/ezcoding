@@ -45,9 +45,18 @@ public class JsonMessageBuilderHandler implements IMessageBuilderHandler {
 
     @Override
     public <T> RequestMessage<T> byte2Message(byte[] bytes, Charset charset, Class<T> cls) throws IOException {
-        InputStreamReader inputStreamReader = new InputStreamReader(new ByteArrayInputStream(bytes), charset);
+        return this.byte2Message(new ByteArrayInputStream(bytes), charset, cls);
+    }
+
+    @Override
+    public <T> RequestMessage<T> byte2Message(InputStream is, Charset charset, Class<T> cls) throws IOException {
+        EmptyBodyCheckingInputStreamHelper emptyBodyCheckingInputStreamHelper = new EmptyBodyCheckingInputStreamHelper(is);
+        if (!emptyBodyCheckingInputStreamHelper.hasBody()) {
+            return null;
+        }
+
         JavaType javaType = objectMapper.getTypeFactory().constructParametricType(RequestMessage.class, cls);
-        RequestMessage<T> requestMessage = objectMapper.readValue(inputStreamReader, javaType);
+        RequestMessage<T> requestMessage = objectMapper.readValue(emptyBodyCheckingInputStreamHelper.getBody(), javaType);
         if (requestMessage.getSystemHead() == null) {
             requestMessage.setSystemHead(new RequestSystemHead());
         }
@@ -82,4 +91,36 @@ public class JsonMessageBuilderHandler implements IMessageBuilderHandler {
     public void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
+
+    private static class EmptyBodyCheckingInputStreamHelper {
+
+        private final InputStream body;
+
+        public EmptyBodyCheckingInputStreamHelper(InputStream inputStream) throws IOException {
+            if (inputStream.markSupported()) {
+                inputStream.mark(1);
+                this.body = (inputStream.read() != -1 ? inputStream : null);
+                inputStream.reset();
+            } else {
+                PushbackInputStream pushbackInputStream = new PushbackInputStream(inputStream);
+                int b = pushbackInputStream.read();
+                if (b == -1) {
+                    this.body = null;
+                } else {
+                    this.body = pushbackInputStream;
+                    pushbackInputStream.unread(b);
+                }
+            }
+        }
+
+        public InputStream getBody() {
+            return this.hasBody() ? this.body : null;
+        }
+
+        public boolean hasBody() {
+            return (this.body != null);
+        }
+
+    }
+
 }
