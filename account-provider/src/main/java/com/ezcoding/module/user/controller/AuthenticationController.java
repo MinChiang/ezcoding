@@ -108,5 +108,4 @@ public class AuthenticationController {
         User user = authenticationService.register(map);
         return user.getCode();
     }
-
 }

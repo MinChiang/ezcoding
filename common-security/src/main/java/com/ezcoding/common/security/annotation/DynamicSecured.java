@@ -7,7 +7,7 @@ import java.lang.annotation.*;
  * @version 1.0.0
  * @date 2020-04-17 17:53
  */
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
@@ -18,6 +18,6 @@ public @interface DynamicSecured {
      *
      * @return 加载的别名
      */
-    String[] alias() default {};
+    String alias() default "";
 
 }

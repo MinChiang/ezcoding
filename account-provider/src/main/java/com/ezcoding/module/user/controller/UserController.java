@@ -6,6 +6,7 @@ import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.StandardResponseHttpEntity;
 import com.ezcoding.common.foundation.core.message.StandardResponseMessageBuilder;
+import com.ezcoding.common.security.annotation.DynamicSecured;
 import com.ezcoding.common.web.resolver.CurrentUser;
 import com.ezcoding.common.web.resolver.JsonParam;
 import com.ezcoding.common.web.resolver.JsonResult;
@@ -14,6 +15,7 @@ import com.ezcoding.module.user.bean.model.User;
 import com.ezcoding.module.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,6 +73,8 @@ public class UserController {
 
     @DeleteMapping("test2")
     @ResponseBody
+    @Secured("ROLE_ADMIN")
+    @DynamicSecured
     public StandardResponseHttpEntity<User> test2(@RequestBody RequestMessage<User> requestMessage) {
         User payload = requestMessage.getPayload();
         System.out.println(payload);

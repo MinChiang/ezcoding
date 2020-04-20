@@ -1,9 +1,13 @@
 package com.ezcoding.common.security.starter;
 
+import com.ezcoding.common.security.metadatasource.DynamicAnnotationSecurityMetadataSource;
+import com.ezcoding.common.security.vote.voter.DynamicRoleVoter;
 import com.ezcoding.common.security.vote.voter.LoginInfoVoter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.method.MethodSecurityMetadataSource;
 import org.springframework.security.access.vote.AbstractAccessDecisionManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
@@ -20,6 +24,9 @@ import java.util.List;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
 public class MethodSecurityAutoConfiguration extends GlobalMethodSecurityConfiguration {
 
+    @Value("${spring.application.name}")
+    private String applicationName = "";
+
     @Override
     protected AccessDecisionManager accessDecisionManager() {
         AbstractAccessDecisionManager accessDecisionManager = (AbstractAccessDecisionManager) super.accessDecisionManager();
@@ -28,8 +35,14 @@ public class MethodSecurityAutoConfiguration extends GlobalMethodSecurityConfigu
         //加入oauth2scope的投票器
         decisionVoters.add(new ScopeVoter());
         decisionVoters.add(new LoginInfoVoter());
+        decisionVoters.add(new DynamicRoleVoter());
 
         return accessDecisionManager;
+    }
+
+    @Override
+    protected MethodSecurityMetadataSource customMethodSecurityMetadataSource() {
+        return new DynamicAnnotationSecurityMetadataSource(applicationName);
     }
 
 }
