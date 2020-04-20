@@ -16,11 +16,9 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class DynamicRoleVoter implements AccessDecisionVoter<Object> {
 
-    private ConcurrentMap<ConfigAttribute, >
-
     @Override
     public boolean supports(ConfigAttribute attribute) {
-        return attribute instanceof DynamicConfigAttribute;
+        return false;
     }
 
     @Override
@@ -30,22 +28,22 @@ public class DynamicRoleVoter implements AccessDecisionVoter<Object> {
 
     @Override
     public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
-        int result = ACCESS_ABSTAIN;
-
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        for (ConfigAttribute attribute : attributes) {
-            if (!this.supports(attribute)) {
-                continue;
-            }
-
-            result = ACCESS_DENIED;
-
-            String attr = attribute.getAttribute();
-            if (loginTypeStr.equals(attr) || deviceTypeStr.equals(attr)) {
-                return ACCESS_GRANTED;
-            }
-
-        }
+//        int result = ACCESS_ABSTAIN;
+//
+//        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+//        for (ConfigAttribute attribute : attributes) {
+//            if (!this.supports(attribute)) {
+//                continue;
+//            }
+//
+//            result = ACCESS_DENIED;
+//
+//            String attr = attribute.getAttribute();
+//            if (loginTypeStr.equals(attr) || deviceTypeStr.equals(attr)) {
+//                return ACCESS_GRANTED;
+//            }
+//
+//        }
         return 0;
     }
 
