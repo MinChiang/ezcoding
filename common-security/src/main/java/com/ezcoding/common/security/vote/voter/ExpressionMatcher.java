@@ -29,7 +29,7 @@ public class ExpressionMatcher implements IRoleExpression {
     }
 
     /**
-     * 解析
+     * 将对应的中序表达式转换为后续表达式
      * admin || develop && test                     ==> admin develop || test &&
      * admin || (develop && test)                   ==> admin develop test && ||
      * test || (develop && (admin || manager))      ==> test develop admin manager || && ||
@@ -42,10 +42,8 @@ public class ExpressionMatcher implements IRoleExpression {
 
         List<Object> result = new LinkedList<>();
         Stack<Object> expressionStack = new Stack<>();
-
         boolean lastAndFlag = false;
         boolean lastOrFlag = false;
-
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < expression.length(); i++) {
@@ -102,7 +100,7 @@ public class ExpressionMatcher implements IRoleExpression {
                         sb = new StringBuilder();
                     }
 
-                    Object pop = null;
+                    Object pop;
                     while ((pop = expressionStack.pop()) != CalculateRegularEnum.OPEN) {
                         result.add(pop);
                     }
@@ -117,7 +115,9 @@ public class ExpressionMatcher implements IRoleExpression {
         if (sb.length() != 0) {
             result.add(sb.toString());
         }
-        result.add(expressionStack.pop());
+        while (!expressionStack.isEmpty()) {
+            result.add(expressionStack.pop());
+        }
 
         return result;
     }
@@ -151,6 +151,12 @@ public class ExpressionMatcher implements IRoleExpression {
         return (boolean) calcStack.pop();
     }
 
+    /**
+     * 将权限转换为对应的字符串列表
+     *
+     * @param authorities 需要转换的权限内容
+     * @return 转换后的权限列表
+     */
     private List<String> convert(Collection<? extends GrantedAuthority> authorities) {
         List<String> result = new LinkedList<>();
         authorities.forEach(authority -> result.add(authority.getAuthority()));
@@ -158,7 +164,7 @@ public class ExpressionMatcher implements IRoleExpression {
     }
 
     public static void main(String[] args) {
-        ExpressionMatcher expressionMatcher = new ExpressionMatcher("test || (develop && (admin || manager)) && a || (b && c)");
+        ExpressionMatcher expressionMatcher = new ExpressionMatcher("test || (develop && (admin || manager))");
         System.out.println(expressionMatcher.execution);
         List<SimpleGrantedAuthority> collect = Stream.of("test", "admin").map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         boolean match = expressionMatcher.match(collect);
