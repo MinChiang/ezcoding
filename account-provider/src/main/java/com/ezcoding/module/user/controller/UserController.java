@@ -62,6 +62,7 @@ public class UserController {
 
     @GetMapping("test")
     @ResponseBody
+    @DynamicSecured
     public StandardResponseHttpEntity<User> test() {
         StandardResponseHttpEntity<User> cu =
                 StandardResponseMessageBuilder
@@ -71,9 +72,8 @@ public class UserController {
         return cu;
     }
 
-    @DeleteMapping("test2")
+    @GetMapping("test2")
     @ResponseBody
-    @Secured("ROLE_ADMIN")
     @DynamicSecured
     public StandardResponseHttpEntity<User> test2(@RequestBody RequestMessage<User> requestMessage) {
         User payload = requestMessage.getPayload();

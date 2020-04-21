@@ -19,6 +19,8 @@ import java.util.stream.Stream;
  */
 public class ExpressionMatcher implements IRoleExpression {
 
+    private String defaultRolePrefix = "ROLE_";
+
     /**
      * 执行内容
      */
@@ -38,7 +40,7 @@ public class ExpressionMatcher implements IRoleExpression {
      * @return 解析后的执行内容
      */
     private List<Object> parse(String originalExpression) {
-        String expression = StringUtils.deleteWhitespace(originalExpression);
+        String expression = StringUtils.deleteWhitespace(originalExpression).toUpperCase();
 
         List<Object> result = new LinkedList<>();
         Stack<Object> expressionStack = new Stack<>();
@@ -54,7 +56,7 @@ public class ExpressionMatcher implements IRoleExpression {
                         lastAndFlag = false;
                         //处理之前已经存在的字符串表达式
                         if (sb.length() != 0) {
-                            result.add(sb.toString());
+                            result.add(defaultRolePrefix + sb.toString());
                             sb = new StringBuilder();
                         }
 
@@ -75,7 +77,7 @@ public class ExpressionMatcher implements IRoleExpression {
                         lastOrFlag = false;
                         //处理之前已经存在的字符串表达式
                         if (sb.length() != 0) {
-                            result.add(sb.toString());
+                            result.add(defaultRolePrefix + sb.toString());
                             sb = new StringBuilder();
                         }
 
@@ -96,7 +98,7 @@ public class ExpressionMatcher implements IRoleExpression {
                     break;
                 case ')':
                     if (sb.length() != 0) {
-                        result.add(sb.toString());
+                        result.add(defaultRolePrefix + sb.toString());
                         sb = new StringBuilder();
                     }
 
@@ -113,7 +115,7 @@ public class ExpressionMatcher implements IRoleExpression {
         }
 
         if (sb.length() != 0) {
-            result.add(sb.toString());
+            result.add(defaultRolePrefix + sb.toString());
         }
         while (!expressionStack.isEmpty()) {
             result.add(expressionStack.pop());
@@ -164,11 +166,19 @@ public class ExpressionMatcher implements IRoleExpression {
     }
 
     public static void main(String[] args) {
-        ExpressionMatcher expressionMatcher = new ExpressionMatcher("test || (develop && (admin || manager))");
+        ExpressionMatcher expressionMatcher = new ExpressionMatcher("admin || (test && account)");
         System.out.println(expressionMatcher.execution);
-        List<SimpleGrantedAuthority> collect = Stream.of("test", "admin").map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        List<SimpleGrantedAuthority> collect = Stream.of("ROLE_ADMIN").map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         boolean match = expressionMatcher.match(collect);
         System.out.println(match);
+    }
+
+    public String getDefaultRolePrefix() {
+        return defaultRolePrefix;
+    }
+
+    public void setDefaultRolePrefix(String defaultRolePrefix) {
+        this.defaultRolePrefix = defaultRolePrefix;
     }
 
     private enum CalculateRegularEnum {

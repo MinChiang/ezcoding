@@ -130,3 +130,7 @@ mybatis-plus:
 ezcoding:
   security:
     default-failure-url: "http://www.zhihu.com"
+    enable-auto-loader: true
+    enable-dynamic-role-loader: true
+    dynamic-role-loader-url: ""
+    refresh-seconds: 10

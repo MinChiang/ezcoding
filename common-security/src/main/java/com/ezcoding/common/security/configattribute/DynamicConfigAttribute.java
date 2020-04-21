@@ -11,8 +11,8 @@ import java.util.Objects;
  */
 public class DynamicConfigAttribute implements ConfigAttribute {
 
-    public static final String SPLIT = ":";
-    public static final String PREFIX = "DYNAMIC_ROLE" + SPLIT;
+    public static final String SPLIT = ".";
+    public static final String PREFIX = "DYNAMIC_ROLE_";
 
     /**
      * 模块号
