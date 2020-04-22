@@ -9,7 +9,7 @@ import static com.ezcoding.module.management.exception.AccountManagementModuleCo
  * @version 1.0.0
  * @date 2018-11-14 15:57
  */
-public class AccountManagementExceptionConstants {
+public class AccountPermissionExceptionConstants {
 
 
 }
