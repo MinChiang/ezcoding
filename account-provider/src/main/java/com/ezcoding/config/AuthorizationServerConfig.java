@@ -13,6 +13,7 @@ import com.ezcoding.module.user.dao.ClientDetailsMapper;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -66,25 +67,25 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
     @Autowired
     private HttpMessageConverters httpMessageConverters;
 
-    private RedisTemplate<String, ClientDetails> clientDetailsRedisTemplate() {
+    @Bean
+    public RedisTemplate<String, ClientDetails> clientDetailsRedisTemplate() {
         RedisTemplate<String, ClientDetails> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
         template.setKeySerializer(new StringRedisSerializer());
         Jackson2JsonRedisSerializer<ClientDetails> objectJackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(ClientDetails.class);
         objectJackson2JsonRedisSerializer.setObjectMapper(ObjectMapperUtils.persist());
         template.setValueSerializer(objectJackson2JsonRedisSerializer);
-        template.afterPropertiesSet();
         return template;
     }
 
-    private RedisTemplate<String, OAuth2Authentication> oAuth2AuthenticationRedisTemplate() {
+    @Bean
+    public RedisTemplate<String, OAuth2Authentication> oAuth2AuthenticationRedisTemplate() {
         RedisTemplate<String, OAuth2Authentication> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
         template.setKeySerializer(new StringRedisSerializer());
         Jackson2JsonRedisSerializer<OAuth2Authentication> objectJackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(OAuth2Authentication.class);
         objectJackson2JsonRedisSerializer.setObjectMapper(ObjectMapperUtils.persist());
         template.setValueSerializer(objectJackson2JsonRedisSerializer);
-        template.afterPropertiesSet();
         return template;
     }
 

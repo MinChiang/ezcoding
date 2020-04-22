@@ -47,7 +47,6 @@ public class AuthenticationConfig {
         Jackson2JsonRedisSerializer<Date> objectJackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Date.class);
         objectJackson2JsonRedisSerializer.setObjectMapper(ObjectMapperUtils.persist());
         template.setValueSerializer(objectJackson2JsonRedisSerializer);
-        template.afterPropertiesSet();
         return template;
     }
 
