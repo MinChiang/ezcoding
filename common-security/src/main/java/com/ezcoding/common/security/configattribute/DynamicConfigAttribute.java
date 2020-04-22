@@ -1,5 +1,6 @@
 package com.ezcoding.common.security.configattribute;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.ConfigAttribute;
 
 import java.util.Objects;
@@ -11,23 +12,23 @@ import java.util.Objects;
  */
 public class DynamicConfigAttribute implements ConfigAttribute {
 
-    public static final String SPLIT = ".";
+    public static final String SPLIT = ":";
     public static final String PREFIX = "DYNAMIC_ROLE_";
 
     /**
      * 模块号
      */
-    private String applicationName;
+    private transient String applicationName;
 
     /**
      * 代理类
      */
-    private String className;
+    private transient String className;
 
     /**
      * 方法名
      */
-    private String methodName;
+    private transient String methodName;
 
     /**
      * 全称
@@ -77,6 +78,18 @@ public class DynamicConfigAttribute implements ConfigAttribute {
     @Override
     public int hashCode() {
         return Objects.hash(wholeName);
+    }
+
+    public static DynamicConfigAttribute create(String wholeName) {
+        String string = StringUtils.substringAfter(wholeName.toUpperCase(), PREFIX);
+        if (StringUtils.isBlank(string)) {
+            throw new IllegalArgumentException("不正确的表达式，必须为：" + PREFIX + "[applicationName]" + SPLIT + "[className]" + SPLIT + "[methodName]");
+        }
+        String[] split = StringUtils.split(string, SPLIT);
+        if (split == null || split.length != 3) {
+            throw new IllegalArgumentException("不正确的表达式，必须为：" + PREFIX + "[applicationName]" + SPLIT + "[className]" + SPLIT + "[methodName]");
+        }
+        return new DynamicConfigAttribute(split[0], split[1], split[2]);
     }
 
 }

@@ -123,9 +123,14 @@
                 <groupId>com.ezcoding</groupId>
                 <artifactId>common-web-starter</artifactId>
                 <version>${project.version}</version>
-            <!-- 高层次依赖 -->
+            </dependency>
+            <dependency>
+                <groupId>com.ezcoding</groupId>
+                <artifactId>common-redis</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
+            <!-- 高层次依赖 -->
             <dependency>
                 <groupId>com.ezcoding</groupId>
                 <artifactId>account-api</artifactId>

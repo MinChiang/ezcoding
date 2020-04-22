@@ -216,5 +216,9 @@
             <groupId>com.ezcoding</groupId>
             <artifactId>common-mybatis-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ezcoding</groupId>
+            <artifactId>common-redis</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -80,7 +80,7 @@ public class MethodSecurityAutoConfiguration extends GlobalMethodSecurityConfigu
 
             if (ezcodingSecurityConfigBean.isEnableAutoLoader() && loader != null) {
                 return new DynamicSecheduledTriggerProxy(loader, dynamicRoleVoter)
-                        .config(true, ezcodingSecurityConfigBean.getRefreshSeconds(), loader);
+                        .config(true, ezcodingSecurityConfigBean.getRefreshSeconds());
             } else {
                 return loader;
             }

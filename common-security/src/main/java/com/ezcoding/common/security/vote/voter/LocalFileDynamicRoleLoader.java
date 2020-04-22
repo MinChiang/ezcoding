@@ -51,9 +51,6 @@ public class LocalFileDynamicRoleLoader implements IDynamicRoleLoadable {
             for (Map.Entry<String, Object> methods : ((Map<String, Object>) classes.getValue()).entrySet()) {
                 DynamicConfigAttribute dynamicConfigAttribute = new DynamicConfigAttribute(this.applicationName, className, methods.getKey());
                 dynamicConfigAttributes.put(dynamicConfigAttribute, (String) methods.getValue());
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("加载权限：{} : {}", dynamicConfigAttribute.getWholeName(), methods.getValue());
-                }
             }
         }
 
