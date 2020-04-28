@@ -140,7 +140,7 @@ public class MessageBuilder implements IMessageBuilder {
 
     @Override
     public <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage, T payload) {
-        return this.buildErrorResponseMessage(returnCode, returnMessage, payload);
+        return new ResponseMessage<>(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), payload);
     }
 
     @Override

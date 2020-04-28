@@ -27,7 +27,7 @@ public class ResponseUtils {
      * @return 信息载体内容
      */
     public static <T> T checkAndGetResult(ResponseMessage<T> responseMessage, Supplier<? extends ApplicationException> supplier) {
-        AssertUtils.mustTrue(responseMessage != null && responseMessage.isSuccess(), Optional.of(supplier).get());
+        AssertUtils.mustTrue(responseMessage != null && responseMessage.success(), Optional.of(supplier).get());
         return responseMessage.getPayload();
     }
 

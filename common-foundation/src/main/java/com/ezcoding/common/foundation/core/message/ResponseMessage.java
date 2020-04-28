@@ -29,8 +29,8 @@ public class ResponseMessage<T> extends AbstractMessage<T> implements Serializab
         this.payload = payload;
     }
 
-    public boolean isSuccess() {
-        return Optional.ofNullable(this.appHead).map(ResponseAppHead::isSuccess).orElse(false);
+    public boolean success() {
+        return Optional.ofNullable(this.appHead).map(ResponseAppHead::success).orElse(false);
     }
 
     public ResponseMessage(ResponseAppHead appHead, T payload) {
