@@ -2,6 +2,7 @@ package com.ezcoding.common.foundation.core.message;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
+import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
 import com.ezcoding.common.foundation.core.message.head.ResponseAppHead;
 import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
 import org.springframework.http.*;
@@ -173,7 +174,7 @@ public class StandardResponseMessageBuilder<T> {
     }
 
     public StandardResponseMessageBuilder<T> error(String returnCode, String returnMessage, T payload) {
-        return error(returnCode, returnMessage, payload);
+        return body(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), payload);
     }
 
     public StandardResponseHttpEntity<T> build() {
