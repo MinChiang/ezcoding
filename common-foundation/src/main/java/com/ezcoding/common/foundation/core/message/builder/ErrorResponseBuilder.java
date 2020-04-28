@@ -2,9 +2,6 @@ package com.ezcoding.common.foundation.core.message.builder;
 
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -13,7 +10,7 @@ import java.util.List;
 public class ErrorResponseBuilder<T> extends AbstractBodyBuilder<T> {
 
     private String errorCode;
-    private List<String> errorMessage = new ArrayList<>(0);
+    private String errorMessage;
 
     ErrorResponseBuilder(T body) {
         super(body);
@@ -28,7 +25,7 @@ public class ErrorResponseBuilder<T> extends AbstractBodyBuilder<T> {
     }
 
     public ErrorResponseBuilder<T> errorMessage(String errorMessage) {
-        this.errorMessage.add(errorMessage);
+        this.errorMessage = errorMessage;
         return this;
     }
 

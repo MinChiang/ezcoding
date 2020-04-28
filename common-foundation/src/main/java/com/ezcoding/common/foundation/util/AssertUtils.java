@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -25,7 +26,7 @@ public final class AssertUtils {
      */
     public static void mustTrue(boolean expression, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (!expression) {
-            throw exceptionSupplier.get();
+            throw Optional.of(exceptionSupplier).get().get();
         }
     }
 
@@ -37,7 +38,7 @@ public final class AssertUtils {
      */
     public static void mustFalse(boolean expression, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (expression) {
-            throw exceptionSupplier.get();
+            throw Optional.of(exceptionSupplier).get().get();
         }
     }
 
@@ -49,7 +50,7 @@ public final class AssertUtils {
      */
     public static void mustNull(Object object, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (object != null) {
-            throw exceptionSupplier.get();
+            throw Optional.of(exceptionSupplier).get().get();
         }
     }
 
@@ -61,7 +62,7 @@ public final class AssertUtils {
      */
     public static void mustNotNull(Object object, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (object == null) {
-            throw exceptionSupplier.get();
+            throw Optional.of(exceptionSupplier).get().get();
         }
     }
 
@@ -73,7 +74,7 @@ public final class AssertUtils {
      */
     public static void mustEmpty(String text, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (StringUtils.isNotEmpty(text)) {
-            throw exceptionSupplier.get();
+            throw Optional.of(exceptionSupplier).get().get();
         }
     }
 
@@ -85,7 +86,7 @@ public final class AssertUtils {
      */
     public static void mustNotEmpty(String text, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (StringUtils.isEmpty(text)) {
-            throw exceptionSupplier.get();
+            throw Optional.of(exceptionSupplier).get().get();
         }
     }
 
@@ -97,7 +98,7 @@ public final class AssertUtils {
      */
     public static void mustNotEmpty(Object[] array, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (ArrayUtils.isEmpty(array)) {
-            throw exceptionSupplier.get();
+            throw Optional.of(exceptionSupplier).get().get();
         }
     }
 
@@ -109,7 +110,7 @@ public final class AssertUtils {
      */
     public static void mustNotEmpty(Collection<?> collection, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (CollectionUtils.isEmpty(collection)) {
-            throw exceptionSupplier.get();
+            throw Optional.of(exceptionSupplier).get().get();
         }
     }
 
@@ -121,7 +122,7 @@ public final class AssertUtils {
      */
     public static void mustNotEmpty(Map<?, ?> map, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (MapUtils.isEmpty(map)) {
-            throw exceptionSupplier.get();
+            throw Optional.of(exceptionSupplier).get().get();
         }
     }
 
@@ -134,7 +135,7 @@ public final class AssertUtils {
      */
     public static void mustInstanceOf(Class<?> type, Object obj, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (!type.isInstance(obj)) {
-            throw exceptionSupplier.get();
+            throw Optional.of(exceptionSupplier).get().get();
         }
     }
 
@@ -147,7 +148,7 @@ public final class AssertUtils {
      */
     public static void mustAssignable(Class<?> superType, Class<?> subType, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (subType == null || !superType.isAssignableFrom(subType)) {
-            throw exceptionSupplier.get();
+            throw Optional.of(exceptionSupplier).get().get();
         }
     }
 

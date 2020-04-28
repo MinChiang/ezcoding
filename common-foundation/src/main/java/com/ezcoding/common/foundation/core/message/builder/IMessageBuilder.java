@@ -134,17 +134,6 @@ public interface IMessageBuilder {
     /**
      * 构造失败响应信息
      *
-     * @param returnCode    响应结果号码
-     * @param returnMessage 响应信息内容数组
-     * @param payload       返回内容
-     * @return 失败响应信息
-     * @throws IOException IO异常
-     */
-    <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, List<String> returnMessage, T payload) throws IOException;
-
-    /**
-     * 构造失败响应信息
-     *
      * @param applicationException 程序异常
      * @param payload              返回内容
      * @return 失败响应信息

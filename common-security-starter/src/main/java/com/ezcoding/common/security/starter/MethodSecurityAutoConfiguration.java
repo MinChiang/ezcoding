@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.oauth2.provider.vote.ScopeVoter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,20 +71,22 @@ public class MethodSecurityAutoConfiguration extends GlobalMethodSecurityConfigu
 
         @Bean
         @ConditionalOnMissingBean(IDynamicRoleLoadable.class)
-        public IDynamicRoleLoadable dynamicRoleLoadable(DynamicRoleVoter dynamicRoleVoter) {
-            IDynamicRoleLoadable loader = null;
+        public IDynamicRoleLoadable dynamicRoleLoadable(DynamicRoleVoter dynamicRoleVoter,
+                                                        DynamicAnnotationSecurityMetadataSource dynamicAnnotationSecurityMetadataSource) {
+            List<IDynamicRoleLoadable> loaders = new ArrayList<>();
+            //需要注意注册的先后顺序，后面注册的会覆盖之前注册的内容
+            if (StringUtils.isNotBlank(ezcodingSecurityConfigBean.getDynamicRoleLoadYaml())) {
+                loaders.add(new LocalFileDynamicRoleLoader(ezcodingSecurityConfigBean.getDynamicRoleLoadYaml(), this.applicationName));
+            }
             if (StringUtils.isNotBlank(ezcodingSecurityConfigBean.getDynamicRoleLoadUrl())) {
-                //TODO 补充对应的内容
-            } else if (StringUtils.isNotBlank(ezcodingSecurityConfigBean.getDynamicRoleLoadYaml())) {
-                loader = new LocalFileDynamicRoleLoader(ezcodingSecurityConfigBean.getDynamicRoleLoadYaml(), this.applicationName);
+                loaders.add(new RemoteDynamicRoleLoader(this.applicationName, ezcodingSecurityConfigBean.getDynamicRoleLoadUrl(), dynamicAnnotationSecurityMetadataSource));
             }
 
-            if (ezcodingSecurityConfigBean.isEnableAutoLoader() && loader != null) {
-                return new DynamicSecheduledTriggerProxy(loader, dynamicRoleVoter)
-                        .config(true, ezcodingSecurityConfigBean.getRefreshSeconds());
-            } else {
-                return loader;
+            IDynamicRoleLoadable delegateDynamicRoleLoader = new DelegateDynamicRoleLoader(loaders);
+            if (ezcodingSecurityConfigBean.isEnableAutoLoader()) {
+                return new DynamicSecheduledTriggerProxy(delegateDynamicRoleLoader, dynamicRoleVoter).config(true, ezcodingSecurityConfigBean.getRefreshSeconds());
             }
+            return delegateDynamicRoleLoader;
         }
 
     }

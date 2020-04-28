@@ -2,7 +2,6 @@ package com.ezcoding.common.foundation.core.message;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
-import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
 import com.ezcoding.common.foundation.core.message.head.ResponseAppHead;
 import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
 import org.springframework.http.*;
@@ -12,10 +11,8 @@ import org.springframework.util.Assert;
 import java.net.URI;
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.List;
 
 /**
  * @author MinChiang
@@ -163,10 +160,6 @@ public class StandardResponseMessageBuilder<T> {
         return body(MessageBuilder.getInstance().buildErrorResponseMessage());
     }
 
-    public StandardResponseMessageBuilder<T> error(String returnCode, List<String> returnMessage, T payload) {
-        return body(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), payload);
-    }
-
     public StandardResponseMessageBuilder<T> error(ApplicationException businessException, T payload) {
         return error(businessException.getIdentification(), businessException.getMessage(), payload);
     }
@@ -176,15 +169,11 @@ public class StandardResponseMessageBuilder<T> {
     }
 
     public StandardResponseMessageBuilder<T> error(String returnCode, String returnMessage) {
-        ArrayList<String> strings = new ArrayList<>(1);
-        strings.add(returnMessage);
-        return error(returnCode, strings, null);
+        return error(returnCode, returnMessage, null);
     }
 
     public StandardResponseMessageBuilder<T> error(String returnCode, String returnMessage, T payload) {
-        ArrayList<String> strings = new ArrayList<>(1);
-        strings.add(returnMessage);
-        return error(returnCode, strings, payload);
+        return error(returnCode, returnMessage, payload);
     }
 
     public StandardResponseHttpEntity<T> build() {

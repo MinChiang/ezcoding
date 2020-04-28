@@ -21,5 +21,6 @@ public class CommonExceptionConstants {
     public static final FunctionLayerModule COMMON_TOKEN_PARSE_ERROR = new FunctionLayerModule(DEFAULT_MODULE_LAYER_MODULE, DEFAULT_FUNCTION_NAME, "7");
     public static final FunctionLayerModule COMMON_SERVICE_NOT_AVALIABLE_ERROR = new FunctionLayerModule(DEFAULT_MODULE_LAYER_MODULE, DEFAULT_FUNCTION_NAME, "8");
     public static final FunctionLayerModule COMMON_USER_IS_KICKED_OUT_ERROR = new FunctionLayerModule(DEFAULT_MODULE_LAYER_MODULE, DEFAULT_FUNCTION_NAME, "9");
+    public static final FunctionLayerModule COMMON_REMOTE_REQUEST_ERROR = new FunctionLayerModule(DEFAULT_MODULE_LAYER_MODULE, DEFAULT_FUNCTION_NAME, "10");
 
 }

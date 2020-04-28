@@ -3,14 +3,11 @@ package com.ezcoding.common.security.vote.voter;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author MinChiang
@@ -163,14 +160,6 @@ public class ExpressionMatcher implements IRoleExpression {
         List<String> result = new LinkedList<>();
         authorities.forEach(authority -> result.add(authority.getAuthority()));
         return result;
-    }
-
-    public static void main(String[] args) {
-        ExpressionMatcher expressionMatcher = new ExpressionMatcher("admin || (test && account)");
-        System.out.println(expressionMatcher.execution);
-        List<SimpleGrantedAuthority> collect = Stream.of("ROLE_ADMIN").map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-        boolean match = expressionMatcher.match(collect);
-        System.out.println(match);
     }
 
     public String getDefaultRolePrefix() {

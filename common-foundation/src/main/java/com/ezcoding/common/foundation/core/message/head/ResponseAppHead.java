@@ -3,8 +3,7 @@ package com.ezcoding.common.foundation.core.message.head;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 /**
  * @author MinChiang
@@ -16,7 +15,7 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
     @JsonProperty(value = "returnCode")
     protected String returnCode;
     @JsonProperty(value = "returnMessage")
-    protected List<String> returnMessages;
+    protected String returnMessage;
 
     public ResponseAppHead() {
     }
@@ -25,19 +24,9 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
         super(pageInfo);
     }
 
-    public ResponseAppHead(PageInfo pageInfo, String returnCode, List<String> returnMessages) {
-        this.returnCode = returnCode;
-        this.returnMessages = returnMessages;
-        this.pageInfo = pageInfo;
-    }
-
-    public ResponseAppHead(String returnCode, List<String> returnMessages) {
-        this(null, returnCode, returnMessages);
-    }
-
     public ResponseAppHead(PageInfo pageInfo, String returnCode, String returnMessage) {
         this.returnCode = returnCode;
-        this.returnMessages = Collections.singletonList(returnMessage);
+        this.returnMessage = returnMessage;
         this.pageInfo = pageInfo;
     }
 
@@ -53,12 +42,21 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
         this.returnCode = returnCode;
     }
 
-    public List<String> getReturnMessages() {
-        return returnMessages;
+    public String getReturnMessage() {
+        return returnMessage;
     }
 
-    public void setReturnMessages(List<String> returnMessages) {
-        this.returnMessages = returnMessages;
+    public void setReturnMessage(String returnMessage) {
+        this.returnMessage = returnMessage;
+    }
+
+    /**
+     * 判断是否成功
+     *
+     * @return 是否成功
+     */
+    public boolean isSuccess() {
+        return Optional.ofNullable(this.returnCode).map(SuccessAppHead.getDefaultSuccessCode()::equals).orElse(false);
     }
 
 }

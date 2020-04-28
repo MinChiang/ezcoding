@@ -35,11 +35,21 @@ public class DynamicConfigAttribute implements ConfigAttribute {
      */
     private String wholeName;
 
+    /**
+     * 描述
+     */
+    private String description;
+
     public DynamicConfigAttribute(String applicationName, String className, String methodName) {
         this.applicationName = applicationName;
         this.className = className;
         this.methodName = methodName;
         this.wholeName = (PREFIX + applicationName + SPLIT + className + SPLIT + methodName).toUpperCase();
+    }
+
+    public DynamicConfigAttribute(String applicationName, String className, String methodName, String description) {
+        this(applicationName, className, methodName);
+        this.description = description;
     }
 
     @Override
@@ -61,6 +71,10 @@ public class DynamicConfigAttribute implements ConfigAttribute {
 
     public String getWholeName() {
         return wholeName;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     @Override

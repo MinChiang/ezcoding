@@ -5,6 +5,7 @@ import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * @author MinChiang
@@ -26,6 +27,10 @@ public class ResponseMessage<T> extends AbstractMessage<T> implements Serializab
 
     public ResponseMessage(T payload) {
         this.payload = payload;
+    }
+
+    public boolean isSuccess() {
+        return Optional.ofNullable(this.appHead).map(ResponseAppHead::isSuccess).orElse(false);
     }
 
     public ResponseMessage(ResponseAppHead appHead, T payload) {

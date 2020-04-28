@@ -20,4 +20,11 @@ public @interface DynamicSecured {
      */
     String alias() default "";
 
+    /**
+     * 对应的入口描述
+     *
+     * @return 入口描述
+     */
+    String description() default "";
+
 }

@@ -13,9 +13,7 @@ import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -126,11 +124,6 @@ public class MessageBuilder implements IMessageBuilder {
     }
 
     @Override
-    public <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, List<String> returnMessage, T payload) {
-        return new ResponseMessage<>(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), payload);
-    }
-
-    @Override
     public <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException businessException, T payload) {
         return this.buildErrorResponseMessage(businessException.getIdentification(), businessException.getMessage(), payload);
     }
@@ -142,16 +135,12 @@ public class MessageBuilder implements IMessageBuilder {
 
     @Override
     public <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage) {
-        ArrayList<String> strings = new ArrayList<>(1);
-        strings.add(returnMessage);
-        return this.buildErrorResponseMessage(returnCode, strings, null);
+        return this.buildErrorResponseMessage(returnCode, returnMessage, null);
     }
 
     @Override
     public <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage, T payload) {
-        ArrayList<String> strings = new ArrayList<>(1);
-        strings.add(returnMessage);
-        return this.buildErrorResponseMessage(returnCode, strings, payload);
+        return this.buildErrorResponseMessage(returnCode, returnMessage, payload);
     }
 
     @Override

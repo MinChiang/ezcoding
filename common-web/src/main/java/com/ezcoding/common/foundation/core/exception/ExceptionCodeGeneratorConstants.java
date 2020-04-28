@@ -18,5 +18,6 @@ public class ExceptionCodeGeneratorConstants {
     public static final WebExceptionCodeGenerator GEN_COMMON_TOKEN_PARSE_ERROR = new WebExceptionCodeGenerator(COMMON_TOKEN_PARSE_ERROR, "COMMON_TOKEN_PARSE_ERROR");
     public static final WebExceptionCodeGenerator GEN_COMMON_SERVICE_NOT_AVALIABLE_ERROR = new WebExceptionCodeGenerator(COMMON_SERVICE_NOT_AVALIABLE_ERROR, "COMMON_SERVICE_NOT_AVALIABLE_ERROR");
     public static final WebExceptionCodeGenerator GEN_COMMON_USER_IS_KICKED_OUT_ERROR = new WebExceptionCodeGenerator(COMMON_USER_IS_KICKED_OUT_ERROR, "COMMON_USER_IS_KICKED_OUT_ERROR");
+    public static final WebExceptionCodeGenerator GEN_COMMON_REMOTE_REQUEST_ERROR = new WebExceptionCodeGenerator(COMMON_REMOTE_REQUEST_ERROR, "COMMON_REMOTE_REQUEST_ERROR");
 
 }
