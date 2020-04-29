@@ -8,7 +8,6 @@ import com.ezcoding.common.security.vote.voter.DynamicRoleVoter;
 import com.ezcoding.common.security.vote.voter.DynamicSecheduledTriggerProxy;
 import com.ezcoding.common.security.vote.voter.IDynamicRoleLoadable;
 import com.ezcoding.extend.spring.redis.DynamicConfigAttributeRedisSerializer;
-import com.ezcoding.extend.spring.security.voter.LocalDynamicRoleLoader;
 import com.ezcoding.extend.user.LocalUserProxy;
 import com.ezcoding.module.user.bean.model.VerificationInfo;
 import com.ezcoding.module.user.core.verification.RedisVerificationServiceImpl;
@@ -50,10 +49,10 @@ public class UserConfig {
     @Bean
     public IDynamicRoleLoadable localDynamicRoleLoader(@Value("${spring.application.name}") String applicationName,
                                                        @Qualifier("dynamicRoleTemplate") RedisTemplate<StandardRedisKey, String> redisTemplate,
+                                                       IDynamicRoleLoadable dynamicRoleLoadable,
                                                        DynamicRoleVoter dynamicRoleVoter) {
-        LocalDynamicRoleLoader localDynamicRoleLoader = new LocalDynamicRoleLoader(applicationName, redisTemplate);
         Long refreshSeconds = ezcodingSecurityConfigBean.getRefreshSeconds();
-        return new DynamicSecheduledTriggerProxy(localDynamicRoleLoader, dynamicRoleVoter).config(true, refreshSeconds == null ? 600 : refreshSeconds);
+        return new DynamicSecheduledTriggerProxy(dynamicRoleLoadable, dynamicRoleVoter).config(true, refreshSeconds == null ? 600 : refreshSeconds);
     }
 
     @Bean(name = "imageVerificationService")

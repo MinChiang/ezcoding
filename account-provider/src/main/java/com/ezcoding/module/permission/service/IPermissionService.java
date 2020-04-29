@@ -1,9 +1,11 @@
 package com.ezcoding.module.permission.service;
 
 import com.ezcoding.common.security.configattribute.DynamicConfigAttribute;
+import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author MinChiang
@@ -28,5 +30,13 @@ public interface IPermissionService {
      * @param expression             注册的表达式
      */
     void registerPermission(DynamicConfigAttribute dynamicConfigAttribute, String expression);
+
+    /**
+     * 加载对应微服务所属权限
+     *
+     * @param applicationName 微服务名称
+     * @return 微服务所属权限
+     */
+    Map<ConfigAttribute, String> loadPermissions(String applicationName);
 
 }
