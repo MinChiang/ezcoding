@@ -16,8 +16,6 @@ import com.ezcoding.redis.serializer.FunctionLayerModuleRedisSerializer;
 import com.ezcoding.redis.serializer.StandardRedisKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -47,9 +45,7 @@ public class UserConfig {
     }
 
     @Bean
-    public IDynamicRoleLoadable localDynamicRoleLoader(@Value("${spring.application.name}") String applicationName,
-                                                       @Qualifier("dynamicRoleTemplate") RedisTemplate<StandardRedisKey, String> redisTemplate,
-                                                       IDynamicRoleLoadable dynamicRoleLoadable,
+    public IDynamicRoleLoadable localDynamicRoleLoader(IDynamicRoleLoadable dynamicRoleLoadable,
                                                        DynamicRoleVoter dynamicRoleVoter) {
         Long refreshSeconds = ezcodingSecurityConfigBean.getRefreshSeconds();
         return new DynamicSecheduledTriggerProxy(dynamicRoleLoadable, dynamicRoleVoter).config(true, refreshSeconds == null ? 600 : refreshSeconds);
@@ -83,8 +79,8 @@ public class UserConfig {
         return template;
     }
 
-    @Bean(name = "dynamicRoleTemplate")
-    public RedisTemplate<StandardRedisKey, String> DynamicRoleRedisTemplate(RedisConnectionFactory factory) {
+    @Bean(name = "dynamicConfigAttributeExpressionRedisTemplate")
+    public RedisTemplate<StandardRedisKey, String> dynamicConfigAttributeExpressionRedisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<StandardRedisKey, String> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
         template.setKeySerializer(new FunctionLayerModuleRedisSerializer());

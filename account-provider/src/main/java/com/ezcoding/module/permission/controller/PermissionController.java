@@ -4,14 +4,15 @@ import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.StandardResponseHttpEntity;
 import com.ezcoding.common.foundation.core.message.StandardResponseMessageBuilder;
 import com.ezcoding.common.security.configattribute.DynamicConfigAttribute;
+import com.ezcoding.module.permission.bean.vo.DynamicConfigAttributeExpressionVO;
+import com.ezcoding.module.permission.bean.vo.DynamicConfigAttributeVO;
 import com.ezcoding.module.permission.service.IPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.ConfigAttribute;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author MinChiang
@@ -27,12 +28,27 @@ public class PermissionController {
     private IPermissionService permissionService;
 
     @PostMapping("{applicationName}")
-    public StandardResponseHttpEntity<Map<ConfigAttribute, String>> loadPermissions(@PathVariable String applicationName,
-                                                                                    @RequestBody RequestMessage<Set<DynamicConfigAttribute>> requestMessage
+    public StandardResponseHttpEntity<List<DynamicConfigAttributeExpressionVO>> loadPermissions(
+            @PathVariable String applicationName,
+            @RequestBody RequestMessage<HashSet<DynamicConfigAttributeVO>> requestMessage
     ) {
-        Set<DynamicConfigAttribute> payload = requestMessage.getPayload();
-        Map<ConfigAttribute, String> configAttributeStringMap = permissionService.loadPermissions(applicationName);
-        return StandardResponseMessageBuilder.<Map<ConfigAttribute, String>>ok().success(configAttributeStringMap).build();
+        //设置可推断的权限内容
+        Set<DynamicConfigAttributeVO> payload = requestMessage.getPayload();
+        if (payload.size() > 0) {
+            Set<DynamicConfigAttribute> inferablePermissions = payload.stream().map(vo -> DynamicConfigAttribute.create(vo.getAttribute())).collect(Collectors.toSet());
+            permissionService.registerInferablePermissions(applicationName, inferablePermissions);
+        }
+
+        //查找对应微服务接口权限
+        Map<DynamicConfigAttribute, String> configAttributeStringMap = permissionService.loadPermissions(applicationName);
+        List<DynamicConfigAttributeExpressionVO> list = new ArrayList<>(configAttributeStringMap.size());
+        for (Map.Entry<DynamicConfigAttribute, String> entry : configAttributeStringMap.entrySet()) {
+            DynamicConfigAttributeExpressionVO vo = new DynamicConfigAttributeExpressionVO();
+            vo.setDynamicConfigAttribute(entry.getKey());
+            vo.setExpression(entry.getValue());
+            list.add(vo);
+        }
+        return StandardResponseMessageBuilder.<List<DynamicConfigAttributeExpressionVO>>ok().success(list).build();
     }
 
 }

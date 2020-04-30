@@ -27,6 +27,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.MessageSource;
@@ -68,7 +69,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     private IUserProxyable userProxyable;
     @Autowired
     private EzcodingWebConfigBean ezcodingWebConfigBean;
-    @Resource(name = "defaultExceptionManager")
+    @Autowired
+    @Qualifier("defaultExceptionManager")
     private AbstractApplicationExceptionManager defaultExceptionManager;
     @Autowired
     private JsonMessageMethodProcessor jsonMessageMethodProcessor;

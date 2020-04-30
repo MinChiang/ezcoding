@@ -1,11 +1,8 @@
 package com.ezcoding.common.security.vote.voter;
 
 import com.ezcoding.common.security.configattribute.DynamicConfigAttribute;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.YamlMapFactoryBean;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.access.ConfigAttribute;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +14,6 @@ import java.util.Map;
  */
 public class LocalFileDynamicRoleLoader implements IDynamicRoleLoadable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LocalFileDynamicRoleLoader.class);
     private static final String FILE_NAME_SUFFIX = ".yaml";
 
     /**
@@ -36,12 +32,12 @@ public class LocalFileDynamicRoleLoader implements IDynamicRoleLoadable {
     }
 
     @Override
-    public Map<ConfigAttribute, String> load() {
+    public Map<DynamicConfigAttribute, String> load() {
         YamlMapFactoryBean yaml = new YamlMapFactoryBean();
         yaml.setResources(new ClassPathResource(this.fileName + FILE_NAME_SUFFIX));
         Map<String, Object> object = yaml.getObject();
 
-        Map<ConfigAttribute, String> dynamicConfigAttributes = new HashMap<>();
+        Map<DynamicConfigAttribute, String> dynamicConfigAttributes = new HashMap<>();
         if (object == null) {
             return dynamicConfigAttributes;
         }

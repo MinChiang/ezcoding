@@ -3,6 +3,7 @@ package com.ezcoding.common.security.vote.voter;
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.builder.RequestMessageBuilder;
+import com.ezcoding.common.security.configattribute.DynamicConfigAttribute;
 import com.ezcoding.common.security.metadatasource.DynamicAnnotationSecurityMetadataSource;
 import com.ezcoding.common.web.util.ResponseUtils;
 import org.springframework.security.access.ConfigAttribute;
@@ -33,6 +34,8 @@ public class RemoteDynamicRoleLoader implements IDynamicRoleLoadable {
      */
     private DynamicAnnotationSecurityMetadataSource dynamicAnnotationSecurityMetadataSource;
 
+    private RestTemplate restTemplate = new RestTemplate();
+
     public RemoteDynamicRoleLoader(String applicationName, String url, DynamicAnnotationSecurityMetadataSource dynamicAnnotationSecurityMetadataSource) {
         this.applicationName = applicationName;
         this.url = url;
@@ -40,10 +43,10 @@ public class RemoteDynamicRoleLoader implements IDynamicRoleLoadable {
     }
 
     @Override
-    public Map<ConfigAttribute, String> load() {
+    public Map<DynamicConfigAttribute, String> load() {
         Set<ConfigAttribute> attributes = dynamicAnnotationSecurityMetadataSource.acquireMetadata();
         RequestMessage<Set<ConfigAttribute>> requestMessage = RequestMessageBuilder.create(attributes).build();
-        ResponseMessage<Map<ConfigAttribute, String>> responseMessage = new RestTemplate().postForObject(this.url, requestMessage, ResponseMessage.class, this.applicationName);
+        ResponseMessage<Map<DynamicConfigAttribute, String>> responseMessage = restTemplate.postForObject(this.url, requestMessage, ResponseMessage.class, this.applicationName);
         return ResponseUtils.checkAndGetResult(responseMessage);
     }
 

@@ -21,6 +21,7 @@ import com.github.qcloudsms.SmsMultiSender;
 import com.github.qcloudsms.SmsMultiSenderResult;
 import com.github.qcloudsms.httpclient.HTTPException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,9 +45,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private SmsMultiSender smsMultiSender;
     @Autowired
     private SmsConfig smsConfig;
-    @Resource(name = "imageVerificationService")
+    @Autowired
+    @Qualifier("imageVerificationService")
     private RedisVerificationServiceImpl imageVerificationService;
-    @Resource(name = "numberVerificationService")
+    @Autowired
+    @Qualifier("numberVerificationService")
     private RedisVerificationServiceImpl numberVerificationService;
     @Autowired
     private KickOutHandler kickOutHandler;

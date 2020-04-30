@@ -13,6 +13,8 @@ import static com.ezcoding.common.constant.UserModuleConstants.ACCOUNT_PERMISSIO
 public class AccountPermissionModuleConstants {
 
     public static final FunctionLayerModule PERMISSION_PERSIST = new FunctionLayerModule(ACCOUNT_PERMISSION_MODULE_LAYER_MODULE, ACCOUNT_PERMISSION_MODEUL_NAME, "0");
+    public static final FunctionLayerModule PERMISSION_EXPRESSION_ERROR = new FunctionLayerModule(ACCOUNT_PERMISSION_MODULE_LAYER_MODULE, ACCOUNT_PERMISSION_MODEUL_NAME, "1");
+
 
 }
 

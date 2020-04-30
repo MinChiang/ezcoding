@@ -141,9 +141,9 @@ public class AuthorizationServerConfig implements AuthorizationServerConfigurer 
         oauth2AuthenticationEntryPoint.setExceptionRenderer(defaultOAuth2ExceptionRenderer);
 
         security
-                //关闭/oauth/token_key验证端点权限访问
-                .tokenKeyAccess("permitAll()")
-                //开启/oauth/check_token验证端点认证访问权限
+                //开启/oauth/token_key验证端点权限访问，获取token公钥的入口端点，详见TokenKeyEndpoint
+                .tokenKeyAccess("isAuthenticated()")
+                //开启/oauth/check_token验证端点认证访问权限，校验token是否合法的入口端点，详见CheckTokenEndpoint
                 .checkTokenAccess("isAuthenticated()")
                 .allowFormAuthenticationForClients()
                 .passwordEncoder(passwordEncoder)

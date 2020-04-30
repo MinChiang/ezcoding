@@ -33,7 +33,7 @@ public class DynamicConfigAttribute implements ConfigAttribute {
     /**
      * 全称
      */
-    private String wholeName;
+    private String attribute;
 
     /**
      * 描述
@@ -44,7 +44,7 @@ public class DynamicConfigAttribute implements ConfigAttribute {
         this.applicationName = applicationName;
         this.className = className;
         this.methodName = methodName;
-        this.wholeName = (PREFIX + applicationName + SPLIT + className + SPLIT + methodName).toUpperCase();
+        this.attribute = (PREFIX + applicationName + SPLIT + className + SPLIT + methodName).toUpperCase();
     }
 
     public DynamicConfigAttribute(String applicationName, String className, String methodName, String description) {
@@ -54,7 +54,7 @@ public class DynamicConfigAttribute implements ConfigAttribute {
 
     @Override
     public String getAttribute() {
-        return this.getWholeName();
+        return this.attribute;
     }
 
     public String getApplicationName() {
@@ -67,10 +67,6 @@ public class DynamicConfigAttribute implements ConfigAttribute {
 
     public String getMethodName() {
         return methodName;
-    }
-
-    public String getWholeName() {
-        return wholeName;
     }
 
     public String getDescription() {
@@ -86,16 +82,22 @@ public class DynamicConfigAttribute implements ConfigAttribute {
             return false;
         }
         DynamicConfigAttribute that = (DynamicConfigAttribute) o;
-        return Objects.equals(wholeName, that.wholeName);
+        return Objects.equals(attribute, that.attribute);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(wholeName);
+        return Objects.hash(attribute);
     }
 
-    public static DynamicConfigAttribute create(String wholeName) {
-        String string = StringUtils.substringAfter(wholeName.toUpperCase(), PREFIX);
+    /**
+     * 根据全称创建对象
+     *
+     * @param attribute 全称
+     * @return 对象
+     */
+    public static DynamicConfigAttribute create(String attribute) {
+        String string = StringUtils.substringAfter(attribute.toUpperCase(), PREFIX);
         if (StringUtils.isBlank(string)) {
             throw new IllegalArgumentException("不正确的表达式，必须为：" + PREFIX + "[applicationName]" + SPLIT + "[className]" + SPLIT + "[methodName]");
         }

@@ -1,6 +1,6 @@
 package com.ezcoding.common.security.vote.voter;
 
-import org.springframework.security.access.ConfigAttribute;
+import com.ezcoding.common.security.configattribute.DynamicConfigAttribute;
 
 import java.io.IOException;
 import java.util.Map;
@@ -17,6 +17,6 @@ public interface IDynamicRoleLoadable {
      *
      * @return 对应的系统权限
      */
-    Map<ConfigAttribute, String> load() throws IOException;
+    Map<DynamicConfigAttribute, String> load() throws IOException;
 
 }

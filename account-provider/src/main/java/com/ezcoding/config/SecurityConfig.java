@@ -11,6 +11,7 @@ import com.ezcoding.module.user.core.authentication.*;
 import com.ezcoding.module.user.core.verification.RedisVerificationServiceImpl;
 import com.ezcoding.module.user.dao.LoginInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,9 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private LoginInfoMapper loginInfoMapper;
     @Autowired
     private IBasicUserService basicUserService;
-    @Resource(name = "imageVerificationService")
+    @Autowired
+    @Qualifier("imageVerificationService")
     private RedisVerificationServiceImpl imageVerificationService;
-    @Resource(name = "numberVerificationService")
+    @Autowired
+    @Qualifier("numberVerificationService")
     private RedisVerificationServiceImpl numberVerificationService;
     @Autowired
     private ICustomUserDetailsService customUserDetailsService;

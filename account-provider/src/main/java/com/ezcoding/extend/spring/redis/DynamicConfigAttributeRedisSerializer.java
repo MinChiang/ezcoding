@@ -15,7 +15,7 @@ public class DynamicConfigAttributeRedisSerializer implements RedisSerializer<Dy
 
     @Override
     public byte[] serialize(DynamicConfigAttribute dynamicConfigAttribute) throws SerializationException {
-        return (dynamicConfigAttribute == null ? null : dynamicConfigAttribute.getWholeName().getBytes(StandardCharsets.UTF_8));
+        return (dynamicConfigAttribute == null ? null : dynamicConfigAttribute.getAttribute().getBytes(StandardCharsets.UTF_8));
     }
 
     @Override

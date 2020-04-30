@@ -1,5 +1,6 @@
 package com.ezcoding.common.security.vote.voter;
 
+import com.ezcoding.common.security.configattribute.DynamicConfigAttribute;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.access.ConfigAttribute;
 
@@ -30,8 +31,8 @@ public class DelegateDynamicRoleLoader implements IDynamicRoleLoadable {
     }
 
     @Override
-    public Map<ConfigAttribute, String> load() throws IOException {
-        Map<ConfigAttribute, String> result = new HashMap<>();
+    public Map<DynamicConfigAttribute, String> load() throws IOException {
+        Map<DynamicConfigAttribute, String> result = new HashMap<>();
         if (CollectionUtils.isEmpty(loadables)) {
             return result;
         }

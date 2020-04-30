@@ -54,7 +54,6 @@ public class ResourceServerAutoConfiguration extends ResourceServerConfigurerAda
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws IOException {
-//        DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
         StandardAccessTokenConverter accessTokenConverter = new StandardAccessTokenConverter();
         accessTokenConverter.setUserTokenConverter(new CustomUserAuthenticationConverter());
 

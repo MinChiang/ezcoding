@@ -67,6 +67,18 @@ public final class AssertUtils {
     }
 
     /**
+     * 断言任意对象不能为null
+     *
+     * @param objects           需要断言的对象
+     * @param exceptionSupplier 异常提供器
+     */
+    public static void mustNotNull(Object[] objects, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        for (Object object : objects) {
+            mustNotNull(object, exceptionSupplier);
+        }
+    }
+
+    /**
      * 断言字符串为空
      *
      * @param text              需要断言的字符串

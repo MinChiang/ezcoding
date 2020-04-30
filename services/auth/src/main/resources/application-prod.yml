@@ -33,7 +33,6 @@ spring:
       testOnBorrow: true
       testOnReturn: false
       maxOpenPreparedStatements: 10
-      removeAbandoned: true
       removeAbandonedTimeout: 1800
       logAbandoned: true
       filters: stat,wall,slf4j

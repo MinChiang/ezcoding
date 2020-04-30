@@ -66,4 +66,14 @@ public class DynamicRoleVoter implements AccessDecisionVoter<Object> {
         matcherHandlers.forEach((key, value) -> this.matcherHandlers.put(key, new ExpressionMatcher(value)));
     }
 
+    /**
+     * 增加匹配器
+     *
+     * @param key   键
+     * @param value 值
+     */
+    public void addExpressionHandler(ConfigAttribute key, String value) {
+        this.matcherHandlers.put(key, new ExpressionMatcher(value));
+    }
+
 }
