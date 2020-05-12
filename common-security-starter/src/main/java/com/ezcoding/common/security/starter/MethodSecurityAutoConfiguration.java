@@ -51,6 +51,7 @@ public class MethodSecurityAutoConfiguration extends GlobalMethodSecurityConfigu
         return accessDecisionManager;
     }
 
+    @Bean
     @Override
     protected MethodSecurityMetadataSource customMethodSecurityMetadataSource() {
         return new DynamicAnnotationSecurityMetadataSource(applicationName);

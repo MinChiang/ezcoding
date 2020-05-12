@@ -66,7 +66,7 @@ public class DynamicAnnotationSecurityMetadataSource extends AbstractFallbackMet
 
     @Override
     public Collection<ConfigAttribute> getAllConfigAttributes() {
-        return null;
+        return this.acquireMetadata();
     }
 
     public String getApplicationName() {
@@ -78,7 +78,7 @@ public class DynamicAnnotationSecurityMetadataSource extends AbstractFallbackMet
      *
      * @return 所有的配置信息
      */
-    public Set<ConfigAttribute> acquireMetadata() {
+    private Set<ConfigAttribute> acquireMetadata() {
         Set<ConfigAttribute> attributes = new HashSet<>();
         for (Collection<ConfigAttribute> value : mapping.values()) {
             attributes.addAll(value);

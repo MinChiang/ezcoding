@@ -9,6 +9,7 @@ import com.ezcoding.common.web.util.ResponseUtils;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,8 +45,8 @@ public class RemoteDynamicRoleLoader implements IDynamicRoleLoadable {
 
     @Override
     public Map<DynamicConfigAttribute, String> load() {
-        Set<ConfigAttribute> attributes = dynamicAnnotationSecurityMetadataSource.acquireMetadata();
-        RequestMessage<Set<ConfigAttribute>> requestMessage = RequestMessageBuilder.create(attributes).build();
+        Collection<ConfigAttribute> attributes = dynamicAnnotationSecurityMetadataSource.getAllConfigAttributes();
+        RequestMessage<Collection<ConfigAttribute>> requestMessage = RequestMessageBuilder.create(attributes).build();
         ResponseMessage<Map<DynamicConfigAttribute, String>> responseMessage = restTemplate.postForObject(this.url, requestMessage, ResponseMessage.class, this.applicationName);
         return ResponseUtils.checkAndGetResult(responseMessage);
     }
