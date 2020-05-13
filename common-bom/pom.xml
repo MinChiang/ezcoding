@@ -129,18 +129,20 @@
                 <artifactId>common-redis</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <!-- 高层次依赖 -->
-            <dependency>
-                <groupId>com.ezcoding</groupId>
-                <artifactId>account-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ezcoding</groupId>
-                <artifactId>account-provider</artifactId>
-                <version>${project.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <!-- 部署私服仓库 -->
+    <distributionManagement>
+        <!-- 快照仓库 -->
+        <snapshotRepository>
+            <id>ezcoding-snapshots</id>
+            <url>http://minchiang.cn:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        <!-- 正式仓库 -->
+        <repository>
+            <id>ezcoding-releases</id>
+            <url>http://minchiang.cn:8081/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
 </project>

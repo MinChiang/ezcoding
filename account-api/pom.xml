@@ -11,9 +11,9 @@
 
     <parent>
         <groupId>com.ezcoding</groupId>
-        <artifactId>ezcoding-parent</artifactId>
+        <artifactId>common-base</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../common-parent/common-base</relativePath>
     </parent>
 
     <dependencies>
