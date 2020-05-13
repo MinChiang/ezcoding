@@ -1,3 +1,0 @@
-userController:
-  test: "test"
-  test2: "admin || (test && account)"
