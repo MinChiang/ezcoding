@@ -13,6 +13,8 @@ import java.io.Serializable;
  */
 public class RequestSystemHead extends AbstractSystemHead implements Serializable {
 
+    private static String defaultConsumerId;
+
     public static final String CONSUMER_ID = "consumerId";
     public static final String CONSUMER_SEQUENCE_NO = "consumerSequenceNo";
     
@@ -24,12 +26,8 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
     protected String consumerSequenceNo;
 
     public RequestSystemHead() {
-        this(null, sequenceNoProducer.produce());
-    }
-
-    public RequestSystemHead(String consumerId, String consumerSequenceNo) {
-        this.consumerId = consumerId;
-        this.consumerSequenceNo = consumerSequenceNo;
+        this.consumerId = defaultConsumerId;
+        this.consumerSequenceNo = sequenceNoProducer.produce();
     }
 
     public static IUUIDProducer getSequenceNoProducer() {
@@ -54,6 +52,14 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
 
     public void setConsumerSequenceNo(String consumerSequenceNo) {
         this.consumerSequenceNo = consumerSequenceNo;
+    }
+
+    public static String getDefaultConsumerId() {
+        return defaultConsumerId;
+    }
+
+    public static void setDefaultConsumerId(String defaultConsumerId) {
+        RequestSystemHead.defaultConsumerId = defaultConsumerId;
     }
 
 }

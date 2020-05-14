@@ -12,7 +12,6 @@ import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 public class MetadataConfigBean {
 
     private Long dataCenterNo;
-    private String category;
     private Long categoryNo;
 
     private Integer applicationCodeLength = ApplicationLayerModule.getApplicationCodeLength();
@@ -28,14 +27,6 @@ public class MetadataConfigBean {
 
     public void setDataCenterNo(Long dataCenterNo) {
         this.dataCenterNo = dataCenterNo;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public Long getCategoryNo() {

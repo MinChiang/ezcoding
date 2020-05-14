@@ -12,30 +12,20 @@ import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeUUIDProducer;
-import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.util.ConvertUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.hibernate.validator.HibernateValidator;
-import org.hibernate.validator.spi.resourceloading.ResourceBundleLocator;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator;
-import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
 
-import javax.validation.MessageInterpolator;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
@@ -85,9 +75,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @ConditionalOnMissingBean(SnowflakeUUIDProducer.class)
     @Bean("snowflakeUUIDProducer")
     public IUUIDProducer snowflakeUuidProducer() {
-//        //高六位为微服务的服务对应序号，低4位为此类微服务对应的机器号
-//        int mechineId = (ApplicationUtils.getApplicationMetadata().getCategoryCode() << (SnowflakeUUIDProducer.MACHINE_BIT - GlobalConstants.Application.APPLICATION_CODE_BIT_LENGTH)) | ApplicationUtils.getApplicationMetadata().getCategoryNo();
-
         Optional<MetadataConfigBean> metadata = Optional.ofNullable(ezcodingFoundationConfigBean.getMetadata());
         Long datacenterId = metadata
                 .map(MetadataConfigBean::getDataCenterNo)
@@ -121,7 +108,10 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         instance.setDefaultMessageBuilder(jsonMessageBuilderHandler);
         instance.setDefaultReadCharset(Charset.forName(message.getReadCharset()));
         instance.setDefaultWriteCharset(Charset.forName(message.getWriteCharset()));
-//        instance.setDefaultConsumerId(this.defaultConsumerId);
+
+        Long categoryNo = ezcodingFoundationConfigBean.getMetadata().getCategoryNo();
+        Long dataCenterNo = ezcodingFoundationConfigBean.getMetadata().getDataCenterNo();
+        instance.setDefaultId(String.valueOf(dataCenterNo) + String.valueOf(categoryNo));
 
         instance.setDefaultReadMessageType(MessageTypeEnum.valueOf(message.getReadMessageType()));
         instance.setDefaultWriteMessageType(MessageTypeEnum.valueOf(message.getWriteMessageType()));

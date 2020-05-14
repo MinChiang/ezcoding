@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class ResponseSystemHead extends AbstractSystemHead implements Serializable {
 
     private static IUUIDProducer sequenceNoProducer = OriginalUUIDProducer.getInstance();
+    private static String defaultProviderId;
 
     public static final String PROVIDER_SEQUENCE_NO_KEY = "providerSequenceNo";
     public static final String PROVIDER_ID = "providerId";
@@ -24,13 +25,8 @@ public class ResponseSystemHead extends AbstractSystemHead implements Serializab
     protected String providerSequenceNo;
 
     public ResponseSystemHead() {
-        providerSequenceNo = sequenceNoProducer.produce();
-    }
-
-    @Deprecated
-    public ResponseSystemHead(String providerId, String providerSequenceNo) {
-        this.providerId = providerId;
-        this.providerSequenceNo = providerSequenceNo;
+        this.providerSequenceNo = sequenceNoProducer.produce();
+        this.providerId = defaultProviderId;
     }
 
     public static IUUIDProducer getSequenceNoProducer() {
@@ -55,6 +51,14 @@ public class ResponseSystemHead extends AbstractSystemHead implements Serializab
 
     public void setProviderSequenceNo(String providerSequenceNo) {
         this.providerSequenceNo = providerSequenceNo;
+    }
+
+    public static String getDefaultProviderId() {
+        return defaultProviderId;
+    }
+
+    public static void setDefaultProviderId(String defaultProviderId) {
+        ResponseSystemHead.defaultProviderId = defaultProviderId;
     }
 
 }

@@ -34,8 +34,6 @@ public class MessageBuilder implements IMessageBuilder {
     private MessageTypeEnum defaultReadMessageType = MessageTypeEnum.valueOf(DEFAULT_READ_MESSAGE_TYPE);
     private MessageTypeEnum defaultWriteMessageType = MessageTypeEnum.valueOf(DEFAULT_WRITE_MESSAGE_TYPE);
 
-    private String defaultConsumerId;
-
     private MessageBuilder() {
 
     }
@@ -90,7 +88,7 @@ public class MessageBuilder implements IMessageBuilder {
 
     @Override
     public <T> RequestMessage<T> buildRequestMessage(PageInfo pageInfo, T payload) {
-        return new RequestMessage<>(new RequestSystemHead(defaultConsumerId, idProducer.produce()), new RequestAppHead(pageInfo), payload);
+        return new RequestMessage<>(new RequestSystemHead(), new RequestAppHead(pageInfo), payload);
     }
 
     @Override
@@ -216,12 +214,9 @@ public class MessageBuilder implements IMessageBuilder {
         SuccessAppHead.setDefaultSuceessMessage(defaultSuccessResponseMessage);
     }
 
-    public String getDefaultConsumerId() {
-        return defaultConsumerId;
-    }
-
-    public void setDefaultConsumerId(String defaultConsumerId) {
-        this.defaultConsumerId = defaultConsumerId;
+    public void setDefaultId(String defaultId) {
+        RequestSystemHead.setDefaultConsumerId(defaultId);
+        ResponseSystemHead.setDefaultProviderId(defaultId);
     }
 
     private static final class MessageBuilderHolder {
