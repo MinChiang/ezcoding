@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>eureka</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>eureka</name>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>com.ezcoding.common</groupId>
         <artifactId>app-pom</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
         <relativePath>../app-pom</relativePath>
     </parent>
 
