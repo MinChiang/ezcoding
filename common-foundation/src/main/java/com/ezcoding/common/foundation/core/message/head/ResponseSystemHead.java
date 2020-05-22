@@ -13,6 +13,7 @@ import java.io.Serializable;
  */
 public class ResponseSystemHead extends AbstractSystemHead implements Serializable {
 
+    private static final long serialVersionUID = -7372043515415310976L;
     private static IdProduceable sequenceNoProducer = OriginalUuidProducer.getInstance();
     private static String defaultProviderId;
 

@@ -11,6 +11,7 @@ import java.io.Serializable;
  */
 public abstract class AbstractMessage<T> implements Message, Serializable {
 
+    private static final long serialVersionUID = -5655558365282029885L;
     public static final String BODY = "body";
 
     @JsonProperty(value = BODY)

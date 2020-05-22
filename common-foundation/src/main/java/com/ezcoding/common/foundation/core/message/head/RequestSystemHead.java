@@ -13,6 +13,7 @@ import java.io.Serializable;
  */
 public class RequestSystemHead extends AbstractSystemHead implements Serializable {
 
+    private static final long serialVersionUID = 7333737769389481420L;
     private static String defaultConsumerId;
 
     public static final String CONSUMER_ID = "consumerId";

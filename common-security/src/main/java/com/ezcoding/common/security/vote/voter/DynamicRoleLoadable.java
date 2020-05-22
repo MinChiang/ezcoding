@@ -16,6 +16,7 @@ public interface DynamicRoleLoadable {
      * 根据系统号加载对应的权限
      *
      * @return 对应的系统权限
+     * @throws IOException IO异常
      */
     Map<DynamicConfigAttribute, String> load() throws IOException;
 

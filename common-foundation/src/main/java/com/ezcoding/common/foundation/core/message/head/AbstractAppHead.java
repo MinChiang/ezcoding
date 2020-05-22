@@ -11,6 +11,8 @@ import java.io.Serializable;
  */
 public abstract class AbstractAppHead implements Head, Serializable {
 
+    private static final long serialVersionUID = -2411208071368843464L;
+
     @JsonUnwrapped
     protected PageInfo pageInfo;
 

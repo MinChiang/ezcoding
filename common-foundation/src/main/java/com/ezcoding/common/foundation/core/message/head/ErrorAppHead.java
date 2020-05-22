@@ -13,6 +13,7 @@ import static com.ezcoding.common.foundation.core.application.ModuleNameable.DET
  */
 public class ErrorAppHead extends ResponseAppHead implements Serializable {
 
+    private static final long serialVersionUID = -1370948908683721517L;
     protected static String defaultErrorMessage = "发生未知错误";
     protected static String defaultErrorCode = StringUtils.repeat("9", DETAIL_CODE_LENGHT);
 

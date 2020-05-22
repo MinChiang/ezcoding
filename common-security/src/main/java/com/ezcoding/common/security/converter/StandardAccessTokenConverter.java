@@ -1,4 +1,4 @@
-package com.ezcoding.common.security.accessTokenConverter;
+package com.ezcoding.common.security.converter;
 
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;

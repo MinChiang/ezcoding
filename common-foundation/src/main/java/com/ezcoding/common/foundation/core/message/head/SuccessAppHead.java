@@ -13,6 +13,7 @@ import static com.ezcoding.common.foundation.core.application.ModuleNameable.DET
  */
 public class SuccessAppHead extends ResponseAppHead implements Serializable {
 
+    private static final long serialVersionUID = -3547811863595703652L;
     protected static String defaultSuceessMessage = "处理成功";
     protected static String defaultSuccessCode = StringUtils.repeat("0", DETAIL_CODE_LENGHT);
 

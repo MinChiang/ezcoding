@@ -1,6 +1,6 @@
 package com.ezcoding.common.security.starter;
 
-import com.ezcoding.common.security.accessTokenConverter.StandardAccessTokenConverter;
+import com.ezcoding.common.security.converter.StandardAccessTokenConverter;
 import com.ezcoding.common.security.authority.CustomUserAuthenticationConverter;
 import com.ezcoding.common.security.entrypoint.Oauth2AuthenticationEntryPoint;
 import org.apache.commons.io.IOUtils;

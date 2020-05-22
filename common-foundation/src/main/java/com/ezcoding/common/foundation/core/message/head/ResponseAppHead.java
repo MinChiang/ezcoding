@@ -12,6 +12,8 @@ import java.util.Optional;
  */
 public class ResponseAppHead extends AbstractAppHead implements Serializable {
 
+    private static final long serialVersionUID = 4369838938491033889L;
+
     @JsonProperty(value = "returnCode")
     protected String returnCode;
     @JsonProperty(value = "returnMessage")

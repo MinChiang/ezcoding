@@ -11,9 +11,9 @@ import java.io.Serializable;
  */
 public class AbstractSystemHead implements Head, Serializable {
 
+    private static final long serialVersionUID = 9212375428640216675L;
     public static final String TRANSACTION_DATE = "transactionDate";
     public static final String VERSION = "version";
-
     public static final String DEFAULT_VERSION = "1.0";
 
     @JsonProperty(value = TRANSACTION_DATE)

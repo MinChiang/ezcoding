@@ -12,6 +12,8 @@ import java.io.Serializable;
  */
 public class VerificationCode implements Serializable {
 
+    private static final long serialVersionUID = 43433697265003439L;
+
     /**
      * 真实的验证码
      */

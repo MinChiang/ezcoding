@@ -11,6 +11,8 @@ import java.io.Serializable;
  */
 public class PageInfo implements Cloneable, Serializable {
 
+    private static final long serialVersionUID = -2554220564325298703L;
+
     /**
      * 当前页码
      */
