@@ -15,6 +15,7 @@ public interface UserDepartmentMapper extends BaseMapper<UserDepartment> {
 
     /**
      * 删除对应用户——部门绑定关系
+     *
      * @param users 需要删除绑定关系的用户主键
      */
     void deleteByUserCode(@Param("users") Collection<String> users);

@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ezcoding.facility.module.message.dao.PersonalMessageMapper;
 import com.ezcoding.facility.module.message.bean.model.PersonalMessage;
 import com.ezcoding.facility.module.message.bean.model.PersonalMessageSearchCondition;
+import com.ezcoding.facility.module.message.dao.PersonalMessageMapper;
 import com.ezcoding.facility.module.message.service.IPersonalMessageService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -82,4 +82,5 @@ public class PersonalMessageServiceImpl extends ServiceImpl<PersonalMessageMappe
         personalMessage.setReceiver(receiver);
         baseMapper.delete(Wrappers.query(personalMessage));
     }
+
 }

@@ -1,6 +1,5 @@
 package com.ezcoding.auth.module.resource.bean.model;
 
-import com.ezcoding.common.foundation.core.constant.GlobalConstants;
 import com.ezcoding.common.foundation.core.exception.CommonApplicationExceptionConstants;
 import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.sdk.auth.resource.bean.model.ResourceTypeEnum;

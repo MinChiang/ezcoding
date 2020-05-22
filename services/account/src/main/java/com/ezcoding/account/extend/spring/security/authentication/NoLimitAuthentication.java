@@ -40,4 +40,5 @@ public class NoLimitAuthentication extends AbstractLoginInfoPreservableAuthentic
     public void setCode(String code) {
         this.code = code;
     }
+
 }

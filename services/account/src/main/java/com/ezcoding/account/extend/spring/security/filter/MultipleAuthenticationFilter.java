@@ -160,4 +160,5 @@ public class MultipleAuthenticationFilter extends AbstractAuthenticationProcessi
     public void setAuthenticationService(IAuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
+
 }

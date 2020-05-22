@@ -15,7 +15,7 @@ public class RequestMessage<T> extends AbstractMessage<T> implements Serializabl
 
     public static final String SYS_HEAD = "sysHead";
     public static final String APP_HEAD = "appHead";
-    
+
     @JsonProperty(value = SYS_HEAD)
     protected RequestSystemHead systemHead;
     @JsonProperty(value = APP_HEAD)

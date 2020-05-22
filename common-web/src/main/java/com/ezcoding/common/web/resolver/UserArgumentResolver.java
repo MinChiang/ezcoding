@@ -1,11 +1,11 @@
 package com.ezcoding.common.web.resolver;
 
-import com.ezcoding.common.core.user.model.UserDetailInformationIdentifiable;
 import com.ezcoding.common.core.user.UserIdentifiable;
-import com.ezcoding.common.web.user.CompositeUserLoader;
 import com.ezcoding.common.core.user.UserLoadable;
-import com.ezcoding.common.web.user.UserProxyable;
+import com.ezcoding.common.core.user.model.UserDetailInformationIdentifiable;
+import com.ezcoding.common.web.user.CompositeUserLoader;
 import com.ezcoding.common.web.user.UserProxy;
+import com.ezcoding.common.web.user.UserProxyable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

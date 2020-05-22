@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageListener {
 
-//    @KafkaListener(topics = "example")
+    //    @KafkaListener(topics = "example")
     public void listen(ConsumerRecord<?, ?> record) {
         System.out.println("key值为：" + record.key());
         System.out.println("value值为：" + record.value());

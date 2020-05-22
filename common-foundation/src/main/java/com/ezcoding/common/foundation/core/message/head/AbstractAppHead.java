@@ -28,4 +28,5 @@ public abstract class AbstractAppHead implements Head, Serializable {
     public void setPageInfo(PageInfo pageInfo) {
         this.pageInfo = pageInfo;
     }
+
 }

@@ -8,7 +8,6 @@ import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -78,4 +77,5 @@ public class Area implements Serializable {
      * 纬度
      */
     private BigDecimal lat;
+
 }

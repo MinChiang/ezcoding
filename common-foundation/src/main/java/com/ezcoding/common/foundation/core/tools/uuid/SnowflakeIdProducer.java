@@ -112,4 +112,5 @@ public class SnowflakeIdProducer implements IdProduceable {
                 | machineId << MACHINE_LEFT
                 | sequence);
     }
+
 }

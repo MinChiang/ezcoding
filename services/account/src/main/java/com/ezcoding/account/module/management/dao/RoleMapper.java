@@ -1,7 +1,6 @@
 package com.ezcoding.account.module.management.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ezcoding.account.module.management.bean.model.Group;
 import com.ezcoding.account.module.management.bean.model.Role;
 
 /**

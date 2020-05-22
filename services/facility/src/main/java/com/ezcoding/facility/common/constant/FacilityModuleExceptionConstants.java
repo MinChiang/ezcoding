@@ -27,5 +27,4 @@ public class FacilityModuleExceptionConstants {
      */
     public static final String COS_MODULE = "0004";
 
-
 }

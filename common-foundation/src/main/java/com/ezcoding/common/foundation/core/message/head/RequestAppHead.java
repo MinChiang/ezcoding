@@ -15,4 +15,5 @@ public class RequestAppHead extends AbstractAppHead implements Serializable {
     public RequestAppHead(PageInfo pageInfo) {
         super(pageInfo);
     }
+
 }

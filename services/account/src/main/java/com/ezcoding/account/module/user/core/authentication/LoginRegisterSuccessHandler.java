@@ -1,7 +1,7 @@
 package com.ezcoding.account.module.user.core.authentication;
 
-import com.ezcoding.sdk.account.user.bean.model.LoginRegisterTypeEnum;
 import com.ezcoding.account.module.user.bean.model.User;
+import com.ezcoding.sdk.account.user.bean.model.LoginRegisterTypeEnum;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -31,4 +31,5 @@ public class LoginRegisterSuccessHandler implements IRegisterSuccessHandler {
     public void setCompositeAuthenticationService(CompositeAuthenticationServiceImpl compositeAuthenticationService) {
         this.compositeAuthenticationService = compositeAuthenticationService;
     }
+
 }

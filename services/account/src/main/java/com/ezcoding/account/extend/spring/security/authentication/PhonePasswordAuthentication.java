@@ -1,7 +1,6 @@
 package com.ezcoding.account.extend.spring.security.authentication;
 
 import com.ezcoding.base.web.extend.spring.security.authentication.AbstractLoginInfoPreservableAuthentication;
-import com.ezcoding.sdk.account.user.bean.model.LoginRegisterTypeEnum;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;

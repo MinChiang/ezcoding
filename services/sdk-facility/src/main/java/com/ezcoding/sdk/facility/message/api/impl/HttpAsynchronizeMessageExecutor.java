@@ -10,8 +10,6 @@ import com.ezcoding.sdk.facility.message.bean.dto.SubscriptionDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.concurrent.*;
-
 /**
  * @author MinChiang
  * @version 1.0.0

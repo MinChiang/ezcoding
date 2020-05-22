@@ -10,4 +10,5 @@ import javax.validation.Payload;
  * @date 2018-11-05 14:24
  */
 public class Default implements Payload {
+
 }

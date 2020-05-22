@@ -13,4 +13,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MessageReadRecordServiceImpl extends ServiceImpl<MessageReadRecordMapper, MessageReadRecord> implements IMessageReadRecordService {
+
 }

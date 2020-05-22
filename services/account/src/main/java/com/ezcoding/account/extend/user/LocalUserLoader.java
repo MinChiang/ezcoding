@@ -1,12 +1,12 @@
 package com.ezcoding.account.extend.user;
 
+import com.ezcoding.account.module.user.service.IUserService;
 import com.ezcoding.base.web.extend.spring.security.authentication.IUserLoadable;
 import com.ezcoding.common.foundation.util.BeanUtils;
 import com.ezcoding.sdk.account.user.api.IUser;
 import com.ezcoding.sdk.account.user.bean.dto.UserDTO;
 import com.ezcoding.sdk.account.user.bean.dto.UserDetailResultDTO;
 import com.ezcoding.sdk.account.user.constant.AccountUserApiConstants;
-import com.ezcoding.account.module.user.service.IUserService;
 
 /**
  * @author MinChiang

@@ -35,7 +35,6 @@ public class EzcodingSecurityConfigBean {
 
     private String dynamicRoleLoadUrl;
 
-
     public String getPrivateKey() {
         return privateKey;
     }

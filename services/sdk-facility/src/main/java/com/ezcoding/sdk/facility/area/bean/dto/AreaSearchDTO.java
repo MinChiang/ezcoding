@@ -1,8 +1,8 @@
 package com.ezcoding.sdk.facility.area.bean.dto;
 
-import com.ezcoding.sdk.facility.area.constant.FacilityAreaValidationConstants;
 import com.ezcoding.sdk.facility.area.bean.model.LevelEnum;
 import com.ezcoding.sdk.facility.area.constant.FacilityAreaConstants;
+import com.ezcoding.sdk.facility.area.constant.FacilityAreaValidationConstants;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 

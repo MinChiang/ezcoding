@@ -46,4 +46,5 @@ public class AccountPasswordAuthenticationServiceImpl extends AbstractAuthentica
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
+
 }

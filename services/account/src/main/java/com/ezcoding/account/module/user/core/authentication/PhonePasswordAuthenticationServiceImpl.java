@@ -1,12 +1,12 @@
 package com.ezcoding.account.module.user.core.authentication;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.ezcoding.base.web.extend.spring.security.authentication.AbstractLoginInfoPreservableAuthentication;
-import com.ezcoding.common.foundation.core.exception.CommonApplicationExceptionConstants;
-import com.ezcoding.common.foundation.util.AssertUtils;
 import com.ezcoding.account.extend.spring.security.authentication.PhonePasswordAuthentication;
 import com.ezcoding.account.module.user.bean.model.User;
 import com.ezcoding.account.module.user.exception.UserExceptionConstants;
+import com.ezcoding.base.web.extend.spring.security.authentication.AbstractLoginInfoPreservableAuthentication;
+import com.ezcoding.common.foundation.core.exception.CommonApplicationExceptionConstants;
+import com.ezcoding.common.foundation.util.AssertUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -46,4 +46,5 @@ public class PhonePasswordAuthenticationServiceImpl extends AbstractAuthenticati
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
+
 }

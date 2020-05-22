@@ -120,4 +120,5 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     public void setUseCache(boolean useCache) {
         this.useCache = useCache;
     }
+
 }

@@ -2,8 +2,6 @@ package com.ezcoding.auth.module.resource.bean.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.util.PathMatcher;
 
 /**
  * @author MinChiang
@@ -13,7 +11,6 @@ import org.springframework.util.PathMatcher;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AccessResource extends AbstractResource {
-
 
     /**
      * 对应保存的可匹配地址

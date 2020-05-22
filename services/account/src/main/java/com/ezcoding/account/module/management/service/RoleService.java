@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 import static com.ezcoding.account.module.management.exception.ManagementExceptionConstants.ROLES_NOT_VALID;

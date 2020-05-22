@@ -59,4 +59,5 @@ public class SmsConfig {
     public void setSmsSign(String smsSign) {
         this.smsSign = smsSign;
     }
+
 }

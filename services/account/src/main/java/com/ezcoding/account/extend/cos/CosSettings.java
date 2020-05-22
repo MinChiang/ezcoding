@@ -45,4 +45,5 @@ public class CosSettings {
     public void setWholeBasePath(String wholeBasePath) {
         this.wholeBasePath = wholeBasePath;
     }
+
 }

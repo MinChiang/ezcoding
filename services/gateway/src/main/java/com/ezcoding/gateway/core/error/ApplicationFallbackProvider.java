@@ -99,4 +99,5 @@ public class ApplicationFallbackProvider implements FallbackProvider {
     public void setMessage(String message) {
         this.message = message;
     }
+
 }

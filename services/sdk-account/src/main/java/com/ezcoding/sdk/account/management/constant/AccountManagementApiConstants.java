@@ -1,7 +1,5 @@
 package com.ezcoding.sdk.account.management.constant;
 
-import com.ezcoding.sdk.account.user.bean.model.UserFieldDetailEnum;
-
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -13,7 +11,6 @@ public class AccountManagementApiConstants {
     public static final String GROUP_API = "group";
     public static final String ROLE_API = "role";
 
-
     public static final String LIST_PARENT_DEPARTMENT = "listParentDepartment";
     public static final String CREATE_DEPARTMENT = "createDepartment";
     public static final String ADD_USERS = "addUsers";
@@ -23,6 +20,5 @@ public class AccountManagementApiConstants {
 
     public static final String CREATE_ROLE = "createRole";
     public static final String FIND_ALL_ROLES = "findAllRoles";
-
 
 }

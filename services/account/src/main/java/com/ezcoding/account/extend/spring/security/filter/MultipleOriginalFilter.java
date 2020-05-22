@@ -152,4 +152,5 @@ public class MultipleOriginalFilter extends GenericFilterBean {
     public void setRequiresAuthenticationRequestMatcher(RequestMatcher requiresAuthenticationRequestMatcher) {
         this.requiresAuthenticationRequestMatcher = requiresAuthenticationRequestMatcher;
     }
+
 }

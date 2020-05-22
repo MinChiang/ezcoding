@@ -12,5 +12,4 @@ public class FacilityAreaApiConstants {
     public static final String SEARCH_AREA = "searchArea";
     public static final String SEARCH_AREA_BY_IDS = "searchAreaByIds";
 
-
 }

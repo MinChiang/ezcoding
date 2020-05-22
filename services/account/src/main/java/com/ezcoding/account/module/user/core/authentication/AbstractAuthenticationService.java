@@ -162,4 +162,5 @@ public abstract class AbstractAuthenticationService implements IAuthenticationSe
     public void setLoginHandlers(List<ILoginSuccessHandler> loginHandlers) {
         this.loginHandlers = loginHandlers;
     }
+
 }

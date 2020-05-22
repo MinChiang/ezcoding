@@ -12,7 +12,7 @@ import java.io.Serializable;
 public abstract class AbstractMessage<T> implements Message, Serializable {
 
     public static final String BODY = "body";
-    
+
     @JsonProperty(value = BODY)
     protected T payload;
 

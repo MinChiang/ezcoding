@@ -9,4 +9,5 @@ import com.ezcoding.facility.module.message.bean.model.Subscription;
  * @date 2019-03-10 10:44
  */
 public interface SubscriptionMapper extends BaseMapper<Subscription> {
+
 }

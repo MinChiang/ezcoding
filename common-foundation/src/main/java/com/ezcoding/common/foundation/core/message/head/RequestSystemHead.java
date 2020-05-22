@@ -17,7 +17,7 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
 
     public static final String CONSUMER_ID = "consumerId";
     public static final String CONSUMER_SEQUENCE_NO = "consumerSequenceNo";
-    
+
     private static IdProduceable sequenceNoProducer = OriginalUuidProducer.getInstance();
 
     @JsonProperty(value = CONSUMER_ID)

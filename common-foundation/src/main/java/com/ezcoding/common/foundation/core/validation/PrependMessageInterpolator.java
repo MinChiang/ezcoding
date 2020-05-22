@@ -57,7 +57,7 @@ public class PrependMessageInterpolator extends ResourceBundleMessageInterpolato
         }
 
         //需要作为目标插值代理进行插值替换
-        Class<?> clz = ((ConstraintDescriptorImpl) context.getConstraintDescriptor()).getAnnotationType();
+        Class<?> clz = ((ConstraintDescriptorImpl<?>) context.getConstraintDescriptor()).getAnnotationType();
         if (clz == null) {
             return messageTemplate;
         }

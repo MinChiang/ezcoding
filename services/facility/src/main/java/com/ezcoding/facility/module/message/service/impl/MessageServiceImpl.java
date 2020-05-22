@@ -6,15 +6,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ezcoding.common.foundation.core.exception.CommonApplicationExceptionConstants;
 import com.ezcoding.common.foundation.util.AssertUtils;
-import com.ezcoding.facility.module.message.dao.MessageMapper;
-import com.ezcoding.facility.module.message.dao.SubscriptionMapper;
-import com.ezcoding.sdk.facility.message.bean.dto.MessageSearchDTO;
 import com.ezcoding.facility.module.message.bean.model.Message;
 import com.ezcoding.facility.module.message.bean.model.MessageReadRecord;
 import com.ezcoding.facility.module.message.bean.model.MessageSearchCondition;
 import com.ezcoding.facility.module.message.bean.model.Subscription;
+import com.ezcoding.facility.module.message.dao.MessageMapper;
+import com.ezcoding.facility.module.message.dao.SubscriptionMapper;
 import com.ezcoding.facility.module.message.service.IMessageReadRecordService;
 import com.ezcoding.facility.module.message.service.IMessageService;
+import com.ezcoding.sdk.facility.message.bean.dto.MessageSearchDTO;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,4 +106,5 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
         page.setRecords(messageSearchDTOs);
         return page;
     }
+
 }

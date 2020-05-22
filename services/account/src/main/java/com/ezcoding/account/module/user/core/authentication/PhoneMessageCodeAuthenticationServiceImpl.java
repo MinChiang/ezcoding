@@ -1,14 +1,14 @@
 package com.ezcoding.account.module.user.core.authentication;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.ezcoding.account.extend.spring.security.authentication.PhoneMessageCodeAuthentication;
+import com.ezcoding.account.module.user.bean.model.CheckVerificationInfo;
+import com.ezcoding.account.module.user.bean.model.User;
 import com.ezcoding.account.module.user.core.verification.RedisVerificationServiceImpl;
+import com.ezcoding.account.module.user.exception.UserExceptionConstants;
 import com.ezcoding.base.web.extend.spring.security.authentication.AbstractLoginInfoPreservableAuthentication;
 import com.ezcoding.common.foundation.core.exception.CommonApplicationExceptionConstants;
 import com.ezcoding.common.foundation.util.AssertUtils;
-import com.ezcoding.account.module.user.bean.model.CheckVerificationInfo;
-import com.ezcoding.account.extend.spring.security.authentication.PhoneMessageCodeAuthentication;
-import com.ezcoding.account.module.user.bean.model.User;
-import com.ezcoding.account.module.user.exception.UserExceptionConstants;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -55,4 +55,5 @@ public class PhoneMessageCodeAuthenticationServiceImpl extends AbstractAuthentic
     public void setNumberVerificationService(RedisVerificationServiceImpl numberVerificationService) {
         this.numberVerificationService = numberVerificationService;
     }
+
 }

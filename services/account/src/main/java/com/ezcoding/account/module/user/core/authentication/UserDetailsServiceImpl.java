@@ -2,15 +2,13 @@ package com.ezcoding.account.module.user.core.authentication;
 
 import com.ezcoding.account.module.management.service.RoleService;
 import com.ezcoding.account.module.user.bean.model.User;
+import com.ezcoding.account.module.user.core.authentication.ICustomUserDetailsService;
 import com.ezcoding.account.module.user.dao.UserMapper;
 import com.ezcoding.account.module.user.exception.UserExceptionConstants;
-import com.ezcoding.account.module.user.core.authentication.ICustomUserDetailsService;
 import com.ezcoding.common.foundation.util.AssertUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 

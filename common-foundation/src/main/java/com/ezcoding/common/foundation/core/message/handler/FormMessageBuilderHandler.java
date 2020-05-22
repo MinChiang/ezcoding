@@ -48,4 +48,5 @@ public class FormMessageBuilderHandler implements MessageBuilderHandleable {
     public byte[] message2Byte(ResponseMessage<?> message, Charset charset) throws IOException {
         return new byte[0];
     }
+
 }

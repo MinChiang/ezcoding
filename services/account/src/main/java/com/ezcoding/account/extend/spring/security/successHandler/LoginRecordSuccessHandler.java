@@ -68,4 +68,5 @@ public class LoginRecordSuccessHandler implements AuthenticationSuccessHandler {
     public void setLoginInfoMapper(LoginInfoMapper loginInfoMapper) {
         this.loginInfoMapper = loginInfoMapper;
     }
+
 }

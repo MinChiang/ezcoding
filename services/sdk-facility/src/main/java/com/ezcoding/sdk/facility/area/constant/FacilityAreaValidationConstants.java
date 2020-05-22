@@ -8,6 +8,7 @@ package com.ezcoding.sdk.facility.area.constant;
 public class FacilityAreaValidationConstants {
 
     public interface SearchArea {
+
     }
 
 }

@@ -93,4 +93,5 @@ public class RedisVerificationServiceImpl implements IVerificationService {
     public void setReceiptProducer(IUUIDProducer receiptProducer) {
         this.receiptProducer = receiptProducer;
     }
+
 }

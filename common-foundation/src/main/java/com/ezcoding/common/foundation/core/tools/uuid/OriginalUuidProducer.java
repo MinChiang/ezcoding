@@ -27,7 +27,9 @@ public class OriginalUuidProducer implements IdProduceable {
     }
 
     private static final class OriginalUUIDProducerHolder {
+
         private static OriginalUuidProducer INSTANCE = new OriginalUuidProducer();
+
     }
 
 }

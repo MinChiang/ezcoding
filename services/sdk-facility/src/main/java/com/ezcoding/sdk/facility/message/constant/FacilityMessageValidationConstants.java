@@ -8,9 +8,11 @@ package com.ezcoding.sdk.facility.message.constant;
 public class FacilityMessageValidationConstants {
 
     public interface Subscribe {
+
     }
 
     public interface Record {
+
     }
 
 }

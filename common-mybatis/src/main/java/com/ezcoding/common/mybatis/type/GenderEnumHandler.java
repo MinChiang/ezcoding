@@ -1,6 +1,5 @@
 package com.ezcoding.common.mybatis.type;
 
-import com.ezcoding.common.core.user.model.DeviceTypeEnum;
 import com.ezcoding.common.core.user.model.GenderEnum;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;

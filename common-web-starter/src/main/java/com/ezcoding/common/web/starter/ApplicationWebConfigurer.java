@@ -1,9 +1,9 @@
 package com.ezcoding.common.web.starter;
 
+import com.ezcoding.common.core.user.UserLoadable;
 import com.ezcoding.common.web.filter.ApplicationContextValueFetchable;
 import com.ezcoding.common.web.resolver.parameter.RequestMessageParameterResolvable;
 import com.ezcoding.common.web.resolver.result.ResponseMessageReturnValueResolvable;
-import com.ezcoding.common.core.user.UserLoadable;
 
 import java.util.List;
 

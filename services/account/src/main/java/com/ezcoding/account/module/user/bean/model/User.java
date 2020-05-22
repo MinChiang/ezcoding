@@ -241,4 +241,5 @@ public class User extends BaseModel implements IUser, UserDetails, Serializable 
         this.authorities.forEach(a -> result.add(a.getAuthority()));
         return result;
     }
+
 }

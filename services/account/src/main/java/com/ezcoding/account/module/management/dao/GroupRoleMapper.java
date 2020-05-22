@@ -2,10 +2,6 @@ package com.ezcoding.account.module.management.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ezcoding.account.module.management.bean.model.GroupRole;
-import com.ezcoding.account.module.management.bean.model.Role;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.Collection;
 
 /**
  * @author MinChiang

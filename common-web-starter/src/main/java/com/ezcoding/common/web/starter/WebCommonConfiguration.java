@@ -5,10 +5,10 @@ import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuild
 import com.ezcoding.common.web.error.ApplicationErrorController;
 import com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes;
 import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
-import com.ezcoding.common.web.filter.FilterConstants;
 import com.ezcoding.common.web.filter.ApplicationContextValueFetchable;
-import com.ezcoding.common.web.user.UserProxyable;
+import com.ezcoding.common.web.filter.FilterConstants;
 import com.ezcoding.common.web.user.RemoteUserProxy;
+import com.ezcoding.common.web.user.UserProxyable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;

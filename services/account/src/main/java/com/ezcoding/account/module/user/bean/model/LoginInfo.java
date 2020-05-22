@@ -1,6 +1,5 @@
 package com.ezcoding.account.module.user.bean.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ezcoding.sdk.account.user.bean.model.DeviceTypeEnum;

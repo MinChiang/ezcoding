@@ -43,4 +43,5 @@ public class Role extends BaseModel implements GrantedAuthority, Serializable {
     public String getAuthority() {
         return this.code;
     }
+
 }

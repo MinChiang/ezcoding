@@ -9,7 +9,6 @@ import com.ezcoding.sdk.facility.area.bean.model.LevelEnum;
 import java.util.Collection;
 import java.util.Set;
 
-
 /**
  * @author MinChiang
  * @version 1.0.0

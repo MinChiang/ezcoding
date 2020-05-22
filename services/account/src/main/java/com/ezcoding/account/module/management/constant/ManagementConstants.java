@@ -6,4 +6,5 @@ package com.ezcoding.account.module.management.constant;
  * @date 2019-09-20 9:43
  */
 public class ManagementConstants {
+
 }

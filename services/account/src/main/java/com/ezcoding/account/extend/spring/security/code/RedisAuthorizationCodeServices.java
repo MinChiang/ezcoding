@@ -55,4 +55,5 @@ public class RedisAuthorizationCodeServices extends RandomValueAuthorizationCode
     public void setDefaultExpireTime(int defaultExpireTime) {
         this.defaultExpireTime = defaultExpireTime;
     }
+
 }

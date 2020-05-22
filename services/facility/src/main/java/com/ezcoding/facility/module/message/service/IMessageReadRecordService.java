@@ -9,4 +9,5 @@ import com.ezcoding.facility.module.message.bean.model.MessageReadRecord;
  * @date 2019-02-20 14:24
  */
 public interface IMessageReadRecordService extends IService<MessageReadRecord> {
+
 }
