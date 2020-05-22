@@ -30,38 +30,40 @@ public class StandardResponseMessageBuilder<T> {
         this.httpStatus = httpStatus;
     }
 
-    public static <T> StandardResponseMessageBuilder<T> status(HttpStatus status) {
+    public static BodyBuilder status(HttpStatus status) {
         Assert.notNull(status, "HttpStatus must not be null");
-        return new StandardResponseMessageBuilder<>(status);
+        return new DefaultBuilder(status);
     }
 
-    public static <T> StandardResponseMessageBuilder<T> ok() {
+    public static BodyBuilder ok() {
         return status(HttpStatus.OK);
     }
 
-    public static <T> StandardResponseMessageBuilder<T> created(URI location) {
-        StandardResponseMessageBuilder<T> result = status(HttpStatus.CREATED);
-        result.headers.setLocation(location);
-        return result;
+    public static <T> StandardResponseHttpEntity<T> ok(T body) {
+        return ok().body(body);
     }
 
-    public static <T> StandardResponseMessageBuilder<T> accepted() {
+    public static BodyBuilder created(URI location) {
+        return status(HttpStatus.CREATED).location(location);
+    }
+
+    public static BodyBuilder accepted() {
         return status(HttpStatus.ACCEPTED);
     }
 
-    public static <T> StandardResponseMessageBuilder<T> noContent() {
+    public static BodyBuilder noContent() {
         return status(HttpStatus.NO_CONTENT);
     }
 
-    public static <T> StandardResponseMessageBuilder<T> badRequest() {
+    public static BodyBuilder badRequest() {
         return status(HttpStatus.BAD_REQUEST);
     }
 
-    public static <T> StandardResponseMessageBuilder<T> notFound() {
+    public static BodyBuilder notFound() {
         return status(HttpStatus.NOT_FOUND);
     }
 
-    public static <T> StandardResponseMessageBuilder<T> unprocessableEntity() {
+    public static BodyBuilder unprocessableEntity() {
         return status(HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
@@ -179,6 +181,153 @@ public class StandardResponseMessageBuilder<T> {
 
     public StandardResponseHttpEntity<T> build() {
         return new StandardResponseHttpEntity<>(this.body, this.headers, this.httpStatus);
+    }
+
+    public interface HeadersBuilder<B extends HeadersBuilder<B>> {
+
+        B header(String headerName, String... headerValues);
+
+        B headers(@Nullable HttpHeaders headers);
+
+        B allow(HttpMethod... allowedMethods);
+
+        B eTag(String etag);
+
+        B lastModified(ZonedDateTime lastModified);
+
+        B lastModified(Instant lastModified);
+
+        B lastModified(long lastModified);
+
+        B location(URI location);
+
+        B cacheControl(CacheControl cacheControl);
+
+        B varyBy(String... requestHeaders);
+
+        <T> StandardResponseHttpEntity<T> build();
+
+        StandardResponseHttpEntity<?> error();
+
+        StandardResponseHttpEntity<?> error(ApplicationException exception);
+
+    }
+
+    public interface BodyBuilder extends HeadersBuilder<BodyBuilder> {
+
+        BodyBuilder contentLength(long contentLength);
+
+        BodyBuilder contentType(MediaType contentType);
+
+        <T> StandardResponseHttpEntity<T> body(@Nullable T body);
+
+    }
+
+    private static class DefaultBuilder implements BodyBuilder {
+
+        private final HttpStatus statusCode;
+        private final HttpHeaders headers = new HttpHeaders();
+
+        public DefaultBuilder(HttpStatus statusCode) {
+            this.statusCode = statusCode;
+        }
+
+        @Override
+        public BodyBuilder header(String headerName, String... headerValues) {
+            for (String headerValue : headerValues) {
+                this.headers.add(headerName, headerValue);
+            }
+            return this;
+        }
+
+        @Override
+        public BodyBuilder headers(@Nullable HttpHeaders headers) {
+            if (headers != null) {
+                this.headers.putAll(headers);
+            }
+            return this;
+        }
+
+        @Override
+        public BodyBuilder allow(HttpMethod... allowedMethods) {
+            this.headers.setAllow(new LinkedHashSet<>(Arrays.asList(allowedMethods)));
+            return this;
+        }
+
+        @Override
+        public BodyBuilder contentLength(long contentLength) {
+            this.headers.setContentLength(contentLength);
+            return this;
+        }
+
+        @Override
+        public BodyBuilder contentType(MediaType contentType) {
+            this.headers.setContentType(contentType);
+            return this;
+        }
+
+        @Override
+        public BodyBuilder eTag(String etag) {
+            if (!etag.startsWith("\"") && !etag.startsWith("W/\"")) {
+                etag = "\"" + etag;
+            }
+            if (!etag.endsWith("\"")) {
+                etag = etag + "\"";
+            }
+            this.headers.setETag(etag);
+            return this;
+        }
+
+        @Override
+        public BodyBuilder lastModified(ZonedDateTime date) {
+            this.headers.setLastModified(date);
+            return this;
+        }
+
+        @Override
+        public BodyBuilder lastModified(Instant date) {
+            this.headers.setLastModified(date);
+            return this;
+        }
+
+        @Override
+        public BodyBuilder lastModified(long date) {
+            this.headers.setLastModified(date);
+            return this;
+        }
+
+        @Override
+        public BodyBuilder location(URI location) {
+            this.headers.setLocation(location);
+            return this;
+        }
+
+        @Override
+        public BodyBuilder cacheControl(CacheControl cacheControl) {
+            this.headers.setCacheControl(cacheControl);
+            return this;
+        }
+
+        @Override
+        public BodyBuilder varyBy(String... requestHeaders) {
+            this.headers.setVary(Arrays.asList(requestHeaders));
+            return this;
+        }
+
+        @Override
+        public <T> StandardResponseHttpEntity<T> build() {
+            return body(null);
+        }
+
+        @Override
+        public <T> StandardResponseHttpEntity<T> body(@Nullable T body) {
+            if (body instanceof ResponseMessage) {
+                return new StandardResponseHttpEntity<T>((ResponseMessage<T>) body, this.headers, this.statusCode);
+            } else {
+                return new StandardResponseHttpEntity<T>(new ResponseMessage<>(body), this.headers, this.statusCode);
+            }
+        }
+
     }
 
 }
