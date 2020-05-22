@@ -1,6 +1,5 @@
 package com.ezcoding.common.web.filter;
 
-import com.ezcoding.common.foundation.core.constant.GlobalConstants;
 import com.ezcoding.common.web.jwt.AuthSettings;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0.0
  * @date 2019-08-27 17:40
  */
-public class UserTokenContextSettable implements IApplicationContextValueFetchable {
+public class UserTokenContextSettable implements ApplicationContextValueFetchable {
 
     private String header = AuthSettings.DEFAULT_HEADER;
 

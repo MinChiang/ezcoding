@@ -21,19 +21,19 @@ public class ApplicationExceptionResolver extends AbstractHandlerExceptionResolv
 
     public static final String KEY_APPLICATION_EXPCETION = "com.ezcoding.common.foundation.core.exception.ApplicationException";
 
-    private IApplicationExceptionProcessible processor;
+    private ApplicationExceptionProcessible processor;
 
     private HttpStatus defaultHttpStatus;
 
     private String defaultMessage;
 
-    public ApplicationExceptionResolver(IApplicationExceptionProcessible processor, HttpStatus defaultHttpStatus, String defaultMessage) {
+    public ApplicationExceptionResolver(ApplicationExceptionProcessible processor, HttpStatus defaultHttpStatus, String defaultMessage) {
         this.processor = processor;
         this.defaultHttpStatus = defaultHttpStatus;
         this.defaultMessage = defaultMessage;
     }
 
-    public ApplicationExceptionResolver(IApplicationExceptionProcessible processor) {
+    public ApplicationExceptionResolver(ApplicationExceptionProcessible processor) {
         this.processor = processor;
     }
 
@@ -79,11 +79,11 @@ public class ApplicationExceptionResolver extends AbstractHandlerExceptionResolv
         return new WebProcessContext(request, response, handler);
     }
 
-    public IApplicationExceptionProcessible getProcessor() {
+    public ApplicationExceptionProcessible getProcessor() {
         return processor;
     }
 
-    public void setProcessor(IApplicationExceptionProcessible processor) {
+    public void setProcessor(ApplicationExceptionProcessible processor) {
         this.processor = processor;
     }
 

@@ -1,7 +1,7 @@
 package com.ezcoding.common.foundation.core.message.head;
 
-import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
-import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
+import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
+import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -18,7 +18,7 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
     public static final String CONSUMER_ID = "consumerId";
     public static final String CONSUMER_SEQUENCE_NO = "consumerSequenceNo";
     
-    private static IUUIDProducer sequenceNoProducer = OriginalUUIDProducer.getInstance();
+    private static IdProduceable sequenceNoProducer = OriginalUuidProducer.getInstance();
 
     @JsonProperty(value = CONSUMER_ID)
     protected String consumerId;
@@ -30,11 +30,11 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
         this.consumerSequenceNo = sequenceNoProducer.produce();
     }
 
-    public static IUUIDProducer getSequenceNoProducer() {
+    public static IdProduceable getSequenceNoProducer() {
         return sequenceNoProducer;
     }
 
-    public static void setSequenceNoProducer(IUUIDProducer sequenceNoProducer) {
+    public static void setSequenceNoProducer(IdProduceable sequenceNoProducer) {
         RequestSystemHead.sequenceNoProducer = sequenceNoProducer;
     }
 

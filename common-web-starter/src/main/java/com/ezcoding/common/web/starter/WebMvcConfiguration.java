@@ -1,10 +1,10 @@
 package com.ezcoding.common.web.starter;
 
 import com.ezcoding.common.core.user.EmptyUserLoader;
-import com.ezcoding.common.core.user.IUserLoadable;
+import com.ezcoding.common.core.user.UserLoadable;
 import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
 import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
-import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
+import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.util.ObjectMapperUtils;
 import com.ezcoding.common.web.jwt.AuthSettings;
@@ -13,12 +13,12 @@ import com.ezcoding.common.web.resolver.JsonPageMethodProcessor;
 import com.ezcoding.common.web.resolver.JsonRequestMessageResolver;
 import com.ezcoding.common.web.resolver.UserArgumentResolver;
 import com.ezcoding.common.web.resolver.parameter.*;
-import com.ezcoding.common.web.resolver.result.IResponseMessageReturnValueResolvable;
+import com.ezcoding.common.web.resolver.result.ResponseMessageReturnValueResolvable;
 import com.ezcoding.common.web.resolver.result.ResponseAppHeadResolver;
 import com.ezcoding.common.web.resolver.result.ResponseMessageResolver;
 import com.ezcoding.common.web.resolver.result.ResponseSystemHeadResolver;
 import com.ezcoding.common.web.user.CompositeUserLoader;
-import com.ezcoding.common.web.user.IUserProxyable;
+import com.ezcoding.common.web.user.UserProxyable;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.spi.resourceloading.ResourceBundleLocator;
@@ -42,7 +42,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import javax.annotation.Resource;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -60,13 +59,13 @@ import java.util.Optional;
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Autowired
-    private IMessageBuilder messageBuilder;
+    private MessageBuildable messageBuilder;
     @Autowired
     private HttpMessageConverters httpMessageConverters;
     @Autowired(required = false)
-    private List<IApplicationWebConfigurer> applicationWebConfigurers;
+    private List<ApplicationWebConfigurer> applicationWebConfigurers;
     @Autowired
-    private IUserProxyable userProxyable;
+    private UserProxyable userProxyable;
     @Autowired
     private EzcodingWebConfigBean ezcodingWebConfigBean;
     @Autowired
@@ -75,14 +74,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Autowired
     private JsonMessageMethodProcessor jsonMessageMethodProcessor;
 
-    private void registerDefaultParameterResolver(List<IRequestMessageParameterResolvable> resolvables) {
+    private void registerDefaultParameterResolver(List<RequestMessageParameterResolvable> resolvables) {
         resolvables.add(new ReqeustMessageResolver());
         resolvables.add(new RequestSystemHeadResolver());
         resolvables.add(new ResquestAppHeadResolver());
         resolvables.add(new DefaultRequestMessageResolver(ObjectMapperUtils.message()));
     }
 
-    private void registerDefaultReturnValueResolvers(List<IResponseMessageReturnValueResolvable> resolvables) {
+    private void registerDefaultReturnValueResolvers(List<ResponseMessageReturnValueResolvable> resolvables) {
         resolvables.add(new ResponseMessageResolver());
         resolvables.add(new ResponseSystemHeadResolver());
         resolvables.add(new ResponseAppHeadResolver());
@@ -96,8 +95,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public JsonMessageMethodProcessor jsonMessageMethodProcessor() {
         JsonMessageMethodProcessor jsonMessageMethodProcessor = new JsonMessageMethodProcessor(httpMessageConverters.getConverters(), jsonRequestMessageResolver());
 
-        List<IRequestMessageParameterResolvable> parameterResolvers = new ArrayList<>();
-        List<IResponseMessageReturnValueResolvable> returnValueResolvers = new ArrayList<>();
+        List<RequestMessageParameterResolvable> parameterResolvers = new ArrayList<>();
+        List<ResponseMessageReturnValueResolvable> returnValueResolvers = new ArrayList<>();
         this.registerDefaultParameterResolver(parameterResolvers);
         this.registerDefaultReturnValueResolvers(returnValueResolvers);
 
@@ -140,9 +139,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         return new JsonPageMethodProcessor(jsonRequestMessageResolver());
     }
 
-    private IUserLoadable compositeUserLoader() {
-        List<IUserLoadable> loaders = new ArrayList<>();
-        Optional<List<IApplicationWebConfigurer>> applicationWebConfigurers = Optional.ofNullable(this.applicationWebConfigurers);
+    private UserLoadable compositeUserLoader() {
+        List<UserLoadable> loaders = new ArrayList<>();
+        Optional<List<ApplicationWebConfigurer>> applicationWebConfigurers = Optional.ofNullable(this.applicationWebConfigurers);
         applicationWebConfigurers.ifPresent(configurers -> {
             configurers.forEach(configurer -> configurer.configUserLoaders(loaders));
             if (loaders.isEmpty()) {

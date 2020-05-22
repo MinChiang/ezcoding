@@ -8,7 +8,7 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2019-12-28 21:13
  */
-public abstract class AbstractExceptionBuilder implements IExceptionBuilder {
+public abstract class AbstractExceptionBuilder implements ExceptionBuildable {
 
     /**
      * 错误编号

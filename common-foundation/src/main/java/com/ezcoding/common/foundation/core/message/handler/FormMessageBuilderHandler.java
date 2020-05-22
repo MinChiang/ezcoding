@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
  * @version 1.0.0
  * @date 2018-07-14 17:08
  */
-public class FormMessageBuilderHandler implements IMessageBuilderHandler {
+public class FormMessageBuilderHandler implements MessageBuilderHandleable {
 
     @Override
     public <T> RequestMessage<T> byte2Message(byte[] bytes, Class<T> cls) throws IOException {

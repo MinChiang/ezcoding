@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @version 1.0.0
  * @date 2018-07-14 17:08
  */
-public abstract class AbstractAppHead implements IHead, Serializable {
+public abstract class AbstractAppHead implements Head, Serializable {
 
     @JsonUnwrapped
     protected PageInfo pageInfo;

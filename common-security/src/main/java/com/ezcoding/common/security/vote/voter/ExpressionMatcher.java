@@ -14,7 +14,7 @@ import java.util.Stack;
  * @version 1.0.0
  * @date 2020-04-18 13:00
  */
-public class ExpressionMatcher implements IRoleExpression {
+public class ExpressionMatcher implements RoleExpressionMatchable {
 
     private String defaultRolePrefix = "ROLE_";
 

@@ -1,7 +1,7 @@
 package com.ezcoding.common.foundation.core.message.head;
 
-import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
-import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
+import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
+import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class ResponseSystemHead extends AbstractSystemHead implements Serializable {
 
-    private static IUUIDProducer sequenceNoProducer = OriginalUUIDProducer.getInstance();
+    private static IdProduceable sequenceNoProducer = OriginalUuidProducer.getInstance();
     private static String defaultProviderId;
 
     public static final String PROVIDER_SEQUENCE_NO_KEY = "providerSequenceNo";
@@ -29,11 +29,11 @@ public class ResponseSystemHead extends AbstractSystemHead implements Serializab
         this.providerId = defaultProviderId;
     }
 
-    public static IUUIDProducer getSequenceNoProducer() {
+    public static IdProduceable getSequenceNoProducer() {
         return sequenceNoProducer;
     }
 
-    public static void setSequenceNoProducer(IUUIDProducer sequenceNoProducer) {
+    public static void setSequenceNoProducer(IdProduceable sequenceNoProducer) {
         ResponseSystemHead.sequenceNoProducer = sequenceNoProducer;
     }
 

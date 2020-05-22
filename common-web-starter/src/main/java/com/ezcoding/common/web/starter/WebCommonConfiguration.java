@@ -6,8 +6,8 @@ import com.ezcoding.common.web.error.ApplicationErrorController;
 import com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes;
 import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
 import com.ezcoding.common.web.filter.FilterConstants;
-import com.ezcoding.common.web.filter.IApplicationContextValueFetchable;
-import com.ezcoding.common.web.user.IUserProxyable;
+import com.ezcoding.common.web.filter.ApplicationContextValueFetchable;
+import com.ezcoding.common.web.user.UserProxyable;
 import com.ezcoding.common.web.user.RemoteUserProxy;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -41,7 +41,7 @@ import java.util.Optional;
 public class WebCommonConfiguration implements InitializingBean {
 
     @Autowired(required = false)
-    private List<IApplicationWebConfigurer> applicationWebConfigurers;
+    private List<ApplicationWebConfigurer> applicationWebConfigurers;
     @Autowired
     private MessageSource messageSource;
 
@@ -67,7 +67,7 @@ public class WebCommonConfiguration implements InitializingBean {
 
     @Bean
     public FilterRegistrationBean<ApplicationContextHolderFilter> applicationContextHolderFilter() {
-        List<IApplicationContextValueFetchable> fetchers = new LinkedList<>();
+        List<ApplicationContextValueFetchable> fetchers = new LinkedList<>();
         Optional
                 .ofNullable(this.applicationWebConfigurers)
                 .ifPresent(configures -> configures.forEach(configurer -> configurer.registerApplicationContextFetchers(fetchers)));
@@ -100,8 +100,8 @@ public class WebCommonConfiguration implements InitializingBean {
     }
 
     @Bean
-    @ConditionalOnMissingBean(IUserProxyable.class)
-    public IUserProxyable userProxy() {
+    @ConditionalOnMissingBean(UserProxyable.class)
+    public UserProxyable userProxy() {
         return new RemoteUserProxy();
     }
 

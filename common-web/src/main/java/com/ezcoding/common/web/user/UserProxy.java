@@ -1,6 +1,6 @@
 package com.ezcoding.common.web.user;
 
-import com.ezcoding.common.core.user.IUserIdentifiable;
+import com.ezcoding.common.core.user.UserIdentifiable;
 import com.ezcoding.common.core.user.model.*;
 
 import java.util.Collection;
@@ -14,7 +14,7 @@ import java.util.Optional;
  * @version 1.0.0
  * @date 2018-12-11 9:21
  */
-public class UserProxy implements IUser {
+public class UserProxy implements UserDetailInformationIdentifiable {
 
     /**
      * 标志user类是否已经被解析实例化
@@ -24,19 +24,19 @@ public class UserProxy implements IUser {
     /**
      * 用户额外加载器
      */
-    private IUserProxyable proxy;
+    private UserProxyable proxy;
 
     /**
      * 真实的user对象
      */
-    private IUser user;
+    private UserDetailInformationIdentifiable user;
 
     /**
      * 被代理的对象
      */
-    private IUserIdentifiable identifiable;
+    private UserIdentifiable identifiable;
 
-    public UserProxy(IUserIdentifiable identifiable, IUserProxyable proxy) {
+    public UserProxy(UserIdentifiable identifiable, UserProxyable proxy) {
         this.identifiable = identifiable;
         this.proxy = proxy;
     }
@@ -44,7 +44,7 @@ public class UserProxy implements IUser {
     /**
      * 从远程获取用户详情
      */
-    private IUser loadUser() {
+    private UserDetailInformationIdentifiable loadUser() {
         if (resolved) {
             return this.user;
         }
@@ -68,28 +68,28 @@ public class UserProxy implements IUser {
     public String getCode() {
         return Optional
                 .ofNullable(this.identifiable.getCode())
-                .orElseGet(() -> Optional.ofNullable(this.user).map(IUser::getCode).orElse(null));
+                .orElseGet(() -> Optional.ofNullable(this.user).map(UserDetailInformationIdentifiable::getCode).orElse(null));
     }
 
     @Override
     public String getAccount() {
         return Optional
                 .ofNullable(this.identifiable.getAccount())
-                .orElseGet(() -> Optional.ofNullable(this.user).map(IUser::getAccount).orElse(null));
+                .orElseGet(() -> Optional.ofNullable(this.user).map(UserDetailInformationIdentifiable::getAccount).orElse(null));
     }
 
     @Override
     public String getPhone() {
         return Optional
                 .ofNullable(this.identifiable.getPhone())
-                .orElseGet(() -> Optional.ofNullable(this.user).map(IUser::getPhone).orElse(null));
+                .orElseGet(() -> Optional.ofNullable(this.user).map(UserDetailInformationIdentifiable::getPhone).orElse(null));
     }
 
     @Override
     public String getEmail() {
         return Optional
                 .ofNullable(this.identifiable.getEmail())
-                .orElseGet(() -> Optional.ofNullable(this.user).map(IUser::getEmail).orElse(null));
+                .orElseGet(() -> Optional.ofNullable(this.user).map(UserDetailInformationIdentifiable::getEmail).orElse(null));
     }
 
     @Override

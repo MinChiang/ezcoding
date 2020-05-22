@@ -17,12 +17,12 @@ import java.util.Collection;
  */
 public class ApplicationContextHolderFilter extends OncePerRequestFilter {
 
-    private Collection<IApplicationContextValueFetchable> settings = new ArrayList<>(0);
+    private Collection<ApplicationContextValueFetchable> settings = new ArrayList<>(0);
 
     public ApplicationContextHolderFilter() {
     }
 
-    public ApplicationContextHolderFilter(Collection<IApplicationContextValueFetchable> settings) {
+    public ApplicationContextHolderFilter(Collection<ApplicationContextValueFetchable> settings) {
         this.settings = settings;
     }
 
@@ -30,7 +30,7 @@ public class ApplicationContextHolderFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         ApplicationContextHolder instance = ApplicationContextHolder.getInstance();
         try {
-            for (IApplicationContextValueFetchable setting : settings) {
+            for (ApplicationContextValueFetchable setting : settings) {
                 Object fetch = setting.fetch(request, response);
                 if (fetch != null) {
                     instance.put(setting.key(), fetch);

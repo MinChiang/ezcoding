@@ -10,7 +10,7 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2018-08-26 23:22
  */
-public class ApplicationException extends RuntimeException implements IApplicationIdentifiable {
+public class ApplicationException extends RuntimeException implements ApplicationIdentifiable {
 
     /**
      * 错误标识

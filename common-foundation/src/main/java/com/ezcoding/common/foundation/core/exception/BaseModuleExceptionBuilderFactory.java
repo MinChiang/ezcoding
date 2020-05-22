@@ -15,10 +15,10 @@ public class BaseModuleExceptionBuilderFactory {
      * @param generator 唯一编号生成器
      * @return 生成的唯一编号
      */
-    protected static String checkAndGenerateIdentification(IExceptionCodeGeneratable generator) {
+    protected static String checkAndGenerateIdentification(ExceptionCodeGeneratable generator) {
         return Optional
                 .of(generator)
-                .map(IExceptionCodeGeneratable::generate)
+                .map(ExceptionCodeGeneratable::generate)
                 .get();
     }
 
@@ -29,7 +29,7 @@ public class BaseModuleExceptionBuilderFactory {
      * @param summary   错误描述
      * @return 默认的错误的构造器
      */
-    public static DefaultExceptionBuilder defaultExceptionBuilder(IExceptionCodeGeneratable generator, String summary) {
+    public static DefaultExceptionBuilder defaultExceptionBuilder(ExceptionCodeGeneratable generator, String summary) {
         return new DefaultExceptionBuilder(checkAndGenerateIdentification(generator), summary);
     }
 
@@ -40,7 +40,7 @@ public class BaseModuleExceptionBuilderFactory {
      * @param template  模板
      * @return 可替换参数的构造器
      */
-    public static ParamTemplateExceptionBuilder paramTemplateExceptionBuilder(IExceptionCodeGeneratable generator, String template) {
+    public static ParamTemplateExceptionBuilder paramTemplateExceptionBuilder(ExceptionCodeGeneratable generator, String template) {
         return new ParamTemplateExceptionBuilder(checkAndGenerateIdentification(generator), template);
     }
 
@@ -52,7 +52,7 @@ public class BaseModuleExceptionBuilderFactory {
      * @param params    替换参数
      * @return 可替换参数的构造器
      */
-    public static ParamTemplateExceptionBuilder paramTemplateExceptionBuilder(IExceptionCodeGeneratable generator, String template, Object[] params) {
+    public static ParamTemplateExceptionBuilder paramTemplateExceptionBuilder(ExceptionCodeGeneratable generator, String template, Object[] params) {
         return paramTemplateExceptionBuilder(generator, template).params(params);
     }
 

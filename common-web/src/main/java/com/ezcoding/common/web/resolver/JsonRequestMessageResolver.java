@@ -1,10 +1,9 @@
 package com.ezcoding.common.web.resolver;
 
 import com.ezcoding.common.foundation.core.message.RequestMessage;
-import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
+import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
 import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -23,9 +22,9 @@ public class JsonRequestMessageResolver {
     private static final Charset CHARSET_READ_DEFAULT = StandardCharsets.UTF_8;
     private static final String REQUEST_MESSAGE = "__REQUEST_MESSAGE__";
 
-    private IMessageBuilder messageBuilder;
+    private MessageBuildable messageBuilder;
 
-    public JsonRequestMessageResolver(IMessageBuilder messageBuilder) {
+    public JsonRequestMessageResolver(MessageBuildable messageBuilder) {
         this.messageBuilder = messageBuilder;
     }
 
@@ -56,11 +55,11 @@ public class JsonRequestMessageResolver {
         return requestMessage;
     }
 
-    public IMessageBuilder getMessageBuilder() {
+    public MessageBuildable getMessageBuilder() {
         return messageBuilder;
     }
 
-    public void setMessageBuilder(IMessageBuilder messageBuilder) {
+    public void setMessageBuilder(MessageBuildable messageBuilder) {
         this.messageBuilder = messageBuilder;
     }
 

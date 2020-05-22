@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.jwt;
 
-import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
-import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
+import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
+import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -34,7 +34,7 @@ public class TokenTools {
 
     private PrivateKey privateKey;
     private PublicKey publicKey;
-    private IUUIDProducer idProducer = OriginalUUIDProducer.getInstance();
+    private IdProduceable idProducer = OriginalUuidProducer.getInstance();
 
     public TokenTools(PrivateKey privateKey, PublicKey publicKey) {
         this.privateKey = privateKey;
@@ -223,11 +223,11 @@ public class TokenTools {
         this.publicKey = publicKey;
     }
 
-    public IUUIDProducer getIdProducer() {
+    public IdProduceable getIdProducer() {
         return idProducer;
     }
 
-    public void setIdProducer(IUUIDProducer idProducer) {
+    public void setIdProducer(IdProduceable idProducer) {
         this.idProducer = idProducer;
     }
 

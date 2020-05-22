@@ -3,12 +3,12 @@ package com.ezcoding.common.foundation.core.message.builder;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.handler.IMessageBuilderHandler;
+import com.ezcoding.common.foundation.core.message.handler.MessageBuilderHandleable;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
 import com.ezcoding.common.foundation.core.message.head.*;
 import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
-import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
-import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
+import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
+import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,12 +21,12 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2018-07-14 17:08
  */
-public class MessageBuilder implements IMessageBuilder {
+public class MessageBuilder implements MessageBuildable {
 
-    private static Map<MessageTypeEnum, IMessageBuilderHandler> handlerMap = new HashMap<>();
-    private static IUUIDProducer idProducer = OriginalUUIDProducer.getInstance();
+    private static Map<MessageTypeEnum, MessageBuilderHandleable> handlerMap = new HashMap<>();
+    private static IdProduceable idProducer = OriginalUuidProducer.getInstance();
 
-    private IMessageBuilderHandler defaultMessageBuilder = new JsonMessageBuilderHandler();
+    private MessageBuilderHandleable defaultMessageBuilder = new JsonMessageBuilderHandler();
 
     private Charset defaultReadCharset = Charset.forName(DEFAULT_READ_CHARSET);
     private Charset defaultWriteCharset = Charset.forName(DEFAULT_WRITE_CHARSET);
@@ -38,7 +38,7 @@ public class MessageBuilder implements IMessageBuilder {
 
     }
 
-    public static void configHandler(MessageTypeEnum messageType, IMessageBuilderHandler messageBuilderHandler) {
+    public static void configHandler(MessageTypeEnum messageType, MessageBuilderHandleable messageBuilderHandler) {
         handlerMap.put(messageType, messageBuilderHandler);
     }
 
@@ -46,19 +46,19 @@ public class MessageBuilder implements IMessageBuilder {
         return MessageBuilderHolder.INSTANCE;
     }
 
-    public static Map<MessageTypeEnum, IMessageBuilderHandler> getHandlerMap() {
+    public static Map<MessageTypeEnum, MessageBuilderHandleable> getHandlerMap() {
         return handlerMap;
     }
 
-    public static void setHandlerMap(Map<MessageTypeEnum, IMessageBuilderHandler> handlerMap) {
+    public static void setHandlerMap(Map<MessageTypeEnum, MessageBuilderHandleable> handlerMap) {
         MessageBuilder.handlerMap = handlerMap;
     }
 
-    public static IUUIDProducer getIdProducer() {
+    public static IdProduceable getIdProducer() {
         return idProducer;
     }
 
-    public static void setIdProducer(IUUIDProducer idProducer) {
+    public static void setIdProducer(IdProduceable idProducer) {
         MessageBuilder.idProducer = idProducer;
         //需要配套设置报文生成器
         RequestSystemHead.setSequenceNoProducer(idProducer);
@@ -73,7 +73,7 @@ public class MessageBuilder implements IMessageBuilder {
     @Override
     public <T> RequestMessage<T> buildRequestMessage(InputStream is, Class<T> cls, Charset charset, MessageTypeEnum type) {
         try {
-            IMessageBuilderHandler handler = handlerMap.getOrDefault(type, defaultMessageBuilder);
+            MessageBuilderHandleable handler = handlerMap.getOrDefault(type, defaultMessageBuilder);
             return handler.byte2Message(is, charset, cls);
         } catch (IOException e) {
             e.printStackTrace();
@@ -143,7 +143,7 @@ public class MessageBuilder implements IMessageBuilder {
 
     @Override
     public String buildResponseMessage(ResponseMessage<?> responseMessage, MessageTypeEnum type) throws IOException {
-        IMessageBuilderHandler handler = handlerMap.getOrDefault(type, defaultMessageBuilder);
+        MessageBuilderHandleable handler = handlerMap.getOrDefault(type, defaultMessageBuilder);
         return handler.message2String(responseMessage);
     }
 
@@ -154,15 +154,15 @@ public class MessageBuilder implements IMessageBuilder {
 
     @Override
     public byte[] buildResponseMessage(ResponseMessage<?> responseMessage, Charset charset, MessageTypeEnum type) throws IOException {
-        IMessageBuilderHandler handler = handlerMap.getOrDefault(type, defaultMessageBuilder);
+        MessageBuilderHandleable handler = handlerMap.getOrDefault(type, defaultMessageBuilder);
         return handler.message2Byte(responseMessage, charset);
     }
 
-    public IMessageBuilderHandler getDefaultMessageBuilder() {
+    public MessageBuilderHandleable getDefaultMessageBuilder() {
         return defaultMessageBuilder;
     }
 
-    public void setDefaultMessageBuilder(IMessageBuilderHandler defaultMessageBuilder) {
+    public void setDefaultMessageBuilder(MessageBuilderHandleable defaultMessageBuilder) {
         this.defaultMessageBuilder = defaultMessageBuilder;
     }
 

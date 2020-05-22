@@ -5,13 +5,13 @@ import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.exception.processor.*;
-import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
+import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
 import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
-import com.ezcoding.common.foundation.core.tools.uuid.IUUIDProducer;
-import com.ezcoding.common.foundation.core.tools.uuid.OriginalUUIDProducer;
-import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeUUIDProducer;
+import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
+import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
+import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeIdProducer;
 import com.ezcoding.common.foundation.util.ConvertUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.CollectionUtils;
@@ -72,28 +72,28 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     }
 
     @Primary
-    @ConditionalOnMissingBean(SnowflakeUUIDProducer.class)
+    @ConditionalOnMissingBean(SnowflakeIdProducer.class)
     @Bean("snowflakeUUIDProducer")
-    public IUUIDProducer snowflakeUuidProducer() {
+    public IdProduceable snowflakeUuidProducer() {
         Optional<MetadataConfigBean> metadata = Optional.ofNullable(ezcodingFoundationConfigBean.getMetadata());
         Long datacenterId = metadata
                 .map(MetadataConfigBean::getDataCenterNo)
-                .orElseGet(() -> RandomUtils.nextLong(0, SnowflakeUUIDProducer.MAX_DATACENTER_NUM));
+                .orElseGet(() -> RandomUtils.nextLong(0, SnowflakeIdProducer.MAX_DATACENTER_NUM));
         Long machineId = metadata
                 .map(MetadataConfigBean::getCategoryNo)
-                .orElseGet(() -> RandomUtils.nextLong(0, SnowflakeUUIDProducer.MAX_MACHINE_NUM));
-        return new SnowflakeUUIDProducer(datacenterId, machineId);
+                .orElseGet(() -> RandomUtils.nextLong(0, SnowflakeIdProducer.MAX_MACHINE_NUM));
+        return new SnowflakeIdProducer(datacenterId, machineId);
     }
 
-    @ConditionalOnMissingBean(OriginalUUIDProducer.class)
+    @ConditionalOnMissingBean(OriginalUuidProducer.class)
     @Bean("originalUUIDProducer")
-    public IUUIDProducer originalUuidProducer() {
-        return OriginalUUIDProducer.getInstance();
+    public IdProduceable originalUuidProducer() {
+        return OriginalUuidProducer.getInstance();
     }
 
-    @ConditionalOnMissingBean(IMessageBuilder.class)
+    @ConditionalOnMissingBean(MessageBuildable.class)
     @Bean
-    public MessageBuilder messageBuilder(ObjectMapper objectMapper, IUUIDProducer producer) {
+    public MessageBuilder messageBuilder(ObjectMapper objectMapper, IdProduceable producer) {
         JsonMessageBuilderHandler jsonMessageBuilderHandler = new JsonMessageBuilderHandler();
         jsonMessageBuilderHandler.setObjectMapper(objectMapper);
         MessageBuilder.configHandler(MessageTypeEnum.JSON, jsonMessageBuilderHandler);
@@ -122,7 +122,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @ConditionalOnMissingBean(AbstractApplicationExceptionManager.class)
     @Bean("defaultExceptionManager")
     public ModuleApplicationExceptionManager moduleApplicationExceptionManager(@Autowired(required = false) @Qualifier(value = "defaultLayerModuleProcessor") AbstractLayerModuleProcessor defaultProcessor,
-                                                                               @Autowired(required = false) List<IApplicationExceptionProcessorConfigurer> registers) {
+                                                                               @Autowired(required = false) List<ApplicationExceptionProcessorConfigurer> registers) {
         ModuleApplicationExceptionManager moduleApplicationExceptionManager = new ModuleApplicationExceptionManager(defaultProcessor);
         registerDefaultProcessor(moduleApplicationExceptionManager, defaultProcessor);
         if (CollectionUtils.isNotEmpty(registers)) {
@@ -138,7 +138,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     }
 
     private void registerExtraProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager,
-                                        List<IApplicationExceptionProcessorConfigurer> registers,
+                                        List<ApplicationExceptionProcessorConfigurer> registers,
                                         AbstractLayerModuleProcessor defaultProcessor) {
         if (CollectionUtils.isNotEmpty(registers)) {
             registers

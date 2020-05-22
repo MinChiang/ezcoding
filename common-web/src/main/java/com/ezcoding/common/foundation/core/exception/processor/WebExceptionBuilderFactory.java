@@ -1,7 +1,7 @@
 package com.ezcoding.common.foundation.core.exception.processor;
 
 import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
-import com.ezcoding.common.foundation.core.exception.IExceptionCodeGeneratable;
+import com.ezcoding.common.foundation.core.exception.ExceptionCodeGeneratable;
 import com.ezcoding.common.foundation.core.exception.WebExceptionCodeGenerator;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class WebExceptionBuilderFactory extends BaseModuleExceptionBuilderFactor
      * @param httpStatus 响应状态码
      * @return 可替换参数的构造器
      */
-    public static WebExceptionBuilder webExceptionBuilder(IExceptionCodeGeneratable generator, String template, HttpStatus httpStatus) {
+    public static WebExceptionBuilder webExceptionBuilder(ExceptionCodeGeneratable generator, String template, HttpStatus httpStatus) {
         WebExceptionBuilder webExceptionBuilder = new WebExceptionBuilder(checkAndGenerateIdentification(generator), template, messageSource);
         webExceptionBuilder.setHttpStatus(httpStatus);
         return webExceptionBuilder;

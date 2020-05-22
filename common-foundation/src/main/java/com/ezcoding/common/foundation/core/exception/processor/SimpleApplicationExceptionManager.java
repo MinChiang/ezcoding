@@ -15,9 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SimpleApplicationExceptionManager extends AbstractApplicationExceptionManager {
 
-    private Map<String, IApplicationExceptionProcessible> processors = new ConcurrentHashMap<>(0);
+    private Map<String, ApplicationExceptionProcessible> processors = new ConcurrentHashMap<>(0);
 
-    public SimpleApplicationExceptionManager(Map<String, IApplicationExceptionProcessible> processors) {
+    public SimpleApplicationExceptionManager(Map<String, ApplicationExceptionProcessible> processors) {
         this.registerProcessors(processors);
     }
 
@@ -42,7 +42,7 @@ public class SimpleApplicationExceptionManager extends AbstractApplicationExcept
         return processContext;
     }
 
-    public Map<String, IApplicationExceptionProcessible> getProcessors() {
+    public Map<String, ApplicationExceptionProcessible> getProcessors() {
         return processors;
     }
 
@@ -51,7 +51,7 @@ public class SimpleApplicationExceptionManager extends AbstractApplicationExcept
      *
      * @param processors 被注册的处理器
      */
-    public void registerProcessors(Map<String, IApplicationExceptionProcessible> processors) {
+    public void registerProcessors(Map<String, ApplicationExceptionProcessible> processors) {
         this.processors.putAll(processors);
     }
 

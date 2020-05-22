@@ -7,7 +7,7 @@ import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
  * @version 1.0.0
  * @date 2019-12-28 21:36
  */
-public class ModuleExceptionCodeGenerator implements IExceptionCodeGeneratable {
+public class ModuleExceptionCodeGenerator implements ExceptionCodeGeneratable {
 
     /**
      * 功能模块

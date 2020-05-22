@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 
-import static com.ezcoding.common.foundation.core.application.IModuleNameable.DETAIL_CODE_LENGHT;
+import static com.ezcoding.common.foundation.core.application.ModuleNameable.DETAIL_CODE_LENGHT;
 
 /**
  * @author MinChiang

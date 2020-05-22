@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.user;
 
-import com.ezcoding.common.core.user.IUserIdentifiable;
-import com.ezcoding.common.core.user.IUserLoadable;
+import com.ezcoding.common.core.user.UserIdentifiable;
+import com.ezcoding.common.core.user.UserLoadable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,21 +12,21 @@ import java.util.Optional;
  * @version 1.0.0
  * @date 2018-12-11 10:34
  */
-public class CompositeUserLoader implements IUserLoadable {
+public class CompositeUserLoader implements UserLoadable {
 
-    private List<IUserLoadable> loaders = new ArrayList<>(0);
+    private List<UserLoadable> loaders = new ArrayList<>(0);
 
-    public CompositeUserLoader(List<IUserLoadable> loaders) {
+    public CompositeUserLoader(List<UserLoadable> loaders) {
         Optional
                 .ofNullable(loaders)
                 .ifPresent(lds -> this.loaders.addAll(lds));
     }
 
     @Override
-    public IUserIdentifiable load() {
+    public UserIdentifiable load() {
         return loaders
                 .stream()
-                .map(IUserLoadable::load)
+                .map(UserLoadable::load)
                 .findFirst()
                 .orElse(null);
     }
@@ -37,7 +37,7 @@ public class CompositeUserLoader implements IUserLoadable {
      * @param index  注册的位置
      * @param loader 需要注册的加载器
      */
-    public void registerLoader(int index, IUserLoadable loader) {
+    public void registerLoader(int index, UserLoadable loader) {
         Optional
                 .of(loader)
                 .ifPresent(ld -> loaders.add(index, ld));

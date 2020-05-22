@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @version 1.0.0
  * @date 2018-07-14 17:08
  */
-public class AbstractSystemHead implements IHead, Serializable {
+public class AbstractSystemHead implements Head, Serializable {
 
     public static final String TRANSACTION_DATE = "transactionDate";
     public static final String VERSION = "version";

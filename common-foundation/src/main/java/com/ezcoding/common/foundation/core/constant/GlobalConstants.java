@@ -1,6 +1,6 @@
 package com.ezcoding.common.foundation.core.constant;
 
-import com.ezcoding.common.foundation.core.application.IModuleNameable;
+import com.ezcoding.common.foundation.core.application.ModuleNameable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,12 +30,12 @@ public class GlobalConstants {
         /**
          * 模块码长度
          */
-        public static final int MODULE_CODE_LENGTH = IModuleNameable.MODULE_CODE_LENGTH;
+        public static final int MODULE_CODE_LENGTH = ModuleNameable.MODULE_CODE_LENGTH;
 
         /**
          * 业务码长度
          */
-        public static final int DETAIL_CODE_LENGTH = IModuleNameable.FUNCTION_CODE_LENGTH;
+        public static final int DETAIL_CODE_LENGTH = ModuleNameable.FUNCTION_CODE_LENGTH;
 
         /**
          * 系统基本模块

@@ -1,8 +1,8 @@
 package com.ezcoding.common.security.starter;
 
-import com.ezcoding.common.core.user.IUserLoadable;
+import com.ezcoding.common.core.user.UserLoadable;
 import com.ezcoding.common.web.SecurityUserLoader;
-import com.ezcoding.common.web.starter.IApplicationWebConfigurer;
+import com.ezcoding.common.web.starter.ApplicationWebConfigurer;
 import com.ezcoding.common.web.starter.WebCommonConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +16,10 @@ import java.util.List;
  */
 @Configuration
 @ConditionalOnBean({WebCommonConfiguration.class})
-public class SecurityCommonConfiguration implements IApplicationWebConfigurer {
+public class SecurityCommonConfiguration implements ApplicationWebConfigurer {
 
     @Override
-    public void registerUserLoaders(List<IUserLoadable> loaders) {
+    public void registerUserLoaders(List<UserLoadable> loaders) {
         SecurityUserLoader securityUserLoader = new SecurityUserLoader();
         loaders.add(securityUserLoader);
     }

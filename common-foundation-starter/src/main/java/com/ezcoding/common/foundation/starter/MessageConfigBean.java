@@ -1,6 +1,6 @@
 package com.ezcoding.common.foundation.starter;
 
-import static com.ezcoding.common.foundation.core.message.builder.IMessageBuilder.*;
+import static com.ezcoding.common.foundation.core.message.builder.MessageBuildable.*;
 import static com.ezcoding.common.foundation.core.message.head.ErrorAppHead.getDefaultErrorCode;
 import static com.ezcoding.common.foundation.core.message.head.ErrorAppHead.getDefaultErrorMessage;
 import static com.ezcoding.common.foundation.core.message.head.PageInfo.getDefaultCurrentPage;

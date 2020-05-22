@@ -1,7 +1,7 @@
 package com.ezcoding.common.foundation.core.application;
 
 import com.ezcoding.common.foundation.core.constant.GlobalConstants;
-import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeUUIDProducer;
+import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeIdProducer;
 
 /**
  * 机器服务信息标志位置
@@ -53,7 +53,7 @@ public class ApplicationMetadata {
         if (code > maxApplicationCode) {
             throw new Error("服务号码最大只能支持到：" + maxApplicationCode);
         }
-        int maxApplicationNo = ((1 << (SnowflakeUUIDProducer.MACHINE_BIT - GlobalConstants.Application.APPLICATION_CODE_BIT_LENGTH)) - 1);
+        int maxApplicationNo = ((1 << (SnowflakeIdProducer.MACHINE_BIT - GlobalConstants.Application.APPLICATION_CODE_BIT_LENGTH)) - 1);
         if (categoryNo > maxApplicationNo) {
             throw new Error("同类型机器号最大只能支持到：" + maxApplicationNo);
         }

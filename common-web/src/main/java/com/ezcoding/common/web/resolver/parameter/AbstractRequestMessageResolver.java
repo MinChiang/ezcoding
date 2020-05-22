@@ -5,7 +5,7 @@ package com.ezcoding.common.web.resolver.parameter;
  * @version 1.0.0
  * @date 2019-11-20 9:09
  */
-public abstract class AbstractRequestMessageResolver implements IRequestMessageParameterResolvable {
+public abstract class AbstractRequestMessageResolver implements RequestMessageParameterResolvable {
 
     private Class<?> targetClass;
 

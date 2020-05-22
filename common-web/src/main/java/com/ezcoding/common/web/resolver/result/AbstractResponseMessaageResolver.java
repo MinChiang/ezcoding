@@ -5,7 +5,7 @@ package com.ezcoding.common.web.resolver.result;
  * @version 1.0.0
  * @date 2019-11-18 20:38
  */
-public abstract class AbstractResponseMessaageResolver implements IResponseMessageReturnValueResolvable {
+public abstract class AbstractResponseMessaageResolver implements ResponseMessageReturnValueResolvable {
 
     private Class<?> targetClass;
 

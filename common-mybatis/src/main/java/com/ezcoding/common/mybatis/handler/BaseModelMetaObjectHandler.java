@@ -1,8 +1,8 @@
 package com.ezcoding.common.mybatis.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.ezcoding.common.core.user.IUserIdentifiable;
-import com.ezcoding.common.core.user.IUserLoadable;
+import com.ezcoding.common.core.user.UserIdentifiable;
+import com.ezcoding.common.core.user.UserLoadable;
 import com.ezcoding.common.mybatis.constant.TableFieldConstants;
 import org.apache.ibatis.reflection.MetaObject;
 
@@ -18,20 +18,20 @@ import java.util.Optional;
  */
 public class BaseModelMetaObjectHandler implements MetaObjectHandler {
 
-    private IUserLoadable loader;
+    private UserLoadable loader;
 
     public BaseModelMetaObjectHandler() {
     }
 
-    public BaseModelMetaObjectHandler(IUserLoadable loader) {
+    public BaseModelMetaObjectHandler(UserLoadable loader) {
         this.loader = loader;
     }
 
     protected String getCurrentUserPrincipal() {
         return Optional
                 .ofNullable(loader)
-                .map(IUserLoadable::load)
-                .map(IUserIdentifiable::getAccount)
+                .map(UserLoadable::load)
+                .map(UserIdentifiable::getAccount)
                 .orElse(null);
     }
 

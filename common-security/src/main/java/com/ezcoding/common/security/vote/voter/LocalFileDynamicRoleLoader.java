@@ -12,7 +12,7 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2020-04-21 14:10
  */
-public class LocalFileDynamicRoleLoader implements IDynamicRoleLoadable {
+public class LocalFileDynamicRoleLoader implements DynamicRoleLoadable {
 
     private static final String FILE_NAME_SUFFIX = ".yaml";
 

@@ -11,7 +11,7 @@ import java.util.Objects;
  * @version 1.0.0
  * @date 2019-11-10 13:48
  */
-public class ApplicationLayerModule implements IModuleNameable {
+public class ApplicationLayerModule implements ModuleNameable {
 
     protected static int applicationCodeLength = APPLICATION_CODE_LENGTH;
     protected static char applicationFillChar = FILL_CHAR;

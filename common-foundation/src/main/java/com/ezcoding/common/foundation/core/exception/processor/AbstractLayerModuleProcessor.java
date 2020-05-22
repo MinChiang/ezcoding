@@ -7,7 +7,7 @@ import com.ezcoding.common.foundation.core.exception.ApplicationException;
  * @version 1.0.0
  * @date 2020-01-17 10:27
  */
-public abstract class AbstractLayerModuleProcessor implements IApplicationExceptionProcessible {
+public abstract class AbstractLayerModuleProcessor implements ApplicationExceptionProcessible {
 
     @Override
     public boolean canProcessible(ApplicationException applicationException) {

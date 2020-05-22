@@ -5,7 +5,7 @@ package com.ezcoding.common.foundation.core.tools.verification;
  * @version 1.0.0
  * @date 2019-05-22 17:16
  */
-public abstract class AbstractLimitLengthVerificationCodeGenerator implements IVerificationCodeGenerator {
+public abstract class AbstractLimitLengthVerificationCodeGenerator implements VerificationCodeGenerator {
 
     /**
      * 验证码位数

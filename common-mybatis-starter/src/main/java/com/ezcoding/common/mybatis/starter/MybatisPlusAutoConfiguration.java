@@ -2,7 +2,7 @@ package com.ezcoding.common.mybatis.starter;
 
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.ezcoding.common.core.user.IUserLoadable;
+import com.ezcoding.common.core.user.UserLoadable;
 import com.ezcoding.common.mybatis.handler.BaseModelMetaObjectHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +21,7 @@ public class MybatisPlusAutoConfiguration {
     //    @Autowired
 //    private ObjectMapper objectMapper;
     @Autowired(required = false)
-    private IUserLoadable loader;
+    private UserLoadable loader;
 
     /**
      * 分页插件

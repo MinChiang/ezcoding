@@ -71,10 +71,10 @@ public class MethodSecurityAutoConfiguration extends GlobalMethodSecurityConfigu
         }
 
         @Bean
-        @ConditionalOnMissingBean(IDynamicRoleLoadable.class)
-        public IDynamicRoleLoadable dynamicRoleLoadable(DynamicRoleVoter dynamicRoleVoter,
-                                                        DynamicAnnotationSecurityMetadataSource dynamicAnnotationSecurityMetadataSource) {
-            List<IDynamicRoleLoadable> loaders = new ArrayList<>();
+        @ConditionalOnMissingBean(DynamicRoleLoadable.class)
+        public DynamicRoleLoadable dynamicRoleLoadable(DynamicRoleVoter dynamicRoleVoter,
+                                                       DynamicAnnotationSecurityMetadataSource dynamicAnnotationSecurityMetadataSource) {
+            List<DynamicRoleLoadable> loaders = new ArrayList<>();
             //需要注意注册的先后顺序，后面注册的会覆盖之前注册的内容
             if (StringUtils.isNotBlank(ezcodingSecurityConfigBean.getDynamicRoleLoadYaml())) {
                 loaders.add(new LocalFileDynamicRoleLoader(ezcodingSecurityConfigBean.getDynamicRoleLoadYaml(), this.applicationName));
@@ -83,7 +83,7 @@ public class MethodSecurityAutoConfiguration extends GlobalMethodSecurityConfigu
                 loaders.add(new RemoteDynamicRoleLoader(this.applicationName, ezcodingSecurityConfigBean.getDynamicRoleLoadUrl(), dynamicAnnotationSecurityMetadataSource));
             }
 
-            IDynamicRoleLoadable delegateDynamicRoleLoader = new DelegateDynamicRoleLoader(loaders);
+            DynamicRoleLoadable delegateDynamicRoleLoader = new DelegateDynamicRoleLoader(loaders);
             if (ezcodingSecurityConfigBean.isEnableAutoLoader()) {
                 return new DynamicSecheduledTriggerProxy(delegateDynamicRoleLoader, dynamicRoleVoter).config(true, ezcodingSecurityConfigBean.getRefreshSeconds());
             }

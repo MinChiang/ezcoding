@@ -15,14 +15,14 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0.0
  * @date 2020-04-21 15:23
  */
-public class DynamicSecheduledTriggerProxy implements IDynamicRoleLoadable {
+public class DynamicSecheduledTriggerProxy implements DynamicRoleLoadable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicSecheduledTriggerProxy.class);
 
     /**
      * 加载器
      */
-    private IDynamicRoleLoadable loadable;
+    private DynamicRoleLoadable loadable;
 
     /**
      * 投票器
@@ -34,7 +34,7 @@ public class DynamicSecheduledTriggerProxy implements IDynamicRoleLoadable {
      */
     private ScheduledExecutorService executorService;
 
-    public DynamicSecheduledTriggerProxy(IDynamicRoleLoadable loadable, DynamicRoleVoter dynamicRoleVoter) {
+    public DynamicSecheduledTriggerProxy(DynamicRoleLoadable loadable, DynamicRoleVoter dynamicRoleVoter) {
         if (loadable == null || dynamicRoleVoter == null) {
             throw new IllegalArgumentException("loadable和dynamicRoleVoter不能为空");
         }

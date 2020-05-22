@@ -10,7 +10,7 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2018-10-24 10:44
  */
-public class ApplicationContextHolder implements IApplicationContext {
+public class ApplicationContextHolder implements ApplicationContext {
 
     private static final ThreadLocal<Map<String, Object>> THREADLOCAL = new InheritableThreadLocal<Map<String, Object>>() {
         @Override

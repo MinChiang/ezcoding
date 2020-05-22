@@ -2,7 +2,6 @@ package com.ezcoding.common.security.vote.voter;
 
 import com.ezcoding.common.security.configattribute.DynamicConfigAttribute;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.security.access.ConfigAttribute;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,15 +14,15 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2020-04-28 15:39
  */
-public class DelegateDynamicRoleLoader implements IDynamicRoleLoadable {
+public class DelegateDynamicRoleLoader implements DynamicRoleLoadable {
 
-    private List<IDynamicRoleLoadable> loadables = new ArrayList<>();
+    private List<DynamicRoleLoadable> loadables = new ArrayList<>();
 
-    public DelegateDynamicRoleLoader(List<IDynamicRoleLoadable> loadables) {
+    public DelegateDynamicRoleLoader(List<DynamicRoleLoadable> loadables) {
         this.addLoaders(loadables);
     }
 
-    public void addLoaders(List<IDynamicRoleLoadable> loadables) {
+    public void addLoaders(List<DynamicRoleLoadable> loadables) {
         if (CollectionUtils.isEmpty(loadables)) {
             return;
         }
@@ -37,7 +36,7 @@ public class DelegateDynamicRoleLoader implements IDynamicRoleLoadable {
             return result;
         }
 
-        for (IDynamicRoleLoadable loadable : this.loadables) {
+        for (DynamicRoleLoadable loadable : this.loadables) {
             result.putAll(loadable.load());
         }
         return result;

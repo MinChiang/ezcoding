@@ -2,7 +2,7 @@ package com.ezcoding.common.security.advice;
 
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.builder.IMessageBuilder;
+import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class SecurityAdviceConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityAdviceConfiguration.class);
 
     @Autowired
-    private IMessageBuilder messageBuilder;
+    private MessageBuildable messageBuilder;
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = AccessDeniedException.class)

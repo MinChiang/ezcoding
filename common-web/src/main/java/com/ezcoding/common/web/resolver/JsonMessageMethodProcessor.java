@@ -4,8 +4,8 @@ import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
 import com.ezcoding.common.foundation.core.message.head.SuccessAppHead;
-import com.ezcoding.common.web.resolver.parameter.IRequestMessageParameterResolvable;
-import com.ezcoding.common.web.resolver.result.IResponseMessageReturnValueResolvable;
+import com.ezcoding.common.web.resolver.parameter.RequestMessageParameterResolvable;
+import com.ezcoding.common.web.resolver.result.ResponseMessageReturnValueResolvable;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +34,8 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonMessageMethodProcessor.class);
 
     private JsonRequestMessageResolver jsonRequestMessageResolver;
-    private List<IResponseMessageReturnValueResolvable> returnValueResolvables = new ArrayList<>();
-    private List<IRequestMessageParameterResolvable> parameterResolvables = new ArrayList<>();
+    private List<ResponseMessageReturnValueResolvable> returnValueResolvables = new ArrayList<>();
+    private List<RequestMessageParameterResolvable> parameterResolvables = new ArrayList<>();
 
     public JsonMessageMethodProcessor(List<HttpMessageConverter<?>> converters,
                                       JsonRequestMessageResolver jsonRequestMessageResolver) {
@@ -62,7 +62,7 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
             return null;
         }
 
-        IRequestMessageParameterResolvable resolvable = parameterResolvables
+        RequestMessageParameterResolvable resolvable = parameterResolvables
                 .stream()
                 .filter(resolver -> resolver.match(parameter.getParameterType()))
                 .findFirst()
@@ -102,7 +102,7 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
      *
      * @param resolvers 需要注册的解析器
      */
-    public void registerReturnValueResolvables(IResponseMessageReturnValueResolvable... resolvers) {
+    public void registerReturnValueResolvables(ResponseMessageReturnValueResolvable... resolvers) {
         if (resolvers == null) {
             return;
         }
@@ -114,7 +114,7 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
      *
      * @param resolvers 需要注册的解析器
      */
-    public void registerReturnValueResolvables(List<IResponseMessageReturnValueResolvable> resolvers) {
+    public void registerReturnValueResolvables(List<ResponseMessageReturnValueResolvable> resolvers) {
         if (resolvers == null) {
             return;
         }
@@ -126,7 +126,7 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
      *
      * @param resolvers 需要注册的解析器
      */
-    public void registerParameterResolvables(IRequestMessageParameterResolvable... resolvers) {
+    public void registerParameterResolvables(RequestMessageParameterResolvable... resolvers) {
         if (resolvers == null) {
             return;
         }
@@ -138,7 +138,7 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
      *
      * @param resolvers 需要注册的入参解析器
      */
-    public void registerParameterResolvables(List<IRequestMessageParameterResolvable> resolvers) {
+    public void registerParameterResolvables(List<RequestMessageParameterResolvable> resolvers) {
         if (resolvers == null) {
             return;
         }

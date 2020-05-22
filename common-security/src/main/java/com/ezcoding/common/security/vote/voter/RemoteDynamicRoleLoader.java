@@ -11,14 +11,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author MinChiang
  * @version 1.0.0
  * @date 2020-04-27 17:46
  */
-public class RemoteDynamicRoleLoader implements IDynamicRoleLoadable {
+public class RemoteDynamicRoleLoader implements DynamicRoleLoadable {
 
     /**
      * 应用名称

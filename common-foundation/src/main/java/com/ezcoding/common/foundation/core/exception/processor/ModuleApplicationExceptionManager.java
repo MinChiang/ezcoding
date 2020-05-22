@@ -2,7 +2,7 @@ package com.ezcoding.common.foundation.core.exception.processor;
 
 import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
 import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
-import com.ezcoding.common.foundation.core.application.IModuleNameable;
+import com.ezcoding.common.foundation.core.application.ModuleNameable;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 
@@ -53,7 +53,7 @@ public class ModuleApplicationExceptionManager extends AbstractApplicationExcept
         return result;
     }
 
-    private void checkParams(IModuleNameable moduleNameable, AbstractLayerModuleProcessor abstractLayerModuleProcessor) {
+    private void checkParams(ModuleNameable moduleNameable, AbstractLayerModuleProcessor abstractLayerModuleProcessor) {
         if (moduleNameable == null || abstractLayerModuleProcessor == null) {
             throw new NullPointerException("模块和错误处理器不能为空");
         }

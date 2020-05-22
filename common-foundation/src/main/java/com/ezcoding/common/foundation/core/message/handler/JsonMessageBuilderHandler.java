@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
  * @version 1.0.0
  * @date 2018-07-14 17:08
  */
-public class JsonMessageBuilderHandler implements IMessageBuilderHandler {
+public class JsonMessageBuilderHandler implements MessageBuilderHandleable {
 
     private static final Charset CHARSET_READ_DEFAULT = StandardCharsets.UTF_8;
     private static final Charset CHARSET_WRITE_DEFAULT = StandardCharsets.UTF_8;

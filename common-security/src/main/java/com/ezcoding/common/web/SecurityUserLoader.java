@@ -1,8 +1,8 @@
 package com.ezcoding.common.web;
 
 import com.ezcoding.common.core.user.EmptyUserLoader;
-import com.ezcoding.common.core.user.ILoginInfoPreservable;
-import com.ezcoding.common.core.user.IUserIdentifiable;
+import com.ezcoding.common.core.user.LoginInfoPreservable;
+import com.ezcoding.common.core.user.UserIdentifiable;
 import com.ezcoding.common.core.user.model.DeviceTypeEnum;
 import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
 import com.ezcoding.common.security.authentication.UserAuthentication;
@@ -17,12 +17,12 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 public class SecurityUserLoader extends EmptyUserLoader {
 
     @Override
-    public IUserIdentifiable load() {
+    public UserIdentifiable load() {
         UserAuthentication authentication = (UserAuthentication) ((OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication()).getUserAuthentication();
         return new User(authentication.getName(), authentication.getLoginType(), authentication.getDeviceType());
     }
 
-    private static class User implements IUserIdentifiable, ILoginInfoPreservable {
+    private static class User implements UserIdentifiable, LoginInfoPreservable {
 
         private String code;
 

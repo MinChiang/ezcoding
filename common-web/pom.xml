@@ -19,13 +19,6 @@
     </parent>
 
     <dependencies>
-        <!-- Junit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <!-- Log -->
         <dependency>
             <groupId>org.slf4j</groupId>
