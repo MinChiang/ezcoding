@@ -97,18 +97,18 @@ public class MessageBuilder implements MessageBuildable {
     }
 
     @Override
-    public <T> ResponseMessage<T> buildSuccessResponseMessage(T payload) {
-        return new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), payload);
+    public <T> ResponseMessage<T> buildResponseMessage(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T payload) {
+        return new ResponseMessage<>(responseSystemHead, responseAppHead, payload);
     }
 
     @Override
-    public <T> ResponseMessage<T> buildSuccessResponseMessage(long totalItem, T payload) {
+    public <T> ResponseMessage<T> buildSuccessResponseMessage(Long totalItem, T payload) {
         return new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(new PageInfo(totalItem)), payload);
     }
 
     @Override
-    public <T> ResponseMessage<T> buildResponseMessage(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T payload) {
-        return new ResponseMessage<>(responseSystemHead, responseAppHead, payload);
+    public <T> ResponseMessage<T> buildSuccessResponseMessage(T payload) {
+        return new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), payload);
     }
 
     @Override

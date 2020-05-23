@@ -92,7 +92,7 @@ public interface MessageBuildable {
      * @return 成功响应信息
      * @throws IOException IO异常
      */
-    <T> ResponseMessage<T> buildSuccessResponseMessage(long totalItem, T payload) throws IOException;
+    <T> ResponseMessage<T> buildSuccessResponseMessage(Long totalItem, T payload) throws IOException;
 
     /**
      * 构造成功响应信息

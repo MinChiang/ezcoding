@@ -1,19 +1,16 @@
 package com.ezcoding.common.foundation.core.message;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
-import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
-import com.ezcoding.common.foundation.core.message.head.ResponseAppHead;
-import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
+import com.ezcoding.common.foundation.core.message.head.*;
 import org.springframework.http.*;
 import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
 
 import java.net.URI;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 
 /**
  * @author MinChiang
@@ -22,25 +19,12 @@ import java.util.LinkedHashSet;
  */
 public class StandardResponseMessageBuilder<T> {
 
-    private HttpStatus httpStatus;
-    private ResponseMessage<T> body;
-    private HttpHeaders headers = new HttpHeaders();
-
-    private StandardResponseMessageBuilder(HttpStatus httpStatus) {
-        this.httpStatus = httpStatus;
-    }
-
     public static BodyBuilder status(HttpStatus status) {
-        Assert.notNull(status, "HttpStatus must not be null");
-        return new DefaultBuilder(status);
+        return new DefaultBuilder(Optional.of(status).orElseThrow(() -> new IllegalArgumentException("状态码不能为空")));
     }
 
     public static BodyBuilder ok() {
         return status(HttpStatus.OK);
-    }
-
-    public static <T> StandardResponseHttpEntity<T> ok(T body) {
-        return ok().body(body);
     }
 
     public static BodyBuilder created(URI location) {
@@ -67,122 +51,6 @@ public class StandardResponseMessageBuilder<T> {
         return status(HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    public StandardResponseMessageBuilder<T> header(String headerName, String... headerValues) {
-        for (String headerValue : headerValues) {
-            this.headers.add(headerName, headerValue);
-        }
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> headers(@Nullable HttpHeaders headers) {
-        if (headers != null) {
-            this.headers.putAll(headers);
-        }
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> allow(HttpMethod... allowedMethods) {
-        this.headers.setAllow(new LinkedHashSet<>(Arrays.asList(allowedMethods)));
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> contentLength(long contentLength) {
-        this.headers.setContentLength(contentLength);
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> contentType(MediaType contentType) {
-        this.headers.setContentType(contentType);
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> eTag(String etag) {
-        if (!etag.startsWith("\"") && !etag.startsWith("W/\"")) {
-            etag = "\"" + etag;
-        }
-        if (!etag.endsWith("\"")) {
-            etag = etag + "\"";
-        }
-        this.headers.setETag(etag);
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> lastModified(ZonedDateTime date) {
-        this.headers.setLastModified(date);
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> lastModified(Instant date) {
-        this.headers.setLastModified(date);
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> lastModified(long date) {
-        this.headers.setLastModified(date);
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> location(URI location) {
-        this.headers.setLocation(location);
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> cacheControl(CacheControl cacheControl) {
-        this.headers.setCacheControl(cacheControl);
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> varyBy(String... requestHeaders) {
-        this.headers.setVary(Arrays.asList(requestHeaders));
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> body(ResponseMessage<T> responseMessage) {
-        this.body = responseMessage;
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> body(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T payload) {
-        this.body = MessageBuilder.getInstance().buildResponseMessage(responseSystemHead, responseAppHead, payload);
-        return this;
-    }
-
-    public StandardResponseMessageBuilder<T> success() {
-        return body(MessageBuilder.getInstance().buildSuccessResponseMessage(null));
-    }
-
-    public StandardResponseMessageBuilder<T> success(T body) {
-        return body(MessageBuilder.getInstance().buildSuccessResponseMessage(body));
-    }
-
-    public StandardResponseMessageBuilder<T> success(long totalItem, T body) {
-        return body(MessageBuilder.getInstance().buildSuccessResponseMessage(totalItem, body));
-    }
-
-    public StandardResponseMessageBuilder<T> error() {
-        return body(MessageBuilder.getInstance().buildErrorResponseMessage());
-    }
-
-    public StandardResponseMessageBuilder<T> error(ApplicationException businessException, T payload) {
-        return error(businessException.getIdentification(), businessException.getMessage(), payload);
-    }
-
-    public StandardResponseMessageBuilder<T> error(ApplicationException businessException) {
-        return error(businessException.getIdentification(), businessException.getMessage(), null);
-    }
-
-    public StandardResponseMessageBuilder<T> error(String returnCode, String returnMessage) {
-        return error(returnCode, returnMessage, null);
-    }
-
-    public StandardResponseMessageBuilder<T> error(String returnCode, String returnMessage, T payload) {
-        return body(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), payload);
-    }
-
-    public StandardResponseHttpEntity<T> build() {
-        return new StandardResponseHttpEntity<>(this.body, this.headers, this.httpStatus);
-    }
-
     public interface HeadersBuilder<B extends HeadersBuilder<B>> {
 
         B header(String headerName, String... headerValues);
@@ -205,12 +73,6 @@ public class StandardResponseMessageBuilder<T> {
 
         B varyBy(String... requestHeaders);
 
-        <T> StandardResponseHttpEntity<T> build();
-
-        StandardResponseHttpEntity<?> error();
-
-        StandardResponseHttpEntity<?> error(ApplicationException exception);
-
     }
 
     public interface BodyBuilder extends HeadersBuilder<BodyBuilder> {
@@ -219,7 +81,21 @@ public class StandardResponseMessageBuilder<T> {
 
         BodyBuilder contentType(MediaType contentType);
 
-        <T> StandardResponseHttpEntity<T> body(@Nullable T body);
+        <T> StandardResponseHttpEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body);
+
+        <T> StandardResponseHttpEntity<T> success(Long totalItem, T body);
+
+        <T> StandardResponseHttpEntity<T> success(T body);
+
+        StandardResponseHttpEntity<?> success();
+
+        <T> StandardResponseHttpEntity<T> error(ApplicationException exception, T body);
+
+        StandardResponseHttpEntity<?> error(ApplicationException exception);
+
+        <T> StandardResponseHttpEntity<T> error(String returnCode, String returnMessage, T body);
+
+        StandardResponseHttpEntity<?> error(String returnCode, String returnMessage);
 
     }
 
@@ -315,17 +191,43 @@ public class StandardResponseMessageBuilder<T> {
         }
 
         @Override
-        public <T> StandardResponseHttpEntity<T> build() {
-            return body(null);
+        public <T> StandardResponseHttpEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body) {
+            return new StandardResponseHttpEntity<>(new ResponseMessage<>(responseSystemHead, responseAppHead, body), this.headers, this.statusCode);
         }
 
         @Override
-        public <T> StandardResponseHttpEntity<T> body(@Nullable T body) {
-            if (body instanceof ResponseMessage) {
-                return new StandardResponseHttpEntity<T>((ResponseMessage<T>) body, this.headers, this.statusCode);
-            } else {
-                return new StandardResponseHttpEntity<T>(new ResponseMessage<>(body), this.headers, this.statusCode);
-            }
+        public <T> StandardResponseHttpEntity<T> success(Long totalItem, T body) {
+            return message(new ResponseSystemHead(), new SuccessAppHead(new PageInfo(totalItem)), body);
+        }
+
+        @Override
+        public <T> StandardResponseHttpEntity<T> success(T body) {
+            return success(null, body);
+        }
+
+        @Override
+        public StandardResponseHttpEntity<?> success() {
+            return success(null);
+        }
+
+        @Override
+        public <T> StandardResponseHttpEntity<T> error(String returnCode, String returnMessage, T body) {
+            return message(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), body);
+        }
+
+        @Override
+        public StandardResponseHttpEntity<?> error(String returnCode, String returnMessage) {
+            return error(returnCode, returnMessage, null);
+        }
+
+        @Override
+        public <T> StandardResponseHttpEntity<T> error(ApplicationException exception, T body) {
+            return error(exception.getIdentification(), exception.getMessage(), body);
+        }
+
+        @Override
+        public StandardResponseHttpEntity<?> error(ApplicationException exception) {
+            return error(exception, null);
         }
 
     }

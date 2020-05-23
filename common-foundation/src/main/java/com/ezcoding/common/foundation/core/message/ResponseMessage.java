@@ -30,10 +30,6 @@ public class ResponseMessage<T> extends AbstractMessage<T> implements Serializab
         this.payload = payload;
     }
 
-    public boolean success() {
-        return Optional.ofNullable(this.appHead).map(ResponseAppHead::success).orElse(false);
-    }
-
     public ResponseMessage(ResponseAppHead appHead, T payload) {
         this(new ResponseSystemHead(), appHead, payload);
     }
@@ -42,6 +38,10 @@ public class ResponseMessage<T> extends AbstractMessage<T> implements Serializab
         super(payload);
         this.systemHead = systemHead;
         this.appHead = appHead;
+    }
+
+    public boolean success() {
+        return Optional.ofNullable(this.appHead).map(ResponseAppHead::success).orElse(false);
     }
 
     public ResponseSystemHead getSystemHead() {
