@@ -3,7 +3,6 @@ package com.ezcoding.common.foundation.core.message;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.message.head.*;
 import org.springframework.http.*;
-import org.springframework.lang.Nullable;
 
 import java.net.URI;
 import java.time.Instant;
@@ -35,7 +34,7 @@ public class StandardResponseMessageBuilder<T> {
         return status(HttpStatus.ACCEPTED);
     }
 
-    public static BodyBuilder noContent() {
+    public static HeadersBuilder<?> noContent() {
         return status(HttpStatus.NO_CONTENT);
     }
 
@@ -43,7 +42,7 @@ public class StandardResponseMessageBuilder<T> {
         return status(HttpStatus.BAD_REQUEST);
     }
 
-    public static BodyBuilder notFound() {
+    public static HeadersBuilder<?> notFound() {
         return status(HttpStatus.NOT_FOUND);
     }
 
@@ -55,7 +54,7 @@ public class StandardResponseMessageBuilder<T> {
 
         B header(String headerName, String... headerValues);
 
-        B headers(@Nullable HttpHeaders headers);
+        B headers(HttpHeaders headers);
 
         B allow(HttpMethod... allowedMethods);
 
@@ -72,6 +71,8 @@ public class StandardResponseMessageBuilder<T> {
         B cacheControl(CacheControl cacheControl);
 
         B varyBy(String... requestHeaders);
+
+        StandardResponseHttpEntity<?> build();
 
     }
 
@@ -117,7 +118,7 @@ public class StandardResponseMessageBuilder<T> {
         }
 
         @Override
-        public BodyBuilder headers(@Nullable HttpHeaders headers) {
+        public BodyBuilder headers(HttpHeaders headers) {
             if (headers != null) {
                 this.headers.putAll(headers);
             }
@@ -188,6 +189,11 @@ public class StandardResponseMessageBuilder<T> {
         public BodyBuilder varyBy(String... requestHeaders) {
             this.headers.setVary(Arrays.asList(requestHeaders));
             return this;
+        }
+
+        @Override
+        public StandardResponseHttpEntity<?> build() {
+            return success();
         }
 
         @Override

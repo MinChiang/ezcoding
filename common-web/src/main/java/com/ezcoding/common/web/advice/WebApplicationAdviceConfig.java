@@ -2,11 +2,10 @@ package com.ezcoding.common.web.advice;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
-import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
+import com.ezcoding.common.foundation.core.message.StandardResponseHttpEntity;
+import com.ezcoding.common.foundation.core.message.StandardResponseMessageBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -34,48 +33,42 @@ public class WebApplicationAdviceConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebApplicationAdviceConfig.class);
 
-    @Autowired
-    private MessageBuildable messageBuilder;
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
-    public ResponseMessage<?> handleHttpRequestMethodNotSupportedExceptionException(HttpRequestMethodNotSupportedException e) throws IOException {
+    public StandardResponseHttpEntity<?> handleHttpRequestMethodNotSupportedExceptionException(HttpRequestMethodNotSupportedException e) {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("请求类型异常：", e);
         }
-        return this.messageBuilder.buildErrorResponseMessage(
-                WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_REQUEST_TYPE_ERROR).build()
-        );
+        return StandardResponseMessageBuilder
+                .status(HttpStatus.NOT_ACCEPTABLE)
+                .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_REQUEST_TYPE_ERROR).build());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = IllegalArgumentException.class)
-    public ResponseMessage<?> handleIllegalArgumentException(IllegalArgumentException e) throws IOException {
+    public StandardResponseHttpEntity<?> handleIllegalArgumentException(IllegalArgumentException e) {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("参数校验异常：", e);
         }
-        return this.messageBuilder.buildErrorResponseMessage(
-                WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).build()
-        );
+        return StandardResponseMessageBuilder
+                .status(HttpStatus.BAD_REQUEST)
+                .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).build());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = BindException.class)
-    public ResponseMessage<?> handleBindException(BindException e) throws IOException {
+    public StandardResponseHttpEntity<?> handleBindException(BindException e) throws IOException {
         StringBuilder sb = new StringBuilder();
         e.getAllErrors().forEach(er -> sb.append(er.getDefaultMessage()));
         String result = sb.toString();
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("参数校验异常：{}", result);
         }
-        return this.messageBuilder.buildErrorResponseMessage(
-                WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).params(result).build()
-        );
+        return StandardResponseMessageBuilder
+                .status(HttpStatus.BAD_REQUEST)
+                .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).params(result).build());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ConstraintViolationException.class)
-    public ResponseMessage<?> handleConstraintViolationException(ConstraintViolationException e) throws IOException {
+    public StandardResponseHttpEntity<?> handleConstraintViolationException(ConstraintViolationException e) throws IOException {
         Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
         StringBuilder stringBuilder = new StringBuilder();
         constraintViolations.forEach(c -> stringBuilder.append(c.getMessage()));
@@ -83,26 +76,29 @@ public class WebApplicationAdviceConfig {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("参数校验异常：{}", result);
         }
-        return this.messageBuilder.buildErrorResponseMessage(
-                WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).params(result).build()
-        );
+        return StandardResponseMessageBuilder
+                .status(HttpStatus.BAD_REQUEST)
+                .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).params(result).build());
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = NoHandlerFoundException.class)
-    public ResponseMessage<?> handleNoHandlerFoundException(NoHandlerFoundException e) throws IOException {
-        return this.messageBuilder.buildErrorResponseMessage(
-                WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_RESOURCE_NOT_FIND_ERROR).build()
-        );
+    public StandardResponseHttpEntity<?> handleNoHandlerFoundException(NoHandlerFoundException e) throws IOException {
+        if (LOGGER.isErrorEnabled()) {
+            LOGGER.error("未找到对应的处理器", e);
+        }
+        return StandardResponseMessageBuilder
+                .status(HttpStatus.NOT_FOUND)
+                .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_RESOURCE_NOT_FIND_ERROR).build());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ApplicationException.class)
-    public ResponseMessage<?> handleBusinessException(ApplicationException e) throws IOException {
+    public StandardResponseHttpEntity<?> handleBusinessException(ApplicationException e) throws IOException {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error(e.toString());
         }
-        return this.messageBuilder.buildErrorResponseMessage(e, null);
+        return StandardResponseMessageBuilder
+                .status(HttpStatus.BAD_REQUEST)
+                .error(e);
     }
 
 }
