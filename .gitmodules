@@ -1,3 +1,0 @@
-[submodule "account"]
-	path = account
-	url = ssh://git@gitlab.minchiang.cn:50003/minchiang/account.git
