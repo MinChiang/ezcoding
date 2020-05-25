@@ -34,7 +34,6 @@ hs_err_pid*
 target/
 .idea/
 logs/
-submodule/
 
 .DS_Store
 node_modules/
