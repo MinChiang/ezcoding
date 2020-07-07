@@ -111,27 +111,29 @@ public class ModuleApplicationExceptionManager extends AbstractApplicationExcept
     /**
      * 注册功能级别的错误处理器
      *
-     * @param functionLayerModule 功能模块
-     * @param processor           错误处理器
-     * @param defaultProcessor    默认层级处理器
+     * @param moduleLayerModule 模块号
+     * @param errorSuffixCode   错误后缀码
+     * @param processor         错误处理器
+     * @param defaultProcessor  默认层级处理器
      */
-    public void registerFunctionProcessor(FunctionLayerModule functionLayerModule, AbstractFunctionLayerModuleProcessor processor, AbstractLayerModuleProcessor defaultProcessor) {
-        checkParams(functionLayerModule, processor);
+    public void registerFunctionProcessor(ModuleLayerModule moduleLayerModule, String errorSuffixCode, AbstractErrorSuffixCodeProcessor processor, AbstractLayerModuleProcessor defaultProcessor) {
+        checkParams(moduleLayerModule, processor);
         applicationLayerModuleProcessors
-                .computeIfAbsent(functionLayerModule.getApplicationCode(), (key) -> new ApplicationLayerModuleProcessor(null))
+                .computeIfAbsent(moduleLayerModule.getApplicationCode(), (key) -> new ApplicationLayerModuleProcessor(null))
                 .getModuleLayerModuleProcessors()
-                .computeIfAbsent(functionLayerModule.getModuleCode(), (key) -> new ModuleLayerModuleProcessor(defaultProcessor))
-                .registerProcessor(functionLayerModule.getFunctionCode(), processor);
+                .computeIfAbsent(moduleLayerModule.getModuleCode(), (key) -> new ModuleLayerModuleProcessor(defaultProcessor))
+                .registerProcessor(errorSuffixCode, processor);
     }
 
     /**
      * 注册功能级别的错误处理器
      *
      * @param functionLayerModule 功能模块
+     * @param errorSuffixCode     错误后缀码
      * @param processor           错误处理器
      */
-    public void registerFunctionProcessor(FunctionLayerModule functionLayerModule, AbstractFunctionLayerModuleProcessor processor) {
-        registerFunctionProcessor(functionLayerModule, processor, null);
+    public void registerFunctionProcessor(FunctionLayerModule functionLayerModule, String errorSuffixCode, AbstractErrorSuffixCodeProcessor processor) {
+        registerFunctionProcessor(functionLayerModule, errorSuffixCode, processor, null);
     }
 
 }

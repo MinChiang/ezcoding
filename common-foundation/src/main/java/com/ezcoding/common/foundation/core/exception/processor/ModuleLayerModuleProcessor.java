@@ -1,9 +1,9 @@
 package com.ezcoding.common.foundation.core.exception.processor;
 
 import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
-import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
+import com.ezcoding.common.foundation.core.exception.ModuleExceptionCodeGenerator;
 
 import java.util.Map;
 import java.util.Optional;
@@ -16,12 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ModuleLayerModuleProcessor extends AbstractLayerModuleProcessor {
 
-    private Map<String, AbstractFunctionLayerModuleProcessor> functionLayerModuleProcessors = new ConcurrentHashMap<>(0);
+    private Map<String, AbstractErrorSuffixCodeProcessor> errorSuffixCodeProcessors = new ConcurrentHashMap<>(0);
     private AbstractLayerModuleProcessor defaultProcessor = new EmptyApplicationExceptionProcessor();
 
-    public ModuleLayerModuleProcessor(Map<String, AbstractFunctionLayerModuleProcessor> functionLayerModuleProcessors, AbstractLayerModuleProcessor defaultProcessor) {
-        if (functionLayerModuleProcessors != null && functionLayerModuleProcessors.size() > 0) {
-            this.functionLayerModuleProcessors.putAll(functionLayerModuleProcessors);
+    public ModuleLayerModuleProcessor(Map<String, AbstractErrorSuffixCodeProcessor> errorSuffixCodeProcessors, AbstractLayerModuleProcessor defaultProcessor) {
+        if (errorSuffixCodeProcessors != null && errorSuffixCodeProcessors.size() > 0) {
+            this.errorSuffixCodeProcessors.putAll(errorSuffixCodeProcessors);
         }
         Optional
                 .ofNullable(defaultProcessor)
@@ -39,16 +39,16 @@ public class ModuleLayerModuleProcessor extends AbstractLayerModuleProcessor {
     @Override
     public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
         int startInclude = ApplicationLayerModule.getApplicationCodeLength() + ModuleLayerModule.getModuleCodeLength();
-        int endExclude = startInclude + FunctionLayerModule.getFunctionCodeLength();
-        String functionCode = applicationException
+        int endExclude = startInclude + ModuleExceptionCodeGenerator.getErrorSuffixCodeLength();
+        String errorSuffixCode = applicationException
                 .getIdentification()
                 .substring(startInclude, endExclude);
-        AbstractFunctionLayerModuleProcessor abstractFunctionLayerModuleProcessor = functionLayerModuleProcessors.get(functionCode);
+        AbstractErrorSuffixCodeProcessor abstractErrorSuffixCodeProcessor = errorSuffixCodeProcessors.get(errorSuffixCode);
         ProcessContext result;
-        if (abstractFunctionLayerModuleProcessor == null) {
+        if (abstractErrorSuffixCodeProcessor == null) {
             result = defaultProcessor.process(applicationException, processContext);
         } else {
-            result = abstractFunctionLayerModuleProcessor.process(applicationException, processContext);
+            result = abstractErrorSuffixCodeProcessor.process(applicationException, processContext);
             if (!result.isProcessed()) {
                 result = defaultProcessor.process(applicationException, processContext);
             }
@@ -56,16 +56,16 @@ public class ModuleLayerModuleProcessor extends AbstractLayerModuleProcessor {
         return result;
     }
 
-    public void registerProcessors(Map<String, AbstractFunctionLayerModuleProcessor> processors) {
-        this.functionLayerModuleProcessors.putAll(processors);
+    public void registerProcessors(Map<String, AbstractErrorSuffixCodeProcessor> processors) {
+        this.errorSuffixCodeProcessors.putAll(processors);
     }
 
-    public void registerProcessor(String functionCode, AbstractFunctionLayerModuleProcessor processor) {
-        this.functionLayerModuleProcessors.put(functionCode, processor);
+    public void registerProcessor(String errorSuffixCode, AbstractErrorSuffixCodeProcessor processor) {
+        this.errorSuffixCodeProcessors.put(errorSuffixCode, processor);
     }
 
-    public Map<String, AbstractFunctionLayerModuleProcessor> getFunctionLayerModuleProcessors() {
-        return functionLayerModuleProcessors;
+    public Map<String, AbstractErrorSuffixCodeProcessor> getErrorSuffixCodeProcessors() {
+        return errorSuffixCodeProcessors;
     }
 
     public AbstractLayerModuleProcessor getDefaultProcessor() {

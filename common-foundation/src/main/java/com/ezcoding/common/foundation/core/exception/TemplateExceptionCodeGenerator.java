@@ -1,6 +1,6 @@
 package com.ezcoding.common.foundation.core.exception;
 
-import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
+import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 
 /**
  * @author MinChiang
@@ -14,8 +14,8 @@ public class TemplateExceptionCodeGenerator extends ModuleExceptionCodeGenerator
      */
     private final String template;
 
-    public TemplateExceptionCodeGenerator(FunctionLayerModule functionLayerModule, String template) {
-        super(functionLayerModule);
+    public TemplateExceptionCodeGenerator(ModuleLayerModule moduleLayerModule, String errorSuffixCode, String template) {
+        super(moduleLayerModule, errorSuffixCode);
         this.template = template;
     }
 

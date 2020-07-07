@@ -1,6 +1,6 @@
 package com.ezcoding.common.foundation.core.exception;
 
-import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
+import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -15,13 +15,13 @@ public class WebExceptionCodeGenerator extends TemplateExceptionCodeGenerator {
      */
     private HttpStatus httpStatus;
 
-    public WebExceptionCodeGenerator(FunctionLayerModule functionLayerModule, String template, HttpStatus httpStatus) {
-        super(functionLayerModule, template);
+    public WebExceptionCodeGenerator(ModuleLayerModule moduleLayerModule, String errorSuffixCode, String template, HttpStatus httpStatus) {
+        super(moduleLayerModule, errorSuffixCode, template);
         this.httpStatus = httpStatus;
     }
 
-    public WebExceptionCodeGenerator(FunctionLayerModule functionLayerModule, String template) {
-        this(functionLayerModule, template, HttpStatus.INTERNAL_SERVER_ERROR);
+    public WebExceptionCodeGenerator(ModuleLayerModule moduleLayerModule, String errorSuffixCode, String template) {
+        this(moduleLayerModule, errorSuffixCode, template, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     public HttpStatus getHttpStatus() {
