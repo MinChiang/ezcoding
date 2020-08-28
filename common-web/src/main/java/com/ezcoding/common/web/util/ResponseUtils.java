@@ -40,7 +40,7 @@ public class ResponseUtils {
      */
     public static <T> T checkAndGetResult(ResponseMessage<T> responseMessage) {
         return checkAndGetResult(responseMessage, () -> {
-            String error = Optional.ofNullable(responseMessage).map(ResponseMessage::getAppHead).map(ResponseAppHead::getReturnMessage).orElse(null);
+            String error = Optional.of(responseMessage).map(ResponseMessage::getAppHead).map(ResponseAppHead::getReturnMessage).orElse(null);
             return WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_REMOTE_REQUEST_ERROR).addOriginalParams(error).build();
         });
     }

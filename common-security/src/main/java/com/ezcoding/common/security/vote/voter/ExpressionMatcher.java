@@ -1,7 +1,5 @@
 package com.ezcoding.common.security.vote.voter;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
@@ -37,17 +35,17 @@ public class ExpressionMatcher implements RoleExpressionMatchable {
      * @return 解析后的执行内容
      */
     private List<Object> parse(String originalExpression) {
-        String expression = StringUtils.deleteWhitespace(originalExpression).toUpperCase();
-
         List<Object> result = new LinkedList<>();
         Stack<Object> expressionStack = new Stack<>();
         boolean lastAndFlag = false;
         boolean lastOrFlag = false;
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < expression.length(); i++) {
-            char c = expression.charAt(i);
+        for (int i = 0; i < originalExpression.length(); i++) {
+            char c = originalExpression.charAt(i);
             switch (c) {
+                case ' ':
+                    break;
                 case '&':
                     if (lastAndFlag) {
                         lastAndFlag = false;
@@ -123,7 +121,7 @@ public class ExpressionMatcher implements RoleExpressionMatchable {
 
     @Override
     public boolean match(Collection<? extends GrantedAuthority> authorities) {
-        if (CollectionUtils.isEmpty(this.execution)) {
+        if (this.execution == null || this.execution.isEmpty()) {
             return true;
         }
 

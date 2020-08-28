@@ -2,7 +2,6 @@ package com.ezcoding.common.security.starter;
 
 import com.ezcoding.common.security.metadatasource.DynamicAnnotationSecurityMetadataSource;
 import com.ezcoding.common.security.vote.voter.*;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -76,10 +75,10 @@ public class MethodSecurityAutoConfiguration extends GlobalMethodSecurityConfigu
                                                        DynamicAnnotationSecurityMetadataSource dynamicAnnotationSecurityMetadataSource) {
             List<DynamicRoleLoadable> loaders = new ArrayList<>();
             //需要注意注册的先后顺序，后面注册的会覆盖之前注册的内容
-            if (StringUtils.isNotBlank(ezcodingSecurityConfigBean.getDynamicRoleLoadYaml())) {
+            if (ezcodingSecurityConfigBean.getDynamicRoleLoadYaml() != null && !ezcodingSecurityConfigBean.getDynamicRoleLoadYaml().isEmpty()) {
                 loaders.add(new LocalFileDynamicRoleLoader(ezcodingSecurityConfigBean.getDynamicRoleLoadYaml(), this.applicationName));
             }
-            if (StringUtils.isNotBlank(ezcodingSecurityConfigBean.getDynamicRoleLoadUrl())) {
+            if (ezcodingSecurityConfigBean.getDynamicRoleLoadUrl() != null && !ezcodingSecurityConfigBean.getDynamicRoleLoadUrl().isEmpty()) {
                 loaders.add(new RemoteDynamicRoleLoader(this.applicationName, ezcodingSecurityConfigBean.getDynamicRoleLoadUrl(), dynamicAnnotationSecurityMetadataSource));
             }
 

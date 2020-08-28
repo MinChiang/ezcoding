@@ -19,7 +19,7 @@ public class BaseModelUtils {
      * @param <T>       被填充的类型
      * @return 被填充的对象
      */
-    public static <T extends BaseModel> T fillCreateField(@NotNull T baseModel, Date date, String user) {
+    public static <T extends BaseModel> T fillCreateField(@NotNull T baseModel, Date date, Long user) {
         baseModel.setCreator(user);
         baseModel.setCreateTime(date);
         return baseModel;
@@ -34,7 +34,7 @@ public class BaseModelUtils {
      * @param <T>       被填充的类型
      * @return 被填充的对象
      */
-    public static <T extends BaseModel> T fillModifyField(@NotNull T baseModel, Date date, String user) {
+    public static <T extends BaseModel> T fillModifyField(@NotNull T baseModel, Date date, Long user) {
         baseModel.setModifier(user);
         baseModel.setModifyTime(date);
         return baseModel;
@@ -49,7 +49,7 @@ public class BaseModelUtils {
      * @param <T>       被填充的类型
      * @return 被填充的对象
      */
-    public static <T extends BaseModel> T fillAllField(@NotNull T baseModel, Date date, String user) {
+    public static <T extends BaseModel> T fillAllField(@NotNull T baseModel, Date date, Long user) {
         fillCreateField(baseModel, date, user);
         fillModifyField(baseModel, date, user);
         return baseModel;
@@ -63,7 +63,7 @@ public class BaseModelUtils {
      * @param <T>       被填充的类型
      * @return 被填充的对象
      */
-    public static <T extends BaseModel> T fillCreateField(@NotNull T baseModel, String user) {
+    public static <T extends BaseModel> T fillCreateField(@NotNull T baseModel, Long user) {
         baseModel.setCreator(user);
         baseModel.setCreateTime(new Date());
         return baseModel;
@@ -77,7 +77,7 @@ public class BaseModelUtils {
      * @param <T>       被填充的类型
      * @return 被填充的对象
      */
-    public static <T extends BaseModel> T fillModifyField(@NotNull T baseModel, String user) {
+    public static <T extends BaseModel> T fillModifyField(@NotNull T baseModel, Long user) {
         baseModel.setModifier(user);
         baseModel.setModifyTime(new Date());
         return baseModel;
@@ -90,7 +90,7 @@ public class BaseModelUtils {
      * @param <T>       被填充的类型
      * @return 被填充的对象
      */
-    public static <T extends BaseModel> T fillAllField(@NotNull T baseModel, String user) {
+    public static <T extends BaseModel> T fillAllField(@NotNull T baseModel, Long user) {
         Date now = new Date();
         baseModel.setCreator(user);
         baseModel.setModifier(user);

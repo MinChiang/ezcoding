@@ -1,7 +1,6 @@
 package com.ezcoding.common.security.vote.voter;
 
 import com.ezcoding.common.security.configattribute.DynamicConfigAttribute;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class DelegateDynamicRoleLoader implements DynamicRoleLoadable {
     }
 
     public void addLoaders(List<DynamicRoleLoadable> loadables) {
-        if (CollectionUtils.isEmpty(loadables)) {
+        if (loadables == null || loadables.isEmpty()) {
             return;
         }
         this.loadables.addAll(loadables);
@@ -32,7 +31,7 @@ public class DelegateDynamicRoleLoader implements DynamicRoleLoadable {
     @Override
     public Map<DynamicConfigAttribute, String> load() throws IOException {
         Map<DynamicConfigAttribute, String> result = new HashMap<>();
-        if (CollectionUtils.isEmpty(loadables)) {
+        if (loadables == null || loadables.isEmpty()) {
             return result;
         }
 

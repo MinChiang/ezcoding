@@ -1,7 +1,7 @@
 package com.ezcoding.common.foundation.core.exception;
 
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
-import org.apache.commons.lang3.StringUtils;
+import com.ezcoding.common.foundation.core.application.ModuleNameable;
 
 /**
  * @author MinChiang
@@ -24,14 +24,14 @@ public class ModuleExceptionCodeGenerator implements ExceptionCodeGeneratable {
     protected String errorSuffixCode;
 
     public ModuleExceptionCodeGenerator(ModuleLayerModule moduleLayerModule, String errorSuffixCode) {
-        if (StringUtils.isEmpty(errorSuffixCode)) {
+        if (errorSuffixCode == null || errorSuffixCode.isEmpty()) {
             throw new IllegalArgumentException("错误后缀码不能为空");
         }
         if (errorSuffixCode.length() > errorSuffixCodeLength) {
             throw new IllegalArgumentException("错误后缀码长度必须小于等于" + errorSuffixCodeLength);
         }
         this.moduleLayerModule = moduleLayerModule;
-        this.errorSuffixCode = StringUtils.leftPad(errorSuffixCode, errorSuffixCodeLength, errorSuffixCodeFillChar);
+        this.errorSuffixCode = ModuleNameable.leftPad(errorSuffixCode, errorSuffixCodeLength, errorSuffixCodeFillChar);
     }
 
     @Override

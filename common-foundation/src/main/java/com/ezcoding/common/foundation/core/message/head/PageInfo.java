@@ -17,6 +17,7 @@ public class PageInfo implements Cloneable, Serializable {
      * 当前页码
      */
     public static int DEFAULT_CURRENT_PAGE = 1;
+
     /**
      * 每页的条数
      */

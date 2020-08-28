@@ -10,7 +10,7 @@ public class DefaultExceptionBuilder extends AbstractExceptionBuilder {
     /**
      * 摘要
      */
-    private String summary;
+    private final String summary;
 
     public DefaultExceptionBuilder(String identification, String summary) {
         super(identification);

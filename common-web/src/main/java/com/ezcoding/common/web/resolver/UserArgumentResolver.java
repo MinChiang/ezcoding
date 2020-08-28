@@ -2,11 +2,10 @@ package com.ezcoding.common.web.resolver;
 
 import com.ezcoding.common.core.user.UserIdentifiable;
 import com.ezcoding.common.core.user.UserLoadable;
-import com.ezcoding.common.core.user.model.UserDetailInformationIdentifiable;
+import com.ezcoding.common.core.user.model.User;
 import com.ezcoding.common.web.user.CompositeUserLoader;
 import com.ezcoding.common.web.user.UserProxy;
 import com.ezcoding.common.web.user.UserProxyable;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -30,7 +29,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(CurrentUser.class) && UserDetailInformationIdentifiable.class.isAssignableFrom(parameter.getParameterType());
+        return parameter.hasParameterAnnotation(CurrentUser.class) && UserIdentifiable.class.isAssignableFrom(parameter.getParameterType());
     }
 
     @Override
@@ -40,19 +39,19 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
         CurrentUser parameterAnnotation = parameter.getParameterAnnotation(CurrentUser.class);
         //校验当前是否必须含有登陆用户
-        assert parameterAnnotation != null;
         if (parameterAnnotation.required()) {
-            if (user == null || StringUtils.isEmpty(user.getCode())) {
+            if (user == null || user.getId() == null) {
                 throw new RuntimeException("用户未登录");
             }
         }
 
-        switch (parameterAnnotation.type()) {
+        switch (parameterAnnotation.proxy()) {
             case AUTO:
-            case PROXY:
                 user = new UserProxy(user, this.proxy);
                 break;
-            case AUTH:
+            case NONE:
+                user = new User(user.getId(), user.getAccount(), user.getPhone(), user.getEmail());
+                break;
             default:
                 break;
         }

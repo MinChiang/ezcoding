@@ -19,19 +19,19 @@ public class SecurityUserLoader extends EmptyUserLoader {
     @Override
     public UserIdentifiable load() {
         UserAuthentication authentication = (UserAuthentication) ((OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication()).getUserAuthentication();
-        return new User(authentication.getName(), authentication.getLoginType(), authentication.getDeviceType());
+        return new SecurityUser(authentication.getId(), authentication.getLoginType(), authentication.getDeviceType());
     }
 
-    private static class User implements UserIdentifiable, LoginInfoPreservable {
+    private static class SecurityUser implements UserIdentifiable, LoginInfoPreservable {
 
-        private String code;
+        private final Long id;
 
-        private LoginRegisterTypeEnum loginTye;
+        private final LoginRegisterTypeEnum loginTye;
 
-        private DeviceTypeEnum deviceType;
+        private final DeviceTypeEnum deviceType;
 
-        public User(String code, LoginRegisterTypeEnum loginTye, DeviceTypeEnum deviceType) {
-            this.code = code;
+        public SecurityUser(Long id, LoginRegisterTypeEnum loginTye, DeviceTypeEnum deviceType) {
+            this.id = id;
             this.loginTye = loginTye;
             this.deviceType = deviceType;
         }
@@ -47,8 +47,8 @@ public class SecurityUserLoader extends EmptyUserLoader {
         }
 
         @Override
-        public String getCode() {
-            return this.code;
+        public Long getId() {
+            return this.id;
         }
 
         @Override

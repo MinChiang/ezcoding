@@ -33,9 +33,9 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonMessageMethodProcessor.class);
 
-    private JsonRequestMessageResolver jsonRequestMessageResolver;
-    private List<ResponseMessageReturnValueResolvable> returnValueResolvables = new ArrayList<>();
-    private List<RequestMessageParameterResolvable> parameterResolvables = new ArrayList<>();
+    private final JsonRequestMessageResolver jsonRequestMessageResolver;
+    private final List<ResponseMessageReturnValueResolvable> returnValueResolvables = new ArrayList<>();
+    private final List<RequestMessageParameterResolvable> parameterResolvables = new ArrayList<>();
 
     public JsonMessageMethodProcessor(List<HttpMessageConverter<?>> converters,
                                       JsonRequestMessageResolver jsonRequestMessageResolver) {

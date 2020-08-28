@@ -14,11 +14,10 @@ import java.io.Serializable;
 public class RequestSystemHead extends AbstractSystemHead implements Serializable {
 
     private static final long serialVersionUID = 7333737769389481420L;
-    private static String defaultConsumerId;
-
     public static final String CONSUMER_ID = "consumerId";
     public static final String CONSUMER_SEQUENCE_NO = "consumerSequenceNo";
 
+    private static String defaultConsumerId;
     private static IdProduceable sequenceNoProducer = OriginalUuidProducer.getInstance();
 
     @JsonProperty(value = CONSUMER_ID)

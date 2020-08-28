@@ -28,7 +28,7 @@ public abstract class BaseModel implements Serializable {
      * 创建人
      */
     @TableField(fill = FieldFill.INSERT)
-    protected String creator;
+    protected Long creator;
 
     /**
      * 创建时间
@@ -40,7 +40,7 @@ public abstract class BaseModel implements Serializable {
      * 更新人
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    protected String modifier;
+    protected Long modifier;
 
     /**
      * 更新时间
@@ -56,11 +56,11 @@ public abstract class BaseModel implements Serializable {
         this.id = id;
     }
 
-    public String getCreator() {
+    public Long getCreator() {
         return creator;
     }
 
-    public void setCreator(String creator) {
+    public void setCreator(Long creator) {
         this.creator = creator;
     }
 
@@ -72,11 +72,11 @@ public abstract class BaseModel implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getModifier() {
+    public Long getModifier() {
         return modifier;
     }
 
-    public void setModifier(String modifier) {
+    public void setModifier(Long modifier) {
         this.modifier = modifier;
     }
 

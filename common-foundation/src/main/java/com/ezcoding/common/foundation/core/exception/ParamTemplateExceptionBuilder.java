@@ -1,9 +1,5 @@
 package com.ezcoding.common.foundation.core.exception;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,13 +22,13 @@ public class ParamTemplateExceptionBuilder extends AbstractTemplateExceptionBuil
         List<Object> params = this.getParams();
         String template = this.getTemplate();
 
-        if (template == null || CollectionUtils.isEmpty(params)) {
+        if (template == null || params.isEmpty()) {
             return template;
         }
 
         String temp = template;
         for (int i = 0; i < params.size(); i++) {
-            temp = StringUtils.replace(temp, PREFIX + i + SUFFIX, params.get(i).toString());
+            temp = temp.replace(PREFIX + i + SUFFIX, params.get(i).toString());
         }
         return temp;
     }
@@ -55,7 +51,7 @@ public class ParamTemplateExceptionBuilder extends AbstractTemplateExceptionBuil
      * @return 实例对象
      */
     public ParamTemplateExceptionBuilder params(Object... params) {
-        if (ArrayUtils.isEmpty(params)) {
+        if (params == null || params.length == 0) {
             return this;
         }
         this.getParams().addAll(Arrays.asList(params));

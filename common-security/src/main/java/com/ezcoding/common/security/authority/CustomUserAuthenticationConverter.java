@@ -98,7 +98,7 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
                 details = content;
             }
 
-            UserAuthentication userAuthentication = new UserAuthentication(principal.toString(), authorities, true);
+            UserAuthentication userAuthentication = new UserAuthentication(Long.valueOf(principal.toString()), authorities, true);
             userAuthentication.setLoginType(loginType == null ? LoginRegisterTypeEnum.UNKNOWN : loginType);
             userAuthentication.setDeviceType(deviceType == null ? DeviceTypeEnum.UNKNOWN : deviceType);
             userAuthentication.setDetails(details);

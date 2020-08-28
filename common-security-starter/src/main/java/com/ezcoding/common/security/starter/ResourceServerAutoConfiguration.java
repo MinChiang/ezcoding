@@ -1,9 +1,8 @@
 package com.ezcoding.common.security.starter;
 
-import com.ezcoding.common.security.converter.StandardAccessTokenConverter;
 import com.ezcoding.common.security.authority.CustomUserAuthenticationConverter;
+import com.ezcoding.common.security.converter.StandardAccessTokenConverter;
 import com.ezcoding.common.security.entrypoint.Oauth2AuthenticationEntryPoint;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +48,9 @@ public class ResourceServerAutoConfiguration extends ResourceServerConfigurerAda
 
     private String getVerifierKey() throws IOException {
         ClassPathResource resource = new ClassPathResource(ezcodingSecurityConfigBean.getPublicKey());
-        return IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8);
+        byte[] bytes = new byte[resource.getInputStream().available()];
+        resource.getInputStream().read(bytes);
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     @Override

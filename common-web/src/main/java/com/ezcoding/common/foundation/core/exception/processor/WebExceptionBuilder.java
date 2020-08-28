@@ -1,7 +1,6 @@
 package com.ezcoding.common.foundation.core.exception.processor;
 
 import com.ezcoding.common.foundation.core.exception.AbstractTemplateExceptionBuilder;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -51,7 +50,7 @@ public class WebExceptionBuilder extends AbstractTemplateExceptionBuilder {
             return null;
         }
         Object[] translate = null;
-        if (CollectionUtils.isNotEmpty(params)) {
+        if (params != null && !params.isEmpty()) {
             translate = new Object[params.size()];
             for (int i = 0; i < params.size(); i++) {
                 Object o = params.get(i);

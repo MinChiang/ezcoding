@@ -39,20 +39,6 @@
             <artifactId>jackson-annotations</artifactId>
         </dependency>
 
-        <!-- Apache Commons -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-        </dependency>
-
         <!-- Validation -->
         <dependency>
             <groupId>org.hibernate.validator</groupId>

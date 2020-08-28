@@ -1,10 +1,6 @@
 package com.ezcoding.common.foundation.util;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
 import java.util.Map;
@@ -85,7 +81,7 @@ public final class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustEmpty(String text, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
-        if (StringUtils.isNotEmpty(text)) {
+        if (!(text == null || text.isEmpty())) {
             throw Optional.of(exceptionSupplier).get().get();
         }
     }
@@ -97,7 +93,7 @@ public final class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustNotEmpty(String text, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
-        if (StringUtils.isEmpty(text)) {
+        if (text == null || text.isEmpty()) {
             throw Optional.of(exceptionSupplier).get().get();
         }
     }
@@ -108,8 +104,8 @@ public final class AssertUtils {
      * @param array             需要断言的数组
      * @param exceptionSupplier 异常提供器
      */
-    public static void mustNotEmpty(Object[] array, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
-        if (ArrayUtils.isEmpty(array)) {
+    public static <T> void mustNotEmpty(T[] array, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        if (array == null || array.length == 0) {
             throw Optional.of(exceptionSupplier).get().get();
         }
     }
@@ -121,7 +117,7 @@ public final class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustNotEmpty(Collection<?> collection, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
-        if (CollectionUtils.isEmpty(collection)) {
+        if (collection == null || collection.size() == 0) {
             throw Optional.of(exceptionSupplier).get().get();
         }
     }
@@ -133,7 +129,7 @@ public final class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustNotEmpty(Map<?, ?> map, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
-        if (MapUtils.isEmpty(map)) {
+        if (map == null || map.size() == 0) {
             throw Optional.of(exceptionSupplier).get().get();
         }
     }

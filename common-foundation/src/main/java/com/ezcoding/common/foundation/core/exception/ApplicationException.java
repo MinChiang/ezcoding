@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public class ApplicationException extends RuntimeException implements ApplicationIdentifiable {
 
+    private static final long serialVersionUID = -4316549432937838305L;
+
     /**
      * 错误标识
      */

@@ -4,7 +4,6 @@ import com.ezcoding.common.core.user.model.DeviceTypeEnum;
 import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
 import eu.bitwalker.useragentutils.DeviceType;
 import eu.bitwalker.useragentutils.UserAgent;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +24,7 @@ public class UserUtils {
      */
     public static DeviceTypeEnum distinguishDeviceType(HttpServletRequest request) {
         String header = request.getHeader(USER_AGENT_HEADER);
-        if (StringUtils.isEmpty(header)) {
+        if (header == null || header.isEmpty()) {
             return DeviceTypeEnum.UNKNOWN;
         }
         UserAgent userAgent = UserAgent.parseUserAgentString(header);

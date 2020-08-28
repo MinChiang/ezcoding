@@ -34,11 +34,6 @@ public interface ModuleNameable {
     char FILL_CHAR = '0';
 
     /**
-     * 功能性号码总长度
-     */
-    int DETAIL_CODE_LENGHT = APPLICATION_CODE_LENGTH + MODULE_CODE_LENGTH + FUNCTION_CODE_LENGTH;
-
-    /**
      * 获取模块整体路径
      *
      * @param pathSplitter 路径分隔符
@@ -59,5 +54,23 @@ public interface ModuleNameable {
      * @return 模块名称
      */
     String getName();
+
+    /**
+     * 左补齐字符
+     *
+     * @param str      待补齐的字符串
+     * @param length   补齐长度
+     * @param fillChar 补齐字符
+     * @return 补齐后的字符串
+     */
+    static String leftPad(String str, int length, char fillChar) {
+        int len = length - (str == null ? 0 : str.length());
+        StringBuilder sb = new StringBuilder();
+        while (len-- > 0) {
+            sb.append(fillChar);
+        }
+        sb.append(str);
+        return sb.toString();
+    }
 
 }

@@ -17,24 +17,19 @@ import java.util.Optional;
 public class UserProxy implements UserDetailInformationIdentifiable {
 
     /**
-     * 标志user类是否已经被解析实例化
-     */
-    private boolean resolved = false;
-
-    /**
      * 用户额外加载器
      */
-    private UserProxyable proxy;
+    private final UserProxyable proxy;
 
     /**
      * 真实的user对象
      */
-    private UserDetailInformationIdentifiable user;
+    private volatile UserDetailInformationIdentifiable user;
 
     /**
      * 被代理的对象
      */
-    private UserIdentifiable identifiable;
+    private final UserIdentifiable identifiable;
 
     public UserProxy(UserIdentifiable identifiable, UserProxyable proxy) {
         this.identifiable = identifiable;
@@ -45,30 +40,24 @@ public class UserProxy implements UserDetailInformationIdentifiable {
      * 从远程获取用户详情
      */
     private UserDetailInformationIdentifiable loadUser() {
-        if (resolved) {
-            return this.user;
-        }
-
-        synchronized (this) {
-            this.resolved = true;
-
-            //如果被代理对象中没有对应的需要检索的字段，则直返回空
-            if (!identifiable.identifiable()) {
-                this.user = new User(identifiable.getCode(), identifiable.getAccount(), identifiable.getPhone(), identifiable.getEmail());
-                return this.user;
+        if (this.user == null) {
+            synchronized (this) {
+                if (this.user == null) {
+                    if (identifiable.identifiable()) {
+                        //如果被代理对象中有对应的需要检索的字段
+                        this.user = proxy.load(this.identifiable);
+                    }
+                }
             }
-
-            this.user = proxy.load(this);
         }
-
         return this.user;
     }
 
     @Override
-    public String getCode() {
+    public Long getId() {
         return Optional
-                .ofNullable(this.identifiable.getCode())
-                .orElseGet(() -> Optional.ofNullable(this.user).map(UserDetailInformationIdentifiable::getCode).orElse(null));
+                .ofNullable(this.identifiable.getId())
+                .orElseGet(() -> Optional.ofNullable(this.user).map(UserDetailInformationIdentifiable::getId).orElse(null));
     }
 
     @Override
@@ -153,8 +142,13 @@ public class UserProxy implements UserDetailInformationIdentifiable {
     }
 
     @Override
+    public UserStatusEnum getStatus() {
+        return this.loadUser().getStatus();
+    }
+
+    @Override
     public Collection<String> getRoles() {
-        return this.user.getRoles();
+        return this.loadUser().getRoles();
     }
 
 }

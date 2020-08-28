@@ -1,9 +1,9 @@
 package com.ezcoding.common.foundation.core.tools.verification;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @author MinChiang
@@ -17,35 +17,25 @@ public class VerificationCode implements Serializable {
     /**
      * 真实的验证码
      */
-    private String code;
+    private final char[] code;
 
     /**
      * 验证码字节流
      */
     @JsonIgnore
-    private transient byte[] data;
+    private final transient byte[] data;
 
-    public VerificationCode() {
-    }
-
-    public VerificationCode(String code) {
+    public VerificationCode(char[] code, byte[] data) {
         this.code = code;
+        this.data = data;
     }
 
-    public String getCode() {
+    public char[] getCode() {
         return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public byte[] getData() {
         return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
     }
 
     /**
@@ -54,18 +44,28 @@ public class VerificationCode implements Serializable {
      * @param code 用户输入的验证码
      * @return 验证码是否正确
      */
-    public boolean verify(String code) {
-        return StringUtils.equals(this.code, code);
+    public boolean verify(char[] code) {
+        return code != null && Arrays.equals(code, this.code);
     }
 
-    /**
-     * 校验验证码（忽略大小写）
-     *
-     * @param code 用户输入的验证码
-     * @return 验证码是否正确
-     */
-    public boolean verifyIgnoreCase(String code) {
-        return StringUtils.equalsIgnoreCase(this.code, code);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        VerificationCode that = (VerificationCode) o;
+        return Arrays.equals(code, that.code) &&
+                Arrays.equals(data, that.data);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Arrays.hashCode(code);
+        result = 31 * result + Arrays.hashCode(data);
+        return result;
     }
 
 }

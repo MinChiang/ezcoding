@@ -12,10 +12,7 @@ import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeIdProducer;
-import com.ezcoding.common.foundation.util.ConvertUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,7 +48,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() {
-        ConvertUtils.init();
         initApplicationMetadata();
     }
 
@@ -78,10 +74,10 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         Optional<MetadataConfigBean> metadata = Optional.ofNullable(ezcodingFoundationConfigBean.getMetadata());
         Long datacenterId = metadata
                 .map(MetadataConfigBean::getDataCenterNo)
-                .orElseGet(() -> RandomUtils.nextLong(0, SnowflakeIdProducer.MAX_DATACENTER_NUM));
+                .orElse(0L);
         Long machineId = metadata
                 .map(MetadataConfigBean::getCategoryNo)
-                .orElseGet(() -> RandomUtils.nextLong(0, SnowflakeIdProducer.MAX_MACHINE_NUM));
+                .orElse(0L);
         return new SnowflakeIdProducer(datacenterId, machineId);
     }
 
@@ -125,7 +121,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                                                                                @Autowired(required = false) List<ApplicationExceptionProcessorConfigurer> registers) {
         ModuleApplicationExceptionManager moduleApplicationExceptionManager = new ModuleApplicationExceptionManager(defaultProcessor);
         registerDefaultProcessor(moduleApplicationExceptionManager, defaultProcessor);
-        if (CollectionUtils.isNotEmpty(registers)) {
+        if (registers != null && !registers.isEmpty()) {
             registerExtraProcessor(moduleApplicationExceptionManager, registers, defaultProcessor);
         }
         return moduleApplicationExceptionManager;
@@ -140,7 +136,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     private void registerExtraProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager,
                                         List<ApplicationExceptionProcessorConfigurer> registers,
                                         AbstractLayerModuleProcessor defaultProcessor) {
-        if (CollectionUtils.isNotEmpty(registers)) {
+        if (registers != null && !registers.isEmpty()) {
             registers
                     .forEach(register -> {
                         register.registerApplicationProcessor(moduleApplicationExceptionManager, defaultProcessor);

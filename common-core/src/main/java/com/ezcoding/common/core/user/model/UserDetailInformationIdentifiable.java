@@ -84,6 +84,13 @@ public interface UserDetailInformationIdentifiable extends UserIdentifiable, Log
     Integer getCity();
 
     /**
+     * 用户状态
+     *
+     * @return 状态
+     */
+    UserStatusEnum getStatus();
+
+    /**
      * 获取对应的权限列表
      *
      * @return 用户权限列表

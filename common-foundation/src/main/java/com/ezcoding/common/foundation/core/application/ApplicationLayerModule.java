@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.application;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Objects;
 
 /**
@@ -20,7 +18,7 @@ public class ApplicationLayerModule implements ModuleNameable {
     protected final String applicationCode;
 
     public ApplicationLayerModule(String applicationName, String applicationCode) {
-        if (StringUtils.isAnyEmpty(applicationName, applicationCode)) {
+        if (applicationName == null || applicationName.isEmpty() || applicationCode == null || applicationCode.isEmpty()) {
             throw new IllegalArgumentException("系统名称，系统码不能为空");
         }
         if (applicationCode.length() > applicationCodeLength) {
@@ -28,7 +26,7 @@ public class ApplicationLayerModule implements ModuleNameable {
         }
 
         this.applicationName = applicationName;
-        this.applicationCode = StringUtils.leftPad(applicationCode, applicationCodeLength, applicationFillChar);
+        this.applicationCode = ModuleNameable.leftPad(applicationCode, applicationCodeLength, applicationFillChar);
     }
 
     @Override
@@ -85,6 +83,14 @@ public class ApplicationLayerModule implements ModuleNameable {
 
     public static void setApplicationFillChar(char applicationFillChar) {
         ApplicationLayerModule.applicationFillChar = applicationFillChar;
+    }
+
+    @Override
+    public String toString() {
+        return "ApplicationLayerModule{" +
+                "applicationName='" + applicationName + '\'' +
+                ", applicationCode='" + applicationCode + '\'' +
+                '}';
     }
 
 }

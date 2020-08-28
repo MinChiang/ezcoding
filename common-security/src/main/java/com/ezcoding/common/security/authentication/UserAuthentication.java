@@ -14,26 +14,25 @@ public class UserAuthentication extends AbstractLoginInfoPreservableAuthenticati
     /**
      * 用户编号
      */
-    private String userCode;
+    private Long id;
 
-    public UserAuthentication(String userCode, Collection<? extends GrantedAuthority> authorities, boolean authenticated) {
+    public UserAuthentication(Long id, Collection<? extends GrantedAuthority> authorities, boolean authenticated) {
         super(authorities, authenticated);
-        this.userCode = userCode;
+        this.id = id;
     }
 
     @Override
     public Object getCredentials() {
-        return "N/A";
+        return null;
     }
 
     @Override
     public Object getPrincipal() {
-        return this.userCode;
+        return this.id;
     }
 
-    @Override
-    public String getName() {
-        return this.userCode;
+    public Long getId() {
+        return id;
     }
 
 }

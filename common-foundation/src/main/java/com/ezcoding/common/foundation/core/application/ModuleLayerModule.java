@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.application;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Objects;
 
 /**
@@ -21,14 +19,14 @@ public class ModuleLayerModule extends ApplicationLayerModule {
 
     public ModuleLayerModule(String applicationName, String applicationCode, String moduleName, String moduleCode) {
         super(applicationName, applicationCode);
-        if (StringUtils.isAnyEmpty(moduleName, moduleCode)) {
+        if (moduleName == null || moduleName.isEmpty() || moduleCode == null || moduleCode.isEmpty()) {
             throw new IllegalArgumentException("模块名称，模块码不能为空");
         }
         if (moduleCode.length() > moduleCodeLength) {
             throw new IllegalArgumentException("模块码长度必须小于等于" + moduleCodeLength);
         }
         this.moduleName = moduleName;
-        this.moduleCode = StringUtils.leftPad(moduleCode, moduleCodeLength, moduleFillChar);
+        this.moduleCode = ModuleNameable.leftPad(moduleCode, moduleCodeLength, moduleFillChar);
     }
 
     public ModuleLayerModule(ApplicationLayerModule applicationLayerModule, String moduleName, String moduleCode) {
@@ -92,6 +90,16 @@ public class ModuleLayerModule extends ApplicationLayerModule {
 
     public static void setModuleFillChar(char moduleFillChar) {
         ModuleLayerModule.moduleFillChar = moduleFillChar;
+    }
+
+    @Override
+    public String toString() {
+        return "ModuleLayerModule{" +
+                "moduleName='" + moduleName + '\'' +
+                ", moduleCode='" + moduleCode + '\'' +
+                ", applicationName='" + applicationName + '\'' +
+                ", applicationCode='" + applicationCode + '\'' +
+                '}';
     }
 
 }

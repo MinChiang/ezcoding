@@ -14,7 +14,7 @@ public class User implements UserDetailInformationIdentifiable {
     /**
      * 用户编号
      */
-    private String code;
+    private Long id;
 
     /**
      * 账号
@@ -87,6 +87,11 @@ public class User implements UserDetailInformationIdentifiable {
     private Integer city;
 
     /**
+     * 状态
+     */
+    private UserStatusEnum status;
+
+    /**
      * 拥有的权限
      */
     private Collection<String> roles = new HashSet<>(0);
@@ -104,20 +109,20 @@ public class User implements UserDetailInformationIdentifiable {
     public User() {
     }
 
-    public User(String code, String account, String phone, String email) {
-        this.code = code;
+    public User(Long id, String account, String phone, String email) {
+        this.id = id;
         this.account = account;
         this.phone = phone;
         this.email = email;
     }
 
     @Override
-    public String getCode() {
-        return code;
+    public Long getId() {
+        return id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
@@ -270,6 +275,15 @@ public class User implements UserDetailInformationIdentifiable {
 
     public void setDeviceType(DeviceTypeEnum deviceType) {
         this.deviceType = deviceType;
+    }
+
+    @Override
+    public UserStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatusEnum status) {
+        this.status = status;
     }
 
 }

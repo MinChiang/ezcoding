@@ -13,13 +13,8 @@ public enum CurrentUserTypeEnum {
     AUTO,
 
     /**
-     * 使用user代理对象
-     */
-    PROXY,
-
-    /**
      * 身份验证user
      */
-    AUTH
+    NONE
 
 }

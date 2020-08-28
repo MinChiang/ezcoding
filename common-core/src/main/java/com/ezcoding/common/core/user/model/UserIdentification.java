@@ -12,7 +12,7 @@ public class UserIdentification implements UserIdentifiable {
     /**
      * 用户编号
      */
-    private String code;
+    private Long id;
 
     /**
      * 账号
@@ -30,12 +30,12 @@ public class UserIdentification implements UserIdentifiable {
     private String email;
 
     @Override
-    public String getCode() {
-        return code;
+    public Long getId() {
+        return id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

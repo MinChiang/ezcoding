@@ -12,7 +12,7 @@ public interface UserIdentifiable {
      *
      * @return 用户编号
      */
-    String getCode();
+    Long getId();
 
     /**
      * 获取用户账号
@@ -41,10 +41,10 @@ public interface UserIdentifiable {
      * @return 是否有唯一用户鉴别属性
      */
     default boolean identifiable() {
-        return getCode() != null ||
+        return getId() != null ||
                 getAccount() != null ||
                 getPhone() != null ||
-                getEmail() == null;
+                getEmail() != null;
     }
 
 }

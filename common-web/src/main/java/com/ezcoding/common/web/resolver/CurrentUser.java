@@ -25,7 +25,7 @@ public @interface CurrentUser {
      *
      * @return 代理模式
      */
-    CurrentUserTypeEnum type() default CurrentUserTypeEnum.AUTO;
+    CurrentUserTypeEnum proxy() default CurrentUserTypeEnum.AUTO;
 
     /**
      * 用户是否必须登录

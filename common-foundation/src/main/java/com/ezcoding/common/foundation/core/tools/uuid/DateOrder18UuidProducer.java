@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Deprecated
 public class DateOrder18UuidProducer implements IdProduceable {
 
-    private static final DateTimeFormatter SECOND_FORMATTER = DateTimeFormatter.ofPattern("YYYYMMddHHmmss");
+    private static final DateTimeFormatter SECOND_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     private static final Integer MAX = 0X1FFF;
     private static final Integer MAX_LENGTH = String.valueOf(MAX).length();
     private static final AtomicLong ATOMIC_LONG = new AtomicLong(0L);

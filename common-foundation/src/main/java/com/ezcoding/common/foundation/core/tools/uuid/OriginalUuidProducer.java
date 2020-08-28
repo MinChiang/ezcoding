@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.tools.uuid;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.UUID;
 
 /**
@@ -22,13 +20,12 @@ public class OriginalUuidProducer implements IdProduceable {
 
     @Override
     public String produce() {
-        //此处不能调用replaceAll进行替换，replaceAll用于替换正则表达式
-        return StringUtils.replace(UUID.randomUUID().toString(), "-", "");
+        return UUID.randomUUID().toString().replace("-", "");
     }
 
     private static final class OriginalUUIDProducerHolder {
 
-        private static OriginalUuidProducer INSTANCE = new OriginalUuidProducer();
+        private static final OriginalUuidProducer INSTANCE = new OriginalUuidProducer();
 
     }
 

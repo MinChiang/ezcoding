@@ -1,10 +1,6 @@
 package com.ezcoding.common.foundation.core.message.head;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serializable;
-
-import static com.ezcoding.common.foundation.core.application.ModuleNameable.DETAIL_CODE_LENGHT;
 
 /**
  * @author MinChiang
@@ -15,7 +11,7 @@ public class SuccessAppHead extends ResponseAppHead implements Serializable {
 
     private static final long serialVersionUID = -3547811863595703652L;
     protected static String defaultSuceessMessage = "处理成功";
-    protected static String defaultSuccessCode = StringUtils.repeat("0", DETAIL_CODE_LENGHT);
+    protected static String defaultSuccessCode = "0000000000";
 
     public SuccessAppHead() {
         super(defaultSuccessCode, defaultSuceessMessage);

@@ -19,7 +19,6 @@ import com.ezcoding.common.web.resolver.result.ResponseMessageReturnValueResolva
 import com.ezcoding.common.web.resolver.result.ResponseSystemHeadResolver;
 import com.ezcoding.common.web.user.CompositeUserLoader;
 import com.ezcoding.common.web.user.UserProxyable;
-import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.spi.resourceloading.ResourceBundleLocator;
 import org.springframework.beans.BeansException;
@@ -206,7 +205,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
             List<HandlerMethodReturnValueHandler> customReturnValueHandlers = adapter.getCustomReturnValueHandlers();
             List<HandlerMethodReturnValueHandler> returnValueHandlers = adapter.getReturnValueHandlers();
-            if (CollectionUtils.isNotEmpty(customReturnValueHandlers) && CollectionUtils.isNotEmpty(returnValueHandlers)) {
+            if (customReturnValueHandlers != null && !customReturnValueHandlers.isEmpty() && returnValueHandlers != null && !returnValueHandlers.isEmpty()) {
                 //returnValueHandlers为不可变对象，需要重新设置一个新的list进行设置
                 List<HandlerMethodReturnValueHandler> dest = new ArrayList<>(returnValueHandlers);
                 dest.removeAll(customReturnValueHandlers);
@@ -216,7 +215,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
             List<HandlerMethodArgumentResolver> customArgumentResolvers = adapter.getCustomArgumentResolvers();
             List<HandlerMethodArgumentResolver> argumentResolvers = adapter.getArgumentResolvers();
-            if (CollectionUtils.isNotEmpty(customArgumentResolvers) && CollectionUtils.isNotEmpty(argumentResolvers)) {
+            if (customArgumentResolvers != null && !customArgumentResolvers.isEmpty() && argumentResolvers != null && !argumentResolvers.isEmpty()) {
                 List<HandlerMethodArgumentResolver> dest = new ArrayList<>(argumentResolvers);
                 dest.removeAll(customArgumentResolvers);
                 dest.addAll(0, customArgumentResolvers);
