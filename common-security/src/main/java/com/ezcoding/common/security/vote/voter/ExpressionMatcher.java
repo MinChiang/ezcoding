@@ -19,7 +19,7 @@ public class ExpressionMatcher implements RoleExpressionMatchable {
     /**
      * 执行内容
      */
-    private List<Object> execution;
+    private final List<Object> execution;
 
     public ExpressionMatcher(String originalExpression) {
         this.execution = parse(originalExpression);

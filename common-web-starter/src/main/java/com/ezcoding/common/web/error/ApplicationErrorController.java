@@ -34,7 +34,7 @@ public class ApplicationErrorController extends BasicErrorController {
         Map<String, Object> body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
         HttpStatus status = getStatus(request);
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(2);
         map.put(ResponseMessage.SYS_HEAD, new ResponseSystemHead());
         map.put(ResponseMessage.APP_HEAD, new ErrorAppHead(
                 (String) body.getOrDefault(KEY_APPLICATION_EXCEPTION_IDENTIFICATION, ErrorAppHead.getDefaultErrorCode()),

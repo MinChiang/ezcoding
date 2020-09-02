@@ -30,9 +30,9 @@ public class AssembleUtils {
 
     public static class AssembleMapper<S, T> {
 
-        private S src;
-        private T target;
-        private List<FunctionAndBiConsumerMapping<S, T>> mappings = new LinkedList<>();
+        private final S src;
+        private final T target;
+        private final List<FunctionAndBiConsumerMapping<S, T>> mappings = new LinkedList<>();
 
         private AssembleMapper(S src, T target) {
             this.src = src;

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * @author MinChiang
@@ -17,25 +18,26 @@ import java.util.Collection;
  */
 public class ApplicationContextHolderFilter extends OncePerRequestFilter {
 
-    private Collection<ApplicationContextValueFetchable> settings = new ArrayList<>(0);
+    private final Collection<ApplicationContextValueFetchable> settings = new ArrayList<>(0);
 
     public ApplicationContextHolderFilter() {
     }
 
     public ApplicationContextHolderFilter(Collection<ApplicationContextValueFetchable> settings) {
-        this.settings = settings;
+        if (settings != null && !settings.isEmpty()) {
+            this.settings.addAll(settings);
+        }
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         ApplicationContextHolder instance = ApplicationContextHolder.getInstance();
         try {
-            for (ApplicationContextValueFetchable setting : settings) {
-                Object fetch = setting.fetch(request, response);
-                if (fetch != null) {
-                    instance.put(setting.key(), fetch);
-                }
-            }
+            this.settings.forEach(setting ->
+                    Optional
+                            .ofNullable(setting.fetch(request, response))
+                            .ifPresent(obj -> instance.put(setting.key(), obj))
+            );
             filterChain.doFilter(request, response);
         } finally {
             //清除上下文中的所有对象，重要

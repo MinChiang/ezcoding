@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class ApplicationContextHolder implements ApplicationContext {
 
-    private static final ThreadLocal<Map<String, Object>> THREADLOCAL = new InheritableThreadLocal<Map<String, Object>>() {
+    private static final ThreadLocal<Map<String, Object>> THREAD_LOCAL = new InheritableThreadLocal<Map<String, Object>>() {
         @Override
         protected Map<String, Object> initialValue() {
             return new HashMap<>(0);
@@ -33,27 +33,27 @@ public class ApplicationContextHolder implements ApplicationContext {
 
     @Override
     public void put(String key, Object value) {
-        THREADLOCAL.get().put(key, value);
+        THREAD_LOCAL.get().put(key, value);
     }
 
     @Override
     public Object get(String key) {
-        return THREADLOCAL.get().get(key);
+        return THREAD_LOCAL.get().get(key);
     }
 
     @Override
     public Map<String, Object> getContext() {
-        return THREADLOCAL.get();
+        return THREAD_LOCAL.get();
     }
 
     @Override
     public void setContext(Map<String, Object> context) {
-        THREADLOCAL.set(context);
+        THREAD_LOCAL.set(context);
     }
 
     @Override
     public void clear() {
-        THREADLOCAL.remove();
+        THREAD_LOCAL.remove();
     }
 
     private static final class AppContextHolder {

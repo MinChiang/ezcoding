@@ -79,7 +79,7 @@ public class MethodSecurityAutoConfiguration extends GlobalMethodSecurityConfigu
                 loaders.add(new LocalFileDynamicRoleLoader(ezcodingSecurityConfigBean.getDynamicRoleLoadYaml(), this.applicationName));
             }
             if (ezcodingSecurityConfigBean.getDynamicRoleLoadUrl() != null && !ezcodingSecurityConfigBean.getDynamicRoleLoadUrl().isEmpty()) {
-                loaders.add(new RemoteDynamicRoleLoader(this.applicationName, ezcodingSecurityConfigBean.getDynamicRoleLoadUrl(), dynamicAnnotationSecurityMetadataSource));
+                loaders.add(new SimpleRemoteDynamicRoleLoader(this.applicationName, ezcodingSecurityConfigBean.getDynamicRoleLoadUrl(), dynamicAnnotationSecurityMetadataSource));
             }
 
             DynamicRoleLoadable delegateDynamicRoleLoader = new DelegateDynamicRoleLoader(loaders);

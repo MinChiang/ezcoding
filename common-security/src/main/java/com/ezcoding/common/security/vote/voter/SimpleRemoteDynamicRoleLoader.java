@@ -17,7 +17,7 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2020-04-27 17:46
  */
-public class RemoteDynamicRoleLoader implements DynamicRoleLoadable {
+public class SimpleRemoteDynamicRoleLoader implements DynamicRoleLoadable {
 
     /**
      * 应用名称
@@ -32,11 +32,11 @@ public class RemoteDynamicRoleLoader implements DynamicRoleLoadable {
     /**
      * 数据源
      */
-    private DynamicAnnotationSecurityMetadataSource dynamicAnnotationSecurityMetadataSource;
+    private final DynamicAnnotationSecurityMetadataSource dynamicAnnotationSecurityMetadataSource;
 
-    private RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    public RemoteDynamicRoleLoader(String applicationName, String url, DynamicAnnotationSecurityMetadataSource dynamicAnnotationSecurityMetadataSource) {
+    public SimpleRemoteDynamicRoleLoader(String applicationName, String url, DynamicAnnotationSecurityMetadataSource dynamicAnnotationSecurityMetadataSource) {
         this.applicationName = applicationName;
         this.url = url;
         this.dynamicAnnotationSecurityMetadataSource = dynamicAnnotationSecurityMetadataSource;

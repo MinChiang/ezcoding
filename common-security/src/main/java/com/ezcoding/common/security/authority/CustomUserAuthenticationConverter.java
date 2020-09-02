@@ -2,7 +2,7 @@ package com.ezcoding.common.security.authority;
 
 import com.ezcoding.common.core.user.model.DeviceTypeEnum;
 import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
-import com.ezcoding.common.foundation.util.EnumMappableUtils;
+import com.ezcoding.common.core.enums.EnumMappableUtils;
 import com.ezcoding.common.security.authentication.AbstractLoginInfoPreservableAuthentication;
 import com.ezcoding.common.security.authentication.UserAuthentication;
 import org.springframework.security.core.Authentication;
@@ -88,8 +88,8 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
             Object principal = map.get(PRINCIPAL);
             Collection<? extends GrantedAuthority> authorities = getAuthorities(map);
             Object details = null;
-            LoginRegisterTypeEnum loginType = null;
-            DeviceTypeEnum deviceType = null;
+            LoginRegisterTypeEnum loginType = LoginRegisterTypeEnum.UNKNOWN;
+            DeviceTypeEnum deviceType = DeviceTypeEnum.UNKNOWN;
 
             if (map.containsKey(DETAIL)) {
                 Map<String, Object> content = this.extractUserDetails((Map<String, ?>) map.get(DETAIL));
@@ -99,8 +99,8 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
             }
 
             UserAuthentication userAuthentication = new UserAuthentication(Long.valueOf(principal.toString()), authorities, true);
-            userAuthentication.setLoginType(loginType == null ? LoginRegisterTypeEnum.UNKNOWN : loginType);
-            userAuthentication.setDeviceType(deviceType == null ? DeviceTypeEnum.UNKNOWN : deviceType);
+            userAuthentication.setLoginType(loginType);
+            userAuthentication.setDeviceType(deviceType);
             userAuthentication.setDetails(details);
             return userAuthentication;
         }
@@ -161,7 +161,7 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
             return AuthorityUtils.commaSeparatedStringToAuthorityList(StringUtils
                     .collectionToCommaDelimitedString((Collection<?>) authorities));
         }
-        throw new IllegalArgumentException("Authorities must be either a String or a Collection");
+        throw new IllegalArgumentException("权限列表不正确");
     }
 
 }

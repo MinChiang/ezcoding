@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class DynamicRoleVoter implements AccessDecisionVoter<Object> {
 
-    private Map<ConfigAttribute, ExpressionMatcher> matcherHandlers = new ConcurrentReferenceHashMap<>();
+    private final Map<ConfigAttribute, ExpressionMatcher> matcherHandlers = new ConcurrentReferenceHashMap<>();
 
     public DynamicRoleVoter() {
     }

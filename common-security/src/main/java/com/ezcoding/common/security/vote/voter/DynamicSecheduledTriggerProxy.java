@@ -22,12 +22,12 @@ public class DynamicSecheduledTriggerProxy implements DynamicRoleLoadable {
     /**
      * 加载器
      */
-    private DynamicRoleLoadable loadable;
+    private final DynamicRoleLoadable loadable;
 
     /**
      * 投票器
      */
-    private DynamicRoleVoter dynamicRoleVoter;
+    private final DynamicRoleVoter dynamicRoleVoter;
 
     /**
      * 执行服务

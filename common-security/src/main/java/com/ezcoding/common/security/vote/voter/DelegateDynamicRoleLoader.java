@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class DelegateDynamicRoleLoader implements DynamicRoleLoadable {
 
-    private List<DynamicRoleLoadable> loadables = new ArrayList<>();
+    private final List<DynamicRoleLoadable> loadables = new ArrayList<>();
 
     public DelegateDynamicRoleLoader(List<DynamicRoleLoadable> loadables) {
         this.addLoaders(loadables);

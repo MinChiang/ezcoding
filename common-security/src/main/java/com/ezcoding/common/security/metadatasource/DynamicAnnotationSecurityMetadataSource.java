@@ -20,9 +20,9 @@ public class DynamicAnnotationSecurityMetadataSource extends AbstractFallbackMet
     /**
      * 所属微服务名称
      */
-    private String applicationName;
+    private final String applicationName;
 
-    private Map<Key, Collection<ConfigAttribute>> mapping = new ConcurrentHashMap<>();
+    private final Map<Key, Collection<ConfigAttribute>> mapping = new ConcurrentHashMap<>();
 
     public DynamicAnnotationSecurityMetadataSource(String applicationName) {
         this.applicationName = applicationName;

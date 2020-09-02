@@ -17,22 +17,22 @@ public class DynamicConfigAttribute implements ConfigAttribute {
     /**
      * 模块号
      */
-    private transient String applicationName;
+    private final transient String applicationName;
 
     /**
      * 代理类
      */
-    private transient String className;
+    private final transient String className;
 
     /**
      * 方法名
      */
-    private transient String methodName;
+    private final transient String methodName;
 
     /**
      * 全称
      */
-    private String attribute;
+    private final String attribute;
 
     /**
      * 描述
