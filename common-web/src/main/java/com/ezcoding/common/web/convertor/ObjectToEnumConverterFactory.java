@@ -38,7 +38,8 @@ public class ObjectToEnumConverterFactory implements ConverterFactory<Object, En
 
         @Override
         public T convert(Object source) {
-            return EnumMappableUtils.mapIgnoreType(source, this.targetClass);
+//            return EnumMappableUtils.mapIgnoreType(source, this.targetClass);
+            return null;
         }
 
     }

@@ -17,16 +17,17 @@ public class InterfaceEnumMapping implements EnumMapping {
 
     @Override
     public Map<Object, Enum<?>> map(Class<? extends Enum<?>> target) {
-        Enum<?>[] enumConstants = target.getEnumConstants();
-        if (enumConstants == null || enumConstants.length == 0) {
-            return null;
-        }
-
-        Map<Object, Enum<?>> result = new HashMap<>();
-        for (Enum<?> enumConstant : enumConstants) {
-            result.put(((EnumMappable) enumConstant).to(), enumConstant);
-        }
-        return result;
+//        Enum<?>[] enumConstants = target.getEnumConstants();
+//        if (enumConstants == null || enumConstants.length == 0) {
+//            return null;
+//        }
+//
+//        Map<Object, Enum<?>> result = new HashMap<>();
+//        for (Enum<?> enumConstant : enumConstants) {
+//            result.put(((EnumMappable) enumConstant).map(), enumConstant);
+//        }
+//        return result;
+        return null;
     }
 
 }

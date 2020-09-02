@@ -93,8 +93,8 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
 
             if (map.containsKey(DETAIL)) {
                 Map<String, Object> content = this.extractUserDetails((Map<String, ?>) map.get(DETAIL));
-                loginType = EnumMappableUtils.mapIgnoreType(content.get(AbstractLoginInfoPreservableAuthentication.LOGIN_TYPE_KEY), LoginRegisterTypeEnum.class);
-                deviceType = EnumMappableUtils.mapIgnoreType(content.get(AbstractLoginInfoPreservableAuthentication.DEVICE_TYPE_KEY), DeviceTypeEnum.class);
+                loginType = EnumMappableUtils.map(content.get(AbstractLoginInfoPreservableAuthentication.LOGIN_TYPE_KEY), LoginRegisterTypeEnum.class);
+                deviceType = EnumMappableUtils.map(content.get(AbstractLoginInfoPreservableAuthentication.DEVICE_TYPE_KEY), DeviceTypeEnum.class);
                 details = content;
             }
 

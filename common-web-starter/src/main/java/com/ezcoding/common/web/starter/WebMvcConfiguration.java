@@ -7,6 +7,7 @@ import com.ezcoding.common.foundation.core.exception.processor.ApplicationExcept
 import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.util.ObjectMapperUtils;
+import com.ezcoding.common.web.convertor.ObjectToEnumConverterFactory;
 import com.ezcoding.common.web.jwt.AuthSettings;
 import com.ezcoding.common.web.resolver.JsonMessageMethodProcessor;
 import com.ezcoding.common.web.resolver.JsonPageMethodProcessor;
@@ -32,6 +33,7 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator;
 import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -188,6 +190,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
             ApplicationExceptionResolver applicationExceptionResolver = new ApplicationExceptionResolver(defaultExceptionManager);
             resolvers.add(0, applicationExceptionResolver);
         }
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverterFactory(new ObjectToEnumConverterFactory());
     }
 
     /**

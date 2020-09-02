@@ -36,7 +36,7 @@ public class ModuleExceptionCodeGenerator implements ExceptionCodeGeneratable {
 
     @Override
     public String generate() {
-        return moduleLayerModule.getCode();
+        return moduleLayerModule.getCode() + this.errorSuffixCode;
     }
 
     @Override

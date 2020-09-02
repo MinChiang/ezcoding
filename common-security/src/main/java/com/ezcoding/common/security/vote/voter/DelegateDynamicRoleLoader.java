@@ -31,7 +31,7 @@ public class DelegateDynamicRoleLoader implements DynamicRoleLoadable {
     @Override
     public Map<DynamicConfigAttribute, String> load() throws IOException {
         Map<DynamicConfigAttribute, String> result = new HashMap<>();
-        if (loadables == null || loadables.isEmpty()) {
+        if (loadables.isEmpty()) {
             return result;
         }
 

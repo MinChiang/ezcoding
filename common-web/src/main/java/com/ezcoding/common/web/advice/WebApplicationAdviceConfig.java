@@ -16,7 +16,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.io.IOException;
 import java.util.Set;
 
 import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGeneratorConstants.*;
@@ -55,7 +54,7 @@ public class WebApplicationAdviceConfig {
     }
 
     @ExceptionHandler(value = BindException.class)
-    public StandardResponseHttpEntity<?> handleBindException(BindException e) throws IOException {
+    public StandardResponseHttpEntity<?> handleBindException(BindException e) {
         StringBuilder sb = new StringBuilder();
         e.getAllErrors().forEach(er -> sb.append(er.getDefaultMessage()));
         String result = sb.toString();
@@ -68,10 +67,12 @@ public class WebApplicationAdviceConfig {
     }
 
     @ExceptionHandler(value = ConstraintViolationException.class)
-    public StandardResponseHttpEntity<?> handleConstraintViolationException(ConstraintViolationException e) throws IOException {
+    public StandardResponseHttpEntity<?> handleConstraintViolationException(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
         StringBuilder stringBuilder = new StringBuilder();
-        constraintViolations.forEach(c -> stringBuilder.append(c.getMessage()));
+        constraintViolations.forEach(c -> {
+            stringBuilder.append(c.getMessage());
+        });
         String result = stringBuilder.toString();
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("参数校验异常：{}", result);
@@ -82,7 +83,7 @@ public class WebApplicationAdviceConfig {
     }
 
     @ExceptionHandler(value = NoHandlerFoundException.class)
-    public StandardResponseHttpEntity<?> handleNoHandlerFoundException(NoHandlerFoundException e) throws IOException {
+    public StandardResponseHttpEntity<?> handleNoHandlerFoundException(NoHandlerFoundException e) {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("未找到对应的处理器", e);
         }
@@ -92,7 +93,7 @@ public class WebApplicationAdviceConfig {
     }
 
     @ExceptionHandler(value = ApplicationException.class)
-    public StandardResponseHttpEntity<?> handleBusinessException(ApplicationException e) throws IOException {
+    public StandardResponseHttpEntity<?> handleBusinessException(ApplicationException e) {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error(e.toString());
         }
