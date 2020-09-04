@@ -3,6 +3,7 @@ package com.ezcoding.common.foundation.starter;
 import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
 import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
+import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
 import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.exception.processor.*;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
@@ -49,6 +50,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         initApplicationMetadata();
+        initEnumMapping();
     }
 
     private void initApplicationMetadata() {
@@ -59,6 +61,10 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         ModuleLayerModule.setModuleFillChar(metadata.getModuleFillChar());
         FunctionLayerModule.setFunctionCodeLength(metadata.getFunctionCodeLength());
         FunctionLayerModule.setFunctionFillChar(metadata.getFunctionFillChar());
+    }
+
+    private void initEnumMapping() {
+
     }
 
     @Bean

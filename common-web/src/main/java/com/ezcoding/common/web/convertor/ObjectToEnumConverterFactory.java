@@ -1,6 +1,5 @@
 package com.ezcoding.common.web.convertor;
 
-import com.ezcoding.common.core.enums.EnumMappableUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 

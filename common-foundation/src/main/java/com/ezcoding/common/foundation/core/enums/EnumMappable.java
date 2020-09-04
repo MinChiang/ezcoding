@@ -1,4 +1,4 @@
-package com.ezcoding.common.core.enums;
+package com.ezcoding.common.foundation.core.enums;
 
 /**
  * @author MinChiang

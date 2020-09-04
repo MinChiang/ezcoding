@@ -2,7 +2,7 @@ package com.ezcoding.common.security.authority;
 
 import com.ezcoding.common.core.user.model.DeviceTypeEnum;
 import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
-import com.ezcoding.common.core.enums.EnumMappableUtils;
+import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
 import com.ezcoding.common.security.authentication.AbstractLoginInfoPreservableAuthentication;
 import com.ezcoding.common.security.authentication.UserAuthentication;
 import org.springframework.security.core.Authentication;

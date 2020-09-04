@@ -1,13 +1,15 @@
 package com.ezcoding.common.web.starter;
 
+import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
 import com.ezcoding.common.core.user.EmptyUserLoader;
 import com.ezcoding.common.core.user.UserLoadable;
+import com.ezcoding.common.foundation.core.enums.TypeMappingPair;
 import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
 import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.util.ObjectMapperUtils;
-import com.ezcoding.common.web.convertor.ObjectToEnumConverterFactory;
+import com.ezcoding.common.web.convertor.ObjectToEnumConverter;
 import com.ezcoding.common.web.jwt.AuthSettings;
 import com.ezcoding.common.web.resolver.JsonMessageMethodProcessor;
 import com.ezcoding.common.web.resolver.JsonPageMethodProcessor;
@@ -50,6 +52,7 @@ import javax.validation.ValidatorFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author MinChiang
@@ -194,7 +197,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverterFactory(new ObjectToEnumConverterFactory());
+        Set<TypeMappingPair> typeMappingPairs = EnumMappableUtils.acquireAllTypeMapping();
+        for (TypeMappingPair typeMappingPair : typeMappingPairs) {
+            registry.addConverter(new ObjectToEnumConverter(typeMappingPair.getSourceClass(), typeMappingPair.getTargetClass()));
+        }
     }
 
     /**
