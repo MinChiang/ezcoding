@@ -14,7 +14,7 @@ public class UserAuthentication extends AbstractLoginInfoPreservableAuthenticati
     /**
      * 用户编号
      */
-    private Long id;
+    private final Long id;
 
     public UserAuthentication(Long id, Collection<? extends GrantedAuthority> authorities, boolean authenticated) {
         super(authorities, authenticated);

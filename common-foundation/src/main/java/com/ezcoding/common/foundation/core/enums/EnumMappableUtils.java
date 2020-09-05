@@ -77,6 +77,18 @@ public class EnumMappableUtils {
     }
 
     /**
+     * 注册解析接口
+     *
+     * @param typeMappingInfo 映射关系
+     */
+    public static void register(TypeMappingInfo typeMappingInfo) {
+        if (typeMappingInfo == null) {
+            return;
+        }
+        CLASS_OBJECT_ENUM_MAPPING.put(typeMappingInfo.getTypeMappingPair(), typeMappingInfo.getMapping());
+    }
+
+    /**
      * 获取所有注册的enum到目标映射类型
      *
      * @return 目标映射类型

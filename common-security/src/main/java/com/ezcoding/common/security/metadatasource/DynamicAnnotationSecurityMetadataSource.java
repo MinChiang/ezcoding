@@ -88,9 +88,9 @@ public class DynamicAnnotationSecurityMetadataSource extends AbstractFallbackMet
 
     private static class Key {
 
-        private Method method;
+        private final Method method;
 
-        private Class<?> targetClass;
+        private final Class<?> targetClass;
 
         public Key(Method method, Class<?> targetClass) {
             this.method = method;

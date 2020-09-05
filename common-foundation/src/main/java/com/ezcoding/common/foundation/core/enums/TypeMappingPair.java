@@ -13,6 +13,12 @@ public class TypeMappingPair {
     private final Class<?> targetClass;
 
     public TypeMappingPair(Class<? extends Enum<?>> sourceClass, Class<?> targetClass) {
+        if (sourceClass == null) {
+            throw new IllegalArgumentException("sourceClass can not be null");
+        }
+        if (targetClass == null) {
+            throw new IllegalArgumentException("targetClass can not be null");
+        }
         this.sourceClass = sourceClass;
         this.targetClass = targetClass;
     }
