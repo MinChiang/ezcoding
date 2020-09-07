@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0.0
  * @date 2019-08-27 17:29
  */
-public interface ApplicationContextValueFetchable {
+public interface ApplicationContextValueFetchable<T> {
 
     /**
      * 在程序上下文中设置对应的参数
@@ -17,7 +17,7 @@ public interface ApplicationContextValueFetchable {
      * @param response 响应
      * @return 需要设置的对象值
      */
-    Object fetch(HttpServletRequest request, HttpServletResponse response);
+    T fetch(HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 需要设置的主键

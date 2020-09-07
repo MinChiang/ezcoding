@@ -77,9 +77,9 @@ public class DynamicSecheduledTriggerProxy implements DynamicRoleLoadable {
         Map<DynamicConfigAttribute, String> content = this.loadable.load();
         for (Map.Entry<DynamicConfigAttribute, String> entry : content.entrySet()) {
             this.dynamicRoleVoter.addExpressionHandler(entry.getKey(), entry.getValue());
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("加载权限：{} : {}", entry.getKey(), entry.getValue());
-            }
+//            if (LOGGER.isDebugEnabled()) {
+//                LOGGER.debug("load dynamic roles：{} : {}", entry.getKey(), entry.getValue());
+//            }
         }
         return content;
     }

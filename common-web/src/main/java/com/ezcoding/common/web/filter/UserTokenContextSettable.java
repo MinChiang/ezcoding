@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0.0
  * @date 2019-08-27 17:40
  */
-public class UserTokenContextSettable implements ApplicationContextValueFetchable {
+public class UserTokenContextSettable implements ApplicationContextValueFetchable<String> {
 
     private String header = AuthSettings.DEFAULT_HEADER;
 
@@ -22,7 +22,7 @@ public class UserTokenContextSettable implements ApplicationContextValueFetchabl
     }
 
     @Override
-    public Object fetch(HttpServletRequest request, HttpServletResponse response) {
+    public String fetch(HttpServletRequest request, HttpServletResponse response) {
         return request.getHeader(this.header);
     }
 

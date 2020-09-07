@@ -17,6 +17,9 @@ public class EzcodingFoundationConfigBean {
     @NestedConfigurationProperty
     private MetadataConfigBean metadata = new MetadataConfigBean();
 
+    @NestedConfigurationProperty
+    private EnumConfigBean enums = new EnumConfigBean();
+
     public MessageConfigBean getMessage() {
         return message;
     }
@@ -31,6 +34,14 @@ public class EzcodingFoundationConfigBean {
 
     public void setMetadata(MetadataConfigBean metadata) {
         this.metadata = metadata;
+    }
+
+    public EnumConfigBean getEnums() {
+        return enums;
+    }
+
+    public void setEnums(EnumConfigBean enums) {
+        this.enums = enums;
     }
 
 }
