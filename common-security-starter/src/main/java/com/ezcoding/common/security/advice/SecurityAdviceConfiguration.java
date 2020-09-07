@@ -1,11 +1,10 @@
 package com.ezcoding.common.security.advice;
 
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
-import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
+import com.ezcoding.common.foundation.core.message.ResponseHttpEntity;
+import com.ezcoding.common.foundation.core.message.ResponseMessageBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -28,18 +27,15 @@ public class SecurityAdviceConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityAdviceConfiguration.class);
 
-    @Autowired
-    private MessageBuildable messageBuilder;
-
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = AccessDeniedException.class)
-    public ResponseMessage<?> handleAccessDeniedException(AccessDeniedException e) throws IOException {
+    public ResponseHttpEntity<?> handleAccessDeniedException(AccessDeniedException e) throws IOException {
         if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("权限不足异常：", e);
+            LOGGER.error("access deny:", e);
         }
-        return this.messageBuilder.buildErrorResponseMessage(
-                WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_NO_PERMISSION_ERROR).build()
-        );
+        return ResponseMessageBuilder
+                .ok()
+                .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_NO_PERMISSION_ERROR).build());
     }
 
 }

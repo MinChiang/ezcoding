@@ -58,7 +58,7 @@ public class ResponseSystemHead extends AbstractSystemHead implements Serializab
         return defaultProviderId;
     }
 
-    public static void setDefaultProviderId(String defaultProviderId) {
+    static void setDefaultProviderId(String defaultProviderId) {
         ResponseSystemHead.defaultProviderId = defaultProviderId;
     }
 

@@ -58,7 +58,7 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
         return defaultConsumerId;
     }
 
-    public static void setDefaultConsumerId(String defaultConsumerId) {
+    static void setDefaultConsumerId(String defaultConsumerId) {
         RequestSystemHead.defaultConsumerId = defaultConsumerId;
     }
 

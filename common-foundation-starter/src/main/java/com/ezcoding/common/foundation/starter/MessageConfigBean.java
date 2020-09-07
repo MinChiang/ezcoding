@@ -1,6 +1,7 @@
 package com.ezcoding.common.foundation.starter;
 
-import static com.ezcoding.common.foundation.core.message.builder.MessageBuildable.*;
+import com.ezcoding.common.foundation.core.message.io.MessageIOFactory;
+
 import static com.ezcoding.common.foundation.core.message.ErrorAppHead.getDefaultErrorCode;
 import static com.ezcoding.common.foundation.core.message.ErrorAppHead.getDefaultErrorMessage;
 import static com.ezcoding.common.foundation.core.message.PageInfo.getDefaultCurrentPage;
@@ -15,10 +16,10 @@ import static com.ezcoding.common.foundation.core.message.SuccessAppHead.getDefa
  */
 public class MessageConfigBean {
 
-    private String readCharset = DEFAULT_READ_CHARSET;
-    private String writeCharset = DEFAULT_WRITE_CHARSET;
-    private String readMessageType = DEFAULT_READ_MESSAGE_TYPE;
-    private String writeMessageType = DEFAULT_WRITE_MESSAGE_TYPE;
+    private String readCharset = MessageIOFactory.DEFAULT_READ_CHARSET;
+    private String writeCharset = MessageIOFactory.DEFAULT_WRITE_CHARSET;
+    private String readMessageType = MessageIOFactory.DEFAULT_READ_MESSAGE_TYPE;
+    private String writeMessageType = MessageIOFactory.DEFAULT_WRITE_MESSAGE_TYPE;
 
     private String errorResponseCode = getDefaultErrorCode();
     private String successResponseCode = getDefaultSuccessCode();

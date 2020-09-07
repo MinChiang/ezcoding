@@ -25,7 +25,7 @@ public class ErrorAppHead extends ResponseAppHead implements Serializable {
         return defaultErrorCode;
     }
 
-    public static void setDefaultErrorCode(String defaultErrorCode) {
+    static void setDefaultErrorCode(String defaultErrorCode) {
         ErrorAppHead.defaultErrorCode = defaultErrorCode;
     }
 
@@ -33,7 +33,7 @@ public class ErrorAppHead extends ResponseAppHead implements Serializable {
         return defaultErrorMessage;
     }
 
-    public static void setDefaultErrorMessage(String defaultErrorMessage) {
+    static void setDefaultErrorMessage(String defaultErrorMessage) {
         ErrorAppHead.defaultErrorMessage = defaultErrorMessage;
     }
 

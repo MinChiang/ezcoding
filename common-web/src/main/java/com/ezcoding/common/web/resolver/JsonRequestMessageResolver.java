@@ -1,8 +1,8 @@
 package com.ezcoding.common.web.resolver;
 
-import com.ezcoding.common.foundation.core.message.RequestMessage;
-import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
 import com.ezcoding.common.foundation.core.message.MessageTypeEnum;
+import com.ezcoding.common.foundation.core.message.RequestMessage;
+import com.ezcoding.common.foundation.core.message.io.MessageIOFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -22,10 +22,10 @@ public class JsonRequestMessageResolver {
     private static final Charset CHARSET_READ_DEFAULT = StandardCharsets.UTF_8;
     private static final String REQUEST_MESSAGE = "__REQUEST_MESSAGE__";
 
-    private MessageBuildable messageBuilder;
+    private MessageIOFactory messageIOFactory;
 
-    public JsonRequestMessageResolver(MessageBuildable messageBuilder) {
-        this.messageBuilder = messageBuilder;
+    public JsonRequestMessageResolver(MessageIOFactory messageIOFactory) {
+        this.messageIOFactory = messageIOFactory;
     }
 
     /**
@@ -47,20 +47,20 @@ public class JsonRequestMessageResolver {
         }
 
         try {
-            requestMessage = messageBuilder.buildRequestMessage(servletRequest.getInputStream(), JsonNode.class, CHARSET_READ_DEFAULT, MessageTypeEnum.JSON);
+            requestMessage = messageIOFactory.buildRequestMessage(servletRequest.getInputStream(), JsonNode.class, CHARSET_READ_DEFAULT, MessageTypeEnum.JSON);
             RequestContextHolder.getRequestAttributes().setAttribute(REQUEST_MESSAGE, requestMessage, RequestAttributes.SCOPE_REQUEST);
         } catch (IOException e) {
-            throw new IOException("报文解析出现异常");
+            throw new IOException("message parse error!", e);
         }
         return requestMessage;
     }
 
-    public MessageBuildable getMessageBuilder() {
-        return messageBuilder;
+    public MessageIOFactory getMessageIOFactory() {
+        return messageIOFactory;
     }
 
-    public void setMessageBuilder(MessageBuildable messageBuilder) {
-        this.messageBuilder = messageBuilder;
+    public void setMessageIOFactory(MessageIOFactory messageIOFactory) {
+        this.messageIOFactory = messageIOFactory;
     }
 
 }

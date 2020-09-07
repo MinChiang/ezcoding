@@ -1,7 +1,7 @@
 package com.ezcoding.common.security.entrypoint;
 
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
-import com.ezcoding.common.foundation.core.message.builder.MessageFactory;
+import com.ezcoding.common.foundation.core.message.MessageFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 

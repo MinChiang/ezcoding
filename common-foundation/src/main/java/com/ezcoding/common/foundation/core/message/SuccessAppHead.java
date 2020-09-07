@@ -25,7 +25,7 @@ public class SuccessAppHead extends ResponseAppHead implements Serializable {
         return defaultSuccessCode;
     }
 
-    public static void setDefaultSuccessCode(String defaultSuccessCode) {
+    static void setDefaultSuccessCode(String defaultSuccessCode) {
         SuccessAppHead.defaultSuccessCode = defaultSuccessCode;
     }
 
@@ -33,7 +33,7 @@ public class SuccessAppHead extends ResponseAppHead implements Serializable {
         return defaultSuceessMessage;
     }
 
-    public static void setDefaultSuceessMessage(String defaultSuceessMessage) {
+    static void setDefaultSuceessMessage(String defaultSuceessMessage) {
         SuccessAppHead.defaultSuceessMessage = defaultSuceessMessage;
     }
 

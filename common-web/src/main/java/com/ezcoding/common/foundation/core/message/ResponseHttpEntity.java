@@ -11,19 +11,19 @@ import org.springframework.util.MultiValueMap;
  */
 public class ResponseHttpEntity<T> extends ResponseEntity<ResponseMessage<T>> {
 
-    public ResponseHttpEntity(HttpStatus status) {
+    ResponseHttpEntity(HttpStatus status) {
         super(status);
     }
 
-    public ResponseHttpEntity(ResponseMessage<T> body, HttpStatus status) {
+    ResponseHttpEntity(ResponseMessage<T> body, HttpStatus status) {
         super(body, status);
     }
 
-    public ResponseHttpEntity(MultiValueMap<String, String> headers, HttpStatus status) {
+    ResponseHttpEntity(MultiValueMap<String, String> headers, HttpStatus status) {
         super(headers, status);
     }
 
-    public ResponseHttpEntity(ResponseMessage<T> body, MultiValueMap<String, String> headers, HttpStatus status) {
+    ResponseHttpEntity(ResponseMessage<T> body, MultiValueMap<String, String> headers, HttpStatus status) {
         super(body, headers, status);
     }
 

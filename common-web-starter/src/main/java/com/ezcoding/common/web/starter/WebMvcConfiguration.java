@@ -1,12 +1,12 @@
 package com.ezcoding.common.web.starter;
 
-import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
 import com.ezcoding.common.core.user.EmptyUserLoader;
 import com.ezcoding.common.core.user.UserLoadable;
+import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
 import com.ezcoding.common.foundation.core.enums.TypeMappingPair;
 import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
 import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
-import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
+import com.ezcoding.common.foundation.core.message.io.MessageIOFactory;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.util.ObjectMapperUtils;
 import com.ezcoding.common.web.convertor.ObjectToEnumConverter;
@@ -63,7 +63,7 @@ import java.util.Set;
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Autowired
-    private MessageBuildable messageBuilder;
+    private MessageIOFactory messageIOFactory;
     @Autowired
     private HttpMessageConverters httpMessageConverters;
     @Autowired(required = false)
@@ -92,7 +92,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     private JsonRequestMessageResolver jsonRequestMessageResolver() {
-        return new JsonRequestMessageResolver(this.messageBuilder);
+        return new JsonRequestMessageResolver(this.messageIOFactory);
     }
 
     @Bean

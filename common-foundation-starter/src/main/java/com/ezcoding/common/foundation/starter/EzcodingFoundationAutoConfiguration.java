@@ -7,10 +7,10 @@ import com.ezcoding.common.foundation.core.enums.EnumMappableStrategy;
 import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
 import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.exception.processor.*;
-import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
-import com.ezcoding.common.foundation.core.message.builder.MessageFactory;
-import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
 import com.ezcoding.common.foundation.core.message.MessageTypeEnum;
+import com.ezcoding.common.foundation.core.message.MessageFactory;
+import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
+import com.ezcoding.common.foundation.core.message.io.MessageIOFactory;
 import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeIdProducer;
@@ -61,12 +61,16 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @Autowired(required = false)
     private List<ApplicationEnumConfigurer> enumConfigurers;
 
+    @Autowired(required = false)
+    private IdProduceable idProduceable;
+
     /**
      * 注册默认分页类型
      */
     @Override
     public void afterPropertiesSet() throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException {
         initApplicationMetadata();
+        initMessage();
         initEnumMapping();
     }
 
@@ -78,6 +82,22 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         ModuleLayerModule.setModuleFillChar(metadata.getModuleFillChar());
         FunctionLayerModule.setFunctionCodeLength(metadata.getFunctionCodeLength());
         FunctionLayerModule.setFunctionFillChar(metadata.getFunctionFillChar());
+    }
+
+    private void initMessage() {
+        if (idProduceable != null) {
+            MessageFactory.setIdProducer(idProduceable);
+        }
+
+        MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
+        MessageFactory.setDefaultErrorResponseCode(message.getErrorResponseCode());
+        MessageFactory.setDefaultSuccessResponseCode(message.getSuccessResponseCode());
+        MessageFactory.setDefaultErrorResponseMessage(message.getErrorResponseMessage());
+        MessageFactory.setDefaultSuccessResponseMessage(message.getSuccessResponseMessage());
+
+        Long categoryNo = ezcodingFoundationConfigBean.getMetadata().getCategoryNo();
+        Long dataCenterNo = ezcodingFoundationConfigBean.getMetadata().getDataCenterNo();
+        MessageFactory.setDefaultId(String.valueOf(dataCenterNo) + String.valueOf(categoryNo));
     }
 
     private void initEnumMapping() throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
@@ -173,27 +193,18 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         return OriginalUuidProducer.getInstance();
     }
 
-    @ConditionalOnMissingBean(MessageBuildable.class)
+    @ConditionalOnMissingBean(MessageIOFactory.class)
     @Bean
-    public MessageFactory messageBuilder(ObjectMapper objectMapper, IdProduceable producer) {
+    public MessageIOFactory messageIOFactory(ObjectMapper objectMapper) {
+        MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
         JsonMessageBuilderHandler jsonMessageBuilderHandler = new JsonMessageBuilderHandler();
         jsonMessageBuilderHandler.setObjectMapper(objectMapper);
-        MessageFactory.configHandler(MessageTypeEnum.JSON, jsonMessageBuilderHandler);
-        MessageFactory.setIdProducer(producer);
+        MessageIOFactory.configHandler(MessageTypeEnum.JSON, jsonMessageBuilderHandler);
 
-        MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
-        MessageFactory instance = MessageFactory.getInstance();
-        instance.setDefaultErrorResponseCode(message.getErrorResponseCode());
-        instance.setDefaultSuccessResponseCode(message.getSuccessResponseCode());
-        instance.setDefaultErrorResponseMessage(message.getErrorResponseMessage());
-        instance.setDefaultSuccessResponseMessage(message.getSuccessResponseMessage());
+        MessageIOFactory instance = MessageIOFactory.getInstance();
         instance.setDefaultMessageBuilder(jsonMessageBuilderHandler);
         instance.setDefaultReadCharset(Charset.forName(message.getReadCharset()));
         instance.setDefaultWriteCharset(Charset.forName(message.getWriteCharset()));
-
-        Long categoryNo = ezcodingFoundationConfigBean.getMetadata().getCategoryNo();
-        Long dataCenterNo = ezcodingFoundationConfigBean.getMetadata().getDataCenterNo();
-        instance.setDefaultId(String.valueOf(dataCenterNo) + String.valueOf(categoryNo));
 
         instance.setDefaultReadMessageType(MessageTypeEnum.valueOf(message.getReadMessageType()));
         instance.setDefaultWriteMessageType(MessageTypeEnum.valueOf(message.getWriteMessageType()));
