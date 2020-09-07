@@ -14,7 +14,7 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2020-09-02 10:42
  */
-public class JacksonEnumMapping implements EnumMappableStrategy {
+public class JacksonEnumMapping extends AbstractEnumMappableStrategy {
 
     @Override
     public boolean canMap(Class<? extends Enum<?>> target) {
@@ -22,7 +22,7 @@ public class JacksonEnumMapping implements EnumMappableStrategy {
     }
 
     @Override
-    public TypeMappingInfo map(Class<? extends Enum<?>> target) {
+    public TypeMappingInfo doMap(Class<? extends Enum<?>> target) {
         Enum<?>[] enumConstants = target.getEnumConstants();
         if (enumConstants == null || enumConstants.length == 0) {
             return null;

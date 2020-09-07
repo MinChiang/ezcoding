@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  * @date 2020-09-01 18:13
  */
-public class SimpleEnumMapping implements EnumMappableStrategy {
+public class SimpleEnumMapping extends AbstractEnumMappableStrategy {
 
     @Override
     public boolean canMap(Class<? extends Enum<?>> target) {
@@ -20,7 +20,7 @@ public class SimpleEnumMapping implements EnumMappableStrategy {
     }
 
     @Override
-    public TypeMappingInfo map(Class<? extends Enum<?>> target) {
+    public TypeMappingInfo doMap(Class<? extends Enum<?>> target) {
         Enum<?>[] enumConstants = target.getEnumConstants();
         if (enumConstants == null || enumConstants.length == 0) {
             return null;

@@ -8,6 +8,7 @@ import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicati
 import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
 import com.ezcoding.common.foundation.core.message.io.MessageIOFactory;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
+import com.ezcoding.common.foundation.starter.EzcodingFoundationAutoConfiguration;
 import com.ezcoding.common.foundation.util.ObjectMapperUtils;
 import com.ezcoding.common.web.convertor.ObjectToEnumConverter;
 import com.ezcoding.common.web.jwt.AuthSettings;
@@ -60,6 +61,7 @@ import java.util.Set;
  * @date 2019-11-20 11:19
  */
 @Configuration
+@AutoConfigureAfter(value = EzcodingFoundationAutoConfiguration.class)
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Autowired
@@ -199,7 +201,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         Set<TypeMappingPair> typeMappingPairs = EnumMappableUtils.acquireAllTypeMapping();
         for (TypeMappingPair typeMappingPair : typeMappingPairs) {
-            registry.addConverter(new ObjectToEnumConverter(typeMappingPair.getSourceClass(), typeMappingPair.getTargetClass()));
+            registry.addConverter(new ObjectToEnumConverter(typeMappingPair.getTargetClass(), typeMappingPair.getSourceClass()));
         }
     }
 

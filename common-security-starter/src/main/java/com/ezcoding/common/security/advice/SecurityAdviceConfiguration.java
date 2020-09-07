@@ -1,8 +1,8 @@
 package com.ezcoding.common.security.advice;
 
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
-import com.ezcoding.common.foundation.core.message.ResponseHttpEntity;
-import com.ezcoding.common.foundation.core.message.ResponseMessageBuilder;
+import com.ezcoding.common.foundation.core.message.StandardResponseEntity;
+import com.ezcoding.common.foundation.core.message.StandardResponseEntityFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -29,11 +29,11 @@ public class SecurityAdviceConfiguration {
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = AccessDeniedException.class)
-    public ResponseHttpEntity<?> handleAccessDeniedException(AccessDeniedException e) throws IOException {
+    public StandardResponseEntity<?> handleAccessDeniedException(AccessDeniedException e) throws IOException {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("access deny:", e);
         }
-        return ResponseMessageBuilder
+        return StandardResponseEntityFactory
                 .ok()
                 .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_NO_PERMISSION_ERROR).build());
     }

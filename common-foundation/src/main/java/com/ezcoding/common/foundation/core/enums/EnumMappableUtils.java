@@ -79,13 +79,15 @@ public class EnumMappableUtils {
     /**
      * 注册解析接口
      *
-     * @param typeMappingInfo 映射关系
+     * @param typeMappingInfos 映射关系
      */
-    public static void register(TypeMappingInfo typeMappingInfo) {
-        if (typeMappingInfo == null) {
+    public static void register(Set<TypeMappingInfo> typeMappingInfos) {
+        if (typeMappingInfos == null || typeMappingInfos.isEmpty()) {
             return;
         }
-        CLASS_OBJECT_ENUM_MAPPING.put(typeMappingInfo.getTypeMappingPair(), typeMappingInfo.getMapping());
+        for (TypeMappingInfo typeMappingInfo : typeMappingInfos) {
+            CLASS_OBJECT_ENUM_MAPPING.put(typeMappingInfo.getTypeMappingPair(), typeMappingInfo.getMapping());
+        }
     }
 
     /**

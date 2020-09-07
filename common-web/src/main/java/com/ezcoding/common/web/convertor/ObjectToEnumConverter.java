@@ -27,7 +27,7 @@ public class ObjectToEnumConverter implements GenericConverter {
 
     @Override
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-        return EnumMappableUtils.map(source, (Class<? extends Enum>) this.convertiblePair.getSourceType());
+        return EnumMappableUtils.map(source, (Class<? extends Enum>) this.convertiblePair.getTargetType());
     }
 
 }

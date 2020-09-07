@@ -15,7 +15,7 @@ import java.util.Optional;
  * @version 1.0.0
  * @date 2020-04-13 15:18
  */
-public class ResponseMessageBuilder<T> {
+public class StandardResponseEntityFactory<T> {
 
     public static BodyBuilder status(HttpStatus status) {
         return new DefaultBuilder(Optional.of(status).orElseThrow(() -> new IllegalArgumentException("status can't be empty")));
@@ -71,7 +71,7 @@ public class ResponseMessageBuilder<T> {
 
         B varyBy(String... requestHeaders);
 
-        ResponseHttpEntity<?> build();
+        StandardResponseEntity<?> build();
 
     }
 
@@ -102,7 +102,7 @@ public class ResponseMessageBuilder<T> {
          * @param <T>                响应内容泛型
          * @return 响应的标准消息
          */
-        <T> ResponseHttpEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body);
+        <T> StandardResponseEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body);
 
         /**
          * 返回成功标准响应消息
@@ -112,7 +112,7 @@ public class ResponseMessageBuilder<T> {
          * @param <T>       响应内容泛型
          * @return 响应的成功标准消息
          */
-        <T> ResponseHttpEntity<T> success(Long totalItem, T body);
+        <T> StandardResponseEntity<T> success(Long totalItem, T body);
 
         /**
          * 返回成功标准响应消息
@@ -121,14 +121,14 @@ public class ResponseMessageBuilder<T> {
          * @param <T>  响应内容泛型
          * @return 响应的成功标准消息
          */
-        <T> ResponseHttpEntity<T> success(T body);
+        <T> StandardResponseEntity<T> success(T body);
 
         /**
          * 返回成功标准响应消息
          *
          * @return 响应的成功标准消息
          */
-        ResponseHttpEntity<?> success();
+        StandardResponseEntity<?> success();
 
         /**
          * 返回错误标准响应消息
@@ -138,7 +138,7 @@ public class ResponseMessageBuilder<T> {
          * @param <T>       响应内容泛型
          * @return 响应的错误标准消息
          */
-        <T> ResponseHttpEntity<T> error(ApplicationException exception, T body);
+        <T> StandardResponseEntity<T> error(ApplicationException exception, T body);
 
         /**
          * 返回错误标准响应消息
@@ -146,7 +146,7 @@ public class ResponseMessageBuilder<T> {
          * @param exception 错误
          * @return 响应的错误标准消息
          */
-        ResponseHttpEntity<?> error(ApplicationException exception);
+        StandardResponseEntity<?> error(ApplicationException exception);
 
 //        /**
 //         * 返回错误标准响应消息
@@ -262,27 +262,27 @@ public class ResponseMessageBuilder<T> {
         }
 
         @Override
-        public ResponseHttpEntity<?> build() {
+        public StandardResponseEntity<?> build() {
             return success();
         }
 
         @Override
-        public <T> ResponseHttpEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body) {
-            return new ResponseHttpEntity<>(new ResponseMessage<>(responseSystemHead, responseAppHead, body), this.headers, this.statusCode);
+        public <T> StandardResponseEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body) {
+            return new StandardResponseEntity<>(new ResponseMessage<>(responseSystemHead, responseAppHead, body), this.headers, this.statusCode);
         }
 
         @Override
-        public <T> ResponseHttpEntity<T> success(Long totalItem, T body) {
+        public <T> StandardResponseEntity<T> success(Long totalItem, T body) {
             return message(new ResponseSystemHead(), new SuccessAppHead(new PageInfo(totalItem)), body);
         }
 
         @Override
-        public <T> ResponseHttpEntity<T> success(T body) {
+        public <T> StandardResponseEntity<T> success(T body) {
             return success(null, body);
         }
 
         @Override
-        public ResponseHttpEntity<?> success() {
+        public StandardResponseEntity<?> success() {
             return success(null);
         }
 
@@ -297,12 +297,12 @@ public class ResponseMessageBuilder<T> {
 //        }
 
         @Override
-        public <T> ResponseHttpEntity<T> error(ApplicationException exception, T body) {
+        public <T> StandardResponseEntity<T> error(ApplicationException exception, T body) {
             return message(new ResponseSystemHead(), new ErrorAppHead(exception.getIdentification(), exception.getMessage()), body);
         }
 
         @Override
-        public ResponseHttpEntity<?> error(ApplicationException exception) {
+        public StandardResponseEntity<?> error(ApplicationException exception) {
             return error(exception, null);
         }
 
