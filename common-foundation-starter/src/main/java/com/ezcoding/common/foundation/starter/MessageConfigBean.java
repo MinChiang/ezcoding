@@ -1,12 +1,12 @@
 package com.ezcoding.common.foundation.starter;
 
 import static com.ezcoding.common.foundation.core.message.builder.MessageBuildable.*;
-import static com.ezcoding.common.foundation.core.message.head.ErrorAppHead.getDefaultErrorCode;
-import static com.ezcoding.common.foundation.core.message.head.ErrorAppHead.getDefaultErrorMessage;
-import static com.ezcoding.common.foundation.core.message.head.PageInfo.getDefaultCurrentPage;
-import static com.ezcoding.common.foundation.core.message.head.PageInfo.getDefaultPageSize;
-import static com.ezcoding.common.foundation.core.message.head.SuccessAppHead.getDefaultSuccessCode;
-import static com.ezcoding.common.foundation.core.message.head.SuccessAppHead.getDefaultSuceessMessage;
+import static com.ezcoding.common.foundation.core.message.ErrorAppHead.getDefaultErrorCode;
+import static com.ezcoding.common.foundation.core.message.ErrorAppHead.getDefaultErrorMessage;
+import static com.ezcoding.common.foundation.core.message.PageInfo.getDefaultCurrentPage;
+import static com.ezcoding.common.foundation.core.message.PageInfo.getDefaultPageSize;
+import static com.ezcoding.common.foundation.core.message.SuccessAppHead.getDefaultSuccessCode;
+import static com.ezcoding.common.foundation.core.message.SuccessAppHead.getDefaultSuceessMessage;
 
 /**
  * @author MinChiang

@@ -2,7 +2,7 @@ package com.ezcoding.common.web.resolver;
 
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
-import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
+import com.ezcoding.common.foundation.core.message.MessageTypeEnum;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;

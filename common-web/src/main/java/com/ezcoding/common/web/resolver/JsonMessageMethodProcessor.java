@@ -2,8 +2,8 @@ package com.ezcoding.common.web.resolver;
 
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
-import com.ezcoding.common.foundation.core.message.head.SuccessAppHead;
+import com.ezcoding.common.foundation.core.message.ResponseSystemHead;
+import com.ezcoding.common.foundation.core.message.SuccessAppHead;
 import com.ezcoding.common.web.resolver.parameter.RequestMessageParameterResolvable;
 import com.ezcoding.common.web.resolver.result.ResponseMessageReturnValueResolvable;
 import com.fasterxml.jackson.databind.JsonNode;

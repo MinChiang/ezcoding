@@ -1,10 +1,7 @@
 package com.ezcoding.common.foundation.core.message.builder;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import com.ezcoding.common.foundation.core.message.RequestMessage;
-import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.head.*;
-import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
+import com.ezcoding.common.foundation.core.message.*;
 
 import java.io.IOException;
 import java.io.InputStream;

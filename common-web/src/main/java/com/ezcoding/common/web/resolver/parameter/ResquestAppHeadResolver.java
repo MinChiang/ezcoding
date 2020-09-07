@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.resolver.parameter;
 
 import com.ezcoding.common.foundation.core.message.RequestMessage;
-import com.ezcoding.common.foundation.core.message.head.RequestAppHead;
+import com.ezcoding.common.foundation.core.message.RequestAppHead;
 import com.ezcoding.common.web.resolver.JsonParam;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.core.MethodParameter;

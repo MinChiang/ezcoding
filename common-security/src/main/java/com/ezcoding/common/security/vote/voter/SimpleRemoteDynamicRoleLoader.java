@@ -2,7 +2,7 @@ package com.ezcoding.common.security.vote.voter;
 
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.builder.RequestMessageBuilder;
+import com.ezcoding.common.foundation.core.message.builder.MessageFactory;
 import com.ezcoding.common.security.configattribute.DynamicConfigAttribute;
 import com.ezcoding.common.security.metadatasource.DynamicAnnotationSecurityMetadataSource;
 import com.ezcoding.common.web.util.ResponseUtils;
@@ -45,7 +45,7 @@ public class SimpleRemoteDynamicRoleLoader implements DynamicRoleLoadable {
     @Override
     public Map<DynamicConfigAttribute, String> load() {
         Collection<ConfigAttribute> attributes = dynamicAnnotationSecurityMetadataSource.getAllConfigAttributes();
-        RequestMessage<Collection<ConfigAttribute>> requestMessage = RequestMessageBuilder.create(attributes).build();
+        RequestMessage<Collection<ConfigAttribute>> requestMessage = MessageFactory.create(attributes).build();
         ResponseMessage<Map<DynamicConfigAttribute, String>> responseMessage = restTemplate.postForObject(this.url, requestMessage, ResponseMessage.class, this.applicationName);
         return ResponseUtils.checkAndGetResult(responseMessage);
     }

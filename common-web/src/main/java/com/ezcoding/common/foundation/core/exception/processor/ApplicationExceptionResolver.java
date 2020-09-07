@@ -1,7 +1,7 @@
 package com.ezcoding.common.foundation.core.exception.processor;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
+import com.ezcoding.common.foundation.core.message.ErrorAppHead;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;

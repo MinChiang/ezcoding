@@ -2,8 +2,8 @@ package com.ezcoding.common.foundation.core.message.handler;
 
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.head.RequestAppHead;
-import com.ezcoding.common.foundation.core.message.head.RequestSystemHead;
+import com.ezcoding.common.foundation.core.message.RequestAppHead;
+import com.ezcoding.common.foundation.core.message.RequestSystemHead;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;

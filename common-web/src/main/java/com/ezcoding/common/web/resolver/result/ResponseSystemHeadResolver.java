@@ -1,8 +1,8 @@
 package com.ezcoding.common.web.resolver.result;
 
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
-import com.ezcoding.common.foundation.core.message.head.SuccessAppHead;
+import com.ezcoding.common.foundation.core.message.ResponseSystemHead;
+import com.ezcoding.common.foundation.core.message.SuccessAppHead;
 import org.springframework.core.MethodParameter;
 
 /**

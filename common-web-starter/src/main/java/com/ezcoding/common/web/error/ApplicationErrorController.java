@@ -1,8 +1,8 @@
 package com.ezcoding.common.web.error;
 
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.head.ErrorAppHead;
-import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
+import com.ezcoding.common.foundation.core.message.ErrorAppHead;
+import com.ezcoding.common.foundation.core.message.ResponseSystemHead;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;

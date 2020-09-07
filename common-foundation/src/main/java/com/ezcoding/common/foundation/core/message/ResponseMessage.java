@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.message;
 
-import com.ezcoding.common.foundation.core.message.head.ResponseAppHead;
-import com.ezcoding.common.foundation.core.message.head.ResponseSystemHead;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;

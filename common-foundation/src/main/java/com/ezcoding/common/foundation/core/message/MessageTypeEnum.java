@@ -1,4 +1,4 @@
-package com.ezcoding.common.foundation.core.message.type;
+package com.ezcoding.common.foundation.core.message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

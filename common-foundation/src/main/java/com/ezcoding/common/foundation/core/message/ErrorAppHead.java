@@ -1,4 +1,4 @@
-package com.ezcoding.common.foundation.core.message.head;
+package com.ezcoding.common.foundation.core.message;
 
 import java.io.Serializable;
 

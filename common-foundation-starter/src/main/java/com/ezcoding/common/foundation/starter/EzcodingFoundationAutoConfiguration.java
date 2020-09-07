@@ -8,9 +8,9 @@ import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
 import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.exception.processor.*;
 import com.ezcoding.common.foundation.core.message.builder.MessageBuildable;
-import com.ezcoding.common.foundation.core.message.builder.MessageBuilder;
+import com.ezcoding.common.foundation.core.message.builder.MessageFactory;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
-import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
+import com.ezcoding.common.foundation.core.message.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeIdProducer;
@@ -175,14 +175,14 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 
     @ConditionalOnMissingBean(MessageBuildable.class)
     @Bean
-    public MessageBuilder messageBuilder(ObjectMapper objectMapper, IdProduceable producer) {
+    public MessageFactory messageBuilder(ObjectMapper objectMapper, IdProduceable producer) {
         JsonMessageBuilderHandler jsonMessageBuilderHandler = new JsonMessageBuilderHandler();
         jsonMessageBuilderHandler.setObjectMapper(objectMapper);
-        MessageBuilder.configHandler(MessageTypeEnum.JSON, jsonMessageBuilderHandler);
-        MessageBuilder.setIdProducer(producer);
+        MessageFactory.configHandler(MessageTypeEnum.JSON, jsonMessageBuilderHandler);
+        MessageFactory.setIdProducer(producer);
 
         MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
-        MessageBuilder instance = MessageBuilder.getInstance();
+        MessageFactory instance = MessageFactory.getInstance();
         instance.setDefaultErrorResponseCode(message.getErrorResponseCode());
         instance.setDefaultSuccessResponseCode(message.getSuccessResponseCode());
         instance.setDefaultErrorResponseMessage(message.getErrorResponseMessage());

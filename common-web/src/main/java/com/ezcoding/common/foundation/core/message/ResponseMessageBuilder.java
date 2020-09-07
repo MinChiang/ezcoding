@@ -1,7 +1,6 @@
 package com.ezcoding.common.foundation.core.message;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import com.ezcoding.common.foundation.core.message.head.*;
 import org.springframework.http.*;
 
 import java.net.URI;
@@ -16,10 +15,10 @@ import java.util.Optional;
  * @version 1.0.0
  * @date 2020-04-13 15:18
  */
-public class StandardResponseMessageBuilder<T> {
+public class ResponseMessageBuilder<T> {
 
     public static BodyBuilder status(HttpStatus status) {
-        return new DefaultBuilder(Optional.of(status).orElseThrow(() -> new IllegalArgumentException("状态码不能为空")));
+        return new DefaultBuilder(Optional.of(status).orElseThrow(() -> new IllegalArgumentException("status can't be empty")));
     }
 
     public static BodyBuilder ok() {
@@ -72,31 +71,102 @@ public class StandardResponseMessageBuilder<T> {
 
         B varyBy(String... requestHeaders);
 
-        StandardResponseHttpEntity<?> build();
+        ResponseHttpEntity<?> build();
 
     }
 
     public interface BodyBuilder extends HeadersBuilder<BodyBuilder> {
 
+        /**
+         * 设置内容长度
+         *
+         * @param contentLength 设置的内容长度
+         * @return 响应体构造器
+         */
         BodyBuilder contentLength(long contentLength);
 
+        /**
+         * 设置返回格式
+         *
+         * @param contentType 设置的返回格式
+         * @return 响应体构造器
+         */
         BodyBuilder contentType(MediaType contentType);
 
-        <T> StandardResponseHttpEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body);
+        /**
+         * 返回标准响应消息
+         *
+         * @param responseSystemHead 系统头
+         * @param responseAppHead    应用头
+         * @param body               响应体
+         * @param <T>                响应内容泛型
+         * @return 响应的标准消息
+         */
+        <T> ResponseHttpEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body);
 
-        <T> StandardResponseHttpEntity<T> success(Long totalItem, T body);
+        /**
+         * 返回成功标准响应消息
+         *
+         * @param totalItem 内容长度
+         * @param body      响应体
+         * @param <T>       响应内容泛型
+         * @return 响应的成功标准消息
+         */
+        <T> ResponseHttpEntity<T> success(Long totalItem, T body);
 
-        <T> StandardResponseHttpEntity<T> success(T body);
+        /**
+         * 返回成功标准响应消息
+         *
+         * @param body 响应体
+         * @param <T>  响应内容泛型
+         * @return 响应的成功标准消息
+         */
+        <T> ResponseHttpEntity<T> success(T body);
 
-        StandardResponseHttpEntity<?> success();
+        /**
+         * 返回成功标准响应消息
+         *
+         * @return 响应的成功标准消息
+         */
+        ResponseHttpEntity<?> success();
 
-        <T> StandardResponseHttpEntity<T> error(ApplicationException exception, T body);
+        /**
+         * 返回错误标准响应消息
+         *
+         * @param exception 错误
+         * @param body      响应体
+         * @param <T>       响应内容泛型
+         * @return 响应的错误标准消息
+         */
+        <T> ResponseHttpEntity<T> error(ApplicationException exception, T body);
 
-        StandardResponseHttpEntity<?> error(ApplicationException exception);
+        /**
+         * 返回错误标准响应消息
+         *
+         * @param exception 错误
+         * @return 响应的错误标准消息
+         */
+        ResponseHttpEntity<?> error(ApplicationException exception);
 
-        <T> StandardResponseHttpEntity<T> error(String returnCode, String returnMessage, T body);
-
-        StandardResponseHttpEntity<?> error(String returnCode, String returnMessage);
+//        /**
+//         * 返回错误标准响应消息
+//         *
+//         * @param returnCode    响应错误码
+//         * @param returnMessage 响应错误信息
+//         * @param body          响应体
+//         * @param <T>           响应内容泛型
+//         * @return 响应的错误标准消息
+//         */
+//        <T> StandardResponseHttpEntity<T> error(String returnCode, String returnMessage, T body);
+//
+//        /**
+//         * 返回错误标准响应消息
+//         *
+//         * @param returnCode    响应错误码
+//         * @param returnMessage 响应错误信息
+//         * @return 响应的错误标准消息
+//         */
+//        StandardResponseHttpEntity<?> error(String returnCode, String returnMessage);
 
     }
 
@@ -192,47 +262,47 @@ public class StandardResponseMessageBuilder<T> {
         }
 
         @Override
-        public StandardResponseHttpEntity<?> build() {
+        public ResponseHttpEntity<?> build() {
             return success();
         }
 
         @Override
-        public <T> StandardResponseHttpEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body) {
-            return new StandardResponseHttpEntity<>(new ResponseMessage<>(responseSystemHead, responseAppHead, body), this.headers, this.statusCode);
+        public <T> ResponseHttpEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body) {
+            return new ResponseHttpEntity<>(new ResponseMessage<>(responseSystemHead, responseAppHead, body), this.headers, this.statusCode);
         }
 
         @Override
-        public <T> StandardResponseHttpEntity<T> success(Long totalItem, T body) {
+        public <T> ResponseHttpEntity<T> success(Long totalItem, T body) {
             return message(new ResponseSystemHead(), new SuccessAppHead(new PageInfo(totalItem)), body);
         }
 
         @Override
-        public <T> StandardResponseHttpEntity<T> success(T body) {
+        public <T> ResponseHttpEntity<T> success(T body) {
             return success(null, body);
         }
 
         @Override
-        public StandardResponseHttpEntity<?> success() {
+        public ResponseHttpEntity<?> success() {
             return success(null);
         }
 
+//        @Override
+//        public <T> StandardResponseHttpEntity<T> error(String returnCode, String returnMessage, T body) {
+//            return message(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), body);
+//        }
+//
+//        @Override
+//        public StandardResponseHttpEntity<?> error(String returnCode, String returnMessage) {
+//            return error(returnCode, returnMessage, null);
+//        }
+
         @Override
-        public <T> StandardResponseHttpEntity<T> error(String returnCode, String returnMessage, T body) {
-            return message(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), body);
+        public <T> ResponseHttpEntity<T> error(ApplicationException exception, T body) {
+            return message(new ResponseSystemHead(), new ErrorAppHead(exception.getIdentification(), exception.getMessage()), body);
         }
 
         @Override
-        public StandardResponseHttpEntity<?> error(String returnCode, String returnMessage) {
-            return error(returnCode, returnMessage, null);
-        }
-
-        @Override
-        public <T> StandardResponseHttpEntity<T> error(ApplicationException exception, T body) {
-            return error(exception.getIdentification(), exception.getMessage(), body);
-        }
-
-        @Override
-        public StandardResponseHttpEntity<?> error(ApplicationException exception) {
+        public ResponseHttpEntity<?> error(ApplicationException exception) {
             return error(exception, null);
         }
 

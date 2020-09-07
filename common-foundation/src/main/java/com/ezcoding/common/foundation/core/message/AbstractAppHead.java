@@ -1,6 +1,4 @@
-package com.ezcoding.common.foundation.core.message.head;
-
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+package com.ezcoding.common.foundation.core.message;
 
 import java.io.Serializable;
 
@@ -9,11 +7,10 @@ import java.io.Serializable;
  * @version 1.0.0
  * @date 2018-07-14 17:08
  */
-public abstract class AbstractAppHead implements Head, Serializable {
+public abstract class AbstractAppHead implements AppHead, Serializable {
 
     private static final long serialVersionUID = -2411208071368843464L;
 
-    @JsonUnwrapped
     protected PageInfo pageInfo;
 
     public AbstractAppHead() {
@@ -23,6 +20,7 @@ public abstract class AbstractAppHead implements Head, Serializable {
         this.pageInfo = pageInfo;
     }
 
+    @Override
     public PageInfo getPageInfo() {
         return pageInfo;
     }

@@ -3,7 +3,7 @@ package com.ezcoding.common.web.util;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.head.ResponseAppHead;
+import com.ezcoding.common.foundation.core.message.ResponseAppHead;
 import com.ezcoding.common.foundation.util.AssertUtils;
 
 import java.util.Optional;

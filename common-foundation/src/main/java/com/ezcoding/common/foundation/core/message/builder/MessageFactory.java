@@ -1,12 +1,9 @@
 package com.ezcoding.common.foundation.core.message.builder;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import com.ezcoding.common.foundation.core.message.RequestMessage;
-import com.ezcoding.common.foundation.core.message.ResponseMessage;
+import com.ezcoding.common.foundation.core.message.*;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
 import com.ezcoding.common.foundation.core.message.handler.MessageBuilderHandleable;
-import com.ezcoding.common.foundation.core.message.head.*;
-import com.ezcoding.common.foundation.core.message.type.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 
@@ -21,7 +18,7 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2018-07-14 17:08
  */
-public class MessageBuilder implements MessageBuildable {
+public class MessageFactory implements MessageBuildable {
 
     private static Map<MessageTypeEnum, MessageBuilderHandleable> handlerMap = new HashMap<>();
     private static IdProduceable idProducer = OriginalUuidProducer.getInstance();
@@ -34,7 +31,7 @@ public class MessageBuilder implements MessageBuildable {
     private MessageTypeEnum defaultReadMessageType = MessageTypeEnum.valueOf(DEFAULT_READ_MESSAGE_TYPE);
     private MessageTypeEnum defaultWriteMessageType = MessageTypeEnum.valueOf(DEFAULT_WRITE_MESSAGE_TYPE);
 
-    private MessageBuilder() {
+    private MessageFactory() {
 
     }
 
@@ -42,7 +39,7 @@ public class MessageBuilder implements MessageBuildable {
         handlerMap.put(messageType, messageBuilderHandler);
     }
 
-    public static MessageBuilder getInstance() {
+    public static MessageFactory getInstance() {
         return MessageBuilderHolder.INSTANCE;
     }
 
@@ -51,7 +48,7 @@ public class MessageBuilder implements MessageBuildable {
     }
 
     public static void setHandlerMap(Map<MessageTypeEnum, MessageBuilderHandleable> handlerMap) {
-        MessageBuilder.handlerMap = handlerMap;
+        MessageFactory.handlerMap = handlerMap;
     }
 
     public static IdProduceable getIdProducer() {
@@ -59,7 +56,7 @@ public class MessageBuilder implements MessageBuildable {
     }
 
     public static void setIdProducer(IdProduceable idProducer) {
-        MessageBuilder.idProducer = idProducer;
+        MessageFactory.idProducer = idProducer;
         //需要配套设置报文生成器
         RequestSystemHead.setSequenceNoProducer(idProducer);
         ResponseSystemHead.setSequenceNoProducer(idProducer);
@@ -219,9 +216,166 @@ public class MessageBuilder implements MessageBuildable {
         ResponseSystemHead.setDefaultProviderId(defaultId);
     }
 
+    public static <T> SuccessResponseFactory<T> success(T body) {
+        return new SuccessResponseFactory<>(body);
+    }
+
+    public static SuccessResponseFactory<?> success() {
+        return success(null);
+    }
+
+    public static <T> ErrorResponseFactory<T> error(T body) {
+        return new ErrorResponseFactory<>(body);
+    }
+
+    public static <T> ErrorResponseFactory<?> error(ApplicationException exception) {
+        return new ErrorResponseFactory<>().errorCode(exception.getIdentification()).errorMessage(exception.getSummary());
+    }
+
+    public static ErrorResponseFactory<?> error() {
+        return new ErrorResponseFactory<>();
+    }
+
+    public static <T> DefaultRequestMessageFactory<T> create(T body) {
+        return new DefaultRequestMessageFactory<>(body);
+    }
+
+    public static <T> DefaultRequestMessageFactory<T> create() {
+        return new DefaultRequestMessageFactory<>();
+    }
+
     private static final class MessageBuilderHolder {
 
-        private static MessageBuilder INSTANCE = new MessageBuilder();
+        private static final MessageFactory INSTANCE = new MessageFactory();
+
+    }
+
+    /**
+     * @author MinChiang
+     * @version 1.0.0
+     * @date 2019-09-01 14:44
+     */
+    public static class ErrorResponseFactory<T> extends AbstractBodyFactory<T> {
+
+        private String errorCode;
+        private String errorMessage;
+
+        private ErrorResponseFactory(T body) {
+            super(body);
+        }
+
+        private ErrorResponseFactory() {
+        }
+
+        public ErrorResponseFactory<T> errorCode(String errorCode) {
+            this.errorCode = errorCode;
+            return this;
+        }
+
+        public ErrorResponseFactory<T> errorMessage(String errorMessage) {
+            this.errorMessage = errorMessage;
+            return this;
+        }
+
+        @Override
+        public ResponseMessage<T> build() {
+            return MessageBuilderHolder.INSTANCE.buildErrorResponseMessage(this.errorCode, this.errorMessage, this.body);
+        }
+
+    }
+
+    /**
+     * @author MinChiang
+     * @version 1.0.0
+     * @date 2019-09-01 14:41
+     */
+    public static class SuccessResponseFactory<T> extends AbstractBodyFactory<T> {
+
+        private Long totalItem;
+
+        private SuccessResponseFactory<T> totalItem(Long totalItem) {
+            this.totalItem = totalItem;
+            return this;
+        }
+
+        private SuccessResponseFactory(T body) {
+            super(body);
+        }
+
+        private SuccessResponseFactory() {
+
+        }
+
+        @Override
+        public ResponseMessage<T> build() {
+            if (this.totalItem == null) {
+                return MessageBuilderHolder.INSTANCE.buildSuccessResponseMessage(this.body);
+            }
+            return MessageBuilderHolder.INSTANCE.buildSuccessResponseMessage(this.totalItem, this.body);
+        }
+
+    }
+
+    /**
+     * @author MinChiang
+     * @version 1.0.0
+     * @date 2019-09-01 15:03
+     */
+    public static class DefaultRequestMessageFactory<T> extends AbstractBodyFactory<T> {
+
+        private Integer pageSize;
+        private Integer currentPage;
+
+        private DefaultRequestMessageFactory(T body) {
+            super(body);
+        }
+
+        private DefaultRequestMessageFactory() {
+            this(null);
+        }
+
+        public DefaultRequestMessageFactory<T> pageSize(Integer pageSize) {
+            this.pageSize = pageSize;
+            return this;
+        }
+
+        public DefaultRequestMessageFactory<T> currentPage(Integer currentPage) {
+            this.currentPage = currentPage;
+            return this;
+        }
+
+        @Override
+        public RequestMessage<T> build() {
+            if (this.pageSize == null && this.currentPage == null) {
+                return MessageBuilderHolder.INSTANCE.buildRequestMessage(this.body);
+            }
+            return MessageBuilderHolder.INSTANCE.buildRequestMessage(new PageInfo(this.currentPage, this.pageSize), this.body);
+        }
+
+    }
+
+    /**
+     * @author MinChiang
+     * @version 1.0.0
+     * @date 2019-09-01 14:38
+     */
+    public abstract static class AbstractBodyFactory<T> {
+
+        protected T body;
+
+        AbstractBodyFactory(T body) {
+            this.body = body;
+        }
+
+        AbstractBodyFactory() {
+        }
+
+        /**
+         * 构建响应实例
+         *
+         * @return 响应实例
+         */
+        public abstract AbstractMessage<T> build();
 
     }
 

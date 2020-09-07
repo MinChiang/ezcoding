@@ -1,4 +1,4 @@
-package com.ezcoding.common.foundation.core.message.head;
+package com.ezcoding.common.foundation.core.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @version 1.0.0
  * @date 2018-07-14 17:08
  */
-public class AbstractSystemHead implements Head, Serializable {
+public class AbstractSystemHead implements SystemHead, Serializable {
 
     private static final long serialVersionUID = 9212375428640216675L;
     public static final String TRANSACTION_DATE = "transactionDate";
@@ -26,6 +26,7 @@ public class AbstractSystemHead implements Head, Serializable {
         this.version = DEFAULT_VERSION;
     }
 
+    @Override
     public long getTransactionDate() {
         return transactionDate;
     }
@@ -34,6 +35,7 @@ public class AbstractSystemHead implements Head, Serializable {
         this.transactionDate = transactionDate;
     }
 
+    @Override
     public String getVersion() {
         return version;
     }
