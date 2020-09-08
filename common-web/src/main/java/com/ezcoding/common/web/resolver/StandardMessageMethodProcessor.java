@@ -36,12 +36,12 @@ public class StandardMessageMethodProcessor extends AbstractMessageConverterMeth
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        return parameter.hasMethodAnnotation(StandardResult.class);
+        return null;
     }
 
     @Override
     public boolean supportsReturnType(MethodParameter returnType) {
-        return false;
+        return returnType.hasMethodAnnotation(StandardResult.class);
     }
 
     @Override
