@@ -112,7 +112,7 @@ public class StandardResponseEntityFactory<T> {
          * @param <T>       响应内容泛型
          * @return 响应的成功标准消息
          */
-        <T> StandardResponseEntity<T> success(Long totalItem, T body);
+        <T> StandardResponseEntity<T> success(Integer totalItem, T body);
 
         /**
          * 返回成功标准响应消息
@@ -272,7 +272,7 @@ public class StandardResponseEntityFactory<T> {
         }
 
         @Override
-        public <T> StandardResponseEntity<T> success(Long totalItem, T body) {
+        public <T> StandardResponseEntity<T> success(Integer totalItem, T body) {
             return message(new ResponseSystemHead(), new SuccessAppHead(new PageInfo(totalItem)), body);
         }
 

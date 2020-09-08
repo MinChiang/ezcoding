@@ -81,7 +81,7 @@ public class MessageFactory {
      * @param body   响应对象
      * @return 成功响应信息
      */
-    public static <T> ResponseMessage<T> buildSuccessResponseMessage(Long totalItem, T body) {
+    public static <T> ResponseMessage<T> buildSuccessResponseMessage(Integer totalItem, T body) {
         return new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(new PageInfo(totalItem)), body);
     }
 
@@ -249,9 +249,9 @@ public class MessageFactory {
      */
     public static class SuccessResponseFactory<T> extends AbstractBodyFactory<T> {
 
-        private Long totalItem;
+        private Integer totalItem;
 
-        private SuccessResponseFactory<T> totalItem(Long totalItem) {
+        private SuccessResponseFactory<T> totalItem(Integer totalItem) {
             this.totalItem = totalItem;
             return this;
         }

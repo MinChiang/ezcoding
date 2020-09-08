@@ -1,5 +1,6 @@
 package com.ezcoding.common.foundation.core.message;
 
+import com.ezcoding.common.foundation.core.enums.InterfaceEnumMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -30,12 +31,12 @@ public class PageInfo implements Cloneable, Serializable {
     protected Integer currentPage;
 
     @JsonProperty
-    protected Long totalItem;
+    protected Integer totalItem;
 
     public PageInfo() {
     }
 
-    public PageInfo(Long totalItem) {
+    public PageInfo(Integer totalItem) {
         this.totalItem = totalItem;
     }
 
@@ -60,11 +61,11 @@ public class PageInfo implements Cloneable, Serializable {
         this.currentPage = currentPage;
     }
 
-    public Long getTotalItem() {
+    public Integer getTotalItem() {
         return totalItem;
     }
 
-    public void setTotalItem(Long totalItem) {
+    public void setTotalItem(Integer totalItem) {
         this.totalItem = totalItem;
     }
 

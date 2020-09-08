@@ -132,9 +132,9 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                 count = 0;
                 for (EnumMappableStrategy strategy : strategies) {
                     if (strategy.canMap((Class<? extends Enum<?>>) cls)) {
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("register strategy [{}] of enum [{}]", strategy.getClass().getName(), cls.getName());
-                        }
+//                        if (LOGGER.isDebugEnabled()) {
+//                            LOGGER.debug("register strategy [{}] of enum [{}]", strategy.getClass().getName(), cls.getName());
+//                        }
 
                         ObjectEnumMappingInfo idToEnumMappingInfo = strategy.map((Class<? extends Enum<?>>) cls);
                         EnumMappableUtils.register(idToEnumMappingInfo);
