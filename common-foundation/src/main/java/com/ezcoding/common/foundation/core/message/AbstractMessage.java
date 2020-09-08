@@ -15,22 +15,22 @@ public abstract class AbstractMessage<T> implements Message<T>, Serializable {
     public static final String BODY = "body";
 
     @JsonProperty(value = BODY)
-    protected T payload;
+    protected T body;
 
     public AbstractMessage() {
     }
 
-    public AbstractMessage(T payload) {
-        this.payload = payload;
+    public AbstractMessage(T body) {
+        this.body = body;
     }
 
     @Override
-    public T getPayload() {
-        return payload;
+    public T getBody() {
+        return body;
     }
 
-    public void setPayload(T payload) {
-        this.payload = payload;
+    public void setBody(T body) {
+        this.body = body;
     }
 
 }

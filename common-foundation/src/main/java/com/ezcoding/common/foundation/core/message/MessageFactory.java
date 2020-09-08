@@ -34,22 +34,22 @@ public class MessageFactory {
     /**
      * 构造请求信息
      *
-     * @param payload 请求对象
+     * @param body 请求对象
      * @return 请求信息
      */
-    public static <T> RequestMessage<T> buildRequestMessage(T payload) {
-        return buildRequestMessage(null, payload);
+    public static <T> RequestMessage<T> buildRequestMessage(T body) {
+        return buildRequestMessage(null, body);
     }
 
     /**
      * 构造请求信息
      *
      * @param pageInfo 分页信息
-     * @param payload  请求对象
+     * @param body  请求对象
      * @return 请求信息
      */
-    public static <T> RequestMessage<T> buildRequestMessage(PageInfo pageInfo, T payload) {
-        return new RequestMessage<>(new RequestSystemHead(), new RequestAppHead(pageInfo), payload);
+    public static <T> RequestMessage<T> buildRequestMessage(PageInfo pageInfo, T body) {
+        return new RequestMessage<>(new RequestSystemHead(), new RequestAppHead(pageInfo), body);
     }
 
     /**
@@ -57,32 +57,32 @@ public class MessageFactory {
      *
      * @param requestSystemHead 系统请求头
      * @param requestAppHead    应用请求头
-     * @param payload           请求对象
+     * @param body           请求对象
      * @return 请求信息
      */
-    public static <T> RequestMessage<T> buildRequestMessage(RequestSystemHead requestSystemHead, RequestAppHead requestAppHead, T payload) {
-        return new RequestMessage<>(requestSystemHead, requestAppHead, payload);
+    public static <T> RequestMessage<T> buildRequestMessage(RequestSystemHead requestSystemHead, RequestAppHead requestAppHead, T body) {
+        return new RequestMessage<>(requestSystemHead, requestAppHead, body);
     }
 
     /**
      * 构造成功响应信息
      *
-     * @param payload 响应对象
+     * @param body 响应对象
      * @return 成功响应信息
      */
-    public static <T> ResponseMessage<T> buildSuccessResponseMessage(T payload) {
-        return new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), payload);
+    public static <T> ResponseMessage<T> buildSuccessResponseMessage(T body) {
+        return new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), body);
     }
 
     /**
      * 构造成功响应信息
      *
      * @param totalItem 查询对象总数量
-     * @param payload   响应对象
+     * @param body   响应对象
      * @return 成功响应信息
      */
-    public static <T> ResponseMessage<T> buildSuccessResponseMessage(Long totalItem, T payload) {
-        return new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(new PageInfo(totalItem)), payload);
+    public static <T> ResponseMessage<T> buildSuccessResponseMessage(Long totalItem, T body) {
+        return new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(new PageInfo(totalItem)), body);
     }
 
     /**
@@ -90,11 +90,11 @@ public class MessageFactory {
      *
      * @param responseSystemHead 系统请求头
      * @param responseAppHead    应用请求头
-     * @param payload            响应对象
+     * @param body            响应对象
      * @return 成功响应信息
      */
-    public static <T> ResponseMessage<T> buildResponseMessage(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T payload) {
-        return new ResponseMessage<>(responseSystemHead, responseAppHead, payload);
+    public static <T> ResponseMessage<T> buildResponseMessage(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body) {
+        return new ResponseMessage<>(responseSystemHead, responseAppHead, body);
     }
 
     /**
@@ -120,22 +120,22 @@ public class MessageFactory {
      *
      * @param returnCode    响应结果号码
      * @param returnMessage 响应信息内容
-     * @param payload       返回内容
+     * @param body       返回内容
      * @return 失败响应信息
      */
-    public static <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage, T payload) {
-        return new ResponseMessage<>(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), payload);
+    public static <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage, T body) {
+        return new ResponseMessage<>(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), body);
     }
 
     /**
      * 构造失败响应信息
      *
      * @param applicationException 程序异常
-     * @param payload              返回内容
+     * @param body              返回内容
      * @return 失败响应信息
      */
-    public static <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException applicationException, T payload) {
-        return buildErrorResponseMessage(applicationException.getIdentification(), applicationException.getMessage(), payload);
+    public static <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException applicationException, T body) {
+        return buildErrorResponseMessage(applicationException.getIdentification(), applicationException.getMessage(), body);
     }
 
     /**

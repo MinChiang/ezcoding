@@ -28,7 +28,7 @@ public class ResponseUtils {
      */
     public static <T> T checkAndGetResult(ResponseMessage<T> responseMessage, Supplier<? extends ApplicationException> supplier) {
         AssertUtils.mustTrue(responseMessage != null && responseMessage.success(), Optional.of(supplier).get());
-        return responseMessage.getPayload();
+        return responseMessage.getBody();
     }
 
     /**

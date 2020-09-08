@@ -23,8 +23,8 @@ public class RequestMessage<T> extends AbstractMessage<T> implements Serializabl
     public RequestMessage() {
     }
 
-    public RequestMessage(RequestSystemHead systemHead, RequestAppHead appHead, T payload) {
-        super(payload);
+    public RequestMessage(RequestSystemHead systemHead, RequestAppHead appHead, T body) {
+        super(body);
         this.systemHead = systemHead;
         this.appHead = appHead;
     }

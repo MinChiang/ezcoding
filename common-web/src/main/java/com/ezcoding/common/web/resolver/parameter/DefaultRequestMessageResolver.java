@@ -30,7 +30,7 @@ public class DefaultRequestMessageResolver extends AbstractRequestMessageResolve
 
     @Override
     public Object resolveReturnValue(RequestMessage<JsonNode> requestMessage, JsonParam parameterAnnotation, MethodParameter methodParameter) {
-        JsonNode payload = requestMessage.getPayload();
+        JsonNode body = requestMessage.getBody();
         String value = parameterAnnotation.value();
         Object result;
         if (!value.isEmpty()) {
@@ -38,12 +38,12 @@ public class DefaultRequestMessageResolver extends AbstractRequestMessageResolve
                 value = (PATH_PREFIX + value);
             }
             try {
-                payload = payload.at(value);
+                body = body.at(value);
             } catch (Exception e) {
                 throw new RuntimeException("未知的参数路径" + value);
             }
         }
-        if (payload == null || payload.isMissingNode()) {
+        if (body == null || body.isMissingNode()) {
             //查不到节点且参数必填，报错
             if (parameterAnnotation.required()) {
                 throw new IllegalArgumentException("方法" + methodParameter.getMethod() + "参数" + methodParameter.getParameterName() + "为必输");
@@ -54,9 +54,9 @@ public class DefaultRequestMessageResolver extends AbstractRequestMessageResolve
             //解决参数类型中的泛型问题
             JavaType javaType = this.objectMapper.constructType(methodParameter.getGenericParameterType());
             try {
-                result = this.objectMapper.convertValue(payload, javaType);
+                result = this.objectMapper.convertValue(body, javaType);
             } catch (Exception e) {
-                throw new IllegalArgumentException("无法将" + payload + "转化为类型" + javaType);
+                throw new IllegalArgumentException("无法将" + body + "转化为类型" + javaType);
             }
         }
         return result;

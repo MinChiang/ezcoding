@@ -12,6 +12,6 @@ public interface Message<T> {
      *
      * @return 获取的信息载体
      */
-    T getPayload();
+    T getBody();
 
 }
