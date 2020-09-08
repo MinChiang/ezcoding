@@ -3,12 +3,11 @@ package com.ezcoding.common.foundation.starter;
 import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
 import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
-import com.ezcoding.common.foundation.core.enums.EnumMappableStrategy;
-import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
+import com.ezcoding.common.foundation.core.enums.*;
 import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.exception.processor.*;
-import com.ezcoding.common.foundation.core.message.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.message.MessageFactory;
+import com.ezcoding.common.foundation.core.message.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
 import com.ezcoding.common.foundation.core.message.io.MessageIOFactory;
 import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
@@ -136,7 +135,26 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                         if (LOGGER.isDebugEnabled()) {
                             LOGGER.debug("register strategy [{}] of enum [{}]", strategy.getClass().getName(), cls.getName());
                         }
-                        EnumMappableUtils.register(strategy.map((Class<? extends Enum<?>>) cls));
+
+                        ObjectEnumMappingInfo idToEnumMappingInfo = strategy.map((Class<? extends Enum<?>>) cls);
+                        EnumMappableUtils.register(idToEnumMappingInfo);
+
+                        Map<String, Enum<?>> stringToEnumMapping = new HashMap<>();
+                        Map<Enum<?>, Object> enumToIdMapping = new HashMap<>();
+
+                        for (Map.Entry<?, ? extends Enum<?>> entry : idToEnumMappingInfo.getMapping().entrySet()) {
+                            stringToEnumMapping.put(entry.getKey().toString(), entry.getValue());
+                            enumToIdMapping.put(entry.getValue(), entry.getKey());
+                        }
+
+                        //补充：加入String -> Enum映射关系
+                        ObjectEnumMappingInfo stringToEnumMappingInfo = new ObjectEnumMappingInfo(new MappingPair(String.class, idToEnumMappingInfo.getMappingPair().getTargetClass()), stringToEnumMapping);
+                        EnumMappableUtils.register(stringToEnumMappingInfo);
+
+                        //补充：加入Enum -> id映射关系
+                        EnumObjectMappingInfo enumObjectMappingInfo = new EnumObjectMappingInfo(new MappingPair(cls, idToEnumMappingInfo.getMappingPair().getSourceClass()), enumToIdMapping);
+                        EnumMappableUtils.register(enumObjectMappingInfo);
+
                         count++;
                     }
                 }

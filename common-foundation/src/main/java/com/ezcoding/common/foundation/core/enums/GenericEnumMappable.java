@@ -12,7 +12,7 @@ public interface GenericEnumMappable {
      *
      * @return 映射键值对
      */
-    TypeMappingPair mapPair();
+    MappingPair mapPair();
 
     /**
      * 获取映射关系

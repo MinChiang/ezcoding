@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.enums;
 
-import java.util.Set;
-
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -21,8 +19,8 @@ public interface EnumMappableStrategy {
      * enum映射
      *
      * @param target 待映射的enum
-     * @return 映射结果集
+     * @return 映射结果
      */
-    Set<TypeMappingInfo> map(Class<? extends Enum<?>> target);
+    ObjectEnumMappingInfo map(Class<? extends Enum<?>> target);
 
 }

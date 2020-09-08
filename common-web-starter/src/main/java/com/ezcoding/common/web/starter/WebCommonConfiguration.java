@@ -1,7 +1,12 @@
 package com.ezcoding.common.web.starter;
 
+import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
+import com.ezcoding.common.foundation.core.enums.MappingPair;
 import com.ezcoding.common.foundation.core.exception.processor.WebDefaultApplicationExceptionProcessor;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
+import com.ezcoding.common.foundation.starter.EzcodingFoundationConfigBean;
+import com.ezcoding.common.web.convertor.StandardEnumDeserializer;
+import com.ezcoding.common.web.convertor.StandardEnumSerializer;
 import com.ezcoding.common.web.error.ApplicationErrorController;
 import com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes;
 import com.ezcoding.common.web.filter.ApplicationContextHolderFilter;
@@ -22,14 +27,15 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolve
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
+
+import static com.ezcoding.common.foundation.starter.EnumConfigBean.JACKSON;
+import static org.springframework.util.StringUtils.tokenizeToStringArray;
 
 /**
  * @author MinChiang
@@ -44,6 +50,8 @@ public class WebCommonConfiguration implements InitializingBean {
     private List<ApplicationWebConfigurer> applicationWebConfigurers;
     @Autowired
     private MessageSource messageSource;
+    @Autowired
+    private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
 
     @Override
     public void afterPropertiesSet() {
@@ -51,7 +59,7 @@ public class WebCommonConfiguration implements InitializingBean {
     }
 
     @Bean
-    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+    public Jackson2ObjectMapperBuilderCustomizer defaultJackson2ObjectMapperBuilderCustomizer() {
         return jacksonObjectMapperBuilder -> {
             //将long转化为string，解决序列化long精度丢失的问题
             jacksonObjectMapperBuilder.serializerByType(long.class, ToStringSerializer.instance);
@@ -63,6 +71,31 @@ public class WebCommonConfiguration implements InitializingBean {
             jacksonObjectMapperBuilder.featuresToEnable(MapperFeature.PROPAGATE_TRANSIENT_MARKER);
             jacksonObjectMapperBuilder.locale(Locale.getDefault());
         };
+    }
+
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer enumMappingJackson2ObjectMapperBuilderCustomizer() {
+        String configContexts = ezcodingFoundationConfigBean.getEnums().getConfigContexts();
+        if (configContexts == null || configContexts.isEmpty()) {
+            return null;
+        }
+
+        String[] contexts = tokenizeToStringArray(configContexts, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
+        for (String context : contexts) {
+            if (Objects.equals(context, JACKSON)) {
+                return jacksonObjectMapperBuilder -> {
+                    Set<MappingPair> enumToObjectMapping = EnumMappableUtils.acquireEnumToObjectMapping();
+                    for (MappingPair mappingPair : enumToObjectMapping) {
+                        jacksonObjectMapperBuilder.serializers(new StandardEnumSerializer((Class<Enum<?>>) mappingPair.getSourceClass()));
+                    }
+                    Set<MappingPair> objectToEnumMapping = EnumMappableUtils.acquireObjectToEnumMapping();
+                    for (MappingPair mappingPair : objectToEnumMapping) {
+                        jacksonObjectMapperBuilder.deserializers(new StandardEnumDeserializer(mappingPair.getSourceClass(), (Class<Enum<?>>) mappingPair.getTargetClass()));
+                    }
+                };
+            }
+        }
+        return null;
     }
 
     @Bean

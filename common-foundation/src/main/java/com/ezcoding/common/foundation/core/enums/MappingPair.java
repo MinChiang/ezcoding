@@ -7,12 +7,12 @@ import java.util.Objects;
  * @version 1.0.0
  * @date 2020-09-03 11:15
  */
-public class TypeMappingPair {
+public class MappingPair {
 
-    private final Class<? extends Enum<?>> sourceClass;
+    private final Class<?> sourceClass;
     private final Class<?> targetClass;
 
-    public TypeMappingPair(Class<? extends Enum<?>> sourceClass, Class<?> targetClass) {
+    public MappingPair(Class<?> sourceClass, Class<?> targetClass) {
         if (sourceClass == null) {
             throw new IllegalArgumentException("sourceClass can not be null");
         }
@@ -31,7 +31,7 @@ public class TypeMappingPair {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TypeMappingPair that = (TypeMappingPair) o;
+        MappingPair that = (MappingPair) o;
         return sourceClass.equals(that.sourceClass) &&
                 targetClass.equals(that.targetClass);
     }
@@ -41,7 +41,7 @@ public class TypeMappingPair {
         return Objects.hash(sourceClass, targetClass);
     }
 
-    public Class<? extends Enum<?>> getSourceClass() {
+    public Class<?> getSourceClass() {
         return sourceClass;
     }
 

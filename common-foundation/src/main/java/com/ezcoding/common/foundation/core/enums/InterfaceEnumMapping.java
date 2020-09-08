@@ -8,7 +8,7 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2020-09-01 16:53
  */
-public class InterfaceEnumMapping extends AbstractEnumMappableStrategy {
+public class InterfaceEnumMapping implements EnumMappableStrategy {
 
     @Override
     public boolean canMap(Class<? extends Enum<?>> target) {
@@ -16,7 +16,7 @@ public class InterfaceEnumMapping extends AbstractEnumMappableStrategy {
     }
 
     @Override
-    public TypeMappingInfo doMap(Class<? extends Enum<?>> target) {
+    public ObjectEnumMappingInfo map(Class<? extends Enum<?>> target) {
         Enum<?>[] enumConstants = target.getEnumConstants();
         if (enumConstants == null || enumConstants.length == 0) {
             return null;
@@ -31,7 +31,7 @@ public class InterfaceEnumMapping extends AbstractEnumMappableStrategy {
                 targetClass = map.getClass();
             }
         }
-        return new TypeMappingInfo(new TypeMappingPair(target, targetClass), mapping);
+        return new ObjectEnumMappingInfo(new MappingPair(targetClass, target), mapping);
     }
 
 }

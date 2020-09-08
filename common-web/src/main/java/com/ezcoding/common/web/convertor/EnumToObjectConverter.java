@@ -10,13 +10,13 @@ import java.util.Set;
 /**
  * @author MinChiang
  * @version 1.0.0
- * @date 2020-09-03 9:21
+ * @date 2020-09-08 9:47
  */
-public class ObjectToEnumConverter implements GenericConverter {
+public class EnumToObjectConverter implements GenericConverter {
 
     private final ConvertiblePair convertiblePair;
 
-    public ObjectToEnumConverter(Class<?> sourceClass, Class<? extends Enum<?>> targetClass) {
+    public EnumToObjectConverter(Class<? extends Enum<?>> sourceClass, Class<?> targetClass) {
         this.convertiblePair = new ConvertiblePair(sourceClass, targetClass);
     }
 
@@ -26,8 +26,8 @@ public class ObjectToEnumConverter implements GenericConverter {
     }
 
     @Override
-    public Enum<?> convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-        return EnumMappableUtils.map(source, (Class<? extends Enum>) this.convertiblePair.getTargetType());
+    public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
+        return EnumMappableUtils.map((Enum<?>) source);
     }
 
 }

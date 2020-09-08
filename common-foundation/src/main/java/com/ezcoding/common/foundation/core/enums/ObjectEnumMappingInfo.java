@@ -7,24 +7,24 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2020-09-05 23:12
  */
-public class TypeMappingInfo {
+public class ObjectEnumMappingInfo {
 
-    private final TypeMappingPair typeMappingPair;
+    private final MappingPair mappingPair;
     private final Map<?, ? extends Enum<?>> mapping;
 
-    public TypeMappingInfo(TypeMappingPair typeMappingPair, Map<?, ? extends Enum<?>> mapping) {
-        if (typeMappingPair == null) {
+    public ObjectEnumMappingInfo(MappingPair mappingPair, Map<?, ? extends Enum<?>> mapping) {
+        if (mappingPair == null) {
             throw new IllegalArgumentException("typeMappingPair can not be null");
         }
         if (mapping == null) {
             throw new IllegalArgumentException("mapping can not be null");
         }
-        this.typeMappingPair = typeMappingPair;
+        this.mappingPair = mappingPair;
         this.mapping = mapping;
     }
 
-    public TypeMappingPair getTypeMappingPair() {
-        return typeMappingPair;
+    public MappingPair getMappingPair() {
+        return mappingPair;
     }
 
     public Map<?, ? extends Enum<?>> getMapping() {
