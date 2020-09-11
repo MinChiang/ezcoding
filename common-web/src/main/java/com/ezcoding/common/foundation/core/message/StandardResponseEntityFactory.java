@@ -93,16 +93,16 @@ public class StandardResponseEntityFactory<T> {
          */
         BodyBuilder contentType(MediaType contentType);
 
-        /**
-         * 返回标准响应消息
-         *
-         * @param responseSystemHead 系统头
-         * @param responseAppHead    应用头
-         * @param body               响应体
-         * @param <T>                响应内容泛型
-         * @return 响应的标准消息
-         */
-        <T> StandardResponseEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body);
+//        /**
+//         * 返回标准响应消息
+//         *
+//         * @param responseSystemHead 系统头
+//         * @param responseAppHead    应用头
+//         * @param body               响应体
+//         * @param <T>                响应内容泛型
+//         * @return 响应的标准消息
+//         */
+//        <T> StandardResponseEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body);
 
         /**
          * 返回成功标准响应消息
@@ -266,14 +266,14 @@ public class StandardResponseEntityFactory<T> {
             return success();
         }
 
-        @Override
-        public <T> StandardResponseEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body) {
-            return new StandardResponseEntity<>(new ResponseMessage<>(responseSystemHead, responseAppHead, body), this.headers, this.statusCode);
-        }
+//        @Override
+//        public <T> StandardResponseEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body) {
+//            return new StandardResponseEntity<>(new ResponseMessage<>(responseSystemHead, responseAppHead, body), this.headers, this.statusCode);
+//        }
 
         @Override
         public <T> StandardResponseEntity<T> success(Integer totalItem, T body) {
-            return message(new ResponseSystemHead(), new SuccessAppHead(new PageInfo(totalItem)), body);
+            return new StandardResponseEntity<>(MessageFactory.buildSuccessResponseMessage(totalItem, body), this.headers, this.statusCode);
         }
 
         @Override
@@ -298,7 +298,7 @@ public class StandardResponseEntityFactory<T> {
 
         @Override
         public <T> StandardResponseEntity<T> error(ApplicationException exception, T body) {
-            return message(new ResponseSystemHead(), new ErrorAppHead(exception.getIdentification(), exception.getMessage()), body);
+            return new StandardResponseEntity<>(MessageFactory.buildErrorResponseMessage(exception, body), this.headers, this.statusCode);
         }
 
         @Override

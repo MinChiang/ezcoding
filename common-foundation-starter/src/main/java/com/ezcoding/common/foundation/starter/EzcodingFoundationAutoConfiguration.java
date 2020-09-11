@@ -85,7 +85,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 
     private void initMessage() {
         if (idProduceable != null) {
-            MessageFactory.setIdProducer(idProduceable);
+            MessageFactory.setSequenceNoProducer(idProduceable);
         }
 
         MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
@@ -96,7 +96,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 
         Long categoryNo = ezcodingFoundationConfigBean.getMetadata().getCategoryNo();
         Long dataCenterNo = ezcodingFoundationConfigBean.getMetadata().getDataCenterNo();
-        MessageFactory.setDefaultId(String.valueOf(dataCenterNo) + String.valueOf(categoryNo));
+        MessageFactory.setAppId(String.valueOf(dataCenterNo) + String.valueOf(categoryNo));
     }
 
     private void initEnumMapping() throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {

@@ -14,4 +14,11 @@ public interface Message<T> {
      */
     T getBody();
 
+    /**
+     * 判断报文是否合法
+     *
+     * @return 报文是否合法
+     */
+    boolean valid();
+
 }

@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class RequestMessage<T> extends AbstractMessage<T> implements Serializable {
 
     private static final long serialVersionUID = 2571149482460360333L;
+
     public static final String SYS_HEAD = "sysHead";
     public static final String APP_HEAD = "appHead";
 
@@ -43,6 +44,11 @@ public class RequestMessage<T> extends AbstractMessage<T> implements Serializabl
 
     public void setAppHead(RequestAppHead appHead) {
         this.appHead = appHead;
+    }
+
+    @Override
+    public boolean valid() {
+        return (systemHead != null && systemHead.valid()) && (appHead != null && appHead.valid());
     }
 
 }

@@ -20,7 +20,7 @@ public class Oauth2AuthenticationEntryPoint extends OAuth2AuthenticationEntryPoi
         exception.printStackTrace();
 
         return new ResponseEntity<Object>(
-                MessageFactory.error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_TOKEN_PARSE_ERROR).build()).build(),
+                MessageFactory.buildErrorResponseMessage(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_TOKEN_PARSE_ERROR).build()),
                 responseEntity.getHeaders(),
                 responseEntity.getStatusCode()
         );

@@ -1,8 +1,10 @@
 package com.ezcoding.common.security.configattribute;
 
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author MinChiang
@@ -10,6 +12,8 @@ import java.util.Objects;
  * @date 2020-04-17 21:22
  */
 public class DynamicConfigAttribute implements ConfigAttribute {
+
+    private static final long serialVersionUID = 7426954738300828506L;
 
     public static final String SPLIT = ":";
     public static final String PREFIX = "DYNAMIC_ROLE_";
@@ -38,6 +42,16 @@ public class DynamicConfigAttribute implements ConfigAttribute {
      * 描述
      */
     private String description;
+
+    /**
+     * 请求路径
+     */
+    private Set<String> paths;
+
+    /**
+     * 请求方法
+     */
+    private Set<RequestMethod> requestMethods;
 
     public DynamicConfigAttribute(String applicationName, String className, String methodName) {
         this.applicationName = applicationName;
@@ -70,6 +84,26 @@ public class DynamicConfigAttribute implements ConfigAttribute {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<String> getPaths() {
+        return paths;
+    }
+
+    public void setPaths(Set<String> paths) {
+        this.paths = paths;
+    }
+
+    public Set<RequestMethod> getRequestMethods() {
+        return requestMethods;
+    }
+
+    public void setRequestMethods(Set<RequestMethod> requestMethods) {
+        this.requestMethods = requestMethods;
     }
 
     @Override

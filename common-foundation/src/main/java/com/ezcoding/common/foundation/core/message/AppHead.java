@@ -5,7 +5,7 @@ package com.ezcoding.common.foundation.core.message;
  * @version 1.0.0
  * @date 2018-07-14 17:08
  */
-public interface AppHead {
+public interface AppHead extends Head {
 
     /**
      * 获取分页信息

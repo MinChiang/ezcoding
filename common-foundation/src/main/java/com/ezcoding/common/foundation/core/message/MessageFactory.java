@@ -4,6 +4,8 @@ import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 
+import java.util.Random;
+
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -11,152 +13,35 @@ import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
  */
 public class MessageFactory {
 
-    private static IdProduceable idProducer = OriginalUuidProducer.getInstance();
+    private static IdProduceable SEQUENCE_NO_PRODUCER;
+    private static String APP_ID;
+
+    static {
+        SEQUENCE_NO_PRODUCER = OriginalUuidProducer.getInstance();
+        Random random = new Random();
+        APP_ID = String.valueOf(random.nextLong());
+    }
 
     private MessageFactory() {
 
     }
 
-    public static IdProduceable getIdProducer() {
-        return idProducer;
+    public static IdProduceable getSequenceNoProducer() {
+        return SEQUENCE_NO_PRODUCER;
     }
 
-    public static void setIdProducer(IdProduceable idProducer) {
-        if (idProducer == null) {
-            throw new IllegalArgumentException("idProducer can't be null");
+    public static void setSequenceNoProducer(IdProduceable sequenceNoProducer) {
+        if (sequenceNoProducer == null) {
+            throw new IllegalArgumentException("sequence no producer can't be null");
         }
-        MessageFactory.idProducer = idProducer;
-        //需要配套设置报文生成器
-        RequestSystemHead.setSequenceNoProducer(idProducer);
-        ResponseSystemHead.setSequenceNoProducer(idProducer);
+        SEQUENCE_NO_PRODUCER = sequenceNoProducer;
     }
 
-    /**
-     * 构造请求信息
-     *
-     * @param body 请求对象
-     * @return 请求信息
-     */
-    public static <T> RequestMessage<T> buildRequestMessage(T body) {
-        return buildRequestMessage(null, body);
-    }
-
-    /**
-     * 构造请求信息
-     *
-     * @param pageInfo 分页信息
-     * @param body  请求对象
-     * @return 请求信息
-     */
-    public static <T> RequestMessage<T> buildRequestMessage(PageInfo pageInfo, T body) {
-        return new RequestMessage<>(new RequestSystemHead(), new RequestAppHead(pageInfo), body);
-    }
-
-    /**
-     * 构造请求信息
-     *
-     * @param requestSystemHead 系统请求头
-     * @param requestAppHead    应用请求头
-     * @param body           请求对象
-     * @return 请求信息
-     */
-    public static <T> RequestMessage<T> buildRequestMessage(RequestSystemHead requestSystemHead, RequestAppHead requestAppHead, T body) {
-        return new RequestMessage<>(requestSystemHead, requestAppHead, body);
-    }
-
-    /**
-     * 构造成功响应信息
-     *
-     * @param body 响应对象
-     * @return 成功响应信息
-     */
-    public static <T> ResponseMessage<T> buildSuccessResponseMessage(T body) {
-        return new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), body);
-    }
-
-    /**
-     * 构造成功响应信息
-     *
-     * @param totalItem 查询对象总数量
-     * @param body   响应对象
-     * @return 成功响应信息
-     */
-    public static <T> ResponseMessage<T> buildSuccessResponseMessage(Integer totalItem, T body) {
-        return new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(new PageInfo(totalItem)), body);
-    }
-
-    /**
-     * 构造成功响应信息
-     *
-     * @param responseSystemHead 系统请求头
-     * @param responseAppHead    应用请求头
-     * @param body            响应对象
-     * @return 成功响应信息
-     */
-    public static <T> ResponseMessage<T> buildResponseMessage(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body) {
-        return new ResponseMessage<>(responseSystemHead, responseAppHead, body);
-    }
-
-    /**
-     * 构造成功响应信息，无响应体
-     *
-     * @return 成功响应信息
-     */
-    public static <T> ResponseMessage<T> buildSuccessResponseMessage() {
-        return buildSuccessResponseMessage(null);
-    }
-
-    /**
-     * 构造失败响应信息
-     *
-     * @return 失败响应信息
-     */
-    public static <T> ResponseMessage<T> buildErrorResponseMessage() {
-        return buildErrorResponseMessage(ErrorAppHead.getDefaultErrorCode(), ErrorAppHead.getDefaultErrorMessage());
-    }
-
-    /**
-     * 构造失败响应信息
-     *
-     * @param returnCode    响应结果号码
-     * @param returnMessage 响应信息内容
-     * @param body       返回内容
-     * @return 失败响应信息
-     */
-    public static <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage, T body) {
-        return new ResponseMessage<>(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), body);
-    }
-
-    /**
-     * 构造失败响应信息
-     *
-     * @param applicationException 程序异常
-     * @param body              返回内容
-     * @return 失败响应信息
-     */
-    public static <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException applicationException, T body) {
-        return buildErrorResponseMessage(applicationException.getIdentification(), applicationException.getMessage(), body);
-    }
-
-    /**
-     * 构造失败响应信息
-     *
-     * @param returnCode    返回码
-     * @param returnMessage 返回内容
-     * @return 失败响应信息
-     */
-    public static <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage) {
-        return buildErrorResponseMessage(returnCode, returnMessage, null);
-    }
-
-    /**
-     * 构造失败响应信息
-     *
-     * @param businessException 程序异常
-     * @return 失败响应信息
-     */
-    public static <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException businessException) {
-        return buildErrorResponseMessage(businessException.getIdentification(), businessException.getMessage(), null);
+    public static void setAppId(String appId) {
+        if (appId == null || appId.isEmpty()) {
+            throw new IllegalArgumentException("current app id can't be null");
+        }
+        APP_ID = appId;
     }
 
     public static void setDefaultErrorResponseCode(String defaultErrorResponseCode) {
@@ -175,9 +60,108 @@ public class MessageFactory {
         SuccessAppHead.setDefaultSuceessMessage(defaultSuccessResponseMessage);
     }
 
-    public static void setDefaultId(String defaultId) {
-        RequestSystemHead.setDefaultConsumerId(defaultId);
-        ResponseSystemHead.setDefaultProviderId(defaultId);
+    /**
+     * 构造请求信息
+     *
+     * @param body 请求对象
+     * @return 请求信息
+     */
+    public static <T> RequestMessage<T> buildRequestMessage(T body) {
+        return buildRequestMessage(null, body);
+    }
+
+    /**
+     * 构造请求信息
+     *
+     * @param pageInfo 分页信息
+     * @param body     请求对象
+     * @return 请求信息
+     */
+    public static <T> RequestMessage<T> buildRequestMessage(PageInfo pageInfo, T body) {
+        return new RequestMessage<>(new RequestSystemHead(APP_ID, SEQUENCE_NO_PRODUCER.produce()), new RequestAppHead(pageInfo), body);
+    }
+
+    /**
+     * 构造成功响应信息
+     *
+     * @param totalItem 查询对象总数量
+     * @param body      响应对象
+     * @return 成功响应信息
+     */
+    public static <T> ResponseMessage<T> buildSuccessResponseMessage(Integer totalItem, T body) {
+        return new ResponseMessage<>(new ResponseSystemHead(APP_ID, SEQUENCE_NO_PRODUCER.produce()), new SuccessAppHead(new PageInfo(totalItem)), body);
+    }
+
+    /**
+     * 构造成功响应信息
+     *
+     * @param body 响应对象
+     * @return 成功响应信息
+     */
+    public static <T> ResponseMessage<T> buildSuccessResponseMessage(T body) {
+        return buildSuccessResponseMessage(null, body);
+    }
+
+    /**
+     * 构造成功响应信息，无响应体
+     *
+     * @return 成功响应信息
+     */
+    public static <T> ResponseMessage<T> buildSuccessResponseMessage() {
+        return buildSuccessResponseMessage(null);
+    }
+
+    /**
+     * 构造失败响应信息
+     *
+     * @param returnCode    响应结果号码
+     * @param returnMessage 响应信息内容
+     * @param body          返回内容
+     * @return 失败响应信息
+     */
+    public static <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage, T body) {
+        return new ResponseMessage<>(new ResponseSystemHead(APP_ID, SEQUENCE_NO_PRODUCER.produce()), new ErrorAppHead(returnCode, returnMessage), body);
+    }
+
+    /**
+     * 构造失败响应信息
+     *
+     * @param returnCode    返回码
+     * @param returnMessage 返回内容
+     * @return 失败响应信息
+     */
+    public static <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage) {
+        return buildErrorResponseMessage(returnCode, returnMessage, null);
+    }
+
+    /**
+     * 构造失败响应信息
+     *
+     * @param applicationException 程序异常
+     * @param body                 返回内容
+     * @return 失败响应信息
+     */
+    public static <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException applicationException, T body) {
+        return buildErrorResponseMessage(applicationException.getIdentification(), applicationException.getMessage(), body);
+    }
+
+    /**
+     * 构造失败响应信息
+     *
+     * @param applicationException 程序异常
+     * @return 失败响应信息
+     */
+    public static <T> ResponseMessage<T> buildErrorResponseMessage(ApplicationException applicationException) {
+        return buildErrorResponseMessage(applicationException, null);
+    }
+
+    /**
+     * 构造失败响应信息
+     *
+     * @return 失败响应信息
+     */
+    public static <T> ResponseMessage<T> buildErrorResponseMessage() {
+        return buildErrorResponseMessage(ErrorAppHead.getDefaultErrorCode(), ErrorAppHead.getDefaultErrorMessage());
     }
 
     public static <T> SuccessResponseFactory<T> success(T body) {
@@ -192,7 +176,7 @@ public class MessageFactory {
         return new ErrorResponseFactory<>(body);
     }
 
-    public static <T> ErrorResponseFactory<?> error(ApplicationException exception) {
+    public static ErrorResponseFactory<?> error(ApplicationException exception) {
         return new ErrorResponseFactory<>().errorCode(exception.getIdentification()).errorMessage(exception.getSummary());
     }
 

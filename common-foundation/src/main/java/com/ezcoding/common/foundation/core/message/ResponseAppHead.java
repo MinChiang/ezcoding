@@ -61,4 +61,9 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
         return Optional.ofNullable(this.returnCode).map(SuccessAppHead.getDefaultSuccessCode()::equals).orElse(false);
     }
 
+    @Override
+    public boolean valid() {
+        return super.valid() && (returnCode != null && !returnCode.isEmpty()) && (returnMessage != null && !returnMessage.isEmpty());
+    }
+
 }

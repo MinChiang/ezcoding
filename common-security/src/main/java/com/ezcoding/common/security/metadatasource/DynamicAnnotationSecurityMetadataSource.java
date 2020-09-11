@@ -2,9 +2,12 @@ package com.ezcoding.common.security.metadatasource;
 
 import com.ezcoding.common.security.annotation.DynamicSecured;
 import com.ezcoding.common.security.configattribute.DynamicConfigAttribute;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.method.AbstractFallbackMethodSecurityMetadataSource;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -54,6 +57,8 @@ public class DynamicAnnotationSecurityMetadataSource extends AbstractFallbackMet
                 description
         );
 
+        configExtraInfo(method, targetClass, dynamicConfigAttribute);
+
         Collection<ConfigAttribute> result = Collections.singleton(dynamicConfigAttribute);
         mapping.put(key, result);
         return result;
@@ -71,6 +76,40 @@ public class DynamicAnnotationSecurityMetadataSource extends AbstractFallbackMet
 
     public String getApplicationName() {
         return applicationName;
+    }
+
+    /**
+     * 设置额外信息
+     *
+     * @param method      方法
+     * @param targetClass 类
+     */
+    private static void configExtraInfo(Method method, Class<?> targetClass, DynamicConfigAttribute dynamicConfigAttribute) {
+        RequestMapping methodAnnotation = AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
+        RequestMapping typeAnnotation = AnnotatedElementUtils.findMergedAnnotation(targetClass, RequestMapping.class);
+
+        RequestMappingInfo combine = create(typeAnnotation).combine(create(methodAnnotation));
+
+        dynamicConfigAttribute.setPaths(combine.getPatternsCondition().getPatterns());
+        dynamicConfigAttribute.setRequestMethods(combine.getMethodsCondition().getMethods());
+    }
+
+    /**
+     * 创建映射
+     *
+     * @param requestMapping 映射信息
+     * @return 映射信息
+     */
+    private static RequestMappingInfo create(RequestMapping requestMapping) {
+        return RequestMappingInfo
+                .paths(requestMapping.path())
+                .methods(requestMapping.method())
+                .build();
+//                .params(requestMapping.params())
+//                .headers(requestMapping.headers())
+//                .consumes(requestMapping.consumes())
+//                .produces(requestMapping.produces())
+//                .mappingName(requestMapping.name()).build();
     }
 
     /**

@@ -42,6 +42,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator;
 import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -263,6 +264,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
             this.beanFactory = beanFactory;
         }
 
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate(this.httpMessageConverters.getConverters());
     }
 
 }

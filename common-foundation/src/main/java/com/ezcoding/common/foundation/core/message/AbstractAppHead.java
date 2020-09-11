@@ -29,4 +29,9 @@ public abstract class AbstractAppHead implements AppHead, Serializable {
         this.pageInfo = pageInfo;
     }
 
+    @Override
+    public boolean valid() {
+        return true;
+    }
+
 }

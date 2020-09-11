@@ -45,7 +45,7 @@ public class SimpleRemoteDynamicRoleLoader implements DynamicRoleLoadable {
     @Override
     public Map<DynamicConfigAttribute, String> load() {
         Collection<ConfigAttribute> attributes = dynamicAnnotationSecurityMetadataSource.getAllConfigAttributes();
-        RequestMessage<Collection<ConfigAttribute>> requestMessage = MessageFactory.create(attributes).build();
+        RequestMessage<Collection<ConfigAttribute>> requestMessage = MessageFactory.buildRequestMessage(attributes);
         ResponseMessage<Map<DynamicConfigAttribute, String>> responseMessage = restTemplate.postForObject(this.url, requestMessage, ResponseMessage.class, this.applicationName);
         return ResponseUtils.checkAndGetResult(responseMessage);
     }
