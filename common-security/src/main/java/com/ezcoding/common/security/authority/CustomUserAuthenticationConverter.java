@@ -161,7 +161,7 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
             return AuthorityUtils.commaSeparatedStringToAuthorityList(StringUtils
                     .collectionToCommaDelimitedString((Collection<?>) authorities));
         }
-        throw new IllegalArgumentException("权限列表不正确");
+        throw new IllegalArgumentException("authority list is uncorrect");
     }
 
 }

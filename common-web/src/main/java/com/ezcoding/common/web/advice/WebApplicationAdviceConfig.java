@@ -36,7 +36,7 @@ public class WebApplicationAdviceConfig {
     @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
     public StandardResponseEntity<?> handleHttpRequestMethodNotSupportedExceptionException(HttpRequestMethodNotSupportedException e) {
         if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("请求类型异常：", e);
+            LOGGER.error("request type error: ", e);
         }
         return StandardResponseEntityFactory
                 .status(HttpStatus.NOT_ACCEPTABLE)
@@ -46,7 +46,7 @@ public class WebApplicationAdviceConfig {
     @ExceptionHandler(value = IllegalArgumentException.class)
     public StandardResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e) {
         if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("参数校验异常：", e);
+            LOGGER.error("parameter valid error: ", e);
         }
         return StandardResponseEntityFactory
                 .status(HttpStatus.BAD_REQUEST)
@@ -59,7 +59,7 @@ public class WebApplicationAdviceConfig {
         e.getAllErrors().forEach(er -> sb.append(er.getDefaultMessage()));
         String result = sb.toString();
         if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("参数校验异常：{}", result);
+            LOGGER.error("parameter valid error: {}", result);
         }
         return StandardResponseEntityFactory
                 .status(HttpStatus.BAD_REQUEST)
@@ -75,7 +75,7 @@ public class WebApplicationAdviceConfig {
         });
         String result = stringBuilder.toString();
         if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("参数校验异常：{}", result);
+            LOGGER.error("parameter valid error: {}", result);
         }
         return StandardResponseEntityFactory
                 .status(HttpStatus.BAD_REQUEST)
@@ -85,7 +85,7 @@ public class WebApplicationAdviceConfig {
     @ExceptionHandler(value = NoHandlerFoundException.class)
     public StandardResponseEntity<?> handleNoHandlerFoundException(NoHandlerFoundException e) {
         if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("未找到对应的处理器", e);
+            LOGGER.error("can not find handler: ", e);
         }
         return StandardResponseEntityFactory
                 .status(HttpStatus.NOT_FOUND)

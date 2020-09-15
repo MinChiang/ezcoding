@@ -11,7 +11,7 @@ public class SuccessAppHead extends ResponseAppHead implements Serializable {
 
     private static final long serialVersionUID = -3547811863595703652L;
 
-    protected static String defaultSuceessMessage = "处理成功";
+    protected static String defaultSuceessMessage = "success";
     protected static String defaultSuccessCode = "0000000000";
 
     public SuccessAppHead() {

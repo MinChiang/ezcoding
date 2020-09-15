@@ -67,7 +67,7 @@ public class BeanUtils {
             org.springframework.beans.BeanUtils.copyProperties(src, target);
             return target;
         } catch (Exception e) {
-            throw new RuntimeException("不能从" + src.getClass() + "转换到" + target, e);
+            throw new RuntimeException("can not convert [" + src.getClass() + "] to [" + target + "]", e);
         }
     }
 
@@ -89,7 +89,7 @@ public class BeanUtils {
             }
             return targets;
         } catch (Exception e) {
-            throw new RuntimeException("不能从" + src.getClass() + "转换到" + targetClass, e);
+            throw new RuntimeException("can not convert [" + src.getClass() + "] to [" + targetClass + "]", e);
         }
     }
 

@@ -57,7 +57,7 @@ public abstract class AbstractAuthenticationService implements IAuthenticationSe
      */
     public void fillBlankContent(User user) {
         user.code(OriginalUUIDProducer.getInstance().produce());
-        String defaultName = "用户" + DateFormatUtils.format(new Date(), "yyyyMMddhhmmss");
+        String defaultName = "user-" + DateFormatUtils.format(new Date(), "yyyyMMddhhmmss");
         if (StringUtils.isBlank(user.getAccount())) {
             user.account(defaultName);
         }

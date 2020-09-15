@@ -20,10 +20,10 @@ public class ModuleLayerModule extends ApplicationLayerModule {
     public ModuleLayerModule(String applicationName, String applicationCode, String moduleName, String moduleCode) {
         super(applicationName, applicationCode);
         if (moduleName == null || moduleName.isEmpty() || moduleCode == null || moduleCode.isEmpty()) {
-            throw new IllegalArgumentException("模块名称，模块码不能为空");
+            throw new IllegalArgumentException("module name, module code can not be empty");
         }
         if (moduleCode.length() > moduleCodeLength) {
-            throw new IllegalArgumentException("模块码长度必须小于等于" + moduleCodeLength);
+            throw new IllegalArgumentException("module code length must less than [" + moduleCodeLength + "]");
         }
         this.moduleName = moduleName;
         this.moduleCode = ModuleNameable.leftPad(moduleCode, moduleCodeLength, moduleFillChar);

@@ -40,6 +40,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator;
 import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
 import org.springframework.web.client.RestTemplate;
@@ -268,7 +269,16 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Bean
     public RestTemplate restTemplate() {
-        return new RestTemplate(this.httpMessageConverters.getConverters());
+        RestTemplate restTemplate = new RestTemplate();
+//        MappingJackson2HttpMessageConverter messageConverter =
+//                restTemplate
+//                        .getMessageConverters()
+//                        .stream()
+//                        .filter(MappingJackson2HttpMessageConverter.class::isInstance)
+//                        .map(MappingJackson2HttpMessageConverter.class::cast)
+//                        .forEach();
+//        messageConverter.setObjectMapper();
+        return restTemplate;
     }
 
 }

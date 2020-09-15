@@ -41,7 +41,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         //校验当前是否必须含有登陆用户
         if (parameterAnnotation.required()) {
             if (user == null || user.getId() == null) {
-                throw new RuntimeException("用户未登录");
+                throw new RuntimeException("user not login");
             }
         }
 

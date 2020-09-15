@@ -26,10 +26,6 @@ public class MessageFactory {
 
     }
 
-    public static IdProduceable getSequenceNoProducer() {
-        return SEQUENCE_NO_PRODUCER;
-    }
-
     public static void setSequenceNoProducer(IdProduceable sequenceNoProducer) {
         if (sequenceNoProducer == null) {
             throw new IllegalArgumentException("sequence no producer can't be null");
@@ -242,10 +238,6 @@ public class MessageFactory {
 
         private SuccessResponseFactory(T body) {
             super(body);
-        }
-
-        private SuccessResponseFactory() {
-
         }
 
         @Override

@@ -13,6 +13,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
@@ -54,7 +55,8 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws IOException {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws IOException, HttpMediaTypeNotSupportedException {
+        Object o = this.readWithMessageConverters(webRequest, parameter, RequestMessage.class);
         RequestMessage<JsonNode> requestMessage = this.jsonRequestMessageResolver.parse(webRequest.getNativeRequest(HttpServletRequest.class));
 
         //如果获取不到对象
@@ -66,14 +68,8 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
                 .stream()
                 .filter(resolver -> resolver.match(parameter.getParameterType()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("未配置默认的参数解析器"));
-        Object result = resolvable.resolveReturnValue(requestMessage, parameter.getParameterAnnotation(JsonParam.class), parameter);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("获取到的值为: {}", result);
-        }
-
-        return result;
+                .orElseThrow(() -> new RuntimeException("can not find default parameter resolver"));
+        return resolvable.resolveReturnValue(requestMessage, parameter.getParameterAnnotation(JsonParam.class), parameter);
     }
 
     @Override

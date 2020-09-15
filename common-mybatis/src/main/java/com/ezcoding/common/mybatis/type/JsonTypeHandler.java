@@ -29,7 +29,7 @@ public class JsonTypeHandler extends BaseTypeHandler<JsonNode> {
         try {
             ps.setString(i, objectMapper.writeValueAsString(parameter));
         } catch (JsonProcessingException e) {
-            throw new SQLException("无法将第" + i + "个参数序列化为", e);
+            throw new SQLException("can not parse parameter [" + i + "]", e);
         }
     }
 
@@ -42,7 +42,7 @@ public class JsonTypeHandler extends BaseTypeHandler<JsonNode> {
             }
             return objectMapper.readTree(string);
         } catch (IOException e) {
-            throw new SQLException("无法反序列化字段" + columnName, e);
+            throw new SQLException("can not parse parameter [" + columnName + "]", e);
         }
     }
 
@@ -55,7 +55,7 @@ public class JsonTypeHandler extends BaseTypeHandler<JsonNode> {
             }
             return objectMapper.readTree(string);
         } catch (IOException e) {
-            throw new SQLException("无法将第" + columnIndex + "列反序列化", e);
+            throw new SQLException("can not parse paramter [" + columnIndex + "]", e);
         }
     }
 
@@ -68,7 +68,7 @@ public class JsonTypeHandler extends BaseTypeHandler<JsonNode> {
             }
             return objectMapper.readTree(string);
         } catch (IOException e) {
-            throw new SQLException("无法将第" + columnIndex + "列反序列化", e);
+            throw new SQLException("can not parse parameter [" + columnIndex + "]", e);
         }
     }
 

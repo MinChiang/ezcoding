@@ -55,7 +55,7 @@ public class ModuleApplicationExceptionManager extends AbstractApplicationExcept
 
     private void checkParams(ModuleNameable moduleNameable, AbstractLayerModuleProcessor abstractLayerModuleProcessor) {
         if (moduleNameable == null || abstractLayerModuleProcessor == null) {
-            throw new NullPointerException("模块和错误处理器不能为空");
+            throw new NullPointerException("module nad processor can not be null");
         }
     }
 

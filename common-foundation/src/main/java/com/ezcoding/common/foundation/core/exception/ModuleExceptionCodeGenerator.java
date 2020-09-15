@@ -23,20 +23,26 @@ public class ModuleExceptionCodeGenerator implements ExceptionCodeGeneratable {
      */
     protected String errorSuffixCode;
 
+    /**
+     * 完整的错误码
+     */
+    private final String fullCode;
+
     public ModuleExceptionCodeGenerator(ModuleLayerModule moduleLayerModule, String errorSuffixCode) {
         if (errorSuffixCode == null || errorSuffixCode.isEmpty()) {
-            throw new IllegalArgumentException("错误后缀码不能为空");
+            throw new IllegalArgumentException("error suffix code can not be null");
         }
         if (errorSuffixCode.length() > errorSuffixCodeLength) {
-            throw new IllegalArgumentException("错误后缀码长度必须小于等于" + errorSuffixCodeLength);
+            throw new IllegalArgumentException("error suffix code length must less than " + errorSuffixCodeLength);
         }
         this.moduleLayerModule = moduleLayerModule;
         this.errorSuffixCode = ModuleNameable.leftPad(errorSuffixCode, errorSuffixCodeLength, errorSuffixCodeFillChar);
+        this.fullCode = moduleLayerModule.getCode() + this.errorSuffixCode;
     }
 
     @Override
     public String generate() {
-        return moduleLayerModule.getCode() + this.errorSuffixCode;
+        return this.fullCode;
     }
 
     @Override

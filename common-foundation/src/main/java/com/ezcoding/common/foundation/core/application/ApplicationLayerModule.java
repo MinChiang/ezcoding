@@ -19,10 +19,10 @@ public class ApplicationLayerModule implements ModuleNameable {
 
     public ApplicationLayerModule(String applicationName, String applicationCode) {
         if (applicationName == null || applicationName.isEmpty() || applicationCode == null || applicationCode.isEmpty()) {
-            throw new IllegalArgumentException("系统名称，系统码不能为空");
+            throw new IllegalArgumentException("application name and application code can not be empty");
         }
         if (applicationCode.length() > applicationCodeLength) {
-            throw new IllegalArgumentException("系统码长度必须小于等于" + applicationCodeLength);
+            throw new IllegalArgumentException("application code length must less than [" + applicationCodeLength + "]");
         }
 
         this.applicationName = applicationName;

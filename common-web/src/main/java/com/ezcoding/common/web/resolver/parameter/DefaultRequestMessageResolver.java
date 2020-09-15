@@ -40,13 +40,13 @@ public class DefaultRequestMessageResolver extends AbstractRequestMessageResolve
             try {
                 body = body.at(value);
             } catch (Exception e) {
-                throw new RuntimeException("未知的参数路径" + value);
+                throw new RuntimeException("unknown path : [" + value + "]");
             }
         }
         if (body == null || body.isMissingNode()) {
             //查不到节点且参数必填，报错
             if (parameterAnnotation.required()) {
-                throw new IllegalArgumentException("方法" + methodParameter.getMethod() + "参数" + methodParameter.getParameterName() + "为必输");
+                throw new IllegalArgumentException("method [" + methodParameter.getMethod() + "] parameter [" + methodParameter.getParameterName() + "] must be provided");
             }
             String defaultValue = parameterAnnotation.defaultValue();
             result = defaultValue.length() > 0 ? convertPrimitive(methodParameter.getParameterType(), defaultValue) : null;
@@ -56,7 +56,7 @@ public class DefaultRequestMessageResolver extends AbstractRequestMessageResolve
             try {
                 result = this.objectMapper.convertValue(body, javaType);
             } catch (Exception e) {
-                throw new IllegalArgumentException("无法将" + body + "转化为类型" + javaType);
+                throw new IllegalArgumentException("can not convert [" + body + "] to [" + javaType + "]");
             }
         }
         return result;

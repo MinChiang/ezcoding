@@ -23,7 +23,7 @@ public class AssembleUtils {
      */
     public static <S, T> AssembleMapper<S, T> instance(S src, T target) {
         if (src == null || target == null) {
-            throw new RuntimeException("源对象和目标对象不能为空");
+            throw new RuntimeException("source and target can not be null");
         }
         return new AssembleMapper<>(src, target);
     }

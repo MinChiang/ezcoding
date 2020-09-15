@@ -24,6 +24,14 @@ public class WebExceptionCodeGenerator extends TemplateExceptionCodeGenerator {
         this(moduleLayerModule, errorSuffixCode, template, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    public WebExceptionCodeGenerator(ModuleLayerModule moduleLayerModule, int errorSuffixCode, String template, HttpStatus httpStatus) {
+        this(moduleLayerModule, String.valueOf(errorSuffixCode), template, httpStatus);
+    }
+
+    public WebExceptionCodeGenerator(ModuleLayerModule moduleLayerModule, int errorSuffixCode, String template) {
+        this(moduleLayerModule, errorSuffixCode, template, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     public HttpStatus getHttpStatus() {
         return httpStatus;
     }

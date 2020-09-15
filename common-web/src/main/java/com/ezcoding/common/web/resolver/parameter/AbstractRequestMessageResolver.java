@@ -7,11 +7,11 @@ package com.ezcoding.common.web.resolver.parameter;
  */
 public abstract class AbstractRequestMessageResolver implements RequestMessageParameterResolvable {
 
-    private Class<?> targetClass;
+    private final Class<?> targetClass;
 
     public AbstractRequestMessageResolver(Class<?> targetClass) {
         if (targetClass == null) {
-            throw new IllegalArgumentException("判断类型不能为空");
+            throw new IllegalArgumentException("target class can not be null");
         }
         this.targetClass = targetClass;
     }

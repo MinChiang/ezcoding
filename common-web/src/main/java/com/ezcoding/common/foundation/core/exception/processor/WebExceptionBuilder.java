@@ -33,10 +33,14 @@ public class WebExceptionBuilder extends AbstractTemplateExceptionBuilder {
      */
     public static final String KEY_HTTP_STATUS = "httpStatus";
 
-    public WebExceptionBuilder(String identification, String template, MessageSource messageSource) {
+    public WebExceptionBuilder(String identification, String template, MessageSource messageSource, Locale locale) {
         super(identification, template);
         this.setMessageSource(messageSource);
-        this.setLocale(LocaleContextHolder.getLocale());
+        this.setLocale(locale);
+    }
+
+    public WebExceptionBuilder(String identification, String template, MessageSource messageSource) {
+        this(identification, template, messageSource, LocaleContextHolder.getLocale());
     }
 
     @Override
@@ -177,7 +181,7 @@ public class WebExceptionBuilder extends AbstractTemplateExceptionBuilder {
         /**
          * 国际化key
          */
-        private List<String> codes = new ArrayList<>();
+        private final List<String> codes = new ArrayList<>();
 
         /**
          * 分割符号key
@@ -237,7 +241,7 @@ public class WebExceptionBuilder extends AbstractTemplateExceptionBuilder {
      */
     public static class OriginalParamBuilder {
 
-        private Object object;
+        private final Object object;
 
         public OriginalParamBuilder(Object object) {
             this.object = object;

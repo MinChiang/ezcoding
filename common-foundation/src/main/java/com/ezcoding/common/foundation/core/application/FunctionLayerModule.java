@@ -20,10 +20,10 @@ public class FunctionLayerModule extends ModuleLayerModule {
     public FunctionLayerModule(String applicationName, String applicationCode, String moduleName, String moduleCode, String functionName, String functionCode) {
         super(applicationName, applicationCode, moduleName, moduleCode);
         if (functionName == null || functionName.isEmpty() || functionCode == null || functionCode.isEmpty()) {
-            throw new IllegalArgumentException("功能名称，功能码不能为空");
+            throw new IllegalArgumentException("function name, function code can not be empty");
         }
         if (functionCode.length() > functionCodeLength) {
-            throw new IllegalArgumentException("模块码长度必须小于等于" + functionCodeLength);
+            throw new IllegalArgumentException("function code length must less than [" + functionCodeLength + "]");
         }
         this.functionName = functionName;
         this.functionCode = ModuleNameable.leftPad(functionCode, functionCodeLength, functionFillChar);
