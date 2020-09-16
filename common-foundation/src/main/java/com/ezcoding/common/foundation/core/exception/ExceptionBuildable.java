@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.exception;
 
-import java.util.Map;
-
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -28,9 +26,8 @@ public interface ExceptionBuildable extends ApplicationIdentifiable {
      *
      * @param key   键
      * @param value 值
-     * @return 错误上下文
      */
-    Map<String, Object> setObject(String key, Object value);
+    void setObject(String key, Object value);
 
     /**
      * 获取上下文内容

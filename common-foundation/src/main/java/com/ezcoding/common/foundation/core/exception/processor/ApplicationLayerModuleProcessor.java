@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ApplicationLayerModuleProcessor extends AbstractLayerModuleProcessor {
 
-    private Map<String, ModuleLayerModuleProcessor> moduleLayerModuleProcessors = new ConcurrentHashMap<>(0);
+    private final Map<String, ModuleLayerModuleProcessor> moduleLayerModuleProcessors = new ConcurrentHashMap<>(0);
     private AbstractLayerModuleProcessor defaultProcessor = new EmptyApplicationExceptionProcessor();
 
     public ApplicationLayerModuleProcessor(Map<String, ModuleLayerModuleProcessor> moduleLayerModuleProcessors, AbstractLayerModuleProcessor defaultProcessor) {

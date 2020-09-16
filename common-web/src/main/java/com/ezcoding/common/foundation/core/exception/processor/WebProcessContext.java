@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class WebProcessContext extends ProcessContext {
 
+    private static final long serialVersionUID = 8428709355503743958L;
+
     /**
      * http请求
      */

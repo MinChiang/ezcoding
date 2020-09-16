@@ -9,6 +9,8 @@ import java.util.HashMap;
  */
 public class ProcessContext extends HashMap<String, Object> {
 
+    private static final long serialVersionUID = 7226279708779364868L;
+
     /**
      * 是否成功被处理标志
      */

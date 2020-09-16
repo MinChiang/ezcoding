@@ -47,9 +47,8 @@ public abstract class AbstractExceptionBuilder implements ExceptionBuildable {
     }
 
     @Override
-    public Map<String, Object> setObject(String key, Object value) {
+    public void setObject(String key, Object value) {
         context.put(key, value);
-        return context;
     }
 
     @Override

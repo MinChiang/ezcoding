@@ -51,26 +51,92 @@ public class StandardResponseEntityFactory<T> {
 
     public interface HeadersBuilder<B extends HeadersBuilder<B>> {
 
+        /**
+         * 设置头
+         *
+         * @param headerName   头名称
+         * @param headerValues 头的值
+         * @return 构造器
+         */
         B header(String headerName, String... headerValues);
 
+        /**
+         * 设置头
+         *
+         * @param headers 头
+         * @return 构造器
+         */
         B headers(HttpHeaders headers);
 
+        /**
+         * 设置请求方法
+         *
+         * @param allowedMethods 请求方法
+         * @return 构造器
+         */
         B allow(HttpMethod... allowedMethods);
 
+        /**
+         * 设置etag
+         *
+         * @param etag 待设置的值
+         * @return 构造器
+         */
         B eTag(String etag);
 
+        /**
+         * 设置上次修改时间
+         *
+         * @param lastModified 上次修改的时间
+         * @return 构造器
+         */
         B lastModified(ZonedDateTime lastModified);
 
+        /**
+         * 设置上次修改时间
+         *
+         * @param lastModified 上次修改的时间
+         * @return 构造器
+         */
         B lastModified(Instant lastModified);
 
+        /**
+         * 设置上次修改时间
+         *
+         * @param lastModified 上次修改的时间
+         * @return 构造器
+         */
         B lastModified(long lastModified);
 
+        /**
+         * 设置定位
+         *
+         * @param location 定位位置
+         * @return 构造器
+         */
         B location(URI location);
 
+        /**
+         * 设置缓存控制
+         *
+         * @param cacheControl 缓存控制对象
+         * @return 构造器
+         */
         B cacheControl(CacheControl cacheControl);
 
+        /**
+         * 设置vary
+         *
+         * @param requestHeaders 设置的头值
+         * @return 构造器
+         */
         B varyBy(String... requestHeaders);
 
+        /**
+         * 构造标准的响应对象
+         *
+         * @return 标准的响应对象
+         */
         StandardResponseEntity<?> build();
 
     }
