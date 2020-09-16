@@ -18,7 +18,7 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2020-09-07 19:35
  */
-public class MessageIOFactory implements MessageReadable, MessageWritable {
+public class MessageIoFactory implements MessageReadable, MessageWritable {
 
     public static final String DEFAULT_READ_CHARSET = StandardCharsets.UTF_8.name();
     public static final String DEFAULT_WRITE_CHARSET = StandardCharsets.UTF_8.name();
@@ -28,13 +28,13 @@ public class MessageIOFactory implements MessageReadable, MessageWritable {
     private static Map<MessageTypeEnum, MessageBuilderHandleable> handlerMap = new HashMap<>();
     private MessageBuilderHandleable defaultMessageBuilder = new JsonMessageBuilderHandler();
 
-    private Charset defaultReadCharset = Charset.forName(MessageIOFactory.DEFAULT_READ_CHARSET);
-    private Charset defaultWriteCharset = Charset.forName(MessageIOFactory.DEFAULT_WRITE_CHARSET);
+    private Charset defaultReadCharset = Charset.forName(MessageIoFactory.DEFAULT_READ_CHARSET);
+    private Charset defaultWriteCharset = Charset.forName(MessageIoFactory.DEFAULT_WRITE_CHARSET);
 
-    private MessageTypeEnum defaultReadMessageType = MessageTypeEnum.valueOf(MessageIOFactory.DEFAULT_READ_MESSAGE_TYPE);
-    private MessageTypeEnum defaultWriteMessageType = MessageTypeEnum.valueOf(MessageIOFactory.DEFAULT_WRITE_MESSAGE_TYPE);
+    private MessageTypeEnum defaultReadMessageType = MessageTypeEnum.valueOf(MessageIoFactory.DEFAULT_READ_MESSAGE_TYPE);
+    private MessageTypeEnum defaultWriteMessageType = MessageTypeEnum.valueOf(MessageIoFactory.DEFAULT_WRITE_MESSAGE_TYPE);
 
-    private MessageIOFactory() {
+    private MessageIoFactory() {
     }
 
     @Override
@@ -81,7 +81,7 @@ public class MessageIOFactory implements MessageReadable, MessageWritable {
         if (handlerMap == null || handlerMap.isEmpty()) {
             throw new IllegalArgumentException("handlerMap can't be empty");
         }
-        MessageIOFactory.handlerMap = handlerMap;
+        MessageIoFactory.handlerMap = handlerMap;
     }
 
     public MessageBuilderHandleable getDefaultMessageBuilder() {
@@ -124,13 +124,13 @@ public class MessageIOFactory implements MessageReadable, MessageWritable {
         this.defaultWriteMessageType = defaultWriteMessageType;
     }
 
-    public static MessageIOFactory getInstance() {
-        return MessageIOFactoryHolder.INSTANCE;
+    public static MessageIoFactory getInstance() {
+        return MessageIoFactoryHolder.INSTANCE;
     }
 
-    private static final class MessageIOFactoryHolder {
+    private static final class MessageIoFactoryHolder {
 
-        private static final MessageIOFactory INSTANCE = new MessageIOFactory();
+        private static final MessageIoFactory INSTANCE = new MessageIoFactory();
 
     }
 

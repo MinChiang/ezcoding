@@ -11,15 +11,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  */
 public class FunctionLayerModuleRedisSerializer implements RedisSerializer<StandardRedisKey> {
 
-    char NAMEABLE_MODULE_SPLITTER_CHAR = ':';
-    String NAMEABLE_MODULE_SPLITTER_STRING = ":";
+    protected char nameableModuleSplitterChar = ':';
+    protected String nameableModuleSplitterString = ":";
 
     @Override
     public byte[] serialize(StandardRedisKey standardRedisKey) throws SerializationException {
         if (standardRedisKey == null) {
             return null;
         }
-        return StringRedisSerializer.UTF_8.serialize(standardRedisKey.getFunctionLayerModule().getPath(NAMEABLE_MODULE_SPLITTER_STRING) + NAMEABLE_MODULE_SPLITTER_STRING + standardRedisKey.getKey());
+        return StringRedisSerializer.UTF_8.serialize(standardRedisKey.getFunctionLayerModule().getPath(nameableModuleSplitterString) + nameableModuleSplitterString + standardRedisKey.getKey());
     }
 
     @Override
@@ -35,7 +35,7 @@ public class FunctionLayerModuleRedisSerializer implements RedisSerializer<Stand
         int count = 3;
         int begin = 0;
         for (; begin < deserialize.length() && count != 0; begin++) {
-            if (deserialize.charAt(begin) == NAMEABLE_MODULE_SPLITTER_CHAR) {
+            if (deserialize.charAt(begin) == nameableModuleSplitterChar) {
                 count--;
             }
         }

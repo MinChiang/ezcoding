@@ -6,7 +6,7 @@ import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
 import com.ezcoding.common.foundation.core.enums.MappingPair;
 import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
 import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
-import com.ezcoding.common.foundation.core.message.io.MessageIOFactory;
+import com.ezcoding.common.foundation.core.message.io.MessageIoFactory;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationAutoConfiguration;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationConfigBean;
@@ -40,7 +40,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator;
 import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
 import org.springframework.web.client.RestTemplate;
@@ -70,7 +69,7 @@ import static org.springframework.util.StringUtils.tokenizeToStringArray;
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Autowired
-    private MessageIOFactory messageIOFactory;
+    private MessageIoFactory messageIoFactory;
     @Autowired
     private HttpMessageConverters httpMessageConverters;
     @Autowired(required = false)
@@ -101,7 +100,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     private JsonRequestMessageResolver jsonRequestMessageResolver() {
-        return new JsonRequestMessageResolver(this.messageIOFactory);
+        return new JsonRequestMessageResolver(this.messageIoFactory);
     }
 
     @Bean

@@ -50,10 +50,10 @@ public class ApplicationException extends RuntimeException implements Applicatio
 
     @Override
     public String toString() {
-        return "\n发生异常：" +
-                "\n\t指令代码：" +
+        return "\nException occurs:" +
+                "\n\tIdentification:" +
                 getIdentification() +
-                "\n\t错误信息：" +
+                "\n\tError message:" +
                 getLocalizedMessage();
     }
 

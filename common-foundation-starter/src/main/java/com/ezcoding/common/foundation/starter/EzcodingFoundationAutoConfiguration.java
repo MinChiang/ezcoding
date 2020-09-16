@@ -9,7 +9,7 @@ import com.ezcoding.common.foundation.core.exception.processor.*;
 import com.ezcoding.common.foundation.core.message.MessageFactory;
 import com.ezcoding.common.foundation.core.message.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
-import com.ezcoding.common.foundation.core.message.io.MessageIOFactory;
+import com.ezcoding.common.foundation.core.message.io.MessageIoFactory;
 import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeIdProducer;
@@ -211,15 +211,15 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         return OriginalUuidProducer.getInstance();
     }
 
-    @ConditionalOnMissingBean(MessageIOFactory.class)
+    @ConditionalOnMissingBean(MessageIoFactory.class)
     @Bean
-    public MessageIOFactory messageIOFactory(ObjectMapper objectMapper) {
+    public MessageIoFactory messageIoFactory(ObjectMapper objectMapper) {
         MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
         JsonMessageBuilderHandler jsonMessageBuilderHandler = new JsonMessageBuilderHandler();
         jsonMessageBuilderHandler.setObjectMapper(objectMapper);
-        MessageIOFactory.configHandler(MessageTypeEnum.JSON, jsonMessageBuilderHandler);
+        MessageIoFactory.configHandler(MessageTypeEnum.JSON, jsonMessageBuilderHandler);
 
-        MessageIOFactory instance = MessageIOFactory.getInstance();
+        MessageIoFactory instance = MessageIoFactory.getInstance();
         instance.setDefaultMessageBuilder(jsonMessageBuilderHandler);
         instance.setDefaultReadCharset(Charset.forName(message.getReadCharset()));
         instance.setDefaultWriteCharset(Charset.forName(message.getWriteCharset()));

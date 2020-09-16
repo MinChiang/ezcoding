@@ -2,7 +2,7 @@ package com.ezcoding.common.web.resolver;
 
 import com.ezcoding.common.foundation.core.message.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.message.RequestMessage;
-import com.ezcoding.common.foundation.core.message.io.MessageIOFactory;
+import com.ezcoding.common.foundation.core.message.io.MessageIoFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -22,10 +22,10 @@ public class JsonRequestMessageResolver {
     private static final Charset CHARSET_READ_DEFAULT = StandardCharsets.UTF_8;
     private static final String REQUEST_MESSAGE = "__REQUEST_MESSAGE__";
 
-    private MessageIOFactory messageIOFactory;
+    private MessageIoFactory messageIoFactory;
 
-    public JsonRequestMessageResolver(MessageIOFactory messageIOFactory) {
-        this.messageIOFactory = messageIOFactory;
+    public JsonRequestMessageResolver(MessageIoFactory messageIoFactory) {
+        this.messageIoFactory = messageIoFactory;
     }
 
     /**
@@ -47,7 +47,7 @@ public class JsonRequestMessageResolver {
         }
 
         try {
-            requestMessage = messageIOFactory.buildRequestMessage(servletRequest.getInputStream(), JsonNode.class, CHARSET_READ_DEFAULT, MessageTypeEnum.JSON);
+            requestMessage = messageIoFactory.buildRequestMessage(servletRequest.getInputStream(), JsonNode.class, CHARSET_READ_DEFAULT, MessageTypeEnum.JSON);
             RequestContextHolder.getRequestAttributes().setAttribute(REQUEST_MESSAGE, requestMessage, RequestAttributes.SCOPE_REQUEST);
         } catch (IOException e) {
             throw new IOException("message parse error!", e);
@@ -55,12 +55,12 @@ public class JsonRequestMessageResolver {
         return requestMessage;
     }
 
-    public MessageIOFactory getMessageIOFactory() {
-        return messageIOFactory;
+    public MessageIoFactory getMessageIoFactory() {
+        return messageIoFactory;
     }
 
-    public void setMessageIOFactory(MessageIOFactory messageIOFactory) {
-        this.messageIOFactory = messageIOFactory;
+    public void setMessageIoFactory(MessageIoFactory messageIoFactory) {
+        this.messageIoFactory = messageIoFactory;
     }
 
 }

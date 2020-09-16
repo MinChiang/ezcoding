@@ -65,10 +65,10 @@ public class ResourceServerAutoConfiguration extends ResourceServerConfigurerAda
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(new JwtTokenStore(jwtAccessTokenConverter));
 
-        DefaultOAuth2ExceptionRenderer defaultOAuth2ExceptionRenderer = new DefaultOAuth2ExceptionRenderer();
-        defaultOAuth2ExceptionRenderer.setMessageConverters(httpMessageConverters.getConverters());
+        DefaultOAuth2ExceptionRenderer renderer = new DefaultOAuth2ExceptionRenderer();
+        renderer.setMessageConverters(httpMessageConverters.getConverters());
         Oauth2AuthenticationEntryPoint oauth2AuthenticationEntryPoint = new Oauth2AuthenticationEntryPoint();
-        oauth2AuthenticationEntryPoint.setExceptionRenderer(defaultOAuth2ExceptionRenderer);
+        oauth2AuthenticationEntryPoint.setExceptionRenderer(renderer);
 
         resources
                 .tokenServices(defaultTokenServices)
