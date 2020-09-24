@@ -110,9 +110,10 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 
         //使用enum扫描策略
         if (enums.getStrategies() != null && !enums.getStrategies().isEmpty()) {
+            //如果自定义配置不为空，则按照配置文件中的内容以及顺序进行配置
             String[] strategyNames = tokenizeToStringArray(enums.getStrategies(), ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
             for (String strategyName : strategyNames) {
-                Class<EnumMappableStrategy> cls = null;
+                Class<EnumMappableStrategy> cls;
                 EnumMappableStrategy enumMappableStrategy = null;
                 try {
                     cls = (Class<EnumMappableStrategy>) Class.forName(strategyName);
@@ -128,7 +129,13 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                 }
                 strategies.add(enumMappableStrategy);
             }
+        } else {
+            //如果自定义配置为空，则使用默认的配置
+            strategies.add(new JacksonStrategy());
+            strategies.add(new SimpleStrategy());
+            strategies.add(new MappingStategy());
         }
+
         if (!strategies.isEmpty() && enums.getPackages() != null && !enums.getPackages().isEmpty()) {
             String[] typeEnumsPackageArray = tokenizeToStringArray(enums.getPackages(), ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
             Set<Class<?>> classes = new HashSet<>();
