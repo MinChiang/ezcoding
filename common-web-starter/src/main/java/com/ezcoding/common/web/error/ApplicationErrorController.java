@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.error;
 
-import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.ErrorAppHead;
+import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.core.message.ResponseSystemHead;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
@@ -25,6 +25,8 @@ import static com.ezcoding.common.web.error.ApplicationExceptionErrorAttributes.
  */
 public class ApplicationErrorController extends BasicErrorController {
 
+    public static final String MESSAGE_KEY = "message";
+
     public ApplicationErrorController(ErrorAttributes errorAttributes, ErrorProperties errorProperties, List<ErrorViewResolver> errorViewResolvers) {
         super(errorAttributes, errorProperties, errorViewResolvers);
     }
@@ -38,7 +40,7 @@ public class ApplicationErrorController extends BasicErrorController {
         map.put(ResponseMessage.SYS_HEAD, new ResponseSystemHead());
         map.put(ResponseMessage.APP_HEAD, new ErrorAppHead(
                 (String) body.getOrDefault(KEY_APPLICATION_EXCEPTION_IDENTIFICATION, ErrorAppHead.getDefaultErrorCode()),
-                (String) body.getOrDefault("message", ErrorAppHead.getDefaultErrorMessage())
+                (String) body.getOrDefault(MESSAGE_KEY, ErrorAppHead.getDefaultErrorMessage())
         ));
         return new ResponseEntity<>(map, status);
     }

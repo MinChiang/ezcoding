@@ -8,11 +8,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * 基础策略，enum中有且仅有一个序列化对象
+ *
  * @author MinChiang
  * @version 1.0.0
  * @date 2020-09-01 18:13
  */
-public class SimpleEnumMapping implements EnumMappableStrategy {
+public class SimpleStrategy implements EnumMappableStrategy {
 
     @Override
     public boolean canMap(Class<? extends Enum<?>> target) {

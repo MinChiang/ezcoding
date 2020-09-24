@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 注册所有实现了EnumMappable接口的类
+ *
  * @author MinChiang
  * @version 1.0.0
- * @date 2020-09-01 16:53
+ * @date 2020-09-24 10:35
  */
-public class InterfaceEnumMapping implements EnumMappableStrategy {
+public class MappingStategy implements EnumMappableStrategy {
 
     @Override
     public boolean canMap(Class<? extends Enum<?>> target) {
@@ -25,7 +27,7 @@ public class InterfaceEnumMapping implements EnumMappableStrategy {
         Map<Object, Enum<?>> mapping = new HashMap<>();
         Class<?> targetClass = null;
         for (Enum<?> enumConstant : enumConstants) {
-            Object map = ((EnumMappable) enumConstant).map(enumConstant);
+            Object map = ((EnumMappable) enumConstant).map();
             mapping.put(map, enumConstant);
             if (targetClass == null && map != null) {
                 targetClass = map.getClass();

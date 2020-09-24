@@ -13,6 +13,7 @@ public class EnumConfigBean {
 
     private String strategies;
     private String packages;
+    private String handlerPackages;
     private String configContexts = DEFAULT_CONTEXTS;
 
     public String getStrategies() {
@@ -37,6 +38,14 @@ public class EnumConfigBean {
 
     public void setConfigContexts(String configContexts) {
         this.configContexts = configContexts;
+    }
+
+    public String getHandlerPackages() {
+        return handlerPackages;
+    }
+
+    public void setHandlerPackages(String handlerPackages) {
+        this.handlerPackages = handlerPackages;
     }
 
 }

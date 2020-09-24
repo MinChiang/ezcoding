@@ -19,7 +19,7 @@ public interface ApplicationWebConfigurer {
      *
      * @param fetchers 已存在的上下文值获取器列表
      */
-    default void registerApplicationContextFetchers(List<ApplicationContextValueFetchable> fetchers) {
+    default void registerApplicationContextFetchers(List<ApplicationContextValueFetchable<?>> fetchers) {
 
     }
 

@@ -18,12 +18,12 @@ import java.util.Optional;
  */
 public class ApplicationContextHolderFilter extends OncePerRequestFilter {
 
-    private final Collection<ApplicationContextValueFetchable> settings = new ArrayList<>(0);
+    private final Collection<ApplicationContextValueFetchable<?>> settings = new ArrayList<>();
 
     public ApplicationContextHolderFilter() {
     }
 
-    public ApplicationContextHolderFilter(Collection<ApplicationContextValueFetchable> settings) {
+    public ApplicationContextHolderFilter(Collection<ApplicationContextValueFetchable<?>> settings) {
         if (settings != null && !settings.isEmpty()) {
             this.settings.addAll(settings);
         }

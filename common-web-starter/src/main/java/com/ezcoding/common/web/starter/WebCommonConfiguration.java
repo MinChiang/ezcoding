@@ -100,7 +100,7 @@ public class WebCommonConfiguration implements InitializingBean {
 
     @Bean
     public FilterRegistrationBean<ApplicationContextHolderFilter> applicationContextHolderFilter() {
-        List<ApplicationContextValueFetchable> fetchers = new LinkedList<>();
+        List<ApplicationContextValueFetchable<?>> fetchers = new LinkedList<>();
         Optional
                 .ofNullable(this.applicationWebConfigurers)
                 .ifPresent(configures -> configures.forEach(configurer -> configurer.registerApplicationContextFetchers(fetchers)));

@@ -1,6 +1,5 @@
 package com.ezcoding.common.foundation.core.message;
 
-import com.ezcoding.common.foundation.core.enums.InterfaceEnumMapping;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;

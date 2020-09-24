@@ -54,20 +54,20 @@ public class EnumMappableUtils {
     /**
      * 注册解析接口
      *
-     * @param enumMappable 待注册的解析接口
+     * @param enumHandleable 待注册的解析接口
      */
-    public static <S extends Enum<S>, T> void register(EnumMappable<S, T> enumMappable) {
-        if (enumMappable == null) {
+    public static <S extends Enum<S>, T> void register(EnumHandleable<S, T> enumHandleable) {
+        if (enumHandleable == null) {
             return;
         }
-        Type[] genericInterfaces = enumMappable.getClass().getGenericInterfaces();
+        Type[] genericInterfaces = enumHandleable.getClass().getGenericInterfaces();
         ParameterizedType genericInterface = (ParameterizedType) genericInterfaces[0];
         Type[] actualTypeArguments = genericInterface.getActualTypeArguments();
         Class<S> enumClass = (Class<S>) actualTypeArguments[0];
         MappingPair mappingPair = new MappingPair(enumClass, (Class<T>) actualTypeArguments[1]);
         Map<T, S> objectEnumMap = new HashMap<>();
         for (S enumConstant : enumClass.getEnumConstants()) {
-            T map = enumMappable.map(enumConstant);
+            T map = enumHandleable.map(enumConstant);
             if (map == null) {
                 continue;
             }

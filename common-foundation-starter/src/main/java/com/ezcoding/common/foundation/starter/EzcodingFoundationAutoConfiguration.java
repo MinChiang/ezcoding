@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -99,25 +100,36 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         MessageFactory.setAppId(String.valueOf(dataCenterNo) + String.valueOf(categoryNo));
     }
 
-    private void initEnumMapping() throws ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
+    private void initEnumMapping() throws ClassNotFoundException, IOException {
         EnumConfigBean enums = ezcodingFoundationConfigBean.getEnums();
 
         List<EnumMappableStrategy> strategies = new ArrayList<>();
         if (enumConfigurers != null && !enumConfigurers.isEmpty()) {
             enumConfigurers.forEach(conf -> conf.registerEnumStrategy(strategies));
         }
+
+        //使用enum扫描策略
         if (enums.getStrategies() != null && !enums.getStrategies().isEmpty()) {
             String[] strategyNames = tokenizeToStringArray(enums.getStrategies(), ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
             for (String strategyName : strategyNames) {
-                Class<EnumMappableStrategy> cls = (Class<EnumMappableStrategy>) Class.forName(strategyName);
-                strategies.add(cls.newInstance());
+                Class<EnumMappableStrategy> cls = null;
+                EnumMappableStrategy enumMappableStrategy = null;
+                try {
+                    cls = (Class<EnumMappableStrategy>) Class.forName(strategyName);
+                    enumMappableStrategy = cls.newInstance();
+                } catch (ClassNotFoundException e) {
+                    if (LOGGER.isErrorEnabled()) {
+                        LOGGER.error("can not find class: [{}]", strategyName);
+                    }
+                } catch (IllegalAccessException | InstantiationException e) {
+                    if (LOGGER.isErrorEnabled()) {
+                        LOGGER.error("can not instantiate class: [{}]", strategyName);
+                    }
+                }
+                strategies.add(enumMappableStrategy);
             }
         }
-
-        if (strategies.isEmpty()) {
-            return;
-        }
-        if (enums.getPackages() != null && !enums.getPackages().isEmpty()) {
+        if (!strategies.isEmpty() && enums.getPackages() != null && !enums.getPackages().isEmpty()) {
             String[] typeEnumsPackageArray = tokenizeToStringArray(enums.getPackages(), ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
             Set<Class<?>> classes = new HashSet<>();
             for (String typePackage : typeEnumsPackageArray) {
@@ -132,10 +144,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                 count = 0;
                 for (EnumMappableStrategy strategy : strategies) {
                     if (strategy.canMap((Class<? extends Enum<?>>) cls)) {
-//                        if (LOGGER.isDebugEnabled()) {
-//                            LOGGER.debug("register strategy [{}] of enum [{}]", strategy.getClass().getName(), cls.getName());
-//                        }
-
                         ObjectEnumMappingInfo idToEnumMappingInfo = strategy.map((Class<? extends Enum<?>>) cls);
                         EnumMappableUtils.register(idToEnumMappingInfo);
 
@@ -161,6 +169,27 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                 if (count == 0) {
                     if (LOGGER.isWarnEnabled()) {
                         LOGGER.warn("can't find any strategy of enum [{}]", cls.getName());
+                    }
+                }
+            }
+        }
+
+        //使用EnumHandleable自动注册映射关系
+        if (enums.getHandlerPackages() != null && !enums.getHandlerPackages().isEmpty()) {
+            String[] handlersPackage = tokenizeToStringArray(enums.getHandlerPackages(), ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
+            Set<Class<?>> classes = new HashSet<>();
+            for (String handlerPackage : handlersPackage) {
+                classes.addAll(scanPackage(handlerPackage));
+            }
+            for (Class<?> cls : classes) {
+                if (!EnumHandleable.class.isAssignableFrom(cls) || cls.isInterface()) {
+                    continue;
+                }
+                try {
+                    EnumMappableUtils.register((EnumHandleable) cls.newInstance());
+                } catch (InstantiationException | IllegalAccessException e) {
+                    if (LOGGER.isErrorEnabled()) {
+                        LOGGER.error("can not instantiate EnumHandleable class: [{}]", cls.getName());
                     }
                 }
             }
@@ -212,6 +241,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     }
 
     @ConditionalOnMissingBean(MessageIoFactory.class)
+    @ConditionalOnClass()
     @Bean
     public MessageIoFactory messageIoFactory(ObjectMapper objectMapper) {
         MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();

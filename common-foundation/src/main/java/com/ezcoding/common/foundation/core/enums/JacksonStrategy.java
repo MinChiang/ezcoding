@@ -10,11 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 关联jackson的策略，扫描@JsonValue中的注解并且将其标记为序列化的字段
+ *
  * @author MinChiang
  * @version 1.0.0
  * @date 2020-09-02 10:42
  */
-public class JacksonEnumMapping implements EnumMappableStrategy {
+public class JacksonStrategy implements EnumMappableStrategy {
 
     @Override
     public boolean canMap(Class<? extends Enum<?>> target) {
