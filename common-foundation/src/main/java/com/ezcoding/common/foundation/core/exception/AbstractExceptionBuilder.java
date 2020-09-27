@@ -13,12 +13,12 @@ public abstract class AbstractExceptionBuilder implements ExceptionBuildable {
     /**
      * 错误编号
      */
-    private String identification;
+    private final String identification;
 
     /**
      * 上下文
      */
-    private Map<String, Object> context = new HashMap<>(0);
+    private final Map<String, Object> context = new HashMap<>(0);
 
     /**
      * 异常抛出内容

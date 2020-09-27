@@ -131,16 +131,16 @@ public class DynamicConfigAttribute implements ConfigAttribute {
      */
     public static DynamicConfigAttribute create(String attribute) {
         if (attribute == null || attribute.isEmpty()) {
-            throw new IllegalArgumentException("不正确的表达式，必须为：" + PREFIX + "[applicationName]" + SPLIT + "[className]" + SPLIT + "[methodName]");
+            throw new IllegalArgumentException("incorrect expression, must be: " + PREFIX + "[applicationName]" + SPLIT + "[className]" + SPLIT + "[methodName]");
         }
         int index = attribute.toUpperCase().indexOf(PREFIX);
         String string = attribute.substring(index);
         if (string.isEmpty()) {
-            throw new IllegalArgumentException("不正确的表达式，必须为：" + PREFIX + "[applicationName]" + SPLIT + "[className]" + SPLIT + "[methodName]");
+            throw new IllegalArgumentException("incorrect expression, must be: " + PREFIX + "[applicationName]" + SPLIT + "[className]" + SPLIT + "[methodName]");
         }
         String[] split = string.split(SPLIT);
         if (split.length != 3) {
-            throw new IllegalArgumentException("不正确的表达式，必须为：" + PREFIX + "[applicationName]" + SPLIT + "[className]" + SPLIT + "[methodName]");
+            throw new IllegalArgumentException("incorrect expression, must be: " + PREFIX + "[applicationName]" + SPLIT + "[className]" + SPLIT + "[methodName]");
         }
         return new DynamicConfigAttribute(split[0], split[1], split[2]);
     }

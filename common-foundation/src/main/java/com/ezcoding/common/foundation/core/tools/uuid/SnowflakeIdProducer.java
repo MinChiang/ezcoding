@@ -46,12 +46,12 @@ public class SnowflakeIdProducer implements IdProduceable {
     /**
      * 数据中心
      */
-    private long datacenterId;
+    private final long datacenterId;
 
     /**
      * 机器标识
      */
-    private long machineId;
+    private final long machineId;
 
     /**
      * 序列号
@@ -65,10 +65,10 @@ public class SnowflakeIdProducer implements IdProduceable {
 
     public SnowflakeIdProducer(long datacenterId, long machineId) {
         if (datacenterId > MAX_DATACENTER_NUM || datacenterId < 0) {
-            throw new IllegalArgumentException("数据中心号码不能小于0或者大于" + MAX_DATACENTER_NUM);
+            throw new IllegalArgumentException("datacenterId must greater or equal to 0" + MAX_DATACENTER_NUM);
         }
         if (machineId > MAX_MACHINE_NUM || machineId < 0) {
-            throw new IllegalArgumentException("机器号码不能小于0或者大于" + MAX_MACHINE_NUM);
+            throw new IllegalArgumentException("machineId must greater or equal to 0" + MAX_MACHINE_NUM);
         }
         this.datacenterId = datacenterId;
         this.machineId = machineId;
@@ -90,7 +90,7 @@ public class SnowflakeIdProducer implements IdProduceable {
     public synchronized String produce() {
         long currStmp = getNewstmp();
         if (currStmp < lastStmp) {
-            throw new RuntimeException("检测到机器时钟回拨，不能生成对应的序列号");
+            throw new RuntimeException("machine clock back is detected and the corresponding serial number cannot be generated");
         }
 
         if (currStmp == lastStmp) {
@@ -107,10 +107,12 @@ public class SnowflakeIdProducer implements IdProduceable {
 
         lastStmp = currStmp;
 
-        return String.valueOf((currStmp - START_STMP) << TIMESTMP_LEFT
-                | datacenterId << DATACENTER_LEFT
-                | machineId << MACHINE_LEFT
-                | sequence);
+        return String.valueOf(
+                (currStmp - START_STMP) << TIMESTMP_LEFT
+                        | datacenterId << DATACENTER_LEFT
+                        | machineId << MACHINE_LEFT
+                        | sequence
+        );
     }
 
 }

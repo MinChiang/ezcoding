@@ -232,12 +232,13 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @Bean("snowflakeUUIDProducer")
     public IdProduceable snowflakeUuidProducer() {
         Optional<MetadataConfigBean> metadata = Optional.ofNullable(ezcodingFoundationConfigBean.getMetadata());
+        Random random = new Random();
         Long datacenterId = metadata
                 .map(MetadataConfigBean::getDataCenterNo)
-                .orElse(0L);
+                .orElse(random.nextLong());
         Long machineId = metadata
                 .map(MetadataConfigBean::getCategoryNo)
-                .orElse(0L);
+                .orElse(random.nextLong());
         return new SnowflakeIdProducer(datacenterId, machineId);
     }
 

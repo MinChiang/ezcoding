@@ -201,7 +201,7 @@ public class WebExceptionBuilder extends AbstractTemplateExceptionBuilder {
 
             String split = messageSource.getMessage(this.splitter, null, this.splitter, locale);
             if (split == null) {
-                throw new IllegalArgumentException("未配置对应的参数分隔符（DOT）");
+                throw new IllegalArgumentException("The corresponding parameter separator(DOT) is not configured");
             }
 
             return codes
