@@ -14,12 +14,12 @@ import java.util.Optional;
  */
 public class CompositeUserLoader implements UserLoadable {
 
-    private List<UserLoadable> loaders = new ArrayList<>(0);
+    private final List<UserLoadable> loaders = new ArrayList<>();
 
     public CompositeUserLoader(List<UserLoadable> loaders) {
         Optional
                 .ofNullable(loaders)
-                .ifPresent(lds -> this.loaders.addAll(lds));
+                .ifPresent(this.loaders::addAll);
     }
 
     @Override

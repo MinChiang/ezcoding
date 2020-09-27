@@ -47,4 +47,26 @@ public interface UserIdentifiable {
                 getEmail() != null;
     }
 
+    /**
+     * 按照id，Phone，Account，Email的顺序获取id
+     *
+     * @return 获取到的id
+     */
+    default Object acquireId() {
+        Object result = getId();
+        if (result != null) {
+            return result;
+        }
+        result = getPhone();
+        if (result != null) {
+            return result;
+        }
+        result = getAccount();
+        if (result != null) {
+            return result;
+        }
+        result = getEmail();
+        return result;
+    }
+
 }

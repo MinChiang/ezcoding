@@ -45,7 +45,10 @@ public class UserProxy implements UserDetailInformationIdentifiable {
                 if (this.user == null) {
                     if (identifiable.identifiable()) {
                         //如果被代理对象中有对应的需要检索的字段
-                        this.user = proxy.load(this.identifiable);
+                        UserDetailInformationIdentifiable load = proxy.load(this.identifiable);
+                        this.user = (load == null ? new User() : load);
+                    } else {
+                        this.user = new User();
                     }
                 }
             }

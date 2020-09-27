@@ -1,9 +1,9 @@
 package com.ezcoding.common.mybatis.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.ezcoding.common.core.user.EmptyUserLoader;
 import com.ezcoding.common.core.user.UserIdentifiable;
 import com.ezcoding.common.core.user.UserLoadable;
-import com.ezcoding.common.mybatis.constant.TableFieldConstants;
 import org.apache.ibatis.reflection.MetaObject;
 
 import java.util.Date;
@@ -18,36 +18,43 @@ import java.util.Optional;
  */
 public class BaseModelMetaObjectHandler implements MetaObjectHandler {
 
-    private UserLoadable loader;
+    public static final String FIELD_NAME_CREATOR = "creator";
+    public static final String FIELD_NAME_CREATE_TIME = "createTime";
+    public static final String FIELD_NAME_MODIFIER = "modifier";
+    public static final String FIELD_NAME_MODIFY_TIME = "modifyTime";
+
+    private UserLoadable loader = new EmptyUserLoader();
 
     public BaseModelMetaObjectHandler() {
     }
 
     public BaseModelMetaObjectHandler(UserLoadable loader) {
-        this.loader = loader;
+        if (loader != null) {
+            this.loader = loader;
+        }
     }
 
-    protected String getCurrentUserPrincipal() {
+    protected Long getCurrentUserPrincipal() {
         return Optional
                 .ofNullable(loader)
                 .map(UserLoadable::load)
-                .map(UserIdentifiable::getAccount)
+                .map(UserIdentifiable::getId)
                 .orElse(null);
     }
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        Object creator = getFieldValByName(TableFieldConstants.FIELD_NAME_CREATOR, metaObject);
+        Object creator = getFieldValByName(FIELD_NAME_CREATOR, metaObject);
         if (creator == null) {
-            String currentUserPrincipal = getCurrentUserPrincipal();
+            Long currentUserPrincipal = getCurrentUserPrincipal();
             if (currentUserPrincipal != null) {
-                setFieldValByName(TableFieldConstants.FIELD_NAME_CREATOR, currentUserPrincipal, metaObject);
+                setFieldValByName(FIELD_NAME_CREATOR, currentUserPrincipal, metaObject);
             }
         }
 
-        Object createTime = getFieldValByName(TableFieldConstants.FIELD_NAME_CREATE_TIME, metaObject);
+        Object createTime = getFieldValByName(FIELD_NAME_CREATE_TIME, metaObject);
         if (createTime == null) {
-            setFieldValByName(TableFieldConstants.FIELD_NAME_CREATE_TIME, new Date(), metaObject);
+            setFieldValByName(FIELD_NAME_CREATE_TIME, new Date(), metaObject);
         }
 
         this.updateFill(metaObject);
@@ -55,17 +62,17 @@ public class BaseModelMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        Object updator = getFieldValByName(TableFieldConstants.FIELD_NAME_MODIFIER, metaObject);
+        Object updator = getFieldValByName(FIELD_NAME_MODIFIER, metaObject);
         if (updator == null) {
-            String currentUserPrincipal = getCurrentUserPrincipal();
+            Long currentUserPrincipal = getCurrentUserPrincipal();
             if (currentUserPrincipal != null) {
-                setFieldValByName(TableFieldConstants.FIELD_NAME_MODIFIER, currentUserPrincipal, metaObject);
+                setFieldValByName(FIELD_NAME_MODIFIER, currentUserPrincipal, metaObject);
             }
         }
 
-        Object updateTime = getFieldValByName(TableFieldConstants.FIELD_NAME_MODIFY_TIME, metaObject);
+        Object updateTime = getFieldValByName(FIELD_NAME_MODIFY_TIME, metaObject);
         if (updateTime == null) {
-            setFieldValByName(TableFieldConstants.FIELD_NAME_MODIFY_TIME, new Date(), metaObject);
+            setFieldValByName(FIELD_NAME_MODIFY_TIME, new Date(), metaObject);
         }
     }
 

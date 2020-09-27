@@ -18,6 +18,12 @@ public class EnumMappableUtils {
     private static final Map<MappingPair, Map<?, ? extends Enum<?>>> OBJECT_TO_ENUM_MAPPING = new ConcurrentHashMap<>();
     private static final Map<Class<? extends Enum<?>>, EnumObjectMappingInfo> ENUM_TO_OBJECT_MAPPING = new ConcurrentHashMap<>();
 
+    static {
+        //注册BooleanTypeEnum
+        register(BooleanTypeEnum::getId);
+        register((EnumHandleable<BooleanTypeEnum, String>) booleanTypeEnum -> String.valueOf(booleanTypeEnum.getId()));
+    }
+
     /**
      * 获取枚举映射的枚举类型
      *
