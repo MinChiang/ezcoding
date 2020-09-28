@@ -1,6 +1,7 @@
 package com.ezcoding.common.foundation.core.enums;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +51,11 @@ public class SimpleStrategy implements EnumMappableStrategy {
     }
 
     /**
-     * 获取非enum成员变量列表
+     * 获取满足规则的成员列表
+     * 规则：
+     * 非enum的成员变量
+     * 类型不是数组类型
+     * 非static修饰
      *
      * @param target enum类
      * @return 非enum成员变量列表
@@ -58,7 +63,7 @@ public class SimpleStrategy implements EnumMappableStrategy {
     private List<Field> acquireNotEnumFields(Class<? extends Enum<?>> target) {
         return Arrays
                 .stream(target.getDeclaredFields())
-                .filter(field -> field.getType() != target && !field.getType().isArray())
+                .filter(field -> field.getType() != target && !Modifier.isStatic(field.getModifiers()) && !field.getType().isArray())
                 .collect(Collectors.toList());
     }
 

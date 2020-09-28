@@ -114,10 +114,10 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
             String[] strategyNames = tokenizeToStringArray(enums.getStrategies(), ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
             for (String strategyName : strategyNames) {
                 Class<EnumMappableStrategy> cls;
-                EnumMappableStrategy enumMappableStrategy = null;
                 try {
                     cls = (Class<EnumMappableStrategy>) Class.forName(strategyName);
-                    enumMappableStrategy = cls.newInstance();
+                    EnumMappableStrategy enumMappableStrategy = cls.newInstance();
+                    strategies.add(enumMappableStrategy);
                 } catch (ClassNotFoundException e) {
                     if (LOGGER.isErrorEnabled()) {
                         LOGGER.error("can not find class: [{}]", strategyName);
@@ -127,7 +127,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                         LOGGER.error("can not instantiate class: [{}]", strategyName);
                     }
                 }
-                strategies.add(enumMappableStrategy);
             }
         } else {
             //如果自定义配置为空，则使用默认的配置

@@ -20,8 +20,18 @@ public class EnumMappableUtils {
 
     static {
         //注册BooleanTypeEnum
-        register(BooleanTypeEnum::getId);
-        register((EnumHandleable<BooleanTypeEnum, String>) booleanTypeEnum -> String.valueOf(booleanTypeEnum.getId()));
+        register(new EnumHandleable<BooleanTypeEnum, Integer>() {
+            @Override
+            public Integer map(BooleanTypeEnum booleanTypeEnum) {
+                return booleanTypeEnum.getId();
+            }
+        });
+        register(new EnumHandleable<BooleanTypeEnum, String>() {
+            @Override
+            public String map(BooleanTypeEnum booleanTypeEnum) {
+                return String.valueOf(booleanTypeEnum.getId());
+            }
+        });
     }
 
     /**
@@ -39,7 +49,7 @@ public class EnumMappableUtils {
     }
 
     /**
-     * 获取枚举映射的枚举类型7
+     * 获取枚举映射的枚举类型
      *
      * @param e   待被映射的enum
      * @param <S> enum类型
