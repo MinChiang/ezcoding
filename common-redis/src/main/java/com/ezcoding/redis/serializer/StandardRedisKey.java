@@ -15,7 +15,7 @@ public class StandardRedisKey {
 
     public StandardRedisKey(FunctionLayerModule functionLayerModule, String key) {
         if (functionLayerModule == null || key == null) {
-            throw new IllegalArgumentException("redis服务号或key不能为空");
+            throw new IllegalArgumentException("functionLayerModule and key can not be null");
         }
         this.functionLayerModule = functionLayerModule;
         this.key = key;

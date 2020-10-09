@@ -9,7 +9,7 @@ import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
  */
 public class StandardRedisKeyBuilder {
 
-    private FunctionLayerModule functionLayerModule;
+    private final FunctionLayerModule functionLayerModule;
 
     private StandardRedisKeyBuilder(FunctionLayerModule functionLayerModule) {
         this.functionLayerModule = functionLayerModule;

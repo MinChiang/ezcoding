@@ -31,7 +31,6 @@
         select
             ad.id,
             ad.parent_id,
-            ad.code,
             ad.name,
             ad.comment,
             ad.level,
@@ -47,7 +46,7 @@
             account_department ad
             left join account_user_department aud on ad.id = aud.department_id
         where
-            aud.user_code = #{user}
+            aud.user_id = #{userId}
     </select>
 
 </mapper>

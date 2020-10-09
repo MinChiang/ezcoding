@@ -8,9 +8,9 @@ package com.ezcoding.common.core.user;
 public interface UserIdentifiable {
 
     /**
-     * 获取用户编号
+     * 获取用户id
      *
-     * @return 用户编号
+     * @return 用户id
      */
     Long getId();
 

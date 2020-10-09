@@ -33,7 +33,6 @@
     <select id="selectAuthenticationDetailByCondition" resultType="com.ezcoding.account.module.user.bean.model.User">
         select
             su.id,
-            su.code,
             su.account,
             su.password,
             su.phone,
@@ -44,9 +43,6 @@
         <where>
             <if test="user.id != null">
                 su.id = #{user.id}
-            </if>
-            <if test="user.code != null">
-                and su.code = #{user.code}
             </if>
             <if test="user.account != null">
                 and su.account = #{user.account}

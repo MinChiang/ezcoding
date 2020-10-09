@@ -12,7 +12,7 @@ import java.util.HashSet;
 public class User implements UserDetailInformationIdentifiable {
 
     /**
-     * 用户编号
+     * 用户id
      */
     private Long id;
 

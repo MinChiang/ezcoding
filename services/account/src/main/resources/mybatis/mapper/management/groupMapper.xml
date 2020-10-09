@@ -20,7 +20,7 @@
             left join account_group_role agr on agr.group_id = ar.id
             left join account_group_user agu on agr.group_id = agu.group_id
         where
-            agu.user_code = #{user}
+            agu.user_id = #{userId}
     </select>
 
 </mapper>

@@ -10,7 +10,7 @@ import com.ezcoding.common.core.user.UserIdentifiable;
 public class UserIdentification implements UserIdentifiable {
 
     /**
-     * 用户编号
+     * 用户id
      */
     private Long id;
 

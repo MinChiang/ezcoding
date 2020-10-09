@@ -12,7 +12,7 @@ import java.util.Collection;
 public class UserAuthentication extends AbstractLoginInfoPreservableAuthentication {
 
     /**
-     * 用户编号
+     * 用户id
      */
     private final Long id;
 

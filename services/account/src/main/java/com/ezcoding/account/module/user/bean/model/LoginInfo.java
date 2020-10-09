@@ -40,7 +40,7 @@ public class LoginInfo implements Serializable {
     private DeviceTypeEnum deviceType;
 
     /**
-     * 登录用户编号
+     * 登录用户id
      */
     private String user;
 
