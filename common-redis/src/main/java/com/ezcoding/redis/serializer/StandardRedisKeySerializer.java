@@ -9,7 +9,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @version 1.0.0
  * @date 2020-04-22 16:00
  */
-public class FunctionLayerModuleRedisSerializer implements RedisSerializer<StandardRedisKey> {
+public class StandardRedisKeySerializer implements RedisSerializer<StandardRedisKey> {
 
     protected char nameableModuleSplitterChar = ':';
     protected String nameableModuleSplitterString = ":";
