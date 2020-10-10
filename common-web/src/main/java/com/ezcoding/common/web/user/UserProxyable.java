@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.user;
 
-import com.ezcoding.common.core.user.UserIdentifiable;
-import com.ezcoding.common.core.user.model.UserDetailInformationIdentifiable;
+import com.ezcoding.common.core.user.UserBasicIdentifiable;
+import com.ezcoding.common.core.user.model.UserDetailInformationAvailable;
 
 /**
  * @author MinChiang
@@ -16,6 +16,6 @@ public interface UserProxyable {
      * @param target 被代理的对象（含有部分对象信息）
      * @return 加载的用户
      */
-    UserDetailInformationIdentifiable load(UserIdentifiable target);
+    UserDetailInformationAvailable load(UserBasicIdentifiable target);
 
 }

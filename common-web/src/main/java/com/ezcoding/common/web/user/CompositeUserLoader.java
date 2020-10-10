@@ -1,6 +1,6 @@
 package com.ezcoding.common.web.user;
 
-import com.ezcoding.common.core.user.UserIdentifiable;
+import com.ezcoding.common.core.user.UserBasicIdentifiable;
 import com.ezcoding.common.core.user.UserLoadable;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class CompositeUserLoader implements UserLoadable {
     }
 
     @Override
-    public UserIdentifiable load() {
+    public UserBasicIdentifiable load() {
         return loaders
                 .stream()
                 .map(UserLoadable::load)

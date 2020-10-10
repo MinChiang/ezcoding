@@ -1,6 +1,6 @@
 package com.ezcoding.common.core.user;
 
-import com.ezcoding.common.core.user.model.User;
+import com.ezcoding.common.core.user.model.UserBasicLoginInfo;
 
 /**
  * @author MinChiang
@@ -10,8 +10,8 @@ import com.ezcoding.common.core.user.model.User;
 public class EmptyUserLoader implements UserLoadable {
 
     @Override
-    public UserIdentifiable load() {
-        return new User();
+    public UserBasicIdentifiable load() {
+        return new UserBasicLoginInfo();
     }
 
 }

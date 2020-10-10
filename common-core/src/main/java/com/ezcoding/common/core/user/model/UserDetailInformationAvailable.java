@@ -1,7 +1,7 @@
 package com.ezcoding.common.core.user.model;
 
 import com.ezcoding.common.core.user.LoginInfoPreservable;
-import com.ezcoding.common.core.user.UserIdentifiable;
+import com.ezcoding.common.core.user.UserExpandIdentifiable;
 
 import java.util.Collection;
 import java.util.Date;
@@ -11,7 +11,7 @@ import java.util.Date;
  * @version 1.0.0
  * @date 2019-01-04 10:07
  */
-public interface UserDetailInformationIdentifiable extends UserIdentifiable, LoginInfoPreservable {
+public interface UserDetailInformationAvailable extends UserExpandIdentifiable, LoginInfoPreservable {
 
     /**
      * 获取用户名字

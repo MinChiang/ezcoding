@@ -1,6 +1,6 @@
 package com.ezcoding.common.web.user;
 
-import com.ezcoding.common.core.user.UserIdentifiable;
+import com.ezcoding.common.core.user.UserBasicIdentifiable;
 import com.ezcoding.common.core.user.model.*;
 
 import java.util.Collection;
@@ -14,7 +14,7 @@ import java.util.Optional;
  * @version 1.0.0
  * @date 2018-12-11 9:21
  */
-public class UserProxy implements UserDetailInformationIdentifiable {
+public class UserProxy implements UserDetailInformationAvailable {
 
     /**
      * 用户额外加载器
@@ -24,14 +24,14 @@ public class UserProxy implements UserDetailInformationIdentifiable {
     /**
      * 真实的user对象
      */
-    private volatile UserDetailInformationIdentifiable user;
+    private volatile UserDetailInformationAvailable user;
 
     /**
      * 被代理的对象
      */
-    private final UserIdentifiable identifiable;
+    private final UserBasicIdentifiable identifiable;
 
-    public UserProxy(UserIdentifiable identifiable, UserProxyable proxy) {
+    public UserProxy(UserBasicIdentifiable identifiable, UserProxyable proxy) {
         this.identifiable = identifiable;
         this.proxy = proxy;
     }
@@ -39,13 +39,13 @@ public class UserProxy implements UserDetailInformationIdentifiable {
     /**
      * 从远程获取用户详情
      */
-    private UserDetailInformationIdentifiable loadUser() {
+    private UserDetailInformationAvailable loadUser() {
         if (this.user == null) {
             synchronized (this) {
                 if (this.user == null) {
                     if (identifiable.identifiable()) {
                         //如果被代理对象中有对应的需要检索的字段
-                        UserDetailInformationIdentifiable load = proxy.load(this.identifiable);
+                        UserDetailInformationAvailable load = proxy.load(this.identifiable);
                         this.user = (load == null ? new User() : load);
                     } else {
                         this.user = new User();
@@ -60,28 +60,7 @@ public class UserProxy implements UserDetailInformationIdentifiable {
     public Long getId() {
         return Optional
                 .ofNullable(this.identifiable.getId())
-                .orElseGet(() -> Optional.ofNullable(this.user).map(UserDetailInformationIdentifiable::getId).orElse(null));
-    }
-
-    @Override
-    public String getAccount() {
-        return Optional
-                .ofNullable(this.identifiable.getAccount())
-                .orElseGet(() -> Optional.ofNullable(this.user).map(UserDetailInformationIdentifiable::getAccount).orElse(null));
-    }
-
-    @Override
-    public String getPhone() {
-        return Optional
-                .ofNullable(this.identifiable.getPhone())
-                .orElseGet(() -> Optional.ofNullable(this.user).map(UserDetailInformationIdentifiable::getPhone).orElse(null));
-    }
-
-    @Override
-    public String getEmail() {
-        return Optional
-                .ofNullable(this.identifiable.getEmail())
-                .orElseGet(() -> Optional.ofNullable(this.user).map(UserDetailInformationIdentifiable::getEmail).orElse(null));
+                .orElseGet(() -> Optional.ofNullable(this.user).map(UserDetailInformationAvailable::getId).orElse(null));
     }
 
     @Override
@@ -92,6 +71,21 @@ public class UserProxy implements UserDetailInformationIdentifiable {
     @Override
     public DeviceTypeEnum getDeviceType() {
         return this.user.getDeviceType();
+    }
+
+    @Override
+    public String getAccount() {
+        return this.loadUser().getAccount();
+    }
+
+    @Override
+    public String getPhone() {
+        return this.loadUser().getPhone();
+    }
+
+    @Override
+    public String getEmail() {
+        return this.loadUser().getEmail();
     }
 
     @Override

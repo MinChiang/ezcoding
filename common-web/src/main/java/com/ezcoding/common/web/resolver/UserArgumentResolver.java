@@ -1,8 +1,10 @@
 package com.ezcoding.common.web.resolver;
 
-import com.ezcoding.common.core.user.UserIdentifiable;
+import com.ezcoding.common.core.user.UserBasicIdentifiable;
+import com.ezcoding.common.core.user.UserExpandIdentifiable;
 import com.ezcoding.common.core.user.UserLoadable;
 import com.ezcoding.common.core.user.model.User;
+import com.ezcoding.common.core.user.model.UserDetailInformationAvailable;
 import com.ezcoding.common.web.user.CompositeUserLoader;
 import com.ezcoding.common.web.user.UserProxy;
 import com.ezcoding.common.web.user.UserProxyable;
@@ -29,13 +31,13 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(CurrentUser.class) && UserIdentifiable.class.isAssignableFrom(parameter.getParameterType());
+        return parameter.hasParameterAnnotation(CurrentUser.class) && UserExpandIdentifiable.class.isAssignableFrom(parameter.getParameterType());
     }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         //获取当前用户
-        UserIdentifiable user = loader.load();
+        UserBasicIdentifiable user = loader.load();
 
         CurrentUser parameterAnnotation = parameter.getParameterAnnotation(CurrentUser.class);
         //校验当前是否必须含有登陆用户
@@ -45,18 +47,23 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             }
         }
 
+        UserDetailInformationAvailable result = null;
         switch (parameterAnnotation.proxy()) {
             case AUTO:
-                user = new UserProxy(user, this.proxy);
+                result = new UserProxy(user, this.proxy);
                 break;
             case NONE:
-                user = new User(user.getId(), user.getAccount(), user.getPhone(), user.getEmail());
+                User u = new User();
+                u.setId(user.getId());
+                u.setLoginType(user.getLoginType());
+                u.setDeviceType(user.getDeviceType());
+                result = u;
                 break;
             default:
                 break;
         }
 
-        return user;
+        return result;
     }
 
     public UserLoadable getLoader() {

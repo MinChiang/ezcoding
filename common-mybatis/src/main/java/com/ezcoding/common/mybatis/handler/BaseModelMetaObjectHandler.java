@@ -2,7 +2,7 @@ package com.ezcoding.common.mybatis.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.ezcoding.common.core.user.EmptyUserLoader;
-import com.ezcoding.common.core.user.UserIdentifiable;
+import com.ezcoding.common.core.user.UserBasicIdentifiable;
 import com.ezcoding.common.core.user.UserLoadable;
 import org.apache.ibatis.reflection.MetaObject;
 
@@ -38,7 +38,7 @@ public class BaseModelMetaObjectHandler implements MetaObjectHandler {
         return Optional
                 .ofNullable(loader)
                 .map(UserLoadable::load)
-                .map(UserIdentifiable::getId)
+                .map(UserBasicIdentifiable::getId)
                 .orElse(null);
     }
 

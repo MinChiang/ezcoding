@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.user;
 
-import com.ezcoding.common.core.user.UserIdentifiable;
-import com.ezcoding.common.core.user.model.UserDetailInformationIdentifiable;
+import com.ezcoding.common.core.user.UserBasicIdentifiable;
+import com.ezcoding.common.core.user.model.UserDetailInformationAvailable;
 
 /**
  * @author MinChiang
@@ -11,7 +11,7 @@ import com.ezcoding.common.core.user.model.UserDetailInformationIdentifiable;
 public class RemoteUserProxy implements UserProxyable {
 
     @Override
-    public UserDetailInformationIdentifiable load(UserIdentifiable target) {
+    public UserDetailInformationAvailable load(UserBasicIdentifiable target) {
         return null;
     }
 

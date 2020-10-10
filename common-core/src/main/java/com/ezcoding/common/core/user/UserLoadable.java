@@ -12,6 +12,6 @@ public interface UserLoadable {
      *
      * @return 加载的用户
      */
-    UserIdentifiable load();
+    UserBasicIdentifiable load();
 
 }

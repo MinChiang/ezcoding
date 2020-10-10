@@ -1,13 +1,13 @@
 package com.ezcoding.common.core.user.model;
 
-import com.ezcoding.common.core.user.UserIdentifiable;
+import com.ezcoding.common.core.user.UserExpandIdentifiable;
 
 /**
  * @author MinChiang
  * @version 1.0.0
  * @date 2020-03-23 14:36
  */
-public class UserIdentification implements UserIdentifiable {
+public class UserIdentification implements UserExpandIdentifiable {
 
     /**
      * 用户id

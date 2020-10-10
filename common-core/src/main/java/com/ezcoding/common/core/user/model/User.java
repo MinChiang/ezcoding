@@ -9,7 +9,7 @@ import java.util.HashSet;
  * @version 1.0.0
  * @date 2019-01-05 10:21
  */
-public class User implements UserDetailInformationIdentifiable {
+public class User implements UserDetailInformationAvailable {
 
     /**
      * 用户id
