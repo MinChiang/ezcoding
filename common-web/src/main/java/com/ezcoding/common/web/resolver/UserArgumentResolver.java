@@ -5,7 +5,6 @@ import com.ezcoding.common.core.user.UserExpandIdentifiable;
 import com.ezcoding.common.core.user.UserLoadable;
 import com.ezcoding.common.core.user.model.User;
 import com.ezcoding.common.core.user.model.UserDetailInformationAvailable;
-import com.ezcoding.common.web.user.CompositeUserLoader;
 import com.ezcoding.common.web.user.UserProxy;
 import com.ezcoding.common.web.user.UserProxyable;
 import org.springframework.core.MethodParameter;
@@ -21,8 +20,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  */
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private UserLoadable loader;
-    private UserProxyable proxy;
+    private final UserLoadable loader;
+    private final UserProxyable proxy;
 
     public UserArgumentResolver(UserLoadable loader, UserProxyable proxy) {
         this.loader = loader;
@@ -47,39 +46,28 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             }
         }
 
-        UserDetailInformationAvailable result = null;
-        switch (parameterAnnotation.proxy()) {
-            case AUTO:
-                result = new UserProxy(user, this.proxy);
-                break;
-            case NONE:
-                User u = new User();
-                u.setId(user.getId());
-                u.setLoginType(user.getLoginType());
-                u.setDeviceType(user.getDeviceType());
-                result = u;
-                break;
-            default:
-                break;
+        if (UserDetailInformationAvailable.class.isAssignableFrom(parameter.getParameterType())) {
+            UserDetailInformationAvailable result = null;
+            switch (parameterAnnotation.proxy()) {
+                case AUTO:
+                    result = new UserProxy(user, this.proxy);
+                    break;
+                case NONE:
+                    User u = new User();
+                    u.setId(user.getId());
+                    u.setLoginType(user.getLoginType());
+                    u.setDeviceType(user.getDeviceType());
+                    result = u;
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        } else if (UserBasicIdentifiable.class.isAssignableFrom(parameter.getParameterType())) {
+            return user;
+        } else {
+            throw new IllegalArgumentException("parameter type must instance of " + UserDetailInformationAvailable.class.getName() + " or " + UserBasicIdentifiable.class.getName());
         }
-
-        return result;
-    }
-
-    public UserLoadable getLoader() {
-        return loader;
-    }
-
-    public void setLoader(CompositeUserLoader loader) {
-        this.loader = loader;
-    }
-
-    public UserProxyable getProxy() {
-        return proxy;
-    }
-
-    public void setProxy(UserProxyable proxy) {
-        this.proxy = proxy;
     }
 
 }
