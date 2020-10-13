@@ -1,7 +1,7 @@
 package com.ezcoding.common.web.resolver;
 
 import com.ezcoding.common.core.user.UserBasicIdentifiable;
-import com.ezcoding.common.core.user.UserExpandIdentifiable;
+import com.ezcoding.common.core.user.UserIdentifiable;
 import com.ezcoding.common.core.user.UserLoadable;
 import com.ezcoding.common.core.user.model.User;
 import com.ezcoding.common.core.user.model.UserDetailInformationAvailable;
@@ -30,7 +30,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(CurrentUser.class) && UserExpandIdentifiable.class.isAssignableFrom(parameter.getParameterType());
+        return parameter.hasParameterAnnotation(CurrentUser.class) && UserIdentifiable.class.isAssignableFrom(parameter.getParameterType());
     }
 
     @Override

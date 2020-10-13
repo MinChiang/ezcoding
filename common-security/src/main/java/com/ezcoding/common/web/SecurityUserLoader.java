@@ -4,6 +4,7 @@ import com.ezcoding.common.core.user.EmptyUserLoader;
 import com.ezcoding.common.core.user.UserBasicIdentifiable;
 import com.ezcoding.common.core.user.model.UserBasicLoginInfo;
 import com.ezcoding.common.security.authentication.UserAuthentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
@@ -16,8 +17,15 @@ public class SecurityUserLoader extends EmptyUserLoader {
 
     @Override
     public UserBasicIdentifiable load() {
-        UserAuthentication authentication = (UserAuthentication) ((OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication()).getUserAuthentication();
-        return new UserBasicLoginInfo(authentication.getId(), authentication.getLoginType(), authentication.getDeviceType());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof OAuth2Authentication) {
+            authentication = ((OAuth2Authentication) authentication).getUserAuthentication();
+            if (authentication instanceof UserAuthentication) {
+                UserAuthentication userAuthentication = (UserAuthentication) authentication;
+                return new UserBasicLoginInfo(userAuthentication.getId(), userAuthentication.getLoginType(), userAuthentication.getDeviceType());
+            }
+        }
+        return new UserBasicLoginInfo();
     }
 
 }

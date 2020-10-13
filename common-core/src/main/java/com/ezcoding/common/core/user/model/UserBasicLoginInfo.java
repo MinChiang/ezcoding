@@ -9,19 +9,22 @@ import com.ezcoding.common.core.user.UserBasicIdentifiable;
  */
 public class UserBasicLoginInfo implements UserBasicIdentifiable {
 
-    private Long id;
+    private final Long id;
 
-    private LoginRegisterTypeEnum loginTye;
+    private final LoginRegisterTypeEnum loginTye;
 
-    private DeviceTypeEnum deviceType;
+    private final DeviceTypeEnum deviceType;
 
     public UserBasicLoginInfo(Long id, LoginRegisterTypeEnum loginTye, DeviceTypeEnum deviceType) {
         this.id = id;
-        this.loginTye = loginTye;
-        this.deviceType = deviceType;
+        this.loginTye = loginTye == null ? LoginRegisterTypeEnum.UNKNOWN : loginTye;
+        this.deviceType = deviceType == null ? DeviceTypeEnum.UNKNOWN : deviceType;
     }
 
     public UserBasicLoginInfo() {
+        this.id = null;
+        this.loginTye = LoginRegisterTypeEnum.UNKNOWN;
+        this.deviceType = DeviceTypeEnum.UNKNOWN;
     }
 
     @Override
