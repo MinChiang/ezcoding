@@ -80,7 +80,7 @@ public class EnumMappableUtils {
         ParameterizedType genericInterface = (ParameterizedType) genericInterfaces[0];
         Type[] actualTypeArguments = genericInterface.getActualTypeArguments();
         Class<S> enumClass = (Class<S>) actualTypeArguments[0];
-        MappingPair mappingPair = new MappingPair(enumClass, (Class<T>) actualTypeArguments[1]);
+        MappingPair mappingPair = new MappingPair((Class<T>) actualTypeArguments[1], enumClass);
         Map<T, S> objectEnumMap = new HashMap<>();
         for (S enumConstant : enumClass.getEnumConstants()) {
             T map = enumHandleable.map(enumConstant);

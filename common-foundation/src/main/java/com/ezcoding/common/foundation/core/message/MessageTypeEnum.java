@@ -1,8 +1,5 @@
 package com.ezcoding.common.foundation.core.message;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,12 +42,10 @@ public enum MessageTypeEnum {
      * @param id id
      * @return 对应类别
      */
-    @JsonCreator
     public static MessageTypeEnum from(String id) {
         return ALL.get(id);
     }
 
-    @JsonValue
     private final String type;
 
     MessageTypeEnum(String type) {

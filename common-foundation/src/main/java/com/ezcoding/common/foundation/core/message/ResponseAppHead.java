@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.message;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 import java.util.Optional;
 
@@ -14,9 +12,7 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
 
     private static final long serialVersionUID = 4369838938491033889L;
 
-    @JsonProperty(value = "returnCode")
     protected String returnCode;
-    @JsonProperty(value = "returnMessage")
     protected String returnMessage;
 
     public ResponseAppHead() {
@@ -64,6 +60,15 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
     @Override
     public boolean valid() {
         return super.valid() && (returnCode != null && !returnCode.isEmpty()) && (returnMessage != null && !returnMessage.isEmpty());
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseAppHead{" +
+                "returnCode='" + returnCode + '\'' +
+                ", returnMessage='" + returnMessage + '\'' +
+                ", pageInfo=" + pageInfo +
+                '}';
     }
 
 }

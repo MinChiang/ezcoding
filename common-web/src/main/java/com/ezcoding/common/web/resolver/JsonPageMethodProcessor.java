@@ -1,27 +1,26 @@
 package com.ezcoding.common.web.resolver;
 
-import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.PageInfo;
+import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodArgumentResolver;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author MinChiang
  * @version 1.0.0
  * @date 2018-12-03 14:45
  */
-public class JsonPageMethodProcessor implements HandlerMethodArgumentResolver {
+public class JsonPageMethodProcessor extends AbstractMessageConverterMethodArgumentResolver {
 
-    private JsonRequestMessageResolver requestMessageResolver;
-
-    public JsonPageMethodProcessor(JsonRequestMessageResolver requestMessageResolver) {
-        this.requestMessageResolver = requestMessageResolver;
+    public JsonPageMethodProcessor(List<HttpMessageConverter<?>> converters) {
+        super(converters);
     }
 
     @Override
@@ -31,9 +30,11 @@ public class JsonPageMethodProcessor implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        RequestMessage<JsonNode> requestMessage = requestMessageResolver.parse(
-                webRequest.getNativeRequest(HttpServletRequest.class)
-        );
+//        RequestMessage<JsonNode> requestMessage = requestMessageResolver.parse(
+//                webRequest.getNativeRequest(HttpServletRequest.class)
+//        );
+
+        RequestMessage<JsonNode> requestMessage = null;
 
         //如果获取不到对象，直接返回默认对象
         if (requestMessage == null) {
@@ -70,14 +71,6 @@ public class JsonPageMethodProcessor implements HandlerMethodArgumentResolver {
             pageInfo.setPageSize(defaultPageSize);
         }
         return pageInfo;
-    }
-
-    public JsonRequestMessageResolver getRequestMessageResolver() {
-        return requestMessageResolver;
-    }
-
-    public void setRequestMessageResolver(JsonRequestMessageResolver requestMessageResolver) {
-        this.requestMessageResolver = requestMessageResolver;
     }
 
 }

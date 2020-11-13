@@ -6,17 +6,15 @@ import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
 import com.ezcoding.common.foundation.core.enums.MappingPair;
 import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
 import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
+import com.ezcoding.common.foundation.core.message.PageInfo;
 import com.ezcoding.common.foundation.core.message.io.MessageIoFactory;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationAutoConfiguration;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationConfigBean;
-import com.ezcoding.common.foundation.util.ObjectMapperUtils;
 import com.ezcoding.common.web.convertor.EnumToObjectConverter;
 import com.ezcoding.common.web.convertor.ObjectToEnumConverter;
 import com.ezcoding.common.web.jwt.AuthSettings;
 import com.ezcoding.common.web.resolver.JsonMessageMethodProcessor;
-import com.ezcoding.common.web.resolver.JsonPageMethodProcessor;
-import com.ezcoding.common.web.resolver.JsonRequestMessageResolver;
 import com.ezcoding.common.web.resolver.UserArgumentResolver;
 import com.ezcoding.common.web.resolver.parameter.*;
 import com.ezcoding.common.web.resolver.result.ResponseAppHeadResolver;
@@ -90,7 +88,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         resolvables.add(new ReqeustMessageResolver());
         resolvables.add(new RequestSystemHeadResolver());
         resolvables.add(new ResquestAppHeadResolver());
-        resolvables.add(new DefaultRequestMessageResolver(ObjectMapperUtils.message()));
+        resolvables.add(new DefaultRequestMessageResolver());
     }
 
     private void registerDefaultReturnValueResolvers(List<ResponseMessageReturnValueResolvable> resolvables) {
@@ -99,13 +97,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         resolvables.add(new ResponseAppHeadResolver());
     }
 
-    private JsonRequestMessageResolver jsonRequestMessageResolver() {
-        return new JsonRequestMessageResolver(this.messageIoFactory);
-    }
-
     @Bean
     public JsonMessageMethodProcessor jsonMessageMethodProcessor() {
-        JsonMessageMethodProcessor jsonMessageMethodProcessor = new JsonMessageMethodProcessor(httpMessageConverters.getConverters(), jsonRequestMessageResolver());
+        JsonMessageMethodProcessor jsonMessageMethodProcessor = new JsonMessageMethodProcessor(httpMessageConverters.getConverters());
 
         List<RequestMessageParameterResolvable> parameterResolvers = new ArrayList<>();
         List<ResponseMessageReturnValueResolvable> returnValueResolvers = new ArrayList<>();
@@ -147,10 +141,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         return validatorFactory.getValidator();
     }
 
-    private JsonPageMethodProcessor jsonPageMethodProcessor() {
-        return new JsonPageMethodProcessor(jsonRequestMessageResolver());
-    }
-
     private UserLoadable compositeUserLoader() {
         List<UserLoadable> loaders = new ArrayList<>();
         Optional<List<ApplicationWebConfigurer>> applicationWebConfigurers = Optional.ofNullable(this.applicationWebConfigurers);
@@ -177,7 +167,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(this.jsonMessageMethodProcessor);
-        argumentResolvers.add(jsonPageMethodProcessor());
         argumentResolvers.add(userArgumentResolver());
     }
 

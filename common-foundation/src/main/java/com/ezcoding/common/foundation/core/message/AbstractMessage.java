@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.message;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
 /**
@@ -13,9 +11,6 @@ public abstract class AbstractMessage<T> implements Message<T>, Serializable {
 
     private static final long serialVersionUID = -5655558365282029885L;
 
-    public static final String BODY = "body";
-
-    @JsonProperty(value = BODY)
     protected T body;
 
     public AbstractMessage() {
@@ -32,6 +27,13 @@ public abstract class AbstractMessage<T> implements Message<T>, Serializable {
 
     public void setBody(T body) {
         this.body = body;
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractMessage{" +
+                "body=" + body +
+                '}';
     }
 
 }

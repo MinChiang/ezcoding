@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.message;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
 /**
@@ -16,9 +14,7 @@ public class ResponseSystemHead extends AbstractSystemHead implements Serializab
     public static final String PROVIDER_SEQUENCE_NO_KEY = "providerSequenceNo";
     public static final String PROVIDER_ID = "providerId";
 
-    @JsonProperty(value = PROVIDER_ID)
     protected String providerId;
-    @JsonProperty(value = PROVIDER_SEQUENCE_NO_KEY)
     protected String providerSequenceNo;
 
     public ResponseSystemHead() {
@@ -48,6 +44,16 @@ public class ResponseSystemHead extends AbstractSystemHead implements Serializab
     @Override
     public boolean valid() {
         return super.valid() && providerId != null && providerSequenceNo != null;
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseSystemHead{" +
+                "providerId='" + providerId + '\'' +
+                ", providerSequenceNo='" + providerSequenceNo + '\'' +
+                ", transactionDate=" + transactionDate +
+                ", version='" + version + '\'' +
+                '}';
     }
 
 }

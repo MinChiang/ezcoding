@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.message;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
 /**
@@ -23,16 +21,15 @@ public class PageInfo implements Cloneable, Serializable {
      */
     public static int DEFAULT_PAGE_SIZE = 10;
 
-    @JsonProperty
     protected Integer pageSize;
 
-    @JsonProperty
     protected Integer currentPage;
 
-    @JsonProperty
     protected Integer totalItem;
 
     public PageInfo() {
+        this.pageSize = DEFAULT_PAGE_SIZE;
+        this.currentPage = DEFAULT_CURRENT_PAGE;
     }
 
     public PageInfo(Integer totalItem) {
@@ -87,6 +84,15 @@ public class PageInfo implements Cloneable, Serializable {
 
     public static void setDefaultPageSize(int defaultPageSize) {
         DEFAULT_PAGE_SIZE = defaultPageSize;
+    }
+
+    @Override
+    public String toString() {
+        return "PageInfo{" +
+                "pageSize=" + pageSize +
+                ", currentPage=" + currentPage +
+                ", totalItem=" + totalItem +
+                '}';
     }
 
 }

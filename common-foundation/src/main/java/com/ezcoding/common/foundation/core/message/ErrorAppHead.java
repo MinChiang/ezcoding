@@ -38,4 +38,13 @@ public class ErrorAppHead extends ResponseAppHead implements Serializable {
         ErrorAppHead.defaultErrorMessage = defaultErrorMessage;
     }
 
+    @Override
+    public String toString() {
+        return "ErrorAppHead{" +
+                "returnCode='" + returnCode + '\'' +
+                ", returnMessage='" + returnMessage + '\'' +
+                ", pageInfo=" + pageInfo +
+                '}';
+    }
+
 }

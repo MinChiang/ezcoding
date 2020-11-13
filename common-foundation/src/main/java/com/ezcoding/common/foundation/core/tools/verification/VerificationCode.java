@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.tools.verification;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -22,7 +20,6 @@ public class VerificationCode implements Serializable {
     /**
      * 验证码字节流
      */
-    @JsonIgnore
     private final transient byte[] data;
 
     public VerificationCode(char[] code, byte[] data) {

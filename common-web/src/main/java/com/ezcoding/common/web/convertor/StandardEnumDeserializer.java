@@ -2,7 +2,6 @@ package com.ezcoding.common.web.convertor;
 
 import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
@@ -23,7 +22,7 @@ public class StandardEnumDeserializer extends StdDeserializer<Enum<?>> {
     }
 
     @Override
-    public Enum<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Enum<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         Object o = p.readValueAs(this.sourceClass);
         return EnumMappableUtils.map(o, (Class<Enum>) this._valueClass);
     }

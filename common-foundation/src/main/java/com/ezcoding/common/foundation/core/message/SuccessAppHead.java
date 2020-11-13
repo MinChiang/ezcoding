@@ -38,4 +38,13 @@ public class SuccessAppHead extends ResponseAppHead implements Serializable {
         SuccessAppHead.defaultSuceessMessage = defaultSuceessMessage;
     }
 
+    @Override
+    public String toString() {
+        return "SuccessAppHead{" +
+                "returnCode='" + returnCode + '\'' +
+                ", returnMessage='" + returnMessage + '\'' +
+                ", pageInfo=" + pageInfo +
+                '}';
+    }
+
 }

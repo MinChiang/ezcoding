@@ -6,24 +6,23 @@ import com.ezcoding.common.foundation.core.message.ResponseSystemHead;
 import com.ezcoding.common.foundation.core.message.SuccessAppHead;
 import com.ezcoding.common.web.resolver.parameter.RequestMessageParameterResolvable;
 import com.ezcoding.common.web.resolver.result.ResponseMessageReturnValueResolvable;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author MinChiang
@@ -34,14 +33,13 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonMessageMethodProcessor.class);
 
-    private final JsonRequestMessageResolver jsonRequestMessageResolver;
+    private static final String REQUEST_MESSAGE = "__REQUEST_MESSAGE__";
+
     private final List<ResponseMessageReturnValueResolvable> returnValueResolvables = new ArrayList<>();
     private final List<RequestMessageParameterResolvable> parameterResolvables = new ArrayList<>();
 
-    public JsonMessageMethodProcessor(List<HttpMessageConverter<?>> converters,
-                                      JsonRequestMessageResolver jsonRequestMessageResolver) {
+    public JsonMessageMethodProcessor(List<HttpMessageConverter<?>> converters) {
         super(converters);
-        this.jsonRequestMessageResolver = jsonRequestMessageResolver;
     }
 
     @Override
@@ -55,13 +53,15 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws IOException, HttpMediaTypeNotSupportedException {
-        Object o = this.readWithMessageConverters(webRequest, parameter, RequestMessage.class);
-        RequestMessage<JsonNode> requestMessage = this.jsonRequestMessageResolver.parse(webRequest.getNativeRequest(HttpServletRequest.class));
-
-        //如果获取不到对象
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        RequestMessage<Map<String, ?>> requestMessage = acquireCurrentRequestMessage();
         if (requestMessage == null) {
-            return null;
+            requestMessage = (RequestMessage<Map<String, ?>>) this.readWithMessageConverters(webRequest, parameter, RequestMessage.class);
+            //如果仍然获取不到对象
+            if (requestMessage == null) {
+                return null;
+            }
+            persistCurrentRequestMessage(requestMessage);
         }
 
         RequestMessageParameterResolvable resolvable = parameterResolvables
@@ -69,7 +69,7 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
                 .filter(resolver -> resolver.match(parameter.getParameterType()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("can not find default parameter resolver"));
-        return resolvable.resolveReturnValue(requestMessage, parameter.getParameterAnnotation(JsonParam.class), parameter);
+        return resolvable.resolve(requestMessage, parameter.getParameterAnnotation(JsonParam.class), parameter);
     }
 
     @Override
@@ -91,6 +91,25 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
         ServletServerHttpRequest inputMessage = this.createInputMessage(webRequest);
         ServletServerHttpResponse outputMessage = this.createOutputMessage(webRequest);
         this.writeWithMessageConverters(responseMessage, returnType, inputMessage, outputMessage);
+    }
+
+    /**
+     * 获取当前报文
+     *
+     * @return 当前报文
+     */
+    private RequestMessage<Map<String, ?>> acquireCurrentRequestMessage() {
+        //能够获取请求报文，直接返回
+        return (RequestMessage<Map<String, ?>>) RequestContextHolder.getRequestAttributes().getAttribute(REQUEST_MESSAGE, RequestAttributes.SCOPE_REQUEST);
+    }
+
+    /**
+     * 保存当前报文
+     *
+     * @param requestMessage 待保存的报文
+     */
+    private void persistCurrentRequestMessage(RequestMessage<Map<String, ?>> requestMessage) {
+        RequestContextHolder.getRequestAttributes().setAttribute(REQUEST_MESSAGE, requestMessage, RequestAttributes.SCOPE_REQUEST);
     }
 
     /**

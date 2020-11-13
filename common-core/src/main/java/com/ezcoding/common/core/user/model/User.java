@@ -286,4 +286,29 @@ public class User implements UserDetailInformationAvailable {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", account='" + account + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", gender=" + gender +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", birthday=" + birthday +
+                ", hireDate=" + hireDate +
+                ", profilePhoto='" + profilePhoto + '\'' +
+                ", description='" + description + '\'' +
+                ", verified=" + verified +
+                ", province=" + province +
+                ", city=" + city +
+                ", status=" + status +
+                ", roles=" + roles +
+                ", loginType=" + loginType +
+                ", deviceType=" + deviceType +
+                '}';
+    }
+
 }

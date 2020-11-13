@@ -18,4 +18,11 @@ public class RequestAppHead extends AbstractAppHead implements Serializable {
         super(pageInfo);
     }
 
+    @Override
+    public String toString() {
+        return "RequestAppHead{" +
+                "pageInfo=" + pageInfo +
+                '}';
+    }
+
 }
