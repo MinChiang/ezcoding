@@ -2,9 +2,8 @@ package com.ezcoding.common.web.resolver.parameter;
 
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.web.resolver.JsonParam;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.core.MethodParameter;
-
-import java.util.Map;
 
 /**
  * @author MinChiang
@@ -29,6 +28,6 @@ public interface RequestMessageParameterResolvable {
      * @param methodParameter     方法参数
      * @return 解析后的报文
      */
-    Object resolve(RequestMessage<Map<String, ?>> requestMessage, JsonParam parameterAnnotation, MethodParameter methodParameter) throws Exception;
+    Object resolve(RequestMessage<JsonNode> requestMessage, JsonParam parameterAnnotation, MethodParameter methodParameter) throws Exception;
 
 }

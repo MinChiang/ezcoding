@@ -67,8 +67,6 @@ import static org.springframework.util.StringUtils.tokenizeToStringArray;
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Autowired
-    private MessageIoFactory messageIoFactory;
-    @Autowired
     private HttpMessageConverters httpMessageConverters;
     @Autowired(required = false)
     private List<ApplicationWebConfigurer> applicationWebConfigurers;

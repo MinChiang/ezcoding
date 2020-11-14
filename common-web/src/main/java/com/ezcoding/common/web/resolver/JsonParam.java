@@ -13,10 +13,25 @@ import java.lang.annotation.*;
 @Inherited
 public @interface JsonParam {
 
+    /**
+     * 参数路径
+     *
+     * @return 参数路径
+     */
     String value() default "";
 
+    /**
+     * 是否必须
+     *
+     * @return 是否必须
+     */
     boolean required() default false;
 
+    /**
+     * 默认参数
+     *
+     * @return 默认参数
+     */
     String defaultValue() default "";
 
 }

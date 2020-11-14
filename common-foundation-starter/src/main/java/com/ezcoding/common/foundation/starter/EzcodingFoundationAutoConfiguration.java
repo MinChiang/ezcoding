@@ -119,13 +119,9 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                     EnumMappableStrategy enumMappableStrategy = cls.newInstance();
                     strategies.add(enumMappableStrategy);
                 } catch (ClassNotFoundException e) {
-                    if (LOGGER.isErrorEnabled()) {
-                        LOGGER.error("can not find class: [{}]", strategyName);
-                    }
+                    LOGGER.error("can not find class: [{}]", strategyName);
                 } catch (IllegalAccessException | InstantiationException e) {
-                    if (LOGGER.isErrorEnabled()) {
-                        LOGGER.error("can not instantiate class: [{}]", strategyName);
-                    }
+                    LOGGER.error("can not instantiate class: [{}]", strategyName);
                 }
             }
         } else {
@@ -173,9 +169,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                     }
                 }
                 if (count == 0) {
-                    if (LOGGER.isWarnEnabled()) {
-                        LOGGER.warn("can't find any strategy of enum [{}]", cls.getName());
-                    }
+                    LOGGER.warn("can't find any strategy of enum [{}]", cls.getName());
                 }
             }
         }
@@ -194,9 +188,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                 try {
                     EnumMappableUtils.register((EnumHandleable) cls.newInstance());
                 } catch (InstantiationException | IllegalAccessException e) {
-                    if (LOGGER.isErrorEnabled()) {
-                        LOGGER.error("can not instantiate EnumHandleable class: [{}]", cls.getName());
-                    }
+                    LOGGER.error("can not instantiate EnumHandleable class: [{}]", cls.getName());
                 }
             }
         }

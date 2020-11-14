@@ -30,9 +30,7 @@ public class SecurityAdviceConfiguration {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = AccessDeniedException.class)
     public StandardResponseEntity<?> handleAccessDeniedException(AccessDeniedException e) throws IOException {
-        if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("access deny:", e);
-        }
+        LOGGER.error("access deny:", e);
         return StandardResponseEntityFactory
                 .ok()
                 .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_NO_PERMISSION_ERROR).build());

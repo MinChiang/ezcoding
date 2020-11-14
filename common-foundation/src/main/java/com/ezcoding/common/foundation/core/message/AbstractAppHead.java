@@ -34,4 +34,11 @@ public abstract class AbstractAppHead implements AppHead, Serializable {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "AbstractAppHead{" +
+                "pageInfo=" + pageInfo +
+                '}';
+    }
+
 }

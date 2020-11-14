@@ -6,6 +6,7 @@ import com.ezcoding.common.foundation.core.message.ResponseSystemHead;
 import com.ezcoding.common.foundation.core.message.SuccessAppHead;
 import com.ezcoding.common.web.resolver.parameter.RequestMessageParameterResolvable;
 import com.ezcoding.common.web.resolver.result.ResponseMessageReturnValueResolvable;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -18,11 +19,12 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author MinChiang
@@ -54,16 +56,21 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        RequestMessage<Map<String, ?>> requestMessage = acquireCurrentRequestMessage();
+        RequestMessage<JsonNode> requestMessage = acquireCurrentRequestMessage();
         if (requestMessage == null) {
-            requestMessage = (RequestMessage<Map<String, ?>>) this.readWithMessageConverters(webRequest, parameter, RequestMessage.class);
+            ParameterizedTypeImpl parameterizedType = ParameterizedTypeImpl.make(RequestMessage.class, new Type[]{JsonNode.class}, null);
+            requestMessage = (RequestMessage<JsonNode>) this.readWithMessageConverters(webRequest, parameter, parameterizedType);
             //如果仍然获取不到对象
             if (requestMessage == null) {
                 return null;
             }
             persistCurrentRequestMessage(requestMessage);
         }
-
+        //清除对应的请求信息
+        if (parameter.getParameterIndex() + 1 == parameter.getMethod().getParameterCount()) {
+            clearCurrentRequestMessage();
+        }
+        //解析参数
         RequestMessageParameterResolvable resolvable = parameterResolvables
                 .stream()
                 .filter(resolver -> resolver.match(parameter.getParameterType()))
@@ -77,7 +84,7 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
         //标识请求是否已经在该方法内完成处理
         mavContainer.setRequestHandled(true);
 
-        ResponseMessage<Object> responseMessage = null;
+        ResponseMessage<Object> responseMessage;
         if (returnValue == null) {
             responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), returnValue);
         } else {
@@ -98,9 +105,9 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
      *
      * @return 当前报文
      */
-    private RequestMessage<Map<String, ?>> acquireCurrentRequestMessage() {
+    private RequestMessage<JsonNode> acquireCurrentRequestMessage() {
         //能够获取请求报文，直接返回
-        return (RequestMessage<Map<String, ?>>) RequestContextHolder.getRequestAttributes().getAttribute(REQUEST_MESSAGE, RequestAttributes.SCOPE_REQUEST);
+        return (RequestMessage<JsonNode>) RequestContextHolder.getRequestAttributes().getAttribute(REQUEST_MESSAGE, RequestAttributes.SCOPE_REQUEST);
     }
 
     /**
@@ -108,8 +115,15 @@ public class JsonMessageMethodProcessor extends AbstractMessageConverterMethodPr
      *
      * @param requestMessage 待保存的报文
      */
-    private void persistCurrentRequestMessage(RequestMessage<Map<String, ?>> requestMessage) {
+    private void persistCurrentRequestMessage(RequestMessage<JsonNode> requestMessage) {
         RequestContextHolder.getRequestAttributes().setAttribute(REQUEST_MESSAGE, requestMessage, RequestAttributes.SCOPE_REQUEST);
+    }
+
+    /**
+     * 移除当前报文
+     */
+    private void clearCurrentRequestMessage() {
+        RequestContextHolder.getRequestAttributes().removeAttribute(REQUEST_MESSAGE, RequestAttributes.SCOPE_REQUEST);
     }
 
     /**

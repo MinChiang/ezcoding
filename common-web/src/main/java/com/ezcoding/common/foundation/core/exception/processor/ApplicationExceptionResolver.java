@@ -70,14 +70,10 @@ public class ApplicationExceptionResolver extends AbstractHandlerExceptionResolv
             model.put(KEY_APPLICATION_EXPCETION, ex);
 
             //自动打印业务错误信息
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("applicatin error: ", ex);
-            }
+            LOGGER.error("applicatin error: ", ex);
             return new ModelAndView(null, model, processStatus);
         } catch (IOException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("io error: ", e);
-            }
+            LOGGER.error("io error: ", e);
         }
 
         return null;

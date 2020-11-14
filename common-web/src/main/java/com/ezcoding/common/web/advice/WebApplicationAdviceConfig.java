@@ -35,9 +35,7 @@ public class WebApplicationAdviceConfig {
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
     public StandardResponseEntity<?> handleHttpRequestMethodNotSupportedExceptionException(HttpRequestMethodNotSupportedException e) {
-        if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("request type error: ", e);
-        }
+        LOGGER.error("request type error: ", e);
         return StandardResponseEntityFactory
                 .status(HttpStatus.NOT_ACCEPTABLE)
                 .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_REQUEST_TYPE_ERROR).build());
@@ -45,9 +43,7 @@ public class WebApplicationAdviceConfig {
 
     @ExceptionHandler(value = IllegalArgumentException.class)
     public StandardResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e) {
-        if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("parameter valid error: ", e);
-        }
+        LOGGER.error("parameter valid error: ", e);
         return StandardResponseEntityFactory
                 .status(HttpStatus.BAD_REQUEST)
                 .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).build());
@@ -58,9 +54,7 @@ public class WebApplicationAdviceConfig {
         StringBuilder sb = new StringBuilder();
         e.getAllErrors().forEach(er -> sb.append(er.getDefaultMessage()));
         String result = sb.toString();
-        if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("parameter valid error: {}", result);
-        }
+        LOGGER.error("parameter valid error: {}", result);
         return StandardResponseEntityFactory
                 .status(HttpStatus.BAD_REQUEST)
                 .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).params(result).build());
@@ -74,9 +68,7 @@ public class WebApplicationAdviceConfig {
             stringBuilder.append(c.getMessage());
         });
         String result = stringBuilder.toString();
-        if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("parameter valid error: {}", result);
-        }
+        LOGGER.error("parameter valid error: {}", result);
         return StandardResponseEntityFactory
                 .status(HttpStatus.BAD_REQUEST)
                 .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_PARAM_VALIDATE_ERROR).params(result).build());
@@ -84,9 +76,7 @@ public class WebApplicationAdviceConfig {
 
     @ExceptionHandler(value = NoHandlerFoundException.class)
     public StandardResponseEntity<?> handleNoHandlerFoundException(NoHandlerFoundException e) {
-        if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("can not find handler: ", e);
-        }
+        LOGGER.error("can not find handler: ", e);
         return StandardResponseEntityFactory
                 .status(HttpStatus.NOT_FOUND)
                 .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_RESOURCE_NOT_FIND_ERROR).build());
@@ -94,9 +84,7 @@ public class WebApplicationAdviceConfig {
 
     @ExceptionHandler(value = ApplicationException.class)
     public StandardResponseEntity<?> handleBusinessException(ApplicationException e) {
-        if (LOGGER.isErrorEnabled()) {
-            LOGGER.error(e.toString());
-        }
+        LOGGER.error(e.toString());
         return StandardResponseEntityFactory
                 .status(HttpStatus.BAD_REQUEST)
                 .error(e);
