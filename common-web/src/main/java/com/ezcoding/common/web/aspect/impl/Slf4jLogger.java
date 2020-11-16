@@ -1,7 +1,6 @@
 package com.ezcoding.common.web.aspect.impl;
 
-import com.ezcoding.common.web.aspect.AbstractSpelLogger;
-import org.slf4j.Logger;
+import com.ezcoding.common.web.aspect.ServiceLogger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
@@ -11,14 +10,11 @@ import java.util.List;
  * @version 1.0.0
  * @date 2018-08-03 20:49
  */
-public class Slf4jLogger extends AbstractSpelLogger {
+public class Slf4jLogger implements ServiceLogger {
 
     @Override
-    protected void doLog(Object target, ServiceLogInfo serviceLogInfo, List<ParamLogInfo> paramLogInfos, Object message) {
-        final Logger logger = LoggerFactory.getLogger(target.getClass());
-        if (logger.isInfoEnabled()) {
-            logger.info((String) message);
-        }
+    public void log(String message, ServiceLogInfo serviceLogInfo, List<ParamLogInfo> paramLogInfos) {
+        LoggerFactory.getLogger(serviceLogInfo.getTarget().getClass()).info(message);
     }
 
 }

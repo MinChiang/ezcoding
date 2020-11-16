@@ -1,6 +1,9 @@
 package com.ezcoding.common.web.aspect.impl;
 
-import java.lang.reflect.Method;
+import com.ezcoding.common.web.aspect.LogFormatter;
+import com.ezcoding.common.web.aspect.LogTypeEnum;
+import com.ezcoding.common.web.aspect.ServiceLog;
+import com.ezcoding.common.web.aspect.ServiceLogger;
 
 /**
  * @author MinChiang
@@ -9,25 +12,55 @@ import java.lang.reflect.Method;
  */
 public class ServiceLogInfo {
 
-    private final Class<?> implementClass;
-    private final String expression;
-    private final Method target;
+    private final String beforeExpression;
+    private final String afterExpression;
+    private final LogTypeEnum type;
+    private final Class<? extends LogFormatter> formatClass;
+    private final Class<? extends ServiceLogger> logClass;
+    private final Object target;
 
-    public ServiceLogInfo(Class<?> implementClass, String expression, Method target) {
-        this.implementClass = implementClass;
-        this.expression = expression;
+    private ServiceLogInfo(String beforeExpression, String afterExpression, LogTypeEnum type, Class<? extends LogFormatter> formatClass, Class<? extends ServiceLogger> logClass, Object target) {
+        this.beforeExpression = beforeExpression;
+        this.afterExpression = afterExpression;
+        this.type = type;
+        this.formatClass = formatClass;
+        this.logClass = logClass;
         this.target = target;
     }
 
-    public Class<?> getImplementClass() {
-        return implementClass;
+    public static ServiceLogInfo create(ServiceLog serviceLog, Object target) {
+        return new ServiceLogInfo(
+                serviceLog.beforeExpression(),
+                serviceLog.afterExpression(),
+                serviceLog.type(),
+                serviceLog.formatClass(),
+                serviceLog.logClass(),
+                target
+        );
     }
 
-    public String getExpression() {
-        return expression;
+    public String getBeforeExpression() {
+        return beforeExpression;
     }
 
-    public Method getTarget() {
+    public String getAfterExpression() {
+        return afterExpression;
+    }
+
+    public LogTypeEnum getType() {
+        return type;
+    }
+
+    public Class<? extends LogFormatter> getFormatClass() {
+        return formatClass;
+    }
+
+    public Class<? extends ServiceLogger> getLogClass() {
+        return logClass;
+    }
+
+    public Object getTarget() {
         return target;
     }
+
 }

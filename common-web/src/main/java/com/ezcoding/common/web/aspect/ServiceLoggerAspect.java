@@ -55,21 +55,19 @@ public class ServiceLoggerAspect {
         //获取方法
         Method method = target.getClass().getMethod(proceedingJoinPoint.getSignature().getName(), parameterTypes);
 
+        ServiceLog serviceLog = method.getAnnotation(ServiceLog.class);
+        ServiceLogInfo serviceLogInfo = ServiceLogInfo.create(serviceLog, target);
+        LogFormatter formatter = LOG_FORMATTER_MAP.getOrDefault(serviceLogInfo.getFormatClass(), defaultLogFormatter);
+        ServiceLogger serviceLogger = SERVICE_LOGGER_MAP.getOrDefault(serviceLogInfo.getLogClass(), defaultServiceLogger);
+
+        //打印入参
         Parameter[] parameters = method.getParameters();
         List<ParamLogInfo> paramLogInfos = new ArrayList<>();
-        //获取调用的参数
         for (int i = 0; i < parameters.length; i++) {
             doAcquireParamLogInfos(paramLogInfos, parameters[i], args[i]);
         }
-
-        //打印入参
-        ServiceLog serviceLog = method.getAnnotation(ServiceLog.class);
-        LogFormatter formatter = LOG_FORMATTER_MAP.getOrDefault(serviceLog.formatClass(), defaultLogFormatter);
-        String format = formatter.format(serviceLog.beforeExpression(), paramLogInfos);
-
-        ServiceLogger serviceLogger = SERVICE_LOGGER_MAP.getOrDefault(serviceLog.logClass(), defaultServiceLogger);
-        ServiceLogInfo beforeServiceLogInfo = new ServiceLogInfo(serviceLog.logClass(), serviceLog.beforeExpression(), method);
-        serviceLogger.logBefore(target, beforeServiceLogInfo, paramLogInfos);
+        String beforeMessage = formatter.format(serviceLogInfo.getBeforeExpression(), paramLogInfos);
+        serviceLogger.log(beforeMessage, serviceLogInfo, paramLogInfos);
 
         //执行业务
         Object result = proceedingJoinPoint.proceed();
@@ -77,8 +75,8 @@ public class ServiceLoggerAspect {
         //打印出参
         List<ParamLogInfo> resultLogInfos = new ArrayList<>();
         doAcquireParamLogInfos(resultLogInfos, method, result);
-        ServiceLogInfo afterServiceLogInfo = new ServiceLogInfo(serviceLog.logClass(), serviceLog.afterExpression(), method);
-        serviceLogger.logAfter(target, afterServiceLogInfo, resultLogInfos);
+        String afterMessage = formatter.format(serviceLogInfo.getAfterExpression(), resultLogInfos);
+        serviceLogger.log(afterMessage, serviceLogInfo, resultLogInfos);
 
         return result;
     }

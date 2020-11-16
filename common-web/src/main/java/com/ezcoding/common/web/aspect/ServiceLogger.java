@@ -15,19 +15,10 @@ public interface ServiceLogger {
     /**
      * 进行日志打印处理
      *
-     * @param target         目标实体
+     * @param message        打印内容
      * @param serviceLogInfo 方法信息
      * @param paramLogInfos  方法的参数
      */
-    void logBefore(Object target, ServiceLogInfo serviceLogInfo, List<ParamLogInfo> paramLogInfos);
-
-    /**
-     * 进行日志打印处理
-     *
-     * @param target         目标实体
-     * @param serviceLogInfo 方法信息
-     * @param resultLogInfo  返回值信息
-     */
-    void logAfter(Object target, ServiceLogInfo serviceLogInfo, ParamLogInfo resultLogInfo);
+    void log(String message, ServiceLogInfo serviceLogInfo, List<ParamLogInfo> paramLogInfos);
 
 }

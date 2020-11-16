@@ -1,6 +1,6 @@
 package com.ezcoding.common.web.aspect.impl;
 
-import com.ezcoding.common.web.aspect.AbstractSpelLogger;
+import com.ezcoding.common.web.aspect.ServiceLogger;
 
 import java.util.List;
 
@@ -9,10 +9,10 @@ import java.util.List;
  * @version 1.0.0
  * @date 2018-08-03 20:50
  */
-public class SystemOutputLogger extends AbstractSpelLogger {
+public class SystemOutputLogger implements ServiceLogger {
 
     @Override
-    protected void doLog(Object target, ServiceLogInfo serviceLogInfo, List<ParamLogInfo> paramLogInfos, Object message) {
+    public void log(String message, ServiceLogInfo serviceLogInfo, List<ParamLogInfo> paramLogInfos) {
         System.out.println(message);
     }
 
