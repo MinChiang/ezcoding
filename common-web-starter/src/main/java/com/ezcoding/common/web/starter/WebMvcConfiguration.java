@@ -11,6 +11,7 @@ import com.ezcoding.common.foundation.core.message.io.MessageIoFactory;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationAutoConfiguration;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationConfigBean;
+import com.ezcoding.common.foundation.util.ObjectMapperUtils;
 import com.ezcoding.common.web.convertor.EnumToObjectConverter;
 import com.ezcoding.common.web.convertor.ObjectToEnumConverter;
 import com.ezcoding.common.web.jwt.AuthSettings;
@@ -86,7 +87,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         resolvables.add(new ReqeustMessageResolver());
         resolvables.add(new RequestSystemHeadResolver());
         resolvables.add(new ResquestAppHeadResolver());
-        resolvables.add(new DefaultRequestMessageResolver());
+        resolvables.add(new DefaultRequestMessageResolver(ObjectMapperUtils.message()));
     }
 
     private void registerDefaultReturnValueResolvers(List<ResponseMessageReturnValueResolvable> resolvables) {
