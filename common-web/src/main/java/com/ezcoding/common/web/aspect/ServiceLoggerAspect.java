@@ -20,25 +20,6 @@ import java.util.*;
 @Aspect
 public class ServiceLoggerAspect {
 
-    private static final Map<Class<? extends ServiceLogger>, ServiceLogger> SERVICE_LOGGER_MAP = new HashMap<>();
-    private static final Map<Class<? extends LogParser>, LogParser> PARAMETER_PARSER_MAP = new HashMap<>();
-    private static final Map<Class<? extends LogFormatter>, LogFormatter> LOG_FORMATTER_MAP = new HashMap<>();
-    private static ServiceLogger defaultServiceLogger;
-    private static LogParser defaultLogParser;
-    private static LogFormatter defaultLogFormatter;
-
-    public ServiceLoggerAspect() {
-        defaultServiceLogger = new Slf4jLogger();
-        SERVICE_LOGGER_MAP.put(Slf4jLogger.class, defaultServiceLogger);
-        SERVICE_LOGGER_MAP.put(SystemOutputLogger.class, new SystemOutputLogger());
-
-        defaultLogParser = new SpelParameterParser();
-        PARAMETER_PARSER_MAP.put(LogParser.class, defaultLogParser);
-
-        defaultLogFormatter = new StringLogFormatter();
-        LOG_FORMATTER_MAP.put(StringLogFormatter.class, defaultLogFormatter);
-    }
-
     @Pointcut("@annotation(ServiceLog)")
     public void doLog() {
 
@@ -81,23 +62,6 @@ public class ServiceLoggerAspect {
         return result;
     }
 
-    private void doAcquireParamLogInfos(List<ParamLogInfo> paramLogInfos, AnnotatedElement annotatedElement, Object arg) {
-        if (annotatedElement.isAnnotationPresent(ParamLog.class)) {
-            ParamLog paramLog = annotatedElement.getAnnotation(ParamLog.class);
-            String[] expressions = paramLog.expressions();
-            String[] names = paramLog.names();
-            if (names.length != expressions.length) {
-                //自动填充对应的名字
-                names = Arrays.copyOf(names, expressions.length);
-//                Arrays.fill(names, names.length, expressions.length, parameter.getName());
-            }
-            LogParser parser = PARAMETER_PARSER_MAP.getOrDefault(paramLog.parseClass(), defaultLogParser);
-            for (int j = 0; j < expressions.length; j++) {
-                ParamLogInfo paramLogInfo = new ParamLogInfo(names[j], expressions[j], arg);
-                paramLogInfos.add(paramLogInfo);
-                parser.parse(paramLogInfo);
-            }
-        }
-    }
+
 
 }
