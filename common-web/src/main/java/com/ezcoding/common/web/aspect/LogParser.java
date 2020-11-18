@@ -10,10 +10,11 @@ import com.ezcoding.common.web.aspect.impl.ParamLogInfo;
 public interface LogParser {
 
     /**
-     * 进行日志打印处理
+     * 转换参数
      *
      * @param paramLogInfo 方法的参数
+     * @return 解析转换后的参数
      */
-    void parse(ParamLogInfo paramLogInfo);
+    Object parse(ParamLogInfo paramLogInfo);
 
 }

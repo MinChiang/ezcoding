@@ -91,7 +91,7 @@ public class ServiceLogInfo {
             for (int i = 0; i < expressions.length; i++) {
                 ParamLogInfo paramLogInfo = new ParamLogInfo(names[i], expressions[i], arg);
                 paramLogInfos.add(paramLogInfo);
-                parser.parse(paramLogInfo);
+                paramLogInfo.setParseObject(parser.parse(paramLogInfo));
             }
         }
         return paramLogInfos;

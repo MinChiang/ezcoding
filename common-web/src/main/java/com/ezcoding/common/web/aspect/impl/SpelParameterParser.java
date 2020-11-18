@@ -14,7 +14,7 @@ public class SpelParameterParser implements LogParser {
     private static final ExpressionParser PARSER = new SpelExpressionParser();
 
     @Override
-    public void parse(ParamLogInfo paramLogInfo) {
+    public Object parse(ParamLogInfo paramLogInfo) {
         String exp = paramLogInfo.getExpression();
         String name = paramLogInfo.getName();
         Object orginalTarget;
@@ -23,7 +23,7 @@ public class SpelParameterParser implements LogParser {
         } else {
             orginalTarget = PARSER.parseExpression(exp).getValue(paramLogInfo.getOrginalTarget());
         }
-        paramLogInfo.setParseObject(orginalTarget);
+        return orginalTarget;
     }
 
 }

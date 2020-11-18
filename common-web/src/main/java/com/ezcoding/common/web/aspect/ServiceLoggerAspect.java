@@ -37,7 +37,7 @@ public class ServiceLoggerAspect {
         Method method = target.getClass().getMethod(proceedingJoinPoint.getSignature().getName(), parameterTypes);
 
         ServiceLog serviceLog = method.getAnnotation(ServiceLog.class);
-        ServiceLogInfo serviceLogInfo = ServiceLogInfo.create(serviceLog, target);
+        ServiceLogInfo serviceLogInfo = ServiceLogInfo.create(serviceLog, target, method);
         LogFormatter formatter = LOG_FORMATTER_MAP.getOrDefault(serviceLogInfo.getFormatClass(), defaultLogFormatter);
         ServiceLogger serviceLogger = SERVICE_LOGGER_MAP.getOrDefault(serviceLogInfo.getLogClass(), defaultServiceLogger);
 
