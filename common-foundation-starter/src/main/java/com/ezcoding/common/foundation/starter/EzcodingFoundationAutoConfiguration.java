@@ -6,9 +6,7 @@ import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.enums.*;
 import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.exception.processor.*;
-import com.ezcoding.common.foundation.core.log.ServiceLog;
-import com.ezcoding.common.foundation.core.log.ServiceLogger;
-import com.ezcoding.common.foundation.core.log.ServiceLoggerFactory;
+import com.ezcoding.common.foundation.core.log.*;
 import com.ezcoding.common.foundation.core.message.MessageFactory;
 import com.ezcoding.common.foundation.core.message.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
@@ -306,6 +304,9 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         @Autowired
         private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
 
+        @Autowired
+        private ServiceLoggerFactory serviceLoggerFactory;
+
         @Pointcut("@annotation(com.ezcoding.common.foundation.core.log.ServiceLog)")
         public void doLog() {
 
@@ -323,7 +324,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
             Method method = target.getClass().getMethod(proceedingJoinPoint.getSignature().getName(), parameterTypes);
 
             ServiceLog serviceLog = method.getAnnotation(ServiceLog.class);
-            ServiceLogger serviceLogger = ServiceLogger.create(serviceLog, target, method);
+            ServiceLogger serviceLogger = serviceLoggerFactory.create(serviceLog, target, method);
 
             //打印入参
             serviceLogger.logBefore(args);
@@ -340,7 +341,38 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         @ConditionalOnMissingBean
         public ServiceLoggerFactory serviceLoggerFactory() {
             LogConfigBean logConfig = ezcodingFoundationConfigBean.getLog();
-            logConfig
+
+            List<LogFormatter> formatters = getInstances(logConfig.getFormatterClass());
+            List<LogParser> parsers = getInstances(logConfig.getParserClass());
+            List<LogPrinter> printers = getInstances(logConfig.getPrinterClass());
+
+            ServiceLoggerFactory serviceLoggerFactory = ServiceLoggerFactory.defaultFactory();
+            serviceLoggerFactory.addLogFormatters(formatters);
+            serviceLoggerFactory.addLogParsers(parsers);
+            serviceLoggerFactory.addLogPrinters(printers);
+
+            return serviceLoggerFactory;
+        }
+
+        /**
+         * 实例化
+         *
+         * @param classStrings 列表
+         * @param <T>          类型
+         * @return 实例
+         */
+        private <T> List<T> getInstances(List<String> classStrings) {
+            List<T> result = new ArrayList<>();
+            for (String classString : classStrings) {
+                try {
+                    Class<T> cls = (Class<T>) Class.forName(classString);
+                    T o = cls.newInstance();
+                    result.add(o);
+                } catch (Exception e) {
+                    LOGGER.error("unable to find or instance class : {}", classString);
+                }
+            }
+            return result;
         }
 
     }

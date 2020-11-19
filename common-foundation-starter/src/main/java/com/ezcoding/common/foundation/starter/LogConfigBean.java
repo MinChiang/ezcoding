@@ -1,5 +1,6 @@
 package com.ezcoding.common.foundation.starter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,9 +11,9 @@ import java.util.List;
 public class LogConfigBean {
 
     private Boolean enable = false;
-    private List<String> printerClass;
-    private List<String> parserClass;
-    private List<String> formatterClass;
+    private List<String> printerClass = new ArrayList<>();
+    private List<String> parserClass = new ArrayList<>();
+    private List<String> formatterClass = new ArrayList<>();
 
     public Boolean getEnable() {
         return enable;

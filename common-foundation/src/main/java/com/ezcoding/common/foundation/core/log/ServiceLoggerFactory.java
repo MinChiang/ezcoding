@@ -1,12 +1,13 @@
 package com.ezcoding.common.foundation.core.log;
 
+import com.ezcoding.common.foundation.core.log.impl.EmptyLogParser;
 import com.ezcoding.common.foundation.core.log.impl.Slf4jLogPrinter;
-import com.ezcoding.common.foundation.core.log.impl.SpelLogParser;
 import com.ezcoding.common.foundation.core.log.impl.StringLogFormatter;
 import com.ezcoding.common.foundation.core.log.impl.SystemLogPrinter;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +37,27 @@ public class ServiceLoggerFactory {
 
     public void addLogFormatter(LogFormatter logFormatter) {
         logFormatterMap.put(logFormatter.getClass(), logFormatter);
+    }
+
+    public void addLogPrinters(List<LogPrinter> logPrinters) {
+        if (logPrinters == null || logPrinters.isEmpty()) {
+            return;
+        }
+        logPrinters.forEach(logPrinter -> this.logPrinterMap.put(logPrinter.getClass(), logPrinter));
+    }
+
+    public void addLogParsers(List<LogParser> logParsers) {
+        if (logParsers == null || logParsers.isEmpty()) {
+            return;
+        }
+        logParsers.forEach(logParser -> this.logParserMap.put(logParser.getClass(), logParser));
+    }
+
+    public void addLogFormatters(List<LogFormatter> logFormatters) {
+        if (logFormatters == null || logFormatters.isEmpty()) {
+            return;
+        }
+        logFormatters.forEach(logFormatter -> this.logFormatterMap.put(logFormatter.getClass(), logFormatter));
     }
 
     public Map<Class<? extends LogPrinter>, LogPrinter> getLogPrinterMap() {
@@ -95,9 +117,9 @@ public class ServiceLoggerFactory {
         serviceLoggerFactory.addLogPrinter(systemLogPrinter);
         serviceLoggerFactory.setDefaultLogPrinter(slf4jLogPrinter);
 
-        SpelLogParser spelLogParser = new SpelLogParser();
-        serviceLoggerFactory.addLogParser(spelLogParser);
-        serviceLoggerFactory.setDefaultLogParser(spelLogParser);
+        EmptyLogParser emptyLogParser = new EmptyLogParser();
+        serviceLoggerFactory.addLogParser(emptyLogParser);
+        serviceLoggerFactory.setDefaultLogParser(emptyLogParser);
 
         StringLogFormatter stringLogFormatter = new StringLogFormatter();
         serviceLoggerFactory.addLogFormatter(stringLogFormatter);

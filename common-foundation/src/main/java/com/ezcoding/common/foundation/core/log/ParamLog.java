@@ -1,6 +1,6 @@
 package com.ezcoding.common.foundation.core.log;
 
-import com.ezcoding.common.foundation.core.log.impl.SpelLogParser;
+import com.ezcoding.common.foundation.core.log.impl.EmptyLogParser;
 
 import java.lang.annotation.*;
 
@@ -23,7 +23,6 @@ public @interface ParamLog {
 
     /**
      * 计算表达式
-     * 不填默认为toString
      *
      * @return 表达式
      */
@@ -34,6 +33,6 @@ public @interface ParamLog {
      *
      * @return 打印实现类
      */
-    Class<? extends LogParser> parseClass() default SpelLogParser.class;
+    Class<? extends LogParser> parseClass() default EmptyLogParser.class;
 
 }
