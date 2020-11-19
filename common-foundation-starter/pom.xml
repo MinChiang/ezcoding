@@ -47,6 +47,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Aspectj -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+
         <!-- Custom -->
         <dependency>
             <groupId>com.ezcoding</groupId>

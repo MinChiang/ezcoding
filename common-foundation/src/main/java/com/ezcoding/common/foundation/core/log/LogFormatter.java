@@ -1,6 +1,4 @@
-package com.ezcoding.common.web.aspect;
-
-import com.ezcoding.common.web.aspect.impl.ParamLogInfo;
+package com.ezcoding.common.foundation.core.log;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
-package com.ezcoding.common.web.aspect.impl;
+package com.ezcoding.common.foundation.core.log.impl;
 
-import com.ezcoding.common.web.aspect.LogFormatter;
+import com.ezcoding.common.foundation.core.log.LogFormatter;
+import com.ezcoding.common.foundation.core.log.ParamLogInfo;
 
 import java.util.List;
 

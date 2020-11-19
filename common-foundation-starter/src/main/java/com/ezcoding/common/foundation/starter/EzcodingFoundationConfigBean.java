@@ -20,6 +20,9 @@ public class EzcodingFoundationConfigBean {
     @NestedConfigurationProperty
     private EnumConfigBean enums = new EnumConfigBean();
 
+    @NestedConfigurationProperty
+    private LogConfigBean log = new LogConfigBean();
+
     public MessageConfigBean getMessage() {
         return message;
     }
@@ -42,6 +45,14 @@ public class EzcodingFoundationConfigBean {
 
     public void setEnums(EnumConfigBean enums) {
         this.enums = enums;
+    }
+
+    public LogConfigBean getLog() {
+        return log;
+    }
+
+    public void setLog(LogConfigBean log) {
+        this.log = log;
     }
 
 }

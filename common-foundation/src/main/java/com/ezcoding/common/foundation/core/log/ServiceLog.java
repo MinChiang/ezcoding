@@ -1,7 +1,7 @@
-package com.ezcoding.common.web.aspect;
+package com.ezcoding.common.foundation.core.log;
 
-import com.ezcoding.common.web.aspect.impl.Slf4jLogger;
-import com.ezcoding.common.web.aspect.impl.StringLogFormatter;
+import com.ezcoding.common.foundation.core.log.impl.Slf4jLogPrinter;
+import com.ezcoding.common.foundation.core.log.impl.StringLogFormatter;
 
 import java.lang.annotation.*;
 
@@ -20,7 +20,7 @@ public @interface ServiceLog {
      *
      * @return 打印实现类
      */
-    Class<? extends ServiceLogger> logClass() default Slf4jLogger.class;
+    Class<? extends LogPrinter> logClass() default Slf4jLogPrinter.class;
 
     /**
      * 格式化实现类

@@ -1,6 +1,6 @@
-package com.ezcoding.common.web.aspect;
+package com.ezcoding.common.foundation.core.log;
 
-import com.ezcoding.common.web.aspect.impl.StringLogFormatter;
+import com.ezcoding.common.foundation.core.log.impl.SpelLogParser;
 
 import java.lang.annotation.*;
 
@@ -34,6 +34,6 @@ public @interface ParamLog {
      *
      * @return 打印实现类
      */
-    Class<? extends LogFormatter> parseClass() default StringLogFormatter.class;
+    Class<? extends LogParser> parseClass() default SpelLogParser.class;
 
 }

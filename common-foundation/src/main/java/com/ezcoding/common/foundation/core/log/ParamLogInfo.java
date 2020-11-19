@@ -1,4 +1,4 @@
-package com.ezcoding.common.web.aspect.impl;
+package com.ezcoding.common.foundation.core.log;
 
 /**
  * @author MinChiang

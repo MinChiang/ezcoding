@@ -6,6 +6,9 @@ import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.enums.*;
 import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.exception.processor.*;
+import com.ezcoding.common.foundation.core.log.ServiceLog;
+import com.ezcoding.common.foundation.core.log.ServiceLogger;
+import com.ezcoding.common.foundation.core.log.ServiceLoggerFactory;
 import com.ezcoding.common.foundation.core.message.MessageFactory;
 import com.ezcoding.common.foundation.core.message.MessageTypeEnum;
 import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
@@ -14,6 +17,11 @@ import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeIdProducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -36,6 +44,7 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -288,6 +297,52 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                         register.registerFunctionProcessor(moduleApplicationExceptionManager, defaultProcessor);
                     });
         }
+    }
+
+    @ConditionalOnProperty(prefix = "ezcoding.foundation.log", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @Aspect
+    public static class ServiceLogAspect {
+
+        @Autowired
+        private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
+
+        @Pointcut("@annotation(com.ezcoding.common.foundation.core.log.ServiceLog)")
+        public void doLog() {
+
+        }
+
+        @Around(value = "doLog()")
+        public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+            //实际调用的对象
+            Object target = proceedingJoinPoint.getTarget();
+            //获取参数
+            MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
+            Class<?>[] parameterTypes = signature.getParameterTypes();
+            Object[] args = proceedingJoinPoint.getArgs();
+            //获取方法
+            Method method = target.getClass().getMethod(proceedingJoinPoint.getSignature().getName(), parameterTypes);
+
+            ServiceLog serviceLog = method.getAnnotation(ServiceLog.class);
+            ServiceLogger serviceLogger = ServiceLogger.create(serviceLog, target, method);
+
+            //打印入参
+            serviceLogger.logBefore(args);
+
+            //执行业务
+            Object result = proceedingJoinPoint.proceed();
+
+            //打印出参
+            serviceLogger.logAfter(result);
+            return result;
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public ServiceLoggerFactory serviceLoggerFactory() {
+            LogConfigBean logConfig = ezcodingFoundationConfigBean.getLog();
+            logConfig
+        }
+
     }
 
 }
