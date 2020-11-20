@@ -108,21 +108,7 @@ public class ServiceLoggerFactory {
     }
 
     public static ServiceLoggerFactory defaultFactory() {
-        ServiceLoggerFactory serviceLoggerFactory = new ServiceLoggerFactory();
-
-//        LogPrinter logPrinter = new DefaultLogPrinter();
-//        serviceLoggerFactory.addLogPrinter(logPrinter);
-//        serviceLoggerFactory.setDefaultLogPrinter(logPrinter);
-
-//        LogParser logParser = new DefaultLogParser();
-//        serviceLoggerFactory.addLogParser(logParser);
-//        serviceLoggerFactory.setDefaultLogParser(logParser);
-
-//        LogFormatter logFormatter = new DefaultLogFormatter();
-//        serviceLoggerFactory.addLogFormatter(logFormatter);
-//        serviceLoggerFactory.setDefaultLogFormatter(logFormatter);
-
-        return serviceLoggerFactory;
+        return new ServiceLoggerFactory();
     }
 
     /**

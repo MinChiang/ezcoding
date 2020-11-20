@@ -101,7 +101,7 @@ public class ServiceLogger {
             this.paramLogInfos.addAll(resultLogInfos);
 
             List<ParamLogInfo> useInfo = this.fillParametersInReturn ? this.paramLogInfos : resultLogInfos;
-            String format = logConfig.acquireLogFormatter(this.formatClass).format(this.beforeExpression, useInfo);
+            String format = logConfig.acquireLogFormatter(this.formatClass).format(this.afterExpression, useInfo);
             logConfig.acquireLogPrinter(this.printerClass).print(format, this, useInfo);
         } catch (Exception e) {
             LOGGER.error("service log error!", e);
