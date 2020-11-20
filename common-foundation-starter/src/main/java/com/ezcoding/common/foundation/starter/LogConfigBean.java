@@ -1,5 +1,9 @@
 package com.ezcoding.common.foundation.starter;
 
+import com.ezcoding.common.foundation.core.log.impl.EmptyLogFormatter;
+import com.ezcoding.common.foundation.core.log.impl.EmptyLogParser;
+import com.ezcoding.common.foundation.core.log.impl.Slf4jLogPrinter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +14,14 @@ import java.util.List;
  */
 public class LogConfigBean {
 
-    private Boolean enable = false;
+    private Boolean enable = true;
+
     private List<String> printerClass = new ArrayList<>();
     private List<String> parserClass = new ArrayList<>();
     private List<String> formatterClass = new ArrayList<>();
+    private String defaultPrinterClass = Slf4jLogPrinter.class.getName();
+    private String defaultParserClass = EmptyLogParser.class.getName();
+    private String defaultFormatterClass = EmptyLogFormatter.class.getName();
 
     public Boolean getEnable() {
         return enable;
@@ -45,6 +53,30 @@ public class LogConfigBean {
 
     public void setFormatterClass(List<String> formatterClass) {
         this.formatterClass = formatterClass;
+    }
+
+    public String getDefaultPrinterClass() {
+        return defaultPrinterClass;
+    }
+
+    public void setDefaultPrinterClass(String defaultPrinterClass) {
+        this.defaultPrinterClass = defaultPrinterClass;
+    }
+
+    public String getDefaultParserClass() {
+        return defaultParserClass;
+    }
+
+    public void setDefaultParserClass(String defaultParserClass) {
+        this.defaultParserClass = defaultParserClass;
+    }
+
+    public String getDefaultFormatterClass() {
+        return defaultFormatterClass;
+    }
+
+    public void setDefaultFormatterClass(String defaultFormatterClass) {
+        this.defaultFormatterClass = defaultFormatterClass;
     }
 
 }

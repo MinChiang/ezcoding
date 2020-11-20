@@ -350,6 +350,9 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
             serviceLoggerFactory.addLogFormatters(formatters);
             serviceLoggerFactory.addLogParsers(parsers);
             serviceLoggerFactory.addLogPrinters(printers);
+            serviceLoggerFactory.setDefaultLogFormatter(getInstance(logConfig.getDefaultFormatterClass()));
+            serviceLoggerFactory.setDefaultLogParser(getInstance(logConfig.getDefaultParserClass()));
+            serviceLoggerFactory.setDefaultLogPrinter(getInstance(logConfig.getDefaultPrinterClass()));
 
             return serviceLoggerFactory;
         }
@@ -364,15 +367,26 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         private <T> List<T> getInstances(List<String> classStrings) {
             List<T> result = new ArrayList<>();
             for (String classString : classStrings) {
-                try {
-                    Class<T> cls = (Class<T>) Class.forName(classString);
-                    T o = cls.newInstance();
-                    result.add(o);
-                } catch (Exception e) {
-                    LOGGER.error("unable to find or instance class : {}", classString);
-                }
+                result.add(getInstance(classString));
             }
             return result;
+        }
+
+        /**
+         * 实例化
+         *
+         * @param classString 列表
+         * @param <T>         类型
+         * @return 实例
+         */
+        private <T> T getInstance(String classString) {
+            try {
+                Class<T> cls = (Class<T>) Class.forName(classString);
+                return cls.newInstance();
+            } catch (Exception e) {
+                LOGGER.error("unable to find or instance class : {}", classString);
+            }
+            return null;
         }
 
     }

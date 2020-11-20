@@ -1,9 +1,8 @@
 package com.ezcoding.common.foundation.core.log;
 
-import com.ezcoding.common.foundation.core.log.impl.EmptyLogParser;
-import com.ezcoding.common.foundation.core.log.impl.Slf4jLogPrinter;
-import com.ezcoding.common.foundation.core.log.impl.StringLogFormatter;
-import com.ezcoding.common.foundation.core.log.impl.SystemLogPrinter;
+import com.ezcoding.common.foundation.core.log.impl.DefaultLogFormatter;
+import com.ezcoding.common.foundation.core.log.impl.DefaultLogParser;
+import com.ezcoding.common.foundation.core.log.impl.DefaultLogPrinter;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -20,9 +19,9 @@ public class ServiceLoggerFactory {
     private Map<Class<? extends LogPrinter>, LogPrinter> logPrinterMap = new HashMap<>();
     private Map<Class<? extends LogParser>, LogParser> logParserMap = new HashMap<>();
     private Map<Class<? extends LogFormatter>, LogFormatter> logFormatterMap = new HashMap<>();
-    private LogPrinter defaultLogPrinter;
-    private LogParser defaultLogParser;
-    private LogFormatter defaultLogFormatter;
+    private final DefaultLogPrinter defaultLogPrinter = new DefaultLogPrinter();
+    private final DefaultLogParser defaultLogParser = new DefaultLogParser();
+    private final DefaultLogFormatter defaultLogFormatter = new DefaultLogFormatter();
 
     private ServiceLoggerFactory() {
     }
@@ -85,45 +84,43 @@ public class ServiceLoggerFactory {
     }
 
     public LogPrinter getDefaultLogPrinter() {
-        return defaultLogPrinter;
+        return defaultLogPrinter.getLogPrinter();
     }
 
     public void setDefaultLogPrinter(LogPrinter defaultLogPrinter) {
-        this.defaultLogPrinter = defaultLogPrinter;
+        this.defaultLogPrinter.setLogPrinter(defaultLogPrinter);
     }
 
     public LogParser getDefaultLogParser() {
-        return defaultLogParser;
+        return defaultLogParser.getLogParser();
     }
 
     public void setDefaultLogParser(LogParser defaultLogParser) {
-        this.defaultLogParser = defaultLogParser;
+        this.defaultLogParser.setLogParser(defaultLogParser);
     }
 
     public LogFormatter getDefaultLogFormatter() {
-        return defaultLogFormatter;
+        return defaultLogFormatter.getLogFormatter();
     }
 
     public void setDefaultLogFormatter(LogFormatter defaultLogFormatter) {
-        this.defaultLogFormatter = defaultLogFormatter;
+        this.defaultLogFormatter.setLogFormatter(defaultLogFormatter);
     }
 
     public static ServiceLoggerFactory defaultFactory() {
         ServiceLoggerFactory serviceLoggerFactory = new ServiceLoggerFactory();
 
-        Slf4jLogPrinter slf4jLogPrinter = new Slf4jLogPrinter();
-        SystemLogPrinter systemLogPrinter = new SystemLogPrinter();
-        serviceLoggerFactory.addLogPrinter(slf4jLogPrinter);
-        serviceLoggerFactory.addLogPrinter(systemLogPrinter);
-        serviceLoggerFactory.setDefaultLogPrinter(slf4jLogPrinter);
+//        LogPrinter logPrinter = new DefaultLogPrinter();
+//        serviceLoggerFactory.addLogPrinter(logPrinter);
+//        serviceLoggerFactory.setDefaultLogPrinter(logPrinter);
 
-        EmptyLogParser emptyLogParser = new EmptyLogParser();
-        serviceLoggerFactory.addLogParser(emptyLogParser);
-        serviceLoggerFactory.setDefaultLogParser(emptyLogParser);
+//        LogParser logParser = new DefaultLogParser();
+//        serviceLoggerFactory.addLogParser(logParser);
+//        serviceLoggerFactory.setDefaultLogParser(logParser);
 
-        StringLogFormatter stringLogFormatter = new StringLogFormatter();
-        serviceLoggerFactory.addLogFormatter(stringLogFormatter);
-        serviceLoggerFactory.setDefaultLogFormatter(stringLogFormatter);
+//        LogFormatter logFormatter = new DefaultLogFormatter();
+//        serviceLoggerFactory.addLogFormatter(logFormatter);
+//        serviceLoggerFactory.setDefaultLogFormatter(logFormatter);
 
         return serviceLoggerFactory;
     }
@@ -151,6 +148,7 @@ public class ServiceLoggerFactory {
                 serviceLog.type(),
                 serviceLog.formatClass(),
                 serviceLog.logClass(),
+                serviceLog.fillParametersInReturn(),
                 target,
                 method,
                 logConfig

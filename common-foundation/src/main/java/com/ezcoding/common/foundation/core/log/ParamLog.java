@@ -1,6 +1,6 @@
 package com.ezcoding.common.foundation.core.log;
 
-import com.ezcoding.common.foundation.core.log.impl.EmptyLogParser;
+import com.ezcoding.common.foundation.core.log.impl.DefaultLogParser;
 
 import java.lang.annotation.*;
 
@@ -15,13 +15,6 @@ import java.lang.annotation.*;
 public @interface ParamLog {
 
     /**
-     * 参数名称
-     *
-     * @return 参数名称
-     */
-    String[] names() default "";
-
-    /**
      * 计算表达式
      *
      * @return 表达式
@@ -33,6 +26,6 @@ public @interface ParamLog {
      *
      * @return 打印实现类
      */
-    Class<? extends LogParser> parseClass() default EmptyLogParser.class;
+    Class<? extends LogParser> parseClass() default DefaultLogParser.class;
 
 }

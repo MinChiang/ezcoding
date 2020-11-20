@@ -12,7 +12,7 @@ public class EmptyLogParser implements LogParser {
 
     @Override
     public Object parse(ParamLogInfo paramLogInfo) {
-        return paramLogInfo.getParseObject();
+        return paramLogInfo.getOriginalTarget();
     }
 
 }

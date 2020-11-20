@@ -17,9 +17,9 @@ public class SpelLogParser implements LogParser {
         String exp = paramLogInfo.getExpression();
         Object orginalTarget;
         if (exp == null || exp.isEmpty()) {
-            orginalTarget = paramLogInfo.getOrginalTarget();
+            orginalTarget = paramLogInfo.getOriginalTarget();
         } else {
-            orginalTarget = PARSER.parseExpression(exp).getValue(paramLogInfo.getOrginalTarget());
+            orginalTarget = PARSER.parseExpression(exp).getValue(paramLogInfo.getOriginalTarget());
         }
         return orginalTarget;
     }

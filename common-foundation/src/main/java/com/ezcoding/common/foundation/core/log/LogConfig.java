@@ -1,5 +1,9 @@
 package com.ezcoding.common.foundation.core.log;
 
+import com.ezcoding.common.foundation.core.log.impl.DefaultLogFormatter;
+import com.ezcoding.common.foundation.core.log.impl.DefaultLogParser;
+import com.ezcoding.common.foundation.core.log.impl.DefaultLogPrinter;
+
 import java.util.Map;
 
 /**
@@ -26,15 +30,27 @@ public class LogConfig {
     }
 
     public LogPrinter acquireLogPrinter(Class<? extends LogPrinter> cls) {
-        return logPrinterMap.getOrDefault(cls, defaultLogPrinter);
+        LogPrinter logPrinter = logPrinterMap.getOrDefault(cls, defaultLogPrinter);
+        if (logPrinter instanceof DefaultLogPrinter) {
+            return ((DefaultLogPrinter) logPrinter).getLogPrinter();
+        }
+        return logPrinter;
     }
 
     public LogParser acquireLogParser(Class<? extends LogParser> cls) {
-        return logParserMap.getOrDefault(cls, defaultLogParser);
+        LogParser logParser = logParserMap.getOrDefault(cls, defaultLogParser);
+        if (logParser instanceof DefaultLogParser) {
+            return ((DefaultLogParser) logParser).getLogParser();
+        }
+        return logParser;
     }
 
     public LogFormatter acquireLogFormatter(Class<? extends LogFormatter> cls) {
-        return logFormatterMap.getOrDefault(cls, defaultLogFormatter);
+        LogFormatter logFormatter = logFormatterMap.getOrDefault(cls, defaultLogFormatter);
+        if (logFormatter instanceof DefaultLogFormatter) {
+            return ((DefaultLogFormatter) logFormatter).getLogFormatter();
+        }
+        return logFormatter;
     }
 
 }
