@@ -1,7 +1,7 @@
 package com.ezcoding.common.foundation.core.log.impl;
 
 import com.ezcoding.common.foundation.core.log.LogFormatter;
-import com.ezcoding.common.foundation.core.log.ParamLogInfo;
+import com.ezcoding.common.foundation.core.log.ServiceLogger;
 
 import java.util.List;
 
@@ -15,8 +15,8 @@ public class DefaultLogFormatter implements LogFormatter {
     private LogFormatter logFormatter = new EmptyLogFormatter();
 
     @Override
-    public String format(String expression, List<ParamLogInfo> paramLogInfos) {
-        return this.logFormatter.format(expression, paramLogInfos);
+    public String format(String expression, ServiceLogger serviceLogger, List<Object> objects) {
+        return this.logFormatter.format(expression, serviceLogger, objects);
     }
 
     public LogFormatter getLogFormatter() {

@@ -1,7 +1,9 @@
 package com.ezcoding.common.foundation.core.log.impl;
 
 import com.ezcoding.common.foundation.core.log.LogParser;
-import com.ezcoding.common.foundation.core.log.ParamLogInfo;
+import com.ezcoding.common.foundation.core.log.ParamLogger;
+
+import java.util.List;
 
 /**
  * @author MinChiang
@@ -13,8 +15,8 @@ public class DefaultLogParser implements LogParser {
     private LogParser logParser = new EmptyLogParser();
 
     @Override
-    public Object parse(ParamLogInfo paramLogInfo) {
-        return logParser.parse(paramLogInfo);
+    public List<Object> parse(ParamLogger paramLogger, Object target) {
+        return logParser.parse(paramLogger, target);
     }
 
     public LogParser getLogParser() {

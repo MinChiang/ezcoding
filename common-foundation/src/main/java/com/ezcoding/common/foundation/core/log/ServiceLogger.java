@@ -3,11 +3,12 @@ package com.ezcoding.common.foundation.core.log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author MinChiang
@@ -18,57 +19,51 @@ public class ServiceLogger {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLogger.class);
 
-    private final String beforeExpression;
-    private final String afterExpression;
-    private final LogTypeEnum type;
-    private final Class<? extends LogFormatter> formatClass;
-    private final Class<? extends LogPrinter> printerClass;
-    private final Boolean fillParametersInReturn;
     private final Object target;
     private final Method method;
     private final LogConfig logConfig;
-    private final List<ParamLogInfo> paramLogInfos = new ArrayList<>();
 
-    ServiceLogger(String beforeExpression,
-                  String afterExpression,
-                  LogTypeEnum type,
-                  Class<? extends LogFormatter> formatClass,
-                  Class<? extends LogPrinter> printerClass,
-                  Boolean fillParametersInReturn,
+    private ServiceLogMetadata serviceLogMetadata;
+    private LogFormatter formatter;
+    private LogPrinter printer;
+    private List<ParamLogger> beforeParamLogger;
+    private ParamLogger afterParamLogger;
+
+    ServiceLogger(LogConfig logConfig,
                   Object target,
-                  Method method,
-                  LogConfig logConfig) {
-        this.beforeExpression = beforeExpression;
-        this.afterExpression = afterExpression;
-        this.type = type;
-        this.formatClass = formatClass;
-        this.printerClass = printerClass;
-        this.fillParametersInReturn = fillParametersInReturn;
+                  Method method) {
         this.target = target;
         this.method = method;
         this.logConfig = logConfig;
+        this.init();
     }
 
     /**
-     * 获取参数注解
-     *
-     * @param annotatedElement 被注释的元素
-     * @param arg              参数对象
-     * @return 注释元数据
+     * 初始化
      */
-    private List<ParamLogInfo> acquireParamLogInfos(AnnotatedElement annotatedElement, Object arg) {
-        List<ParamLogInfo> paramLogInfos = new ArrayList<>();
-        if (annotatedElement.isAnnotationPresent(ParamLog.class)) {
-            ParamLog paramLog = annotatedElement.getAnnotation(ParamLog.class);
-            String[] expressions = paramLog.expressions();
-            LogParser parser = logConfig.acquireLogParser(paramLog.parseClass());
-            for (String expression : expressions) {
-                ParamLogInfo paramLogInfo = new ParamLogInfo(expression, arg);
-                paramLogInfos.add(paramLogInfo);
-                paramLogInfo.setParseObject(parser.parse(paramLogInfo));
-            }
+    private void init() {
+        //元数据初始化
+        ServiceLog serviceLog = this.method.getAnnotation(ServiceLog.class);
+        this.serviceLogMetadata = new ServiceLogMetadata(
+                serviceLog.beforeExpression(),
+                serviceLog.afterExpression(),
+                serviceLog.type(),
+                serviceLog.formatClass(),
+                serviceLog.logClass(),
+                serviceLog.fillParametersInReturn()
+        );
+        this.formatter = logConfig.acquireLogFormatter(this.serviceLogMetadata.formatClass);
+        this.printer = logConfig.acquireLogPrinter(this.serviceLogMetadata.printerClass);
+
+        //入参初始化
+        Parameter[] parameters = method.getParameters();
+        this.beforeParamLogger = new ArrayList<>();
+        for (Parameter parameter : parameters) {
+            this.beforeParamLogger.add(new ParamLogger(this.logConfig, parameter));
         }
-        return paramLogInfos;
+
+        //出参初始化
+        this.afterParamLogger = new ParamLogger(this.logConfig, this.method);
     }
 
     /**
@@ -77,14 +72,26 @@ public class ServiceLogger {
      * @param args 入参
      */
     public void logBefore(Object[] args) {
+        if (Objects.equals(this.serviceLogMetadata.type, LogTypeEnum.ASYNC)) {
+            CompletableFuture.runAsync(() -> logBeforeSync(args));
+        } else {
+            logBeforeSync(args);
+        }
+    }
+
+    /**
+     * 同步方式打印日志
+     *
+     * @param args 入参
+     */
+    private void logBeforeSync(Object[] args) {
         try {
-            //打印入参
-            Parameter[] parameters = method.getParameters();
-            for (int i = 0; i < parameters.length; i++) {
-                this.paramLogInfos.addAll(this.acquireParamLogInfos(parameters[i], args[i]));
+            List<Object> parsedObjects = new ArrayList<>();
+            for (int i = 0; i < this.beforeParamLogger.size(); i++) {
+                parsedObjects.addAll(this.beforeParamLogger.get(i).parse(args[i]));
             }
-            String format = logConfig.acquireLogFormatter(this.formatClass).format(this.beforeExpression, paramLogInfos);
-            logConfig.acquireLogPrinter(this.printerClass).print(format, this, paramLogInfos);
+            String format = this.formatter.format(this.serviceLogMetadata.beforeExpression, this, parsedObjects);
+            this.printer.print(format, this, parsedObjects);
         } catch (Exception e) {
             LOGGER.error("service log error!", e);
         }
@@ -96,36 +103,37 @@ public class ServiceLogger {
      * @param result 出参
      */
     public void logAfter(Object result) {
-        try {
-            List<ParamLogInfo> resultLogInfos = this.acquireParamLogInfos(method, result);
-            this.paramLogInfos.addAll(resultLogInfos);
-
-            List<ParamLogInfo> useInfo = this.fillParametersInReturn ? this.paramLogInfos : resultLogInfos;
-            String format = logConfig.acquireLogFormatter(this.formatClass).format(this.afterExpression, useInfo);
-            logConfig.acquireLogPrinter(this.printerClass).print(format, this, useInfo);
-        } catch (Exception e) {
-            LOGGER.error("service log error!", e);
+        if (Objects.equals(this.serviceLogMetadata.type, LogTypeEnum.ASYNC)) {
+            CompletableFuture.runAsync(() -> logAfterSync(result));
+        } else {
+            logAfterSync(result);
         }
     }
 
-    public String getBeforeExpression() {
-        return beforeExpression;
-    }
+    /**
+     * 同步方式打印日志
+     *
+     * @param result 出参
+     */
+    public void logAfterSync(Object result) {
+        try {
+            List<ParamLogger> paramLoggers;
+            if (this.serviceLogMetadata.fillParametersInReturn) {
+                paramLoggers = new ArrayList<>(this.beforeParamLogger);
+            } else {
+                paramLoggers = new ArrayList<>();
+            }
+            paramLoggers.add(this.afterParamLogger);
 
-    public String getAfterExpression() {
-        return afterExpression;
-    }
-
-    public LogTypeEnum getType() {
-        return type;
-    }
-
-    public Class<? extends LogFormatter> getFormatClass() {
-        return formatClass;
-    }
-
-    public Class<? extends LogPrinter> getPrinterClass() {
-        return printerClass;
+            List<Object> parsedObjects = new ArrayList<>();
+            for (ParamLogger paramLogger : paramLoggers) {
+                parsedObjects.addAll(paramLogger.parse(result));
+            }
+            String format = this.formatter.format(this.serviceLogMetadata.afterExpression, this, parsedObjects);
+            this.printer.print(format, this, parsedObjects);
+        } catch (Exception e) {
+            LOGGER.error("service log error!", e);
+        }
     }
 
     public Object getTarget() {
@@ -140,8 +148,24 @@ public class ServiceLogger {
         return logConfig;
     }
 
-    public Boolean getFillParametersInReturn() {
-        return fillParametersInReturn;
+    public ServiceLogMetadata getServiceLogMetadata() {
+        return serviceLogMetadata;
+    }
+
+    public LogFormatter getFormatter() {
+        return formatter;
+    }
+
+    public LogPrinter getPrinter() {
+        return printer;
+    }
+
+    public List<ParamLogger> getBeforeParamLogger() {
+        return beforeParamLogger;
+    }
+
+    public ParamLogger getAfterParamLogger() {
+        return afterParamLogger;
     }
 
 }

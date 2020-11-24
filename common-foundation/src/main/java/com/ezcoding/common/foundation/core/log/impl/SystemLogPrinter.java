@@ -1,7 +1,6 @@
 package com.ezcoding.common.foundation.core.log.impl;
 
 import com.ezcoding.common.foundation.core.log.LogPrinter;
-import com.ezcoding.common.foundation.core.log.ParamLogInfo;
 import com.ezcoding.common.foundation.core.log.ServiceLogger;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
 public class SystemLogPrinter implements LogPrinter {
 
     @Override
-    public void print(String message, ServiceLogger serviceLogger, List<ParamLogInfo> paramLogInfos) {
+    public void print(String message, ServiceLogger serviceLogger, List<Object> objects) {
         System.out.println(message);
     }
 

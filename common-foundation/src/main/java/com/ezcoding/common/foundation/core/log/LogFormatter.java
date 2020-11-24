@@ -13,8 +13,9 @@ public interface LogFormatter {
      * 进行参数输出
      *
      * @param expression    表达式
-     * @param paramLogInfos 参数值
+     * @param serviceLogger 方法信息
+     * @param objects       参数值
      */
-    String format(String expression, List<ParamLogInfo> paramLogInfos);
+    String format(String expression, ServiceLogger serviceLogger, List<Object> objects);
 
 }

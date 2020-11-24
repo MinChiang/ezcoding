@@ -114,12 +114,11 @@ public class ServiceLoggerFactory {
     /**
      * 构建对象
      *
-     * @param serviceLog 注解
-     * @param target     调用对象
-     * @param method     调用方法
+     * @param target 调用对象
+     * @param method 调用方法
      * @return 构建的对象
      */
-    public ServiceLogger create(ServiceLog serviceLog, Object target, Method method) {
+    public ServiceLogger create(Object target, Method method) {
         LogConfig logConfig = new LogConfig(
                 this.logPrinterMap,
                 this.logParserMap,
@@ -128,16 +127,11 @@ public class ServiceLoggerFactory {
                 this.defaultLogParser,
                 this.defaultLogFormatter
         );
+
         return new ServiceLogger(
-                serviceLog.beforeExpression(),
-                serviceLog.afterExpression(),
-                serviceLog.type(),
-                serviceLog.formatClass(),
-                serviceLog.logClass(),
-                serviceLog.fillParametersInReturn(),
+                logConfig,
                 target,
-                method,
-                logConfig
+                method
         );
     }
 

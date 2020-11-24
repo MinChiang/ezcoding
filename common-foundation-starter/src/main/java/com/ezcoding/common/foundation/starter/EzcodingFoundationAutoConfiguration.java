@@ -75,7 +75,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
      * 注册默认分页类型
      */
     @Override
-    public void afterPropertiesSet() throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException {
+    public void afterPropertiesSet() throws ClassNotFoundException, IOException {
         initApplicationMetadata();
         initMessage();
         initEnumMapping();
@@ -104,7 +104,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 
         Long categoryNo = ezcodingFoundationConfigBean.getMetadata().getCategoryNo();
         Long dataCenterNo = ezcodingFoundationConfigBean.getMetadata().getDataCenterNo();
-        MessageFactory.setAppId(String.valueOf(dataCenterNo) + String.valueOf(categoryNo));
+        MessageFactory.setAppId(String.valueOf(dataCenterNo) + categoryNo);
     }
 
     private void initEnumMapping() throws ClassNotFoundException, IOException {
@@ -319,14 +319,12 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
             //获取参数
             MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
             Class<?>[] parameterTypes = signature.getParameterTypes();
-            Object[] args = proceedingJoinPoint.getArgs();
             //获取方法
             Method method = target.getClass().getMethod(proceedingJoinPoint.getSignature().getName(), parameterTypes);
-
-            ServiceLog serviceLog = method.getAnnotation(ServiceLog.class);
-            ServiceLogger serviceLogger = serviceLoggerFactory.create(serviceLog, target, method);
+            ServiceLogger serviceLogger = serviceLoggerFactory.create(target, method);
 
             //打印入参
+            Object[] args = proceedingJoinPoint.getArgs();
             serviceLogger.logBefore(args);
 
             //执行业务

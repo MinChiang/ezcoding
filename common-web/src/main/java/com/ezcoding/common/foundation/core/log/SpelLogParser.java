@@ -3,6 +3,9 @@ package com.ezcoding.common.foundation.core.log;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -13,15 +16,17 @@ public class SpelLogParser implements LogParser {
     private static final ExpressionParser PARSER = new SpelExpressionParser();
 
     @Override
-    public Object parse(ParamLogInfo paramLogInfo) {
-        String exp = paramLogInfo.getExpression();
-        Object orginalTarget;
-        if (exp == null || exp.isEmpty()) {
-            orginalTarget = paramLogInfo.getOriginalTarget();
-        } else {
-            orginalTarget = PARSER.parseExpression(exp).getValue(paramLogInfo.getOriginalTarget());
+    public List<Object> parse(ParamLogger paramLogger, Object target) {
+        List<Object> result = new ArrayList<>();
+        ParamLogMetadata paramLogMetadata = paramLogger.getParamLogMetadata();
+        for (String exp : paramLogMetadata.expressions) {
+            if (exp == null || exp.isEmpty()) {
+                result.add(target);
+            } else {
+                result.add(PARSER.parseExpression(exp).getValue(target));
+            }
         }
-        return orginalTarget;
+        return result;
     }
 
 }

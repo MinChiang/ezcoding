@@ -12,10 +12,10 @@ public interface LogPrinter {
     /**
      * 进行日志打印处理
      *
-     * @param message        打印内容
+     * @param message       打印内容
      * @param serviceLogger 方法信息
-     * @param paramLogInfos  方法的参数
+     * @param objects       解析对象
      */
-    void print(String message, ServiceLogger serviceLogger, List<ParamLogInfo> paramLogInfos);
+    void print(String message, ServiceLogger serviceLogger, List<Object> objects);
 
 }

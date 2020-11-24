@@ -1,7 +1,6 @@
 package com.ezcoding.common.foundation.core.log.impl;
 
 import com.ezcoding.common.foundation.core.log.LogPrinter;
-import com.ezcoding.common.foundation.core.log.ParamLogInfo;
 import com.ezcoding.common.foundation.core.log.ServiceLogger;
 
 import java.util.List;
@@ -16,8 +15,8 @@ public class DefaultLogPrinter implements LogPrinter {
     private LogPrinter logPrinter = new Slf4jLogPrinter();
 
     @Override
-    public void print(String message, ServiceLogger serviceLogger, List<ParamLogInfo> paramLogInfos) {
-        logPrinter.print(message, serviceLogger, paramLogInfos);
+    public void print(String message, ServiceLogger serviceLogger, List<Object> objects) {
+        logPrinter.print(message, serviceLogger, objects);
     }
 
     public LogPrinter getLogPrinter() {
