@@ -6,8 +6,6 @@ import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
 import com.ezcoding.common.foundation.core.enums.MappingPair;
 import com.ezcoding.common.foundation.core.exception.processor.AbstractApplicationExceptionManager;
 import com.ezcoding.common.foundation.core.exception.processor.ApplicationExceptionResolver;
-import com.ezcoding.common.foundation.core.message.PageInfo;
-import com.ezcoding.common.foundation.core.message.io.MessageIoFactory;
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationAutoConfiguration;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationConfigBean;
@@ -15,7 +13,7 @@ import com.ezcoding.common.foundation.util.ObjectMapperUtils;
 import com.ezcoding.common.web.convertor.EnumToObjectConverter;
 import com.ezcoding.common.web.convertor.ObjectToEnumConverter;
 import com.ezcoding.common.web.jwt.AuthSettings;
-import com.ezcoding.common.web.resolver.JsonMessageMethodProcessor;
+import com.ezcoding.common.web.resolver.StandardMessageMethodProcessor;
 import com.ezcoding.common.web.resolver.UserArgumentResolver;
 import com.ezcoding.common.web.resolver.parameter.*;
 import com.ezcoding.common.web.resolver.result.ResponseAppHeadResolver;
@@ -79,7 +77,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Qualifier("defaultExceptionManager")
     private AbstractApplicationExceptionManager defaultExceptionManager;
     @Autowired
-    private JsonMessageMethodProcessor jsonMessageMethodProcessor;
+    private StandardMessageMethodProcessor standardMessageMethodProcessor;
     @Autowired
     private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
 
@@ -87,6 +85,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         resolvables.add(new ReqeustMessageResolver());
         resolvables.add(new RequestSystemHeadResolver());
         resolvables.add(new ResquestAppHeadResolver());
+        resolvables.add(new PageInfoRequestMessageResolver());
         resolvables.add(new DefaultRequestMessageResolver(ObjectMapperUtils.message()));
     }
 
@@ -97,8 +96,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public JsonMessageMethodProcessor jsonMessageMethodProcessor() {
-        JsonMessageMethodProcessor jsonMessageMethodProcessor = new JsonMessageMethodProcessor(httpMessageConverters.getConverters());
+    public StandardMessageMethodProcessor jsonMessageMethodProcessor() {
+        StandardMessageMethodProcessor standardMessageMethodProcessor = new StandardMessageMethodProcessor(httpMessageConverters.getConverters());
 
         List<RequestMessageParameterResolvable> parameterResolvers = new ArrayList<>();
         List<ResponseMessageReturnValueResolvable> returnValueResolvers = new ArrayList<>();
@@ -112,10 +111,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                     configurer.registerResponseMessageReturnValueResolvers(returnValueResolvers);
                 }));
 
-        jsonMessageMethodProcessor.registerParameterResolvables(parameterResolvers);
-        jsonMessageMethodProcessor.registerReturnValueResolvables(returnValueResolvers);
+        standardMessageMethodProcessor.registerParameterResolvables(parameterResolvers);
+        standardMessageMethodProcessor.registerReturnValueResolvables(returnValueResolvers);
 
-        return jsonMessageMethodProcessor;
+        return standardMessageMethodProcessor;
     }
 
     /**
@@ -160,12 +159,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
-        returnValueHandlers.add(this.jsonMessageMethodProcessor);
+        returnValueHandlers.add(this.standardMessageMethodProcessor);
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(this.jsonMessageMethodProcessor);
+        argumentResolvers.add(this.standardMessageMethodProcessor);
         argumentResolvers.add(userArgumentResolver());
     }
 

@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface JsonPage {
+public @interface StandardPage {
 
     /**
      * 是否返回总条数
@@ -25,13 +25,13 @@ public @interface JsonPage {
      *
      * @return 默认当前页码
      */
-    int defaultCurrentPage();
+    int currentPage() default 1;
 
     /**
      * 默认每页条数
      *
      * @return 默认每页条数
      */
-    int defaultPageSize();
+    int pageSize() default 10;
 
 }

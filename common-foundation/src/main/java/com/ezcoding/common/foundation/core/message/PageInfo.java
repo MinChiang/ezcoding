@@ -27,7 +27,10 @@ public class PageInfo implements Cloneable, Serializable {
 
     protected Integer totalItem;
 
+    protected Boolean searchCount;
+
     public PageInfo() {
+        this.searchCount = false;
         this.pageSize = DEFAULT_PAGE_SIZE;
         this.currentPage = DEFAULT_CURRENT_PAGE;
     }
@@ -37,6 +40,7 @@ public class PageInfo implements Cloneable, Serializable {
     }
 
     public PageInfo(Integer currentPage, Integer pageSize) {
+        this.searchCount = false;
         this.pageSize = pageSize;
         this.currentPage = currentPage;
     }
@@ -86,12 +90,21 @@ public class PageInfo implements Cloneable, Serializable {
         DEFAULT_PAGE_SIZE = defaultPageSize;
     }
 
+    public Boolean getSearchCount() {
+        return searchCount;
+    }
+
+    public void setSearchCount(Boolean searchCount) {
+        this.searchCount = searchCount;
+    }
+
     @Override
     public String toString() {
         return "PageInfo{" +
                 "pageSize=" + pageSize +
                 ", currentPage=" + currentPage +
                 ", totalItem=" + totalItem +
+                ", searchCount=" + searchCount +
                 '}';
     }
 
