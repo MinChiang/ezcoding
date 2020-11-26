@@ -5,6 +5,7 @@ import com.ezcoding.common.foundation.core.log.impl.DefaultLogParser;
 import com.ezcoding.common.foundation.core.log.impl.DefaultLogPrinter;
 
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 /**
  * @author MinChiang
@@ -19,14 +20,22 @@ public class LogConfig {
     private final LogPrinter defaultLogPrinter;
     private final LogParser defaultLogParser;
     private final LogFormatter defaultLogFormatter;
+    private final Executor executor;
 
-    LogConfig(Map<Class<? extends LogPrinter>, LogPrinter> logPrinterMap, Map<Class<? extends LogParser>, LogParser> logParserMap, Map<Class<? extends LogFormatter>, LogFormatter> logFormatterMap, LogPrinter defaultLogPrinter, LogParser defaultLogParser, LogFormatter defaultLogFormatter) {
+    LogConfig(Map<Class<? extends LogPrinter>, LogPrinter> logPrinterMap,
+              Map<Class<? extends LogParser>, LogParser> logParserMap,
+              Map<Class<? extends LogFormatter>, LogFormatter> logFormatterMap,
+              LogPrinter defaultLogPrinter,
+              LogParser defaultLogParser,
+              LogFormatter defaultLogFormatter,
+              Executor executor) {
         this.logPrinterMap = logPrinterMap;
         this.logParserMap = logParserMap;
         this.logFormatterMap = logFormatterMap;
         this.defaultLogPrinter = defaultLogPrinter;
         this.defaultLogParser = defaultLogParser;
         this.defaultLogFormatter = defaultLogFormatter;
+        this.executor = executor;
     }
 
     public LogPrinter acquireLogPrinter(Class<? extends LogPrinter> cls) {
@@ -51,6 +60,10 @@ public class LogConfig {
             return ((DefaultLogFormatter) logFormatter).getLogFormatter();
         }
         return logFormatter;
+    }
+
+    public Executor getExecutor() {
+        return executor;
     }
 
 }

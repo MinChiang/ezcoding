@@ -12,23 +12,17 @@ import java.util.stream.Collectors;
  */
 public class ParamLogger {
 
-    final LogConfig logConfig;
-    final AnnotatedElement annotatedElement;
+    private final LogConfig logConfig;
+    private final AnnotatedElement annotatedElement;
 
-    private ParamLogMetadata paramLogMetadata;
-    private LogParser parser;
+    private final ParamLogMetadata paramLogMetadata;
+    private final LogParser parser;
 
     ParamLogger(LogConfig logConfig,
                 AnnotatedElement annotatedElement) {
         this.logConfig = logConfig;
         this.annotatedElement = annotatedElement;
-        this.init();
-    }
 
-    /**
-     * 初始化
-     */
-    private void init() {
         //元数据初始化
         ParamLog paramLog = annotatedElement.getAnnotation(ParamLog.class);
         this.paramLogMetadata = new ParamLogMetadata(

@@ -1,7 +1,5 @@
 package com.ezcoding.common.foundation.core.log;
 
-import java.util.List;
-
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -14,8 +12,9 @@ public interface LogPrinter {
      *
      * @param message       打印内容
      * @param serviceLogger 方法信息
+     * @param target        目标对象
      * @param objects       解析对象
      */
-    void print(String message, ServiceLogger serviceLogger, List<Object> objects);
+    void print(String message, ServiceLogger serviceLogger, Object target, Object[] objects);
 
 }

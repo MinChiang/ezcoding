@@ -318,20 +318,19 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
             Object target = proceedingJoinPoint.getTarget();
             //获取参数
             MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
-            Class<?>[] parameterTypes = signature.getParameterTypes();
             //获取方法
-            Method method = target.getClass().getMethod(proceedingJoinPoint.getSignature().getName(), parameterTypes);
-            ServiceLogger serviceLogger = serviceLoggerFactory.create(target, method);
+            Method method = signature.getMethod();
+            ServiceLogger serviceLogger = serviceLoggerFactory.getOrCreate(method);
 
             //打印入参
             Object[] args = proceedingJoinPoint.getArgs();
-            serviceLogger.logBefore(args);
+            serviceLogger.logBefore(target, args);
 
             //执行业务
             Object result = proceedingJoinPoint.proceed();
 
             //打印出参
-            serviceLogger.logAfter(result);
+            serviceLogger.logAfter(target, result);
             return result;
         }
 

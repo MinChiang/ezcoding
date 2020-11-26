@@ -5,8 +5,6 @@ import com.ezcoding.common.foundation.core.log.ServiceLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -15,10 +13,10 @@ import java.util.List;
 public class Slf4jLogPrinter implements LogPrinter {
 
     @Override
-    public void print(String message, ServiceLogger serviceLogger, List<Object> objects) {
-        Logger logger = LoggerFactory.getLogger(serviceLogger.getTarget().getClass());
+    public void print(String message, ServiceLogger serviceLogger, Object target, Object[] objects) {
+        Logger logger = LoggerFactory.getLogger(target.getClass());
         if (logger.isInfoEnabled()) {
-            logger.info(message, objects.toArray());
+            logger.info(message, objects);
         }
     }
 

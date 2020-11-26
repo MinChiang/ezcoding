@@ -15,8 +15,8 @@ public class DefaultLogPrinter implements LogPrinter {
     private LogPrinter logPrinter = new Slf4jLogPrinter();
 
     @Override
-    public void print(String message, ServiceLogger serviceLogger, List<Object> objects) {
-        logPrinter.print(message, serviceLogger, objects);
+    public void print(String message, ServiceLogger serviceLogger, Object target, Object[] objects) {
+        logPrinter.print(message, serviceLogger, target, objects);
     }
 
     public LogPrinter getLogPrinter() {

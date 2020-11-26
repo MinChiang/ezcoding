@@ -8,6 +8,11 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author MinChiang
@@ -16,9 +21,13 @@ import java.util.Map;
  */
 public class ServiceLoggerFactory {
 
+    private final Map<Method, ServiceLogger> map = new WeakHashMap<>();
+
     private Map<Class<? extends LogPrinter>, LogPrinter> logPrinterMap = new HashMap<>();
     private Map<Class<? extends LogParser>, LogParser> logParserMap = new HashMap<>();
     private Map<Class<? extends LogFormatter>, LogFormatter> logFormatterMap = new HashMap<>();
+    private Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new DefaultThreadFactory());
+
     private final DefaultLogPrinter defaultLogPrinter = new DefaultLogPrinter();
     private final DefaultLogParser defaultLogParser = new DefaultLogParser();
     private final DefaultLogFormatter defaultLogFormatter = new DefaultLogFormatter();
@@ -111,28 +120,76 @@ public class ServiceLoggerFactory {
         return new ServiceLoggerFactory();
     }
 
+    public Executor getExecutor() {
+        return executor;
+    }
+
+    public void setExecutor(Executor executor) {
+        this.executor = executor;
+    }
+
     /**
      * 构建对象
      *
-     * @param target 调用对象
      * @param method 调用方法
      * @return 构建的对象
      */
-    public ServiceLogger create(Object target, Method method) {
+    public ServiceLogger create(Method method) {
         LogConfig logConfig = new LogConfig(
                 this.logPrinterMap,
                 this.logParserMap,
                 this.logFormatterMap,
                 this.defaultLogPrinter,
                 this.defaultLogParser,
-                this.defaultLogFormatter
+                this.defaultLogFormatter,
+                this.executor
         );
-
         return new ServiceLogger(
                 logConfig,
-                target,
                 method
         );
+    }
+
+    /**
+     * 构建对象
+     *
+     * @param method 调用方法
+     * @return 构建的对象
+     */
+    public ServiceLogger getOrCreate(Method method) {
+        ServiceLogger serviceLogger = map.get(method);
+        if (serviceLogger == null) {
+            synchronized (this.map) {
+                serviceLogger = map.get(method);
+                if (serviceLogger == null) {
+                    serviceLogger = create(method);
+                    map.put(method, serviceLogger);
+                }
+            }
+        }
+        return serviceLogger;
+    }
+
+    private static class DefaultThreadFactory implements ThreadFactory {
+
+        private static final AtomicLong POOL_NUMBER = new AtomicLong(1);
+        private final AtomicLong threadNumber = new AtomicLong(1);
+        private final ThreadGroup group;
+        private final String namePrefix;
+
+        DefaultThreadFactory() {
+            group = new ThreadGroup(ServiceLogger.class.getSimpleName());
+            namePrefix = "pool-" + POOL_NUMBER.getAndIncrement() + "-thread-";
+        }
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement(), 0);
+            t.setDaemon(false);
+            t.setPriority(Thread.MIN_PRIORITY);
+            return t;
+        }
+
     }
 
 }

@@ -15,8 +15,8 @@ public class DefaultLogFormatter implements LogFormatter {
     private LogFormatter logFormatter = new EmptyLogFormatter();
 
     @Override
-    public String format(String expression, ServiceLogger serviceLogger, List<Object> objects) {
-        return this.logFormatter.format(expression, serviceLogger, objects);
+    public String format(String expression, ServiceLogger serviceLogger, Object target, Object[] objects) {
+        return this.logFormatter.format(expression, serviceLogger, target, objects);
     }
 
     public LogFormatter getLogFormatter() {

@@ -19,29 +19,20 @@ public class ServiceLogger {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLogger.class);
 
-    private final Object target;
     private final Method method;
     private final LogConfig logConfig;
 
-    private ServiceLogMetadata serviceLogMetadata;
-    private LogFormatter formatter;
-    private LogPrinter printer;
-    private List<ParamLogger> beforeParamLogger;
-    private ParamLogger afterParamLogger;
+    private final ServiceLogMetadata serviceLogMetadata;
+    private final LogFormatter formatter;
+    private final LogPrinter printer;
+    private final List<ParamLogger> beforeParamLogger;
+    private final ParamLogger afterParamLogger;
 
     ServiceLogger(LogConfig logConfig,
-                  Object target,
                   Method method) {
-        this.target = target;
         this.method = method;
         this.logConfig = logConfig;
-        this.init();
-    }
 
-    /**
-     * 初始化
-     */
-    private void init() {
         //元数据初始化
         ServiceLog serviceLog = this.method.getAnnotation(ServiceLog.class);
         this.serviceLogMetadata = new ServiceLogMetadata(
@@ -69,29 +60,31 @@ public class ServiceLogger {
     /**
      * 打印日志
      *
-     * @param args 入参
+     * @param target 目标对象
+     * @param args   入参
      */
-    public void logBefore(Object[] args) {
+    public void logBefore(Object target, Object[] args) {
         if (Objects.equals(this.serviceLogMetadata.type, LogTypeEnum.ASYNC)) {
-            CompletableFuture.runAsync(() -> logBeforeSync(args));
+            CompletableFuture.runAsync(() -> logBeforeSync(target, args), logConfig.getExecutor());
         } else {
-            logBeforeSync(args);
+            logBeforeSync(target, args);
         }
     }
 
     /**
      * 同步方式打印日志
      *
-     * @param args 入参
+     * @param target 目标对象
+     * @param args   入参
      */
-    private void logBeforeSync(Object[] args) {
+    private void logBeforeSync(Object target, Object[] args) {
         try {
-            List<Object> parsedObjects = new ArrayList<>();
+            Object[] parsedObjects = new Object[this.beforeParamLogger.size()];
             for (int i = 0; i < this.beforeParamLogger.size(); i++) {
-                parsedObjects.addAll(this.beforeParamLogger.get(i).parse(args[i]));
+                parsedObjects[i] = this.beforeParamLogger.get(i).parse(args[i]);
             }
-            String format = this.formatter.format(this.serviceLogMetadata.beforeExpression, this, parsedObjects);
-            this.printer.print(format, this, parsedObjects);
+            String format = this.formatter.format(this.serviceLogMetadata.beforeExpression, this, target, parsedObjects);
+            this.printer.print(format, this, target, parsedObjects);
         } catch (Exception e) {
             LOGGER.error("service log error!", e);
         }
@@ -100,22 +93,24 @@ public class ServiceLogger {
     /**
      * 打印日志
      *
+     * @param target 目标对象
      * @param result 出参
      */
-    public void logAfter(Object result) {
+    public void logAfter(Object target, Object result) {
         if (Objects.equals(this.serviceLogMetadata.type, LogTypeEnum.ASYNC)) {
-            CompletableFuture.runAsync(() -> logAfterSync(result));
+            CompletableFuture.runAsync(() -> logAfterSync(target, result), logConfig.getExecutor());
         } else {
-            logAfterSync(result);
+            logAfterSync(target, result);
         }
     }
 
     /**
      * 同步方式打印日志
      *
+     * @param target 目标对象
      * @param result 出参
      */
-    public void logAfterSync(Object result) {
+    public void logAfterSync(Object target, Object result) {
         try {
             List<ParamLogger> paramLoggers;
             if (this.serviceLogMetadata.fillParametersInReturn) {
@@ -125,19 +120,15 @@ public class ServiceLogger {
             }
             paramLoggers.add(this.afterParamLogger);
 
-            List<Object> parsedObjects = new ArrayList<>();
-            for (ParamLogger paramLogger : paramLoggers) {
-                parsedObjects.addAll(paramLogger.parse(result));
+            Object[] parsedObjects = new Object[paramLoggers.size()];
+            for (int i = 0; i < paramLoggers.size(); i++) {
+                parsedObjects[i] = paramLoggers.get(i).parse(result);
             }
-            String format = this.formatter.format(this.serviceLogMetadata.afterExpression, this, parsedObjects);
-            this.printer.print(format, this, parsedObjects);
+            String format = this.formatter.format(this.serviceLogMetadata.afterExpression, this, target, parsedObjects);
+            this.printer.print(format, this, target, parsedObjects);
         } catch (Exception e) {
             LOGGER.error("service log error!", e);
         }
-    }
-
-    public Object getTarget() {
-        return target;
     }
 
     public Method getMethod() {
