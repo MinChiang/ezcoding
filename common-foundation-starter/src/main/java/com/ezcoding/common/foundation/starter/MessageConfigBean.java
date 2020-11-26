@@ -4,8 +4,6 @@ import com.ezcoding.common.foundation.core.message.io.MessageIoFactory;
 
 import static com.ezcoding.common.foundation.core.message.ErrorAppHead.getDefaultErrorCode;
 import static com.ezcoding.common.foundation.core.message.ErrorAppHead.getDefaultErrorMessage;
-import static com.ezcoding.common.foundation.core.message.PageInfo.getDefaultCurrentPage;
-import static com.ezcoding.common.foundation.core.message.PageInfo.getDefaultPageSize;
 import static com.ezcoding.common.foundation.core.message.SuccessAppHead.getDefaultSuccessCode;
 import static com.ezcoding.common.foundation.core.message.SuccessAppHead.getDefaultSuceessMessage;
 
@@ -25,9 +23,6 @@ public class MessageConfigBean {
     private String successResponseCode = getDefaultSuccessCode();
     private String errorResponseMessage = getDefaultErrorMessage();
     private String successResponseMessage = getDefaultSuceessMessage();
-
-    private Integer currentPage = getDefaultCurrentPage();
-    private Integer pageSize = getDefaultPageSize();
 
     public String getReadCharset() {
         return readCharset;
@@ -91,22 +86,6 @@ public class MessageConfigBean {
 
     public void setSuccessResponseMessage(String successResponseMessage) {
         this.successResponseMessage = successResponseMessage;
-    }
-
-    public Integer getCurrentPage() {
-        return currentPage;
-    }
-
-    public void setCurrentPage(Integer currentPage) {
-        this.currentPage = currentPage;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
     }
 
 }

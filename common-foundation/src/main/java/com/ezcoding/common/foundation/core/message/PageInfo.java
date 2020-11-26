@@ -14,12 +14,17 @@ public class PageInfo implements Cloneable, Serializable {
     /**
      * 当前页码
      */
-    public static int DEFAULT_CURRENT_PAGE = 1;
+    public static final int DEFAULT_CURRENT_PAGE = 1;
 
     /**
      * 每页的条数
      */
-    public static int DEFAULT_PAGE_SIZE = 10;
+    public static final int DEFAULT_PAGE_SIZE = 10;
+
+    /**
+     * 是否搜索全部数量
+     */
+    public static final boolean DEFAULT_SEARCH_COUNT = false;
 
     protected Integer pageSize;
 
@@ -30,9 +35,6 @@ public class PageInfo implements Cloneable, Serializable {
     protected Boolean searchCount;
 
     public PageInfo() {
-        this.searchCount = false;
-        this.pageSize = DEFAULT_PAGE_SIZE;
-        this.currentPage = DEFAULT_CURRENT_PAGE;
     }
 
     public PageInfo(Integer totalItem) {
@@ -40,9 +42,13 @@ public class PageInfo implements Cloneable, Serializable {
     }
 
     public PageInfo(Integer currentPage, Integer pageSize) {
-        this.searchCount = false;
+        this(currentPage, pageSize, DEFAULT_SEARCH_COUNT);
+    }
+
+    public PageInfo(Integer currentPage, Integer pageSize, Boolean searchCount) {
         this.pageSize = pageSize;
         this.currentPage = currentPage;
+        this.searchCount = searchCount;
     }
 
     public Integer getPageSize() {
@@ -72,22 +78,6 @@ public class PageInfo implements Cloneable, Serializable {
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
-    }
-
-    public static int getDefaultCurrentPage() {
-        return DEFAULT_CURRENT_PAGE;
-    }
-
-    public static void setDefaultCurrentPage(int defaultCurrentPage) {
-        DEFAULT_CURRENT_PAGE = defaultCurrentPage;
-    }
-
-    public static int getDefaultPageSize() {
-        return DEFAULT_PAGE_SIZE;
-    }
-
-    public static void setDefaultPageSize(int defaultPageSize) {
-        DEFAULT_PAGE_SIZE = defaultPageSize;
     }
 
     public Boolean getSearchCount() {
