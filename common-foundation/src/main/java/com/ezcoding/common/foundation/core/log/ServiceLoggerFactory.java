@@ -179,12 +179,12 @@ public class ServiceLoggerFactory {
 
         DefaultThreadFactory() {
             group = new ThreadGroup(ServiceLogger.class.getSimpleName());
-            namePrefix = "pool-" + POOL_NUMBER.getAndIncrement() + "-thread-";
+            namePrefix = "serviceLogger-pool-" + POOL_NUMBER.getAndIncrement() + "-thread-";
         }
 
         @Override
-        public Thread newThread(Runnable r) {
-            Thread t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement(), 0);
+        public Thread newThread(Runnable runnable) {
+            Thread t = new Thread(group, runnable, namePrefix + threadNumber.getAndIncrement(), 0);
             t.setDaemon(false);
             t.setPriority(Thread.MIN_PRIORITY);
             return t;

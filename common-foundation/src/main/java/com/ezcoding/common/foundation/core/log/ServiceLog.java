@@ -48,7 +48,7 @@ public @interface ServiceLog {
      *
      * @return 打印方式
      */
-    LogTypeEnum type() default LogTypeEnum.SYNC;
+    LogTypeEnum type() default LogTypeEnum.ASYNC;
 
     /**
      * 是否在返回表达式中用请求参数填充
