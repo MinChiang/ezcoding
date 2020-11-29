@@ -159,17 +159,6 @@ public class StandardResponseEntityFactory<T> {
          */
         BodyBuilder contentType(MediaType contentType);
 
-//        /**
-//         * 返回标准响应消息
-//         *
-//         * @param responseSystemHead 系统头
-//         * @param responseAppHead    应用头
-//         * @param body               响应体
-//         * @param <T>                响应内容泛型
-//         * @return 响应的标准消息
-//         */
-//        <T> StandardResponseEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body);
-
         /**
          * 返回成功标准响应消息
          *

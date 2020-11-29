@@ -1,9 +1,12 @@
 package com.ezcoding.common.web.starter;
 
+import com.ezcoding.common.foundation.core.enums.EnumMappableStrategy;
 import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
+import com.ezcoding.common.foundation.core.enums.JacksonStrategy;
 import com.ezcoding.common.foundation.core.enums.MappingPair;
 import com.ezcoding.common.foundation.core.exception.processor.WebDefaultApplicationExceptionProcessor;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
+import com.ezcoding.common.foundation.starter.ApplicationEnumConfigurer;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationConfigBean;
 import com.ezcoding.common.web.convertor.StandardEnumDeserializer;
 import com.ezcoding.common.web.convertor.StandardEnumSerializer;
@@ -44,7 +47,7 @@ import static org.springframework.util.StringUtils.tokenizeToStringArray;
  */
 @Configuration
 @EnableConfigurationProperties(EzcodingWebConfigBean.class)
-public class WebCommonConfiguration implements InitializingBean {
+public class WebCommonConfiguration implements InitializingBean, ApplicationEnumConfigurer {
 
     @Autowired(required = false)
     private List<ApplicationWebConfigurer> applicationWebConfigurers;
@@ -136,6 +139,11 @@ public class WebCommonConfiguration implements InitializingBean {
     @ConditionalOnMissingBean(UserProxyable.class)
     public UserProxyable userProxy() {
         return new RemoteUserProxy();
+    }
+
+    @Override
+    public void registerEnumStrategy(List<EnumMappableStrategy> strategies) {
+        strategies.add(new JacksonStrategy());
     }
 
 }

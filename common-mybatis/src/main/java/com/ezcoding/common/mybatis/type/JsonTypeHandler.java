@@ -1,6 +1,5 @@
 package com.ezcoding.common.mybatis.type;
 
-import com.ezcoding.common.foundation.util.ObjectMapperUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +21,7 @@ import java.sql.SQLException;
 @MappedTypes(JsonNode.class)
 public class JsonTypeHandler extends BaseTypeHandler<JsonNode> {
 
-    private ObjectMapper objectMapper = ObjectMapperUtils.base();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, JsonNode parameter, JdbcType jdbcType) throws SQLException {

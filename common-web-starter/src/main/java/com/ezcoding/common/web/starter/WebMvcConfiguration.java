@@ -9,7 +9,7 @@ import com.ezcoding.common.foundation.core.exception.processor.ApplicationExcept
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationAutoConfiguration;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationConfigBean;
-import com.ezcoding.common.foundation.util.ObjectMapperUtils;
+import com.ezcoding.common.web.util.ObjectMapperUtils;
 import com.ezcoding.common.web.convertor.EnumToObjectConverter;
 import com.ezcoding.common.web.convertor.ObjectToEnumConverter;
 import com.ezcoding.common.web.jwt.AuthSettings;

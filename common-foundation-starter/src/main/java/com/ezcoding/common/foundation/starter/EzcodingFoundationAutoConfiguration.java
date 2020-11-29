@@ -8,13 +8,9 @@ import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderF
 import com.ezcoding.common.foundation.core.exception.processor.*;
 import com.ezcoding.common.foundation.core.log.*;
 import com.ezcoding.common.foundation.core.message.MessageFactory;
-import com.ezcoding.common.foundation.core.message.MessageTypeEnum;
-import com.ezcoding.common.foundation.core.message.handler.JsonMessageBuilderHandler;
-import com.ezcoding.common.foundation.core.message.io.MessageIoFactory;
 import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeIdProducer;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -43,7 +38,6 @@ import org.springframework.util.ClassUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
 import java.util.*;
 
 import static com.ezcoding.common.foundation.core.exception.ModuleConstants.DEFAULT_APPLICATION_LAYER_MODULE;
@@ -133,7 +127,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
             }
         } else {
             //如果自定义配置为空，则使用默认的配置
-            strategies.add(new JacksonStrategy());
             strategies.add(new SimpleStrategy());
             strategies.add(new MappingStategy());
         }
@@ -244,26 +237,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @Bean("originalUUIDProducer")
     public IdProduceable originalUuidProducer() {
         return OriginalUuidProducer.getInstance();
-    }
-
-    @ConditionalOnMissingBean(MessageIoFactory.class)
-    @ConditionalOnClass()
-    @Bean
-    public MessageIoFactory messageIoFactory(ObjectMapper objectMapper) {
-        MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
-        JsonMessageBuilderHandler jsonMessageBuilderHandler = new JsonMessageBuilderHandler();
-        jsonMessageBuilderHandler.setObjectMapper(objectMapper);
-        MessageIoFactory.configHandler(MessageTypeEnum.JSON, jsonMessageBuilderHandler);
-
-        MessageIoFactory instance = MessageIoFactory.getInstance();
-        instance.setDefaultMessageBuilder(jsonMessageBuilderHandler);
-        instance.setDefaultReadCharset(Charset.forName(message.getReadCharset()));
-        instance.setDefaultWriteCharset(Charset.forName(message.getWriteCharset()));
-
-        instance.setDefaultReadMessageType(MessageTypeEnum.valueOf(message.getReadMessageType()));
-        instance.setDefaultWriteMessageType(MessageTypeEnum.valueOf(message.getWriteMessageType()));
-
-        return instance;
     }
 
     @ConditionalOnMissingBean(AbstractApplicationExceptionManager.class)

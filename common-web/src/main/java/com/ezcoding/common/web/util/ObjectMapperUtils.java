@@ -1,4 +1,4 @@
-package com.ezcoding.common.foundation.util;
+package com.ezcoding.common.web.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
