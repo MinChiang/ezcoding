@@ -2,7 +2,7 @@ package com.ezcoding.common.foundation.core.lock.impl;
 
 import com.ezcoding.common.foundation.core.lock.LockInfo;
 import com.ezcoding.common.foundation.core.lock.LockMetadata;
-import com.ezcoding.common.foundation.core.lock.Lockable;
+import com.ezcoding.common.foundation.core.lock.LockProcessor;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @version 1.0.0
  * @date 2020-11-30 11:40
  */
-public class SimpleLock implements Lockable {
+public class SimpleLock implements LockProcessor {
 
     private final Map<Method, Lock> map = new WeakHashMap<>();
 

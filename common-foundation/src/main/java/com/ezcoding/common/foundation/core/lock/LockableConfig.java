@@ -1,6 +1,6 @@
 package com.ezcoding.common.foundation.core.lock;
 
-import com.ezcoding.common.foundation.core.lock.impl.DefaultLock;
+import com.ezcoding.common.foundation.core.lock.impl.DefaultLockProcessor;
 
 import java.util.Map;
 
@@ -11,21 +11,21 @@ import java.util.Map;
  */
 public class LockableConfig {
 
-    private final Map<Class<? extends Lockable>, Lockable> lockableMap;
-    private final Lockable defaultLockable;
+    private final Map<Class<? extends LockProcessor>, LockProcessor> lockableMap;
+    private final LockProcessor defaultLockProcessor;
 
-    LockableConfig(Map<Class<? extends Lockable>, Lockable> lockableMap,
-                   Lockable defaultLockable) {
+    LockableConfig(Map<Class<? extends LockProcessor>, LockProcessor> lockableMap,
+                   LockProcessor defaultLockProcessor) {
         this.lockableMap = lockableMap;
-        this.defaultLockable = defaultLockable;
+        this.defaultLockProcessor = defaultLockProcessor;
     }
 
-    public Lockable acquireLockable(Class<? extends Lockable> cls) {
-        Lockable lockable = lockableMap.getOrDefault(cls, defaultLockable);
-        if (lockable instanceof DefaultLock) {
-            return ((DefaultLock) lockable).getLock();
+    public LockProcessor acquireLockable(Class<? extends LockProcessor> cls) {
+        LockProcessor lockProcessor = lockableMap.getOrDefault(cls, defaultLockProcessor);
+        if (lockProcessor instanceof DefaultLockProcessor) {
+            return ((DefaultLockProcessor) lockProcessor).getLock();
         }
-        return lockable;
+        return lockProcessor;
     }
 
 }
