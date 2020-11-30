@@ -1,5 +1,7 @@
 package com.ezcoding.common.foundation.core.lock;
 
+import com.ezcoding.common.foundation.core.lock.impl.DefaultLock;
+
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
 
@@ -19,7 +21,7 @@ public @interface StandardLock {
      *
      * @return 锁表达式
      */
-    String key() default "";
+    String key();
 
     /**
      * 锁前缀
@@ -48,5 +50,12 @@ public @interface StandardLock {
      * @return 时间单位
      */
     TimeUnit timeUnit() default TimeUnit.SECONDS;
+
+    /**
+     * 锁默认实现方式
+     *
+     * @return 锁默认实现方式
+     */
+    Class<? extends Lockable> lockClass() default DefaultLock.class;
 
 }

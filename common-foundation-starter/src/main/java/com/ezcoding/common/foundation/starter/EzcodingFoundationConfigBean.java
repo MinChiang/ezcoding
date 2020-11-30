@@ -23,6 +23,9 @@ public class EzcodingFoundationConfigBean {
     @NestedConfigurationProperty
     private LogConfigBean log = new LogConfigBean();
 
+    @NestedConfigurationProperty
+    private LockConfigBean lock = new LockConfigBean();
+
     public MessageConfigBean getMessage() {
         return message;
     }
@@ -53,6 +56,14 @@ public class EzcodingFoundationConfigBean {
 
     public void setLog(LogConfigBean log) {
         this.log = log;
+    }
+
+    public LockConfigBean getLock() {
+        return lock;
+    }
+
+    public void setLock(LockConfigBean lock) {
+        this.lock = lock;
     }
 
 }
