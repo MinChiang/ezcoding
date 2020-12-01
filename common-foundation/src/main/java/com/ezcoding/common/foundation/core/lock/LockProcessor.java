@@ -10,17 +10,19 @@ public interface LockProcessor {
     /**
      * 获取锁
      *
+     * @param lockKey      锁对象
      * @param lockInfo     上锁信息
      * @param lockMetadata 锁元数据
      */
-    boolean lock(LockInfo lockInfo, LockMetadata lockMetadata) throws Exception;
+    boolean lock(String lockKey, LockInfo lockInfo, LockMetadata lockMetadata) throws Exception;
 
     /**
      * 获取锁
      *
+     * @param lockKey      锁对象
      * @param lockInfo     上锁信息
      * @param lockMetadata 锁元数据
      */
-    void unlock(LockInfo lockInfo, LockMetadata lockMetadata) throws Exception;
+    void unlock(String lockKey, LockInfo lockInfo, LockMetadata lockMetadata) throws Exception;
 
 }

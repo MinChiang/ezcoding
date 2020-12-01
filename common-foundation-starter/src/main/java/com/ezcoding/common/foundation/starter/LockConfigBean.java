@@ -1,6 +1,6 @@
 package com.ezcoding.common.foundation.starter;
 
-import com.ezcoding.common.foundation.core.lock.impl.SimpleLock;
+import com.ezcoding.common.foundation.core.lock.impl.SimpleLockProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class LockConfigBean {
     private Boolean enable = true;
 
     private List<String> lockClass = new ArrayList<>();
-    private String defaultLockClass = SimpleLock.class.getName();
+    private String defaultLockClass = SimpleLockProcessor.class.getName();
 
     public Boolean getEnable() {
         return enable;

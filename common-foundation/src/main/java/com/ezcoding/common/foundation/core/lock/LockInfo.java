@@ -9,18 +9,18 @@ import java.lang.reflect.Method;
  */
 public class LockInfo {
 
-    private final Object object;
+    private final Object target;
     private final Method method;
     private final Object[] args;
 
-    public LockInfo(Object object, Method method, Object[] args) {
-        this.object = object;
+    public LockInfo(Object target, Method method, Object[] args) {
+        this.target = target;
         this.method = method;
         this.args = args;
     }
 
-    public Object getObject() {
-        return object;
+    public Object getTarget() {
+        return target;
     }
 
     public Method getMethod() {

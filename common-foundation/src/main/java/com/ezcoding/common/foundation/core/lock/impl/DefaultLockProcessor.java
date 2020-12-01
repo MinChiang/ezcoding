@@ -14,13 +14,13 @@ public class DefaultLockProcessor implements LockProcessor {
     private LockProcessor lockProcessor;
 
     @Override
-    public boolean lock(LockInfo lockInfo, LockMetadata lockMetadata) throws Exception {
-        return this.lockProcessor.lock(lockInfo, lockMetadata);
+    public boolean lock(String lockKey, LockInfo lockInfo, LockMetadata lockMetadata) throws Exception {
+        return this.lockProcessor.lock(lockKey, lockInfo, lockMetadata);
     }
 
     @Override
-    public void unlock(LockInfo lockInfo, LockMetadata lockMetadata) throws Exception {
-        this.lockProcessor.unlock(lockInfo, lockMetadata);
+    public void unlock(String lockKey, LockInfo lockInfo, LockMetadata lockMetadata) throws Exception {
+        this.lockProcessor.unlock(lockKey, lockInfo, lockMetadata);
     }
 
     public LockProcessor getLock() {

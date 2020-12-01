@@ -4,9 +4,8 @@ import com.ezcoding.common.foundation.core.lock.LockInfo;
 import com.ezcoding.common.foundation.core.lock.LockMetadata;
 import com.ezcoding.common.foundation.core.lock.LockProcessor;
 
-import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -15,43 +14,45 @@ import java.util.concurrent.locks.ReentrantLock;
  * @version 1.0.0
  * @date 2020-11-30 11:40
  */
-public class SimpleLock implements LockProcessor {
+public class SimpleLockProcessor implements LockProcessor {
 
-    private final Map<Method, Lock> map = new WeakHashMap<>();
+    private final Map<String, Lock> map = new HashMap<>();
 
     @Override
-    public boolean lock(LockInfo lockInfo, LockMetadata lockMetadata) throws Exception {
-        Lock lock = this.getOrCreate(lockInfo);
+    public boolean lock(String lockKey, LockInfo lockInfo, LockMetadata lockMetadata) throws Exception {
+        Lock lock = this.getOrCreate(lockKey, lockInfo);
         return lock.tryLock(lockMetadata.expireTime, lockMetadata.timeUnit);
     }
 
     @Override
-    public void unlock(LockInfo lockInfo, LockMetadata lockMetadata) throws Exception {
-        Lock lock = this.getLock(lockInfo);
+    public void unlock(String lockKey, LockInfo lockInfo, LockMetadata lockMetadata) throws Exception {
+        Lock lock = this.getLock(lockKey, lockInfo);
         lock.unlock();
     }
 
     /**
      * 获取锁对象
      *
+     * @param lockKey  锁对象
      * @param lockInfo 调用数据
      * @return 锁对象
      */
-    private Lock getLock(LockInfo lockInfo) {
-        return map.get(lockInfo.getMethod());
+    private Lock getLock(String lockKey, LockInfo lockInfo) {
+        return map.get(lockKey);
     }
 
     /**
      * 获取或构建锁对象
      *
+     * @param lockKey  锁对象
      * @param lockInfo 调用数据
      * @return 锁对象
      */
-    private Lock getOrCreate(LockInfo lockInfo) {
-        Lock lock = getLock(lockInfo);
+    private Lock getOrCreate(String lockKey, LockInfo lockInfo) {
+        Lock lock = getLock(lockKey, lockInfo);
         if (lock == null) {
             synchronized (this.map) {
-                lock = map.computeIfAbsent(lockInfo.getMethod(), (key) -> this.createLock(lockInfo));
+                lock = map.computeIfAbsent(lockKey, (key) -> this.createLock(lockKey, lockInfo));
             }
         }
         return lock;
@@ -60,10 +61,11 @@ public class SimpleLock implements LockProcessor {
     /**
      * 创建对象
      *
+     * @param lockKey  锁对象
      * @param lockInfo 调用数据
      * @return 构建的对象
      */
-    private Lock createLock(LockInfo lockInfo) {
+    private Lock createLock(String lockKey, LockInfo lockInfo) {
         return new ReentrantLock();
     }
 

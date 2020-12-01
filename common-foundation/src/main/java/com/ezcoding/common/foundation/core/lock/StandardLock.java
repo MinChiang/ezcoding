@@ -1,5 +1,6 @@
 package com.ezcoding.common.foundation.core.lock;
 
+import com.ezcoding.common.foundation.core.lock.impl.DefaultLockIdentification;
 import com.ezcoding.common.foundation.core.lock.impl.DefaultLockProcessor;
 
 import java.lang.annotation.*;
@@ -63,6 +64,6 @@ public @interface StandardLock {
      *
      * @return 锁默认实现方式
      */
-    Class<? extends LockProcessor> processorClass() default DefaultLockProcessor.class;
+    Class<? extends LockIdentification> identificationClass() default DefaultLockIdentification.class;
 
 }

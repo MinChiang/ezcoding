@@ -14,13 +14,17 @@ public class LockMetadata {
     public final long expireTime;
     public final long waitTime;
     public final TimeUnit timeUnit;
+    public final Class<? extends LockProcessor> processorClass;
+    public final Class<? extends LockIdentification> identificationClass;
 
-    public LockMetadata(String key, String prefix, long expireTime, long waitTime, TimeUnit timeUnit) {
+    public LockMetadata(String key, String prefix, long expireTime, long waitTime, TimeUnit timeUnit, Class<? extends LockProcessor> processorClass, Class<? extends LockIdentification> identificationClass) {
         this.key = key;
         this.prefix = prefix;
         this.expireTime = expireTime;
         this.waitTime = waitTime;
         this.timeUnit = timeUnit;
+        this.processorClass = processorClass;
+        this.identificationClass = identificationClass;
     }
 
 }

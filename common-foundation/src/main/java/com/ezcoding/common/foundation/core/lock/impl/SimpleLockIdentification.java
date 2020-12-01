@@ -1,11 +1,8 @@
 package com.ezcoding.common.foundation.core.lock.impl;
 
 import com.ezcoding.common.foundation.core.lock.LockIdentification;
+import com.ezcoding.common.foundation.core.lock.LockInfo;
 import com.ezcoding.common.foundation.core.lock.LockMetadata;
-import com.ezcoding.common.foundation.core.lock.LockProcessor;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author MinChiang
@@ -14,12 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SimpleLockIdentification implements LockIdentification {
 
-    private Map<String, LockProcessor> map = new ConcurrentHashMap<>();
-
     @Override
-    public LockProcessor find(LockMetadata lockMetadata) {
-
-        return null;
+    public String identify(LockInfo lockInfo, LockMetadata lockMetadata) {
+        String key = lockMetadata.key.isEmpty() ? lockInfo.getMethod().getName() : lockMetadata.key;
+        String prefix = lockMetadata.prefix.isEmpty() ? lockInfo.getTarget().getClass().getName() : lockMetadata.prefix;
+        return key + "#" + prefix;
     }
 
 }
