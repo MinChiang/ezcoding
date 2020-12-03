@@ -13,8 +13,8 @@ public interface LogFormatter {
      * @param expression    表达式
      * @param serviceLogger 方法信息
      * @param target        目标对象
-     * @param objects       参数值
+     * @param args       参数值
      */
-    String format(String expression, ServiceLogger serviceLogger, Object target, Object[] objects);
+    String format(String expression, ServiceLogger serviceLogger, Object target, Object[] args);
 
 }

@@ -11,8 +11,8 @@ import com.ezcoding.common.foundation.core.log.ServiceLogger;
 public class StringLogFormatter implements LogFormatter {
 
     @Override
-    public String format(String expression, ServiceLogger serviceLogger, Object target, Object[] objects) {
-        return String.format(expression, objects);
+    public String format(String expression, ServiceLogger serviceLogger, Object target, Object[] args) {
+        return String.format(expression, args);
     }
 
 }

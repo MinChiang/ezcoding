@@ -1,8 +1,8 @@
 package com.ezcoding.common.foundation.core.lock.impl;
 
 import com.ezcoding.common.foundation.core.lock.LockIdentification;
-import com.ezcoding.common.foundation.core.lock.LockRuntime;
 import com.ezcoding.common.foundation.core.lock.LockMetadata;
+import com.ezcoding.common.foundation.core.lock.LockProcessor;
 
 /**
  * @author MinChiang
@@ -12,9 +12,10 @@ import com.ezcoding.common.foundation.core.lock.LockMetadata;
 public class SimpleLockIdentification implements LockIdentification {
 
     @Override
-    public String identify(LockRuntime lockRuntime, LockMetadata lockMetadata) {
-        String key = lockMetadata.key.isEmpty() ? lockRuntime.getMethod().getName() : lockMetadata.key;
-        String prefix = lockMetadata.prefix.isEmpty() ? lockRuntime.getTarget().getClass().getName() : lockMetadata.prefix;
+    public String identify(LockProcessor lockProcessor) {
+        LockMetadata lockMetadata = lockProcessor.getLockMetadata();
+        String key = lockMetadata.key.isEmpty() ? lockProcessor.getMethod().getName() : lockMetadata.key;
+        String prefix = lockMetadata.prefix.isEmpty() ? lockProcessor.getMethod().getName() : lockMetadata.prefix;
         return key + "#" + prefix;
     }
 

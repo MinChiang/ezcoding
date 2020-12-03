@@ -16,8 +16,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author MinChiang
@@ -66,7 +64,7 @@ public class ServiceLogConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ServiceLoggerFactory serviceLoggerFactory() {
+    public ServiceLoggerFactory serviceLoggerFactory() throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         LogConfigBean logConfig = ezcodingFoundationConfigBean.getLog();
 
         ServiceLoggerFactory serviceLoggerFactory = ServiceLoggerFactory.defaultFactory();
@@ -80,33 +78,18 @@ public class ServiceLogConfiguration {
     /**
      * 实例化
      *
-     * @param classStrings 列表
-     * @param <T>          类型
-     * @return 实例
-     */
-    private <T> List<T> getInstances(List<String> classStrings) {
-        List<T> result = new ArrayList<>();
-        for (String classString : classStrings) {
-            result.add(getInstance(classString));
-        }
-        return result;
-    }
-
-    /**
-     * 实例化
-     *
      * @param classString 列表
      * @param <T>         类型
      * @return 实例
      */
-    private <T> T getInstance(String classString) {
+    private <T> T getInstance(String classString) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         try {
             Class<T> cls = (Class<T>) Class.forName(classString);
             return cls.newInstance();
         } catch (Exception e) {
             LOGGER.error("unable to find or instance class : {}", classString);
+            throw e;
         }
-        return null;
     }
 
 }

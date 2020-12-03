@@ -10,19 +10,21 @@ public interface LockImplement {
     /**
      * 获取锁
      *
-     * @param lockKey      锁对象
-     * @param lockRuntime     上锁信息
-     * @param lockMetadata 锁元数据
+     * @param lockKey       锁对象
+     * @param lockProcessor 锁元数据
+     * @param target        目标对象
+     * @param args          参数值
      */
-    boolean lock(String lockKey, LockRuntime lockRuntime, LockMetadata lockMetadata) throws Exception;
+    boolean lock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args) throws Exception;
 
     /**
      * 获取锁
      *
-     * @param lockKey      锁对象
-     * @param lockRuntime     上锁信息
-     * @param lockMetadata 锁元数据
+     * @param lockKey       锁对象
+     * @param lockProcessor 锁元数据
+     * @param target        目标对象
+     * @param args          参数值
      */
-    void unlock(String lockKey, LockRuntime lockRuntime, LockMetadata lockMetadata) throws Exception;
+    void unlock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args);
 
 }

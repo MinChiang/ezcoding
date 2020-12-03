@@ -10,10 +10,9 @@ public interface LockIdentification {
     /**
      * 获取锁处理对象
      *
-     * @param lockRuntime     上锁信息
-     * @param lockMetadata 元数据
+     * @param lockProcessor 上锁信息
      * @return 锁处理对象
      */
-    String identify(LockRuntime lockRuntime, LockMetadata lockMetadata);
+    String identify(LockProcessor lockProcessor);
 
 }

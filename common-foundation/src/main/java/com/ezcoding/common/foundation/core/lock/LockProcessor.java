@@ -14,21 +14,75 @@ public class LockProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LockProcessor.class);
 
-    private final LockConfig lockConfig;
     private final Method method;
+    private final LockConfig lockConfig;
+
+    private final LockMetadata lockMetadata;
+    private final LockIdentification lockIdentification;
+    private final LockImplement lockImplement;
 
     LockProcessor(LockConfig lockConfig,
                   Method method) {
         this.method = method;
         this.lockConfig = lockConfig;
+
+        //元素据初始化
+        StandardLock standardLock = this.method.getAnnotation(StandardLock.class);
+        this.lockMetadata = new LockMetadata(
+                standardLock.key(),
+                standardLock.prefix(),
+                standardLock.expireTime(),
+                standardLock.waitTime(),
+                standardLock.timeUnit(),
+                standardLock.processorClass(),
+                standardLock.identificationClass()
+        );
+        this.lockIdentification = lockConfig.acquireLockIdentification(this.lockMetadata.identificationClass);
+        this.lockImplement = lockConfig.acquireLockImplement(this.lockMetadata.implementClass);
     }
 
-    public void lock(LockRuntime lockRuntime) {
-
+    /**
+     * 上锁
+     *
+     * @param target 目标对象
+     * @param args   入参
+     * @return 锁元素
+     */
+    public String lock(Object target, Object[] args) throws Exception {
+        String lockKey = lockIdentification.identify(this);
+        lockImplement.lock(lockKey, this, target, args);
+        return lockKey;
     }
 
-    public void unlock(LockRuntime lockRuntime) {
+    /**
+     * 解锁
+     *
+     * @param lockKey 锁标志
+     * @param target  目标对象
+     * @param args    入参
+     */
+    public void unlock(String lockKey, Object target, Object[] args) {
+        lockImplement.unlock(lockKey, this, target, args);
+    }
 
+    public LockConfig getLockConfig() {
+        return lockConfig;
+    }
+
+    public Method getMethod() {
+        return method;
+    }
+
+    public LockMetadata getLockMetadata() {
+        return lockMetadata;
+    }
+
+    public LockIdentification getLockIdentification() {
+        return lockIdentification;
+    }
+
+    public LockImplement getLockImplement() {
+        return lockImplement;
     }
 
 }
