@@ -4,9 +4,6 @@ import com.ezcoding.common.foundation.core.log.impl.EmptyLogFormatter;
 import com.ezcoding.common.foundation.core.log.impl.EmptyLogParser;
 import com.ezcoding.common.foundation.core.log.impl.Slf4jLogPrinter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -16,9 +13,6 @@ public class LogConfigBean {
 
     private Boolean enable = true;
 
-    private List<String> printerClass = new ArrayList<>();
-    private List<String> parserClass = new ArrayList<>();
-    private List<String> formatterClass = new ArrayList<>();
     private String defaultPrinterClass = Slf4jLogPrinter.class.getName();
     private String defaultParserClass = EmptyLogParser.class.getName();
     private String defaultFormatterClass = EmptyLogFormatter.class.getName();
@@ -29,30 +23,6 @@ public class LogConfigBean {
 
     public void setEnable(Boolean enable) {
         this.enable = enable;
-    }
-
-    public List<String> getPrinterClass() {
-        return printerClass;
-    }
-
-    public void setPrinterClass(List<String> printerClass) {
-        this.printerClass = printerClass;
-    }
-
-    public List<String> getParserClass() {
-        return parserClass;
-    }
-
-    public void setParserClass(List<String> parserClass) {
-        this.parserClass = parserClass;
-    }
-
-    public List<String> getFormatterClass() {
-        return formatterClass;
-    }
-
-    public void setFormatterClass(List<String> formatterClass) {
-        this.formatterClass = formatterClass;
     }
 
     public String getDefaultPrinterClass() {

@@ -1,28 +1,34 @@
 package com.ezcoding.common.foundation.core.lock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Method;
+
 /**
  * @author MinChiang
  * @version 1.0.0
- * @date 2020-11-30 9:41
+ * @date 2020-12-01 17:43
  */
-public interface LockProcessor {
+public class LockProcessor {
 
-    /**
-     * 获取锁
-     *
-     * @param lockKey      锁对象
-     * @param lockInfo     上锁信息
-     * @param lockMetadata 锁元数据
-     */
-    boolean lock(String lockKey, LockInfo lockInfo, LockMetadata lockMetadata) throws Exception;
+    private static final Logger LOGGER = LoggerFactory.getLogger(LockProcessor.class);
 
-    /**
-     * 获取锁
-     *
-     * @param lockKey      锁对象
-     * @param lockInfo     上锁信息
-     * @param lockMetadata 锁元数据
-     */
-    void unlock(String lockKey, LockInfo lockInfo, LockMetadata lockMetadata) throws Exception;
+    private final LockConfig lockConfig;
+    private final Method method;
+
+    LockProcessor(LockConfig lockConfig,
+                  Method method) {
+        this.method = method;
+        this.lockConfig = lockConfig;
+    }
+
+    public void lock(LockRuntime lockRuntime) {
+
+    }
+
+    public void unlock(LockRuntime lockRuntime) {
+
+    }
 
 }

@@ -1,9 +1,7 @@
 package com.ezcoding.common.foundation.starter;
 
-import com.ezcoding.common.foundation.core.lock.impl.SimpleLockProcessor;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.ezcoding.common.foundation.core.lock.impl.SimpleLockIdentification;
+import com.ezcoding.common.foundation.core.lock.impl.SimpleLockImplement;
 
 /**
  * @author MinChiang
@@ -14,8 +12,8 @@ public class LockConfigBean {
 
     private Boolean enable = true;
 
-    private List<String> lockClass = new ArrayList<>();
-    private String defaultLockClass = SimpleLockProcessor.class.getName();
+    private String defaultLockImplementClass = SimpleLockImplement.class.getName();
+    private String defaultLockIdentificationClass = SimpleLockIdentification.class.getName();
 
     public Boolean getEnable() {
         return enable;
@@ -25,20 +23,20 @@ public class LockConfigBean {
         this.enable = enable;
     }
 
-    public String getDefaultLockClass() {
-        return defaultLockClass;
+    public String getDefaultLockImplementClass() {
+        return defaultLockImplementClass;
     }
 
-    public void setDefaultLockClass(String defaultLockClass) {
-        this.defaultLockClass = defaultLockClass;
+    public void setDefaultLockImplementClass(String defaultLockImplementClass) {
+        this.defaultLockImplementClass = defaultLockImplementClass;
     }
 
-    public List<String> getLockClass() {
-        return lockClass;
+    public String getDefaultLockIdentificationClass() {
+        return defaultLockIdentificationClass;
     }
 
-    public void setLockClass(List<String> lockClass) {
-        this.lockClass = lockClass;
+    public void setDefaultLockIdentificationClass(String defaultLockIdentificationClass) {
+        this.defaultLockIdentificationClass = defaultLockIdentificationClass;
     }
 
 }

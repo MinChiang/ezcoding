@@ -7,13 +7,13 @@ import java.lang.reflect.Method;
  * @version 1.0.0
  * @date 2020-11-30 11:16
  */
-public class LockInfo {
+public class LockRuntime {
 
     private final Object target;
     private final Method method;
     private final Object[] args;
 
-    public LockInfo(Object target, Method method, Object[] args) {
+    public LockRuntime(Object target, Method method, Object[] args) {
         this.target = target;
         this.method = method;
         this.args = args;

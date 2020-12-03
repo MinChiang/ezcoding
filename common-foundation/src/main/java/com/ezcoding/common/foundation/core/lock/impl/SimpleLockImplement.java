@@ -1,8 +1,8 @@
 package com.ezcoding.common.foundation.core.lock.impl;
 
-import com.ezcoding.common.foundation.core.lock.LockInfo;
+import com.ezcoding.common.foundation.core.lock.LockRuntime;
 import com.ezcoding.common.foundation.core.lock.LockMetadata;
-import com.ezcoding.common.foundation.core.lock.LockProcessor;
+import com.ezcoding.common.foundation.core.lock.LockImplement;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,19 +14,19 @@ import java.util.concurrent.locks.ReentrantLock;
  * @version 1.0.0
  * @date 2020-11-30 11:40
  */
-public class SimpleLockProcessor implements LockProcessor {
+public class SimpleLockImplement implements LockImplement {
 
     private final Map<String, Lock> map = new HashMap<>();
 
     @Override
-    public boolean lock(String lockKey, LockInfo lockInfo, LockMetadata lockMetadata) throws Exception {
-        Lock lock = this.getOrCreate(lockKey, lockInfo);
+    public boolean lock(String lockKey, LockRuntime lockRuntime, LockMetadata lockMetadata) throws Exception {
+        Lock lock = this.getOrCreate(lockKey, lockRuntime);
         return lock.tryLock(lockMetadata.expireTime, lockMetadata.timeUnit);
     }
 
     @Override
-    public void unlock(String lockKey, LockInfo lockInfo, LockMetadata lockMetadata) throws Exception {
-        Lock lock = this.getLock(lockKey, lockInfo);
+    public void unlock(String lockKey, LockRuntime lockRuntime, LockMetadata lockMetadata) throws Exception {
+        Lock lock = this.getLock(lockKey, lockRuntime);
         lock.unlock();
     }
 
@@ -34,10 +34,10 @@ public class SimpleLockProcessor implements LockProcessor {
      * 获取锁对象
      *
      * @param lockKey  锁对象
-     * @param lockInfo 调用数据
+     * @param lockRuntime 调用数据
      * @return 锁对象
      */
-    private Lock getLock(String lockKey, LockInfo lockInfo) {
+    private Lock getLock(String lockKey, LockRuntime lockRuntime) {
         return map.get(lockKey);
     }
 
@@ -45,14 +45,14 @@ public class SimpleLockProcessor implements LockProcessor {
      * 获取或构建锁对象
      *
      * @param lockKey  锁对象
-     * @param lockInfo 调用数据
+     * @param lockRuntime 调用数据
      * @return 锁对象
      */
-    private Lock getOrCreate(String lockKey, LockInfo lockInfo) {
-        Lock lock = getLock(lockKey, lockInfo);
+    private Lock getOrCreate(String lockKey, LockRuntime lockRuntime) {
+        Lock lock = getLock(lockKey, lockRuntime);
         if (lock == null) {
             synchronized (this.map) {
-                lock = map.computeIfAbsent(lockKey, (key) -> this.createLock(lockKey, lockInfo));
+                lock = map.computeIfAbsent(lockKey, (key) -> this.createLock(lockKey, lockRuntime));
             }
         }
         return lock;
@@ -62,10 +62,10 @@ public class SimpleLockProcessor implements LockProcessor {
      * 创建对象
      *
      * @param lockKey  锁对象
-     * @param lockInfo 调用数据
+     * @param lockRuntime 调用数据
      * @return 构建的对象
      */
-    private Lock createLock(String lockKey, LockInfo lockInfo) {
+    private Lock createLock(String lockKey, LockRuntime lockRuntime) {
         return new ReentrantLock();
     }
 

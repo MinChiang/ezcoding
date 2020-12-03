@@ -1,7 +1,7 @@
 package com.ezcoding.common.foundation.core.lock;
 
 import com.ezcoding.common.foundation.core.lock.impl.DefaultLockIdentification;
-import com.ezcoding.common.foundation.core.lock.impl.DefaultLockProcessor;
+import com.ezcoding.common.foundation.core.lock.impl.DefaultLockImplement;
 
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
@@ -57,7 +57,7 @@ public @interface StandardLock {
      *
      * @return 锁默认实现方式
      */
-    Class<? extends LockProcessor> processorClass() default DefaultLockProcessor.class;
+    Class<? extends LockImplement> processorClass() default DefaultLockImplement.class;
 
     /**
      * 锁默认实现方式

@@ -27,6 +27,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -52,6 +53,7 @@ import static org.springframework.util.StringUtils.tokenizeToStringArray;
 @Configuration
 @EnableConfigurationProperties(EzcodingFoundationConfigBean.class)
 @ConditionalOnProperty(prefix = "ezcoding.foundation", name = "enabled", havingValue = "true", matchIfMissing = true)
+@Import({ServiceLogConfiguration.class})
 public class EzcodingFoundationAutoConfiguration implements InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EzcodingFoundationAutoConfiguration.class);
@@ -268,97 +270,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                         register.registerFunctionProcessor(moduleApplicationExceptionManager, defaultProcessor);
                     });
         }
-    }
-
-    @ConditionalOnProperty(prefix = "ezcoding.foundation.log", name = "enabled", havingValue = "true", matchIfMissing = true)
-    @Aspect
-    public static class ServiceLogAspect {
-
-        @Autowired
-        private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
-
-        @Autowired
-        private ServiceLoggerFactory serviceLoggerFactory;
-
-        @Pointcut("@annotation(com.ezcoding.common.foundation.core.log.ServiceLog)")
-        public void doLog() {
-
-        }
-
-        @Around(value = "doLog()")
-        public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-            //实际调用的对象
-            Object target = proceedingJoinPoint.getTarget();
-            //获取参数
-            MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
-            //获取方法
-            Method method = signature.getMethod();
-            ServiceLogger serviceLogger = serviceLoggerFactory.getOrCreate(method);
-
-            //打印入参
-            Object[] args = proceedingJoinPoint.getArgs();
-            serviceLogger.logBefore(target, args);
-
-            //执行业务
-            Object result = proceedingJoinPoint.proceed();
-
-            //打印出参
-            serviceLogger.logAfter(target, result);
-            return result;
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        public ServiceLoggerFactory serviceLoggerFactory() {
-            LogConfigBean logConfig = ezcodingFoundationConfigBean.getLog();
-
-            List<LogFormatter> formatters = getInstances(logConfig.getFormatterClass());
-            List<LogParser> parsers = getInstances(logConfig.getParserClass());
-            List<LogPrinter> printers = getInstances(logConfig.getPrinterClass());
-
-            ServiceLoggerFactory serviceLoggerFactory = ServiceLoggerFactory.defaultFactory();
-            serviceLoggerFactory.addLogFormatters(formatters);
-            serviceLoggerFactory.addLogParsers(parsers);
-            serviceLoggerFactory.addLogPrinters(printers);
-            serviceLoggerFactory.setDefaultLogFormatter(getInstance(logConfig.getDefaultFormatterClass()));
-            serviceLoggerFactory.setDefaultLogParser(getInstance(logConfig.getDefaultParserClass()));
-            serviceLoggerFactory.setDefaultLogPrinter(getInstance(logConfig.getDefaultPrinterClass()));
-
-            return serviceLoggerFactory;
-        }
-
-        /**
-         * 实例化
-         *
-         * @param classStrings 列表
-         * @param <T>          类型
-         * @return 实例
-         */
-        private <T> List<T> getInstances(List<String> classStrings) {
-            List<T> result = new ArrayList<>();
-            for (String classString : classStrings) {
-                result.add(getInstance(classString));
-            }
-            return result;
-        }
-
-        /**
-         * 实例化
-         *
-         * @param classString 列表
-         * @param <T>         类型
-         * @return 实例
-         */
-        private <T> T getInstance(String classString) {
-            try {
-                Class<T> cls = (Class<T>) Class.forName(classString);
-                return cls.newInstance();
-            } catch (Exception e) {
-                LOGGER.error("unable to find or instance class : {}", classString);
-            }
-            return null;
-        }
-
     }
 
 }
