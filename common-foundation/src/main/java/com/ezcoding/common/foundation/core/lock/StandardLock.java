@@ -22,7 +22,7 @@ public @interface StandardLock {
      *
      * @return 锁表达式
      */
-    String key();
+    String key() default "";
 
     /**
      * 锁前缀

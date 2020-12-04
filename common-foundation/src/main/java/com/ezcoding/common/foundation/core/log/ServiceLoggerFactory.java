@@ -1,9 +1,6 @@
 package com.ezcoding.common.foundation.core.log;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 /**
  * @author MinChiang
@@ -12,7 +9,7 @@ import java.util.WeakHashMap;
  */
 public class ServiceLoggerFactory {
 
-    private final Map<Method, ServiceLogger> map = Collections.synchronizedMap(new WeakHashMap<>());
+    //    private final Map<Method, ServiceLogger> map = new ConcurrentHashMap<>();
     private final LogConfig logConfig = new LogConfig();
 
     private ServiceLoggerFactory() {
@@ -35,25 +32,15 @@ public class ServiceLoggerFactory {
         );
     }
 
-    /**
-     * 构建对象
-     *
-     * @param method 调用方法
-     * @return 构建的对象
-     */
-    public ServiceLogger getOrCreate(Method method) {
-        ServiceLogger serviceLogger = map.get(method);
-        if (serviceLogger == null) {
-            synchronized (this.map) {
-                serviceLogger = map.get(method);
-                if (serviceLogger == null) {
-                    serviceLogger = create(method);
-                    map.put(method, serviceLogger);
-                }
-            }
-        }
-        return serviceLogger;
-    }
+//    /**
+//     * 构建对象
+//     *
+//     * @param method 调用方法
+//     * @return 构建的对象
+//     */
+//    public ServiceLogger getOrCreate(Method method) {
+//        return this.map.computeIfAbsent(method, key -> create(method));
+//    }
 
     public void setDefaultLogPrinter(LogPrinter defaultLogPrinter) {
         this.logConfig.setDefaultLogPrinter(defaultLogPrinter);

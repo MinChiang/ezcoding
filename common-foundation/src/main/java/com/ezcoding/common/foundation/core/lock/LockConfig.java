@@ -22,8 +22,8 @@ public class LockConfig {
     private final Map<Class<? extends LockImplement>, LockImplement> lockImplementMap = new ConcurrentHashMap<>();
     private final Map<Class<? extends LockIdentification>, LockIdentification> lockIdentificationMap = new ConcurrentHashMap<>();
 
-    private final LockImplement defaultLockImplement = new SimpleLockImplement();
-    private final LockIdentification defaultLockIdentification = new SimpleLockIdentification();
+    private LockImplement defaultLockImplement = new SimpleLockImplement();
+    private LockIdentification defaultLockIdentification = new SimpleLockIdentification();
 
     /**
      * 获取锁实现类
@@ -68,6 +68,14 @@ public class LockConfig {
             LOGGER.error("unable to find or instance class : {}", cls.getName());
         }
         return defaultInstance;
+    }
+
+    public void setDefaultLockImplement(LockImplement defaultLockImplement) {
+        this.defaultLockImplement = defaultLockImplement;
+    }
+
+    public void setDefaultLockIdentification(LockIdentification defaultLockIdentification) {
+        this.defaultLockIdentification = defaultLockIdentification;
     }
 
 }

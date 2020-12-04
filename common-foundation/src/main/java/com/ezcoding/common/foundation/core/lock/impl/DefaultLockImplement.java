@@ -2,6 +2,7 @@ package com.ezcoding.common.foundation.core.lock.impl;
 
 import com.ezcoding.common.foundation.core.lock.LockImplement;
 import com.ezcoding.common.foundation.core.lock.LockProcessor;
+import com.ezcoding.common.foundation.core.lock.LockResult;
 
 /**
  * @author MinChiang
@@ -13,7 +14,7 @@ public class DefaultLockImplement implements LockImplement {
     private LockImplement lockImplement = new SimpleLockImplement();
 
     @Override
-    public boolean lock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args) throws Exception {
+    public LockResult lock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args) throws Exception {
         return this.lockImplement.lock(lockKey, lockProcessor, target, args);
     }
 

@@ -1,5 +1,6 @@
 package com.ezcoding.common.foundation.starter;
 
+import com.ezcoding.common.foundation.core.constant.AopConstants;
 import com.ezcoding.common.foundation.core.log.ServiceLogger;
 import com.ezcoding.common.foundation.core.log.ServiceLoggerFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
 
@@ -23,6 +25,7 @@ import java.lang.reflect.Method;
  * @date 2020-12-03 11:59
  */
 @Aspect
+@Order(AopConstants.Order.LOG_ORDER)
 @Configuration
 @ConditionalOnProperty(prefix = "ezcoding.foundation.log", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class ServiceLogConfiguration {
@@ -48,10 +51,11 @@ public class ServiceLogConfiguration {
         MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
         //获取方法
         Method method = signature.getMethod();
-        ServiceLogger serviceLogger = serviceLoggerFactory.getOrCreate(method);
+        //获取参数
+        Object[] args = proceedingJoinPoint.getArgs();
 
         //打印入参
-        Object[] args = proceedingJoinPoint.getArgs();
+        ServiceLogger serviceLogger = serviceLoggerFactory.create(method);
         serviceLogger.logBefore(target, args);
 
         //执行业务

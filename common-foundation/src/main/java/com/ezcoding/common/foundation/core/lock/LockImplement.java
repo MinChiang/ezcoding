@@ -15,7 +15,7 @@ public interface LockImplement {
      * @param target        目标对象
      * @param args          参数值
      */
-    boolean lock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args) throws Exception;
+    LockResult lock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args) throws Exception;
 
     /**
      * 获取锁

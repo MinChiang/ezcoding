@@ -3,6 +3,7 @@ package com.ezcoding.common.mybatis.starter;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.ezcoding.common.core.user.UserLoadable;
+import com.ezcoding.common.foundation.core.constant.AopConstants;
 import com.ezcoding.common.mybatis.handler.BaseModelMetaObjectHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @date 2018-07-14 17:08
  */
 @Configuration
-@EnableTransactionManagement(proxyTargetClass = true)
+@EnableTransactionManagement(proxyTargetClass = true, order = AopConstants.Order.TRANSACTION_ORDER)
 public class MybatisPlusAutoConfiguration {
 
     @Autowired(required = false)

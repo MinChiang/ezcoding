@@ -3,6 +3,7 @@ package com.ezcoding.common.foundation.core.lock.impl;
 import com.ezcoding.common.foundation.core.lock.LockImplement;
 import com.ezcoding.common.foundation.core.lock.LockMetadata;
 import com.ezcoding.common.foundation.core.lock.LockProcessor;
+import com.ezcoding.common.foundation.core.lock.LockResult;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,16 +21,21 @@ public class SimpleLockImplement implements LockImplement {
     private final Map<String, Lock> map = Collections.synchronizedMap(new HashMap<>());
 
     @Override
-    public boolean lock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args) throws Exception {
+    public LockResult lock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args) throws Exception {
         Lock lock = this.getOrCreate(lockKey);
         LockMetadata lockMetadata = lockProcessor.getLockMetadata();
-        return lock.tryLock(lockMetadata.expireTime, lockMetadata.timeUnit);
+        if (lock.tryLock(lockMetadata.expireTime, lockMetadata.timeUnit)) {
+            return new LockResult(lockKey);
+        }
+        return new LockResult();
     }
 
     @Override
     public void unlock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args) {
         Lock lock = this.getLock(lockKey);
-        lock.unlock();
+        if (lock != null) {
+            lock.unlock();
+        }
     }
 
     /**

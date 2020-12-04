@@ -48,10 +48,12 @@ public class LockProcessor {
      * @param args   入参
      * @return 锁元素
      */
-    public String lock(Object target, Object[] args) throws Exception {
+    public LockResult lock(Object target, Object[] args) throws Exception {
         String lockKey = lockIdentification.identify(this);
-        lockImplement.lock(lockKey, this, target, args);
-        return lockKey;
+        if (lockKey == null || lockKey.isEmpty()) {
+            return new LockResult();
+        }
+        return lockImplement.lock(lockKey, this, target, args);
     }
 
     /**
