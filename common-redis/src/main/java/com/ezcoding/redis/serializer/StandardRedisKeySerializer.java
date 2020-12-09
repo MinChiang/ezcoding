@@ -12,7 +12,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class StandardRedisKeySerializer implements RedisSerializer<StandardRedisKey> {
 
     protected char nameableModuleSplitterChar = ':';
-    protected String nameableModuleSplitterString = ":";
+    protected String nameableModuleSplitterString = String.valueOf(this.nameableModuleSplitterChar);
 
     @Override
     public byte[] serialize(StandardRedisKey standardRedisKey) throws SerializationException {

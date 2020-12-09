@@ -12,11 +12,12 @@ import org.slf4j.LoggerFactory;
  */
 public class Slf4jLogPrinter implements LogPrinter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Slf4jLogPrinter.class);
+
     @Override
     public void print(String message, ServiceLogger serviceLogger, Object target, Object[] objects) {
-        Logger logger = LoggerFactory.getLogger(target.getClass());
-        if (logger.isInfoEnabled()) {
-            logger.info(message, objects);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info(message, objects);
         }
     }
 

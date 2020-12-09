@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SimpleApplicationExceptionManager extends AbstractApplicationExceptionManager {
 
-    private Map<String, ApplicationExceptionProcessible> processors = new ConcurrentHashMap<>(0);
+    private final Map<String, ApplicationExceptionProcessible> processors = new ConcurrentHashMap<>(0);
 
     public SimpleApplicationExceptionManager(Map<String, ApplicationExceptionProcessible> processors) {
         this.registerProcessors(processors);
