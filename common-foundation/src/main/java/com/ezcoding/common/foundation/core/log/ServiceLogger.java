@@ -65,7 +65,7 @@ public class ServiceLogger {
      */
     public void logBefore(Object target, Object[] args) {
         if (Objects.equals(this.serviceLogMetadata.type, LogTypeEnum.ASYNC)) {
-            CompletableFuture.runAsync(() -> logBeforeSync(target, args), logConfig.getExecutor());
+            CompletableFuture.runAsync(() -> logBeforeSync(target, args), logConfig.acquireExecutor());
         } else {
             logBeforeSync(target, args);
         }
@@ -98,7 +98,7 @@ public class ServiceLogger {
      */
     public void logAfter(Object target, Object result) {
         if (Objects.equals(this.serviceLogMetadata.type, LogTypeEnum.ASYNC)) {
-            CompletableFuture.runAsync(() -> logAfterSync(target, result), logConfig.getExecutor());
+            CompletableFuture.runAsync(() -> logAfterSync(target, result), logConfig.acquireExecutor());
         } else {
             logAfterSync(target, result);
         }

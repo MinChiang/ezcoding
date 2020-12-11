@@ -4,8 +4,8 @@ import com.ezcoding.common.foundation.core.log.impl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -20,14 +20,35 @@ public class LogConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogConfig.class);
 
-    private final Map<Class<? extends LogPrinter>, LogPrinter> logPrinterMap = new ConcurrentHashMap<>();
-    private final Map<Class<? extends LogParser>, LogParser> logParserMap = new ConcurrentHashMap<>();
-    private final Map<Class<? extends LogFormatter>, LogFormatter> logFormatterMap = new ConcurrentHashMap<>();
+    private Map<Class<? extends LogPrinter>, LogPrinter> logPrinterMap = new HashMap<>();
+    private Map<Class<? extends LogParser>, LogParser> logParserMap = new HashMap<>();
+    private Map<Class<? extends LogFormatter>, LogFormatter> logFormatterMap = new HashMap<>();
 
     private LogPrinter defaultLogPrinter = new Slf4jLogPrinter();
     private LogParser defaultLogParser = new EmptyLogParser();
     private LogFormatter defaultLogFormatter = new EmptyLogFormatter();
+
     private Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new DefaultThreadFactory());
+
+    public LogConfig(Map<Class<? extends LogPrinter>, LogPrinter> logPrinterMap, Map<Class<? extends LogParser>, LogParser> logParserMap, Map<Class<? extends LogFormatter>, LogFormatter> logFormatterMap, LogPrinter defaultLogPrinter, LogParser defaultLogParser, LogFormatter defaultLogFormatter, Executor executor) {
+        this.logPrinterMap = logPrinterMap;
+        this.logParserMap = logParserMap;
+        this.logFormatterMap = logFormatterMap;
+        this.defaultLogPrinter = defaultLogPrinter;
+        this.defaultLogParser = defaultLogParser;
+        this.defaultLogFormatter = defaultLogFormatter;
+        this.executor = executor;
+    }
+
+    public LogConfig(LogPrinter defaultLogPrinter, LogParser defaultLogParser, LogFormatter defaultLogFormatter, Executor executor) {
+        this.defaultLogPrinter = defaultLogPrinter;
+        this.defaultLogParser = defaultLogParser;
+        this.defaultLogFormatter = defaultLogFormatter;
+        this.executor = executor;
+    }
+
+    public LogConfig() {
+    }
 
     /**
      * 获取日志打印器
@@ -36,7 +57,7 @@ public class LogConfig {
      * @return 日志打印器实例
      */
     public LogPrinter acquireLogPrinter(Class<? extends LogPrinter> cls) {
-        LogPrinter logPrinter = logPrinterMap.computeIfAbsent(cls, key -> getInstance(key, defaultLogPrinter));
+        LogPrinter logPrinter = logPrinterMap.getOrDefault(cls, defaultLogPrinter);
         if (logPrinter instanceof DefaultLogPrinter) {
             return ((DefaultLogPrinter) logPrinter).getLogPrinter();
         }
@@ -50,7 +71,7 @@ public class LogConfig {
      * @return 日志参数解析实例
      */
     public LogParser acquireLogParser(Class<? extends LogParser> cls) {
-        LogParser logParser = logParserMap.computeIfAbsent(cls, key -> getInstance(key, defaultLogParser));
+        LogParser logParser = logParserMap.getOrDefault(cls, defaultLogParser);
         if (logParser instanceof DefaultLogParser) {
             return ((DefaultLogParser) logParser).getLogParser();
         }
@@ -64,43 +85,20 @@ public class LogConfig {
      * @return 日志打印格式化实例
      */
     public LogFormatter acquireLogFormatter(Class<? extends LogFormatter> cls) {
-        LogFormatter logFormatter = logFormatterMap.computeIfAbsent(cls, key -> getInstance(key, defaultLogFormatter));
+        LogFormatter logFormatter = logFormatterMap.getOrDefault(cls, defaultLogFormatter);
         if (logFormatter instanceof DefaultLogFormatter) {
             return ((DefaultLogFormatter) logFormatter).getLogFormatter();
         }
         return logFormatter;
     }
 
-    public LogPrinter getDefaultLogPrinter() {
-        return defaultLogPrinter;
-    }
-
-    public void setDefaultLogPrinter(LogPrinter defaultLogPrinter) {
-        this.defaultLogPrinter = defaultLogPrinter;
-    }
-
-    public LogParser getDefaultLogParser() {
-        return defaultLogParser;
-    }
-
-    public void setDefaultLogParser(LogParser defaultLogParser) {
-        this.defaultLogParser = defaultLogParser;
-    }
-
-    public LogFormatter getDefaultLogFormatter() {
-        return defaultLogFormatter;
-    }
-
-    public void setDefaultLogFormatter(LogFormatter defaultLogFormatter) {
-        this.defaultLogFormatter = defaultLogFormatter;
-    }
-
-    public Executor getExecutor() {
-        return executor;
-    }
-
-    public void setExecutor(Executor executor) {
-        this.executor = executor;
+    /**
+     * 获取线程执行器
+     *
+     * @return 线程执行器
+     */
+    public Executor acquireExecutor() {
+        return this.executor;
     }
 
     /**
@@ -120,7 +118,7 @@ public class LogConfig {
         return defaultInstance;
     }
 
-    private static class DefaultThreadFactory implements ThreadFactory {
+    protected static class DefaultThreadFactory implements ThreadFactory {
 
         private static final AtomicLong POOL_NUMBER = new AtomicLong(1);
         private final AtomicLong threadNumber = new AtomicLong(1);

@@ -3,6 +3,7 @@ package com.ezcoding.common.foundation.starter;
 import com.ezcoding.common.foundation.core.constant.AopConstants;
 import com.ezcoding.common.foundation.core.log.ServiceLogger;
 import com.ezcoding.common.foundation.core.log.ServiceLoggerFactory;
+import com.ezcoding.common.foundation.util.BeanUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -71,29 +72,15 @@ public class ServiceLogConfiguration {
     public ServiceLoggerFactory serviceLoggerFactory() throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         LogConfigBean logConfig = ezcodingFoundationConfigBean.getLog();
 
-        ServiceLoggerFactory serviceLoggerFactory = ServiceLoggerFactory.defaultFactory();
-        serviceLoggerFactory.setDefaultLogFormatter(getInstance(logConfig.getDefaultFormatterClass()));
-        serviceLoggerFactory.setDefaultLogParser(getInstance(logConfig.getDefaultParserClass()));
-        serviceLoggerFactory.setDefaultLogPrinter(getInstance(logConfig.getDefaultPrinterClass()));
-
-        return serviceLoggerFactory;
-    }
-
-    /**
-     * 实例化
-     *
-     * @param classString 列表
-     * @param <T>         类型
-     * @return 实例
-     */
-    private <T> T getInstance(String classString) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        try {
-            Class<T> cls = (Class<T>) Class.forName(classString);
-            return cls.newInstance();
-        } catch (Exception e) {
-            LOGGER.error("unable to find or instance class : {}", classString);
-            throw e;
-        }
+        return ServiceLoggerFactory
+                .builder()
+                .defaultLogFormatter(BeanUtils.getInstance(logConfig.getDefaultFormatterClass()))
+                .defaultLogParser(BeanUtils.getInstance(logConfig.getDefaultParserClass()))
+                .defaultLogPrinter(BeanUtils.getInstance(logConfig.getDefaultPrinterClass()))
+                .logFormatters(BeanUtils.getInstances(logConfig.getFormatterClass()))
+                .logParsers(BeanUtils.getInstances(logConfig.getParserClass()))
+                .logPrinters(BeanUtils.getInstances(logConfig.getPrinterClass()))
+                .build();
     }
 
 }
