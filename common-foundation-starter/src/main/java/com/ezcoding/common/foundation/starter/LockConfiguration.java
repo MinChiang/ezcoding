@@ -19,6 +19,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author MinChiang
@@ -29,9 +31,9 @@ import java.lang.reflect.Method;
 @Order(AopConstants.Order.LOCK_ORDER)
 @Configuration
 @ConditionalOnProperty(prefix = "ezcoding.foundation.lock", name = "enabled", havingValue = "true", matchIfMissing = true)
-public class ServiceLockConfiguration {
+public class LockConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceLockConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LockConfiguration.class);
 
     @Autowired
     private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
@@ -39,7 +41,7 @@ public class ServiceLockConfiguration {
     @Autowired
     private LockProcessorFactory lockProcessorFactory;
 
-    @Pointcut("@annotation(com.ezcoding.common.foundation.core.log.ServiceLog)")
+    @Pointcut("@annotation(com.ezcoding.common.foundation.core.lock.StandardLock)")
     public void doLock() {
 
     }
@@ -77,11 +79,13 @@ public class ServiceLockConfiguration {
     public LockProcessorFactory lockProcessorFactory() throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         LockConfigBean lockConfigBean = ezcodingFoundationConfigBean.getLock();
 
-        LockProcessorFactory lockProcessorFactory = LockProcessorFactory.defaultFactory();
-        lockProcessorFactory.setDefaultLockIdentification(getInstance(lockConfigBean.getDefaultLockIdentificationClass()));
-        lockProcessorFactory.setDefaultLockImplement(getInstance(lockConfigBean.getDefaultLockImplementClass()));
-
-        return lockProcessorFactory;
+        return LockProcessorFactory
+                .builder()
+                .defaultLockImplement(getInstance(lockConfigBean.getDefaultLockImplementClass()))
+                .defaultLockIdentification(getInstance(lockConfigBean.getDefaultLockIdentificationClass()))
+                .lockImplements(getInstances(lockConfigBean.getLockImplementClass()))
+                .lockIdentifications(getInstances(lockConfigBean.getIdentificationClass()))
+                .build();
     }
 
     /**
@@ -99,6 +103,21 @@ public class ServiceLockConfiguration {
             LOGGER.error("unable to find or instance class : {}", classString);
             throw e;
         }
+    }
+
+    /**
+     * 实例化
+     *
+     * @param classStrings 列表
+     * @param <T>          类型
+     * @return 实例
+     */
+    private <T> List<T> getInstances(List<String> classStrings) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        List<T> result = new ArrayList<>();
+        for (String classString : classStrings) {
+            result.add(getInstance(classString));
+        }
+        return result;
     }
 
 }

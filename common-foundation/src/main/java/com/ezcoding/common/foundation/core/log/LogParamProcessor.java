@@ -1,33 +1,31 @@
 package com.ezcoding.common.foundation.core.log;
 
 import java.lang.reflect.AnnotatedElement;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author MinChiang
  * @version 1.0.0
  * @date 2018-08-04 14:30
  */
-public class ParamLogger {
+public class LogParamProcessor {
 
     private final LogConfig logConfig;
     private final AnnotatedElement annotatedElement;
-
     private final ParamLogMetadata paramLogMetadata;
     private final LogParser parser;
 
-    ParamLogger(LogConfig logConfig,
-                AnnotatedElement annotatedElement) {
+    LogParamProcessor(LogConfig logConfig,
+                      AnnotatedElement annotatedElement) {
         this.logConfig = logConfig;
         this.annotatedElement = annotatedElement;
 
         //元数据初始化
-        ParamLog paramLog = annotatedElement.getAnnotation(ParamLog.class);
+        StandardLogParam standardLogParam = annotatedElement.getAnnotation(StandardLogParam.class);
         this.paramLogMetadata = new ParamLogMetadata(
-                paramLog.expressions(),
-                paramLog.parseClass()
+                standardLogParam.expressions(),
+                standardLogParam.parseClass()
         );
         this.parser = logConfig.acquireLogParser(paramLogMetadata.parseClass);
     }
@@ -39,10 +37,11 @@ public class ParamLogger {
      * @return 解析后的对象
      */
     public List<Object> parse(Object target) {
-        return Arrays
-                .stream(this.paramLogMetadata.expressions)
-                .map(exp -> this.parser.parse(this, target))
-                .collect(Collectors.toList());
+        List<Object> result = new ArrayList<>(this.paramLogMetadata.expressions.length);
+        for (int i = 0; i < this.paramLogMetadata.expressions.length; i++) {
+            result.add(this.parser.parse(this.paramLogMetadata.expressions[i], this.paramLogMetadata, target));
+        }
+        return result;
     }
 
     public ParamLogMetadata getParamLogMetadata() {

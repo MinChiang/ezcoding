@@ -4,11 +4,8 @@ import com.ezcoding.common.foundation.core.lock.impl.DefaultLockIdentification;
 import com.ezcoding.common.foundation.core.lock.impl.DefaultLockImplement;
 import com.ezcoding.common.foundation.core.lock.impl.SimpleLockIdentification;
 import com.ezcoding.common.foundation.core.lock.impl.SimpleLockImplement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author MinChiang
@@ -17,13 +14,21 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class LockConfig {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LockConfig.class);
-
-    private final Map<Class<? extends LockImplement>, LockImplement> lockImplementMap = new ConcurrentHashMap<>();
-    private final Map<Class<? extends LockIdentification>, LockIdentification> lockIdentificationMap = new ConcurrentHashMap<>();
+    private Map<Class<? extends LockImplement>, LockImplement> lockImplementMap;
+    private Map<Class<? extends LockIdentification>, LockIdentification> lockIdentificationMap;
 
     private LockImplement defaultLockImplement = new SimpleLockImplement();
     private LockIdentification defaultLockIdentification = new SimpleLockIdentification();
+
+    public LockConfig(Map<Class<? extends LockImplement>, LockImplement> lockImplementMap, Map<Class<? extends LockIdentification>, LockIdentification> lockIdentificationMap, LockImplement defaultLockImplement, LockIdentification defaultLockIdentification) {
+        this.lockImplementMap = lockImplementMap;
+        this.lockIdentificationMap = lockIdentificationMap;
+        this.defaultLockImplement = defaultLockImplement;
+        this.defaultLockIdentification = defaultLockIdentification;
+    }
+
+    public LockConfig() {
+    }
 
     /**
      * 获取锁实现类
@@ -32,7 +37,7 @@ public class LockConfig {
      * @return 锁实现实例
      */
     public LockImplement acquireLockImplement(Class<? extends LockImplement> cls) {
-        LockImplement lockImplement = lockImplementMap.computeIfAbsent(cls, key -> getInstance(key, defaultLockImplement));
+        LockImplement lockImplement = lockImplementMap.getOrDefault(cls, defaultLockImplement);
         if (lockImplement instanceof DefaultLockImplement) {
             return ((DefaultLockImplement) lockImplement).getLock();
         }
@@ -46,36 +51,11 @@ public class LockConfig {
      * @return 锁id实例
      */
     public LockIdentification acquireLockIdentification(Class<? extends LockIdentification> cls) {
-        LockIdentification lockIdentification = lockIdentificationMap.computeIfAbsent(cls, key -> getInstance(key, defaultLockIdentification));
+        LockIdentification lockIdentification = lockIdentificationMap.getOrDefault(cls, defaultLockIdentification);
         if (lockIdentification instanceof DefaultLockIdentification) {
             return ((DefaultLockIdentification) lockIdentification).getDefaultLockIdentification();
         }
         return lockIdentification;
-    }
-
-    /**
-     * 实例化
-     *
-     * @param cls             需要实例化类
-     * @param <T>             类型
-     * @param defaultInstance 默认取值
-     * @return 实例
-     */
-    private <T> T getInstance(Class<? extends T> cls, T defaultInstance) {
-        try {
-            return cls.newInstance();
-        } catch (Exception e) {
-            LOGGER.error("unable to find or instance class : {}", cls.getName());
-        }
-        return defaultInstance;
-    }
-
-    public void setDefaultLockImplement(LockImplement defaultLockImplement) {
-        this.defaultLockImplement = defaultLockImplement;
-    }
-
-    public void setDefaultLockIdentification(LockIdentification defaultLockIdentification) {
-        this.defaultLockIdentification = defaultLockIdentification;
     }
 
 }

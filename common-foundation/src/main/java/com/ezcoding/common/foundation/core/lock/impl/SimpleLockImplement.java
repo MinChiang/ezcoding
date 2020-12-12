@@ -21,9 +21,8 @@ public class SimpleLockImplement implements LockImplement {
     private final Map<String, Lock> map = Collections.synchronizedMap(new HashMap<>());
 
     @Override
-    public LockResult lock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args) throws Exception {
+    public LockResult lock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args) throws Exception {
         Lock lock = this.getOrCreate(lockKey);
-        LockMetadata lockMetadata = lockProcessor.getLockMetadata();
         if (lock.tryLock(lockMetadata.expireTime, lockMetadata.timeUnit)) {
             return new LockResult(lockKey);
         }

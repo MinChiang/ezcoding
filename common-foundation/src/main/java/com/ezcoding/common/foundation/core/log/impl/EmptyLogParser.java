@@ -1,10 +1,7 @@
 package com.ezcoding.common.foundation.core.log.impl;
 
 import com.ezcoding.common.foundation.core.log.LogParser;
-import com.ezcoding.common.foundation.core.log.ParamLogger;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.ezcoding.common.foundation.core.log.ParamLogMetadata;
 
 /**
  * @author MinChiang
@@ -14,12 +11,8 @@ import java.util.List;
 public class EmptyLogParser implements LogParser {
 
     @Override
-    public List<Object> parse(ParamLogger paramLogger, Object target) {
-        List<Object> result = new ArrayList<>(paramLogger.getParamLogMetadata().getExpressions().length);
-        for (String expression : paramLogger.getParamLogMetadata().getExpressions()) {
-            result.add(target);
-        }
-        return result;
+    public Object parse(String expression, ParamLogMetadata paramLogMetadata, Object target) {
+        return target;
     }
 
 }

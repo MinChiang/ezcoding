@@ -1,7 +1,9 @@
 package com.ezcoding.common.foundation.core.log.impl;
 
+import com.ezcoding.common.foundation.core.log.LogMetadata;
 import com.ezcoding.common.foundation.core.log.LogPrinter;
-import com.ezcoding.common.foundation.core.log.ServiceLogger;
+
+import java.util.List;
 
 /**
  * @author MinChiang
@@ -11,7 +13,7 @@ import com.ezcoding.common.foundation.core.log.ServiceLogger;
 public class SystemLogPrinter implements LogPrinter {
 
     @Override
-    public void print(String message, ServiceLogger serviceLogger, Object target, Object[] objects) {
+    public void print(String message, LogMetadata logMetadata, Object target, List<Object> objects) {
         System.out.println(message);
     }
 

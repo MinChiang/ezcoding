@@ -11,8 +11,8 @@ import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
  */
 public class MetadataConfigBean {
 
-    private Long dataCenterNo;
-    private Long categoryNo;
+    private Long dataCenterNo = 0L;
+    private Long categoryNo = 0L;
 
     private Integer applicationCodeLength = ApplicationLayerModule.getApplicationCodeLength();
     private Character applicationFillChar = ApplicationLayerModule.getApplicationFillChar();

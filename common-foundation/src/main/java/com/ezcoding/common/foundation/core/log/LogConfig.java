@@ -1,8 +1,6 @@
 package com.ezcoding.common.foundation.core.log;
 
 import com.ezcoding.common.foundation.core.log.impl.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,13 +10,13 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
+ * 注意此类设计为运行前确定配置
+ *
  * @author MinChiang
  * @version 1.0.0
  * @date 2020-11-19 14:46
  */
-public class LogConfig {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(LogConfig.class);
+class LogConfig {
 
     private Map<Class<? extends LogPrinter>, LogPrinter> logPrinterMap = new HashMap<>();
     private Map<Class<? extends LogParser>, LogParser> logParserMap = new HashMap<>();
@@ -101,23 +99,6 @@ public class LogConfig {
         return this.executor;
     }
 
-    /**
-     * 实例化
-     *
-     * @param cls             需要实例化类
-     * @param <T>             类型
-     * @param defaultInstance 默认取值
-     * @return 实例
-     */
-    private <T> T getInstance(Class<? extends T> cls, T defaultInstance) {
-        try {
-            return cls.newInstance();
-        } catch (Exception e) {
-            LOGGER.error("unable to find or instance class : {}", cls.getName());
-        }
-        return defaultInstance;
-    }
-
     protected static class DefaultThreadFactory implements ThreadFactory {
 
         private static final AtomicLong POOL_NUMBER = new AtomicLong(1);
@@ -126,7 +107,7 @@ public class LogConfig {
         private final String namePrefix;
 
         DefaultThreadFactory() {
-            group = new ThreadGroup(ServiceLogger.class.getSimpleName());
+            group = new ThreadGroup(LogProcessor.class.getSimpleName());
             namePrefix = "serviceLogger-pool-" + POOL_NUMBER.getAndIncrement() + "-thread-";
         }
 

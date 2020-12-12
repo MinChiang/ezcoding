@@ -1,7 +1,9 @@
 package com.ezcoding.common.foundation.core.log.impl;
 
 import com.ezcoding.common.foundation.core.log.LogFormatter;
-import com.ezcoding.common.foundation.core.log.ServiceLogger;
+import com.ezcoding.common.foundation.core.log.LogMetadata;
+
+import java.util.List;
 
 /**
  * @author MinChiang
@@ -11,7 +13,7 @@ import com.ezcoding.common.foundation.core.log.ServiceLogger;
 public class EmptyLogFormatter implements LogFormatter {
 
     @Override
-    public String format(String expression, ServiceLogger serviceLogger, Object target, Object[] args) {
+    public String format(String expression, LogMetadata logMetadata, Object target, List<Object> args) {
         return expression;
     }
 

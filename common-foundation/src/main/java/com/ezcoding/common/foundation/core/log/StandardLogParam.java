@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER, ElementType.METHOD})
 @Inherited
-public @interface ParamLog {
+public @interface StandardLogParam {
 
     /**
      * 计算表达式

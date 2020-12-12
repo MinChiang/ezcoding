@@ -53,7 +53,7 @@ public class LockProcessor {
         if (lockKey == null || lockKey.isEmpty()) {
             return new LockResult();
         }
-        return lockImplement.lock(lockKey, this, target, args);
+        return lockImplement.lock(lockKey, this.lockMetadata, target, args);
     }
 
     /**
