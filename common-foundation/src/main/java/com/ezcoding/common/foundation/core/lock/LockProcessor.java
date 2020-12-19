@@ -49,9 +49,9 @@ public class LockProcessor {
      * @return 锁元素
      */
     public LockResult lock(Object target, Object[] args) throws Exception {
-        String lockKey = lockIdentification.identify(this);
+        String lockKey = lockIdentification.identify(lockMetadata, lockConfig, this.method);
         if (lockKey == null || lockKey.isEmpty()) {
-            return new LockResult();
+            return LockResult.lockFail();
         }
         return lockImplement.lock(lockKey, this.lockMetadata, target, args);
     }
@@ -64,7 +64,7 @@ public class LockProcessor {
      * @param args    入参
      */
     public void unlock(String lockKey, Object target, Object[] args) {
-        lockImplement.unlock(lockKey, this, target, args);
+        lockImplement.unlock(lockKey, this.lockMetadata, target, args);
     }
 
     public LockConfig getLockConfig() {

@@ -1,5 +1,7 @@
 package com.ezcoding.common.foundation.core.lock;
 
+import java.lang.reflect.Method;
+
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -10,9 +12,11 @@ public interface LockIdentification {
     /**
      * 获取锁处理对象
      *
-     * @param lockProcessor 上锁信息
+     * @param lockMetadata 上锁信息
+     * @param lockConfig
+     * @param method
      * @return 锁处理对象
      */
-    String identify(LockProcessor lockProcessor);
+    String identify(LockMetadata lockMetadata, LockConfig lockConfig, Method method);
 
 }

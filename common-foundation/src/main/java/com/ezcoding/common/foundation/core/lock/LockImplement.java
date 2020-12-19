@@ -9,21 +9,22 @@ public interface LockImplement {
 
     /**
      * 获取锁
-     *  @param lockKey       锁对象
+     *
+     * @param lockKey      锁对象
      * @param lockMetadata 锁元数据
-     * @param target        目标对象
-     * @param args          参数值
+     * @param target       目标对象
+     * @param args         参数值
      */
     LockResult lock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args) throws Exception;
 
     /**
      * 获取锁
      *
-     * @param lockKey       锁对象
-     * @param lockProcessor 锁元数据
-     * @param target        目标对象
-     * @param args          参数值
+     * @param lockKey      锁对象
+     * @param lockMetadata 锁元数据
+     * @param target       目标对象
+     * @param args         参数值
      */
-    void unlock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args);
+    void unlock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args);
 
 }

@@ -1,8 +1,10 @@
 package com.ezcoding.common.foundation.core.lock.impl;
 
+import com.ezcoding.common.foundation.core.lock.LockConfig;
 import com.ezcoding.common.foundation.core.lock.LockIdentification;
 import com.ezcoding.common.foundation.core.lock.LockMetadata;
-import com.ezcoding.common.foundation.core.lock.LockProcessor;
+
+import java.lang.reflect.Method;
 
 /**
  * @author MinChiang
@@ -12,10 +14,9 @@ import com.ezcoding.common.foundation.core.lock.LockProcessor;
 public class SimpleLockIdentification implements LockIdentification {
 
     @Override
-    public String identify(LockProcessor lockProcessor) {
-        LockMetadata lockMetadata = lockProcessor.getLockMetadata();
-        String key = lockMetadata.key.isEmpty() ? lockProcessor.getMethod().getName() : lockMetadata.key;
-        String prefix = lockMetadata.prefix.isEmpty() ? lockProcessor.getMethod().getName() : lockMetadata.prefix;
+    public String identify(LockMetadata lockMetadata, LockConfig lockConfig, Method method) {
+        String key = lockMetadata.key.isEmpty() ? method.getName() : lockMetadata.key;
+        String prefix = lockMetadata.prefix.isEmpty() ? method.getName() : lockMetadata.prefix;
         return key + "#" + prefix;
     }
 

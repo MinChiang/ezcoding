@@ -1,7 +1,10 @@
 package com.ezcoding.common.foundation.core.lock.impl;
 
+import com.ezcoding.common.foundation.core.lock.LockConfig;
 import com.ezcoding.common.foundation.core.lock.LockIdentification;
-import com.ezcoding.common.foundation.core.lock.LockProcessor;
+import com.ezcoding.common.foundation.core.lock.LockMetadata;
+
+import java.lang.reflect.Method;
 
 /**
  * @author MinChiang
@@ -13,8 +16,8 @@ public class DefaultLockIdentification implements LockIdentification {
     private LockIdentification defaultLockIdentification = new SimpleLockIdentification();
 
     @Override
-    public String identify(LockProcessor lockProcessor) {
-        return defaultLockIdentification.identify(lockProcessor);
+    public String identify(LockMetadata lockMetadata, LockConfig lockConfig, Method method) {
+        return defaultLockIdentification.identify(lockMetadata, lockConfig, method);
     }
 
     public LockIdentification getDefaultLockIdentification() {

@@ -2,7 +2,6 @@ package com.ezcoding.common.foundation.core.lock.impl;
 
 import com.ezcoding.common.foundation.core.lock.LockImplement;
 import com.ezcoding.common.foundation.core.lock.LockMetadata;
-import com.ezcoding.common.foundation.core.lock.LockProcessor;
 import com.ezcoding.common.foundation.core.lock.LockResult;
 
 import java.util.Collections;
@@ -24,13 +23,13 @@ public class SimpleLockImplement implements LockImplement {
     public LockResult lock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args) throws Exception {
         Lock lock = this.getOrCreate(lockKey);
         if (lock.tryLock(lockMetadata.expireTime, lockMetadata.timeUnit)) {
-            return new LockResult(lockKey);
+            return LockResult.lockSuccess(lockKey);
         }
-        return new LockResult();
+        return LockResult.lockFail();
     }
 
     @Override
-    public void unlock(String lockKey, LockProcessor lockProcessor, Object target, Object[] args) {
+    public void unlock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args) {
         Lock lock = this.getLock(lockKey);
         if (lock != null) {
             lock.unlock();

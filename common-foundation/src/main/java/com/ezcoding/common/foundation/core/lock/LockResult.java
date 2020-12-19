@@ -10,22 +10,25 @@ public class LockResult {
     private final boolean lock;
     private final String lockKey;
 
+    private LockResult(boolean lock, String lockKey) {
+        this.lock = lock;
+        this.lockKey = lockKey;
+    }
+
     /**
      * 加锁成功
      *
      * @param lockKey 锁名称
      */
-    public LockResult(String lockKey) {
-        this.lock = true;
-        this.lockKey = lockKey;
+    public static LockResult lockSuccess(String lockKey) {
+        return new LockResult(true, lockKey);
     }
 
     /**
      * 加锁失败
      */
-    public LockResult() {
-        this.lock = false;
-        this.lockKey = null;
+    public static LockResult lockFail() {
+        return new LockResult(false, null);
     }
 
     /**
