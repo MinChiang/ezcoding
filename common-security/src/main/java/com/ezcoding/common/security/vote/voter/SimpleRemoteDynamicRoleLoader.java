@@ -1,11 +1,11 @@
 package com.ezcoding.common.security.vote.voter;
 
+import com.ezcoding.common.foundation.core.message.MessageFactory;
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.MessageFactory;
+import com.ezcoding.common.foundation.util.ResponseUtils;
 import com.ezcoding.common.security.configattribute.DynamicConfigAttribute;
 import com.ezcoding.common.security.metadatasource.DynamicAnnotationSecurityMetadataSource;
-import com.ezcoding.common.web.util.ResponseUtils;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.web.client.RestTemplate;
 
@@ -47,7 +47,7 @@ public class SimpleRemoteDynamicRoleLoader implements DynamicRoleLoadable {
         Collection<ConfigAttribute> attributes = dynamicAnnotationSecurityMetadataSource.getAllConfigAttributes();
         RequestMessage<Collection<ConfigAttribute>> requestMessage = MessageFactory.buildRequestMessage(attributes);
         ResponseMessage<Map<DynamicConfigAttribute, String>> responseMessage = restTemplate.postForObject(this.url, requestMessage, ResponseMessage.class, this.applicationName);
-        return ResponseUtils.checkAndGetResult(responseMessage);
+        return ResponseUtils.checkAndGet(responseMessage);
     }
 
     public String getApplicationName() {
