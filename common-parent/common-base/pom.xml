@@ -15,7 +15,7 @@
         <groupId>com.ezcoding</groupId>
         <artifactId>common-parent</artifactId>
         <version>1.0.0</version>
-        <relativePath>../</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <properties>
