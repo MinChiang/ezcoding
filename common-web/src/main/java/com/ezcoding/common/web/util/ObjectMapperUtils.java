@@ -24,6 +24,7 @@ public class ObjectMapperUtils {
      */
     public static ObjectMapper base() {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
