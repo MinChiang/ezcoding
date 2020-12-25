@@ -13,8 +13,8 @@ public interface LockIdentification {
      * 获取锁处理对象
      *
      * @param lockMetadata 上锁信息
-     * @param lockConfig
-     * @param method
+     * @param lockConfig   锁配置
+     * @param method       方法
      * @return 锁处理对象
      */
     String identify(LockMetadata lockMetadata, LockConfig lockConfig, Method method);
