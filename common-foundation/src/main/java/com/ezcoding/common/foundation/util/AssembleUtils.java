@@ -59,7 +59,8 @@ public class AssembleUtils {
          */
         public T assemble() {
             for (FunctionAndBiConsumerMapping mapping : this.mappings) {
-                mapping.biConsumer.accept(target, mapping.function.apply(src));
+                Object apply = mapping.function.apply(src);
+                mapping.biConsumer.accept(target, apply);
             }
             return target;
         }

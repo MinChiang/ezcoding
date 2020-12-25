@@ -5,8 +5,8 @@ import com.ezcoding.common.foundation.core.lock.LockMetadata;
 import com.ezcoding.common.foundation.core.lock.LockResult;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class SimpleLockImplement implements LockImplement {
 
-    private final Map<String, Lock> map = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, Lock> map = Collections.synchronizedMap(new WeakHashMap<>());
 
     @Override
     public LockResult lock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args) throws Exception {

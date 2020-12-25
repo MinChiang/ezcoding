@@ -13,11 +13,13 @@ import java.lang.reflect.Method;
  */
 public class SimpleLockIdentification implements LockIdentification {
 
+    public static final String SPLITTER = "#";
+
     @Override
     public String identify(LockMetadata lockMetadata, LockConfig lockConfig, Method method) {
         String key = lockMetadata.key.isEmpty() ? method.getName() : lockMetadata.key;
         String prefix = lockMetadata.prefix.isEmpty() ? method.getName() : lockMetadata.prefix;
-        return key + "#" + prefix;
+        return prefix + SPLITTER + key;
     }
 
 }
