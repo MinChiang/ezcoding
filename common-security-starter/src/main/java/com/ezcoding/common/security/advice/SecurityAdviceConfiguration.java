@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.io.IOException;
-
 import static com.ezcoding.common.foundation.core.exception.ExceptionCodeGeneratorConstants.GEN_COMMON_NO_PERMISSION_ERROR;
 
 /**
@@ -29,7 +27,7 @@ public class SecurityAdviceConfiguration {
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = AccessDeniedException.class)
-    public StandardResponseEntity<?> handleAccessDeniedException(AccessDeniedException e) throws IOException {
+    public StandardResponseEntity<?> handleAccessDeniedException(AccessDeniedException e) {
         LOGGER.error("access deny:", e);
         return StandardResponseEntityFactory
                 .ok()
