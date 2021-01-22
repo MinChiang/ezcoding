@@ -9,9 +9,11 @@ import com.ezcoding.common.core.user.model.UserBasicLoginInfo;
  */
 public class EmptyUserLoader implements UserLoadable {
 
+    private static final UserBasicIdentifiable INSTANCE = new UserBasicLoginInfo();
+
     @Override
     public UserBasicIdentifiable load() {
-        return new UserBasicLoginInfo();
+        return INSTANCE;
     }
 
 }

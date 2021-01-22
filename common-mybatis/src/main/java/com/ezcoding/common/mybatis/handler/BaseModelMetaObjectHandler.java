@@ -25,9 +25,6 @@ public class BaseModelMetaObjectHandler implements MetaObjectHandler {
 
     private UserLoadable loader = new EmptyUserLoader();
 
-    public BaseModelMetaObjectHandler() {
-    }
-
     public BaseModelMetaObjectHandler(UserLoadable loader) {
         if (loader != null) {
             this.loader = loader;

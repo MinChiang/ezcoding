@@ -1,7 +1,5 @@
 package com.ezcoding.common.core.user;
 
-import com.ezcoding.common.core.user.LoginInfoPreservable;
-import com.ezcoding.common.core.user.UserExpandIdentifiable;
 import com.ezcoding.common.core.user.model.GenderEnum;
 import com.ezcoding.common.core.user.model.UserStatusEnum;
 

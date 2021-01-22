@@ -1,10 +1,10 @@
 package com.ezcoding.common.web.resolver;
 
 import com.ezcoding.common.core.user.UserBasicIdentifiable;
+import com.ezcoding.common.core.user.UserDetailInformationAvailable;
 import com.ezcoding.common.core.user.UserIdentifiable;
 import com.ezcoding.common.core.user.UserLoadable;
 import com.ezcoding.common.core.user.model.User;
-import com.ezcoding.common.core.user.UserDetailInformationAvailable;
 import com.ezcoding.common.web.user.UserProxy;
 import com.ezcoding.common.web.user.UserProxyable;
 import org.springframework.core.MethodParameter;
@@ -40,6 +40,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
         CurrentUser parameterAnnotation = parameter.getParameterAnnotation(CurrentUser.class);
         //校验当前是否必须含有登陆用户
+        assert parameterAnnotation != null;
         if (parameterAnnotation.required()) {
             if (user == null || user.getId() == null) {
                 throw new RuntimeException("user not login");
@@ -47,6 +48,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         }
 
         if (UserDetailInformationAvailable.class.isAssignableFrom(parameter.getParameterType())) {
+            //获取用户详细信息
             UserDetailInformationAvailable result = null;
             switch (parameterAnnotation.proxy()) {
                 case AUTO:
@@ -64,6 +66,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             }
             return result;
         } else if (UserBasicIdentifiable.class.isAssignableFrom(parameter.getParameterType())) {
+            //获取用户id信息
             return user;
         } else {
             throw new IllegalArgumentException("parameter type must instance of " + UserDetailInformationAvailable.class.getName() + " or " + UserBasicIdentifiable.class.getName());
