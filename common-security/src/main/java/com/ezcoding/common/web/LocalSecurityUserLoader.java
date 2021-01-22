@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
  * @version 1.0.0
  * @date 2020-04-03 14:47
  */
-public class SecurityUserLoader extends EmptyUserLoader {
+public class LocalSecurityUserLoader extends EmptyUserLoader {
 
     @Override
     public UserBasicIdentifiable load() {
