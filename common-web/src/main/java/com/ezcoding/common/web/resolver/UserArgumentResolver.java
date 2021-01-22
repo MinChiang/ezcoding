@@ -4,7 +4,7 @@ import com.ezcoding.common.core.user.UserBasicIdentifiable;
 import com.ezcoding.common.core.user.UserIdentifiable;
 import com.ezcoding.common.core.user.UserLoadable;
 import com.ezcoding.common.core.user.model.User;
-import com.ezcoding.common.core.user.model.UserDetailInformationAvailable;
+import com.ezcoding.common.core.user.UserDetailInformationAvailable;
 import com.ezcoding.common.web.user.UserProxy;
 import com.ezcoding.common.web.user.UserProxyable;
 import org.springframework.core.MethodParameter;

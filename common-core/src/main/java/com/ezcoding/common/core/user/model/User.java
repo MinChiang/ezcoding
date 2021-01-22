@@ -1,5 +1,7 @@
 package com.ezcoding.common.core.user.model;
 
+import com.ezcoding.common.core.user.UserDetailInformationAvailable;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;

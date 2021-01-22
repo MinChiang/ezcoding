@@ -1,6 +1,7 @@
 package com.ezcoding.common.web.user;
 
 import com.ezcoding.common.core.user.UserBasicIdentifiable;
+import com.ezcoding.common.core.user.UserDetailInformationAvailable;
 import com.ezcoding.common.core.user.model.*;
 
 import java.util.Collection;
