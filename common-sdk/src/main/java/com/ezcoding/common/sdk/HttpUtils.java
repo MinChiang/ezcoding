@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -18,12 +19,29 @@ public class HttpUtils {
 
     private static final OkHttpClient INSTANCE;
     private static final ObjectMapper OBJECT_MAPPER;
-    private static final String TYPE = "application/json";
-    private static final String CHARSET = "utf-8";
-    public static final MediaType MEDIA_TYPE = MediaType.get(TYPE + ";charset=" + CHARSET);
+    private static final String TYPE_JSON = "application/json";
+    private static final String CHARSET_UTF8 = "utf-8";
+    private static final MediaType DEFAULT_MEDIA_TYPE = MediaType.get(TYPE_JSON + ";charset=" + CHARSET_UTF8);
+
+    private static final String METHOD_GET = "GET";
+    private static final String METHOD_POST = "POST";
+    private static final String METHOD_DELETE = "DELETE";
+    private static final String METHOD_PUT = "PUT";
+    private static final String METHOD_PATCH = "PATCH";
+
+    private static final String AUTHORIZATION = "Authorization";
 
     static {
-        INSTANCE = new OkHttpClient();
+        INSTANCE = new OkHttpClient.Builder().authenticator(new Authenticator() {
+            @Override
+            public Request authenticate(Route route, Response response) throws IOException {
+                if (response.request().header(AUTHORIZATION) != null) {
+                    return null; // Give up, we've already attempted to authenticate.
+                }
+//                response.request().newBuilder().header(AUTHORIZATION, )
+                return null;
+            }
+        }).build();
         OBJECT_MAPPER = new ObjectMapper();
     }
 
@@ -49,6 +67,33 @@ public class HttpUtils {
     }
 
     /**
+     * 处理请求
+     *
+     * @param method         请求方法
+     * @param url            请求路径
+     * @param parameters     路径参数
+     * @param requestMessage 请求信息
+     * @param <K>            请求类型
+     * @return 请求
+     * @throws IOException io异常
+     */
+    private static <K> Request handleRequest(String url, String method, Map<String, String> parameters, RequestMessage<K> requestMessage) throws IOException {
+        String requestBody = null;
+        if (requestMessage != null) {
+            requestBody = OBJECT_MAPPER.writeValueAsString(requestMessage);
+        }
+        HttpUrl.Builder httpUrlBuilder = HttpUrl.get(url).newBuilder();
+        if (parameters != null && !parameters.isEmpty()) {
+            parameters.forEach(httpUrlBuilder::addQueryParameter);
+        }
+        return new Request
+                .Builder()
+                .method(method, RequestBody.create(DEFAULT_MEDIA_TYPE, requestBody))
+                .url(httpUrlBuilder.build())
+                .build();
+    }
+
+    /**
      * 开始请求
      *
      * @param request 请求体
@@ -65,21 +110,15 @@ public class HttpUtils {
      * 开始post请求
      *
      * @param url            请求路径
+     * @param parameters     请求路径参数
      * @param requestMessage 请求信息
      * @param <K>            请求泛型
      * @param <V>            响应泛型
      * @return 响应信息
      */
-    public static <K, V> ResponseMessage<V> doPostRequest(String url, RequestMessage<K> requestMessage) {
+    public static <K, V> ResponseMessage<V> doPostRequest(String url, Map<String, String> parameters, RequestMessage<K> requestMessage) {
         try {
-            String requestBody = OBJECT_MAPPER.writeValueAsString(Objects.requireNonNull(requestMessage));
-            Request request = new Request
-                    .Builder()
-                    .get()
-                    .post(RequestBody.create(MEDIA_TYPE, requestBody))
-                    .url(url)
-                    .build();
-            return doRequest(request);
+            return doRequest(handleRequest(url, METHOD_POST, parameters, requestMessage));
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
@@ -88,18 +127,14 @@ public class HttpUtils {
     /**
      * 开始get请求
      *
-     * @param url 请求路径
-     * @param <V> 响应泛型
+     * @param url        请求路径
+     * @param parameters 请求路径参数
+     * @param <V>        响应泛型
      * @return 响应信息
      */
-    public static <V> ResponseMessage<V> doGetRequest(String url) {
+    public static <V> ResponseMessage<V> doGetRequest(String url, Map<String, String> parameters) {
         try {
-            Request request = new Request
-                    .Builder()
-                    .get()
-                    .url(url)
-                    .build();
-            return doRequest(request);
+            return doRequest(handleRequest(url, METHOD_GET, parameters, null));
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
@@ -141,7 +176,7 @@ public class HttpUtils {
             Request request = new Request
                     .Builder()
                     .get()
-                    .post(RequestBody.create(MEDIA_TYPE, requestBody))
+                    .post(RequestBody.create(DEFAULT_MEDIA_TYPE, requestBody))
                     .url(url)
                     .build();
             doRequestAsync(request, callbackAction);
