@@ -21,7 +21,7 @@ public class ResponseUtils {
      * @param function        错误提供器
      * @param <E>             错误类型
      */
-    public static <E extends Throwable> void check(ResponseMessage<?> responseMessage, Function<ResponseMessage<?>, E> function) throws E {
+    public static <E extends Throwable> void checkThrowWithResponseMessage(ResponseMessage<?> responseMessage, Function<ResponseMessage<?>, E> function) throws E {
         if (!Optional
                 .ofNullable(responseMessage)
                 .map(message -> message.valid() && message.success())
@@ -39,24 +39,29 @@ public class ResponseUtils {
      * @param function        错误提供器
      * @param <E>             错误类型
      */
-    public static <E extends Throwable> void checkThrowWithContext(ResponseMessage<?> responseMessage, Function<ResponseAppHead, E> function) throws E {
-        if (!Optional
-                .ofNullable(responseMessage)
-                .map(message -> message.valid() && message.success())
-                .orElse(false)) {
-            throw Objects
-                    .requireNonNull(function, "function can not be null")
-                    .apply(responseMessage.getAppHead());
-        }
+    public static <E extends Throwable> void checkThrowWithResponseAppHead(ResponseMessage<?> responseMessage, Function<ResponseAppHead, E> function) throws E {
+        checkThrowWithResponseMessage(responseMessage, msg -> function.apply(msg.getAppHead()));
     }
 
     /**
      * 校验返回信息是否正确，若不正确则抛出异常
+     *
+     * @param responseMessage 返回信息
+     * @param function        错误提供器
+     * @param <E>             错误类型
+     */
+    public static <E extends Throwable> void checkThrowWithReturnMessage(ResponseMessage<?> responseMessage, Function<String, E> function) throws E {
+        checkThrowWithResponseAppHead(responseMessage, appHead -> function.apply(appHead.getReturnMessage()));
+    }
+
+    /**
+     * 校验返回信息是否正确，若不正确则抛出异常
+     * 抛出的是运行时异常
      *
      * @param responseMessage 返回信息
      */
     public static void check(ResponseMessage<?> responseMessage) {
-        checkThrowWithContext(responseMessage, head -> new RuntimeException("response error with code [" + head.getReturnCode() + "] and message [" + head.getReturnMessage() + "]"));
+        checkThrowWithResponseAppHead(responseMessage, head -> new RuntimeException("response error with code [" + head.getReturnCode() + "] and message [" + head.getReturnMessage() + "]"));
     }
 
     /**
@@ -68,8 +73,8 @@ public class ResponseUtils {
      * @param <E>             错误类型
      * @return 信息载体内容
      */
-    public static <T, E extends Throwable> T checkAndGet(ResponseMessage<T> responseMessage, Function<ResponseMessage<?>, E> function) throws E {
-        check(responseMessage, function);
+    public static <T, E extends Throwable> T checkAndGetThrowWithResponseMessage(ResponseMessage<T> responseMessage, Function<ResponseMessage<?>, E> function) throws E {
+        checkThrowWithResponseMessage(responseMessage, function);
         return responseMessage.getBody();
     }
 
@@ -82,13 +87,14 @@ public class ResponseUtils {
      * @param <E>             错误类型
      * @return 信息载体内容
      */
-    public static <T, E extends Throwable> T checkAndGetThrowWithContext(ResponseMessage<T> responseMessage, Function<ResponseAppHead, E> function) throws E {
-        checkThrowWithContext(responseMessage, function);
+    public static <T, E extends Throwable> T checkAndGetThrowWithResponseAppHead(ResponseMessage<T> responseMessage, Function<ResponseAppHead, E> function) throws E {
+        checkThrowWithResponseAppHead(responseMessage, function);
         return responseMessage.getBody();
     }
 
     /**
      * 校验返回信息是否正确，若不正确则抛出异常
+     * 抛出的是运行时异常
      *
      * @param responseMessage 返回信息
      * @param <T>             信息载体内容类型

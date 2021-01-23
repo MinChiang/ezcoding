@@ -4,6 +4,7 @@ import com.ezcoding.common.foundation.core.exception.ApplicationException;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -12,7 +13,7 @@ import java.util.function.Supplier;
  * @version 1.0.0
  * @date 2018-12-29 13:36
  */
-public final class AssertUtils {
+public class AssertUtils {
 
     /**
      * 断言表达式为true
@@ -27,13 +28,26 @@ public final class AssertUtils {
     }
 
     /**
-     * 断言表达式为fasle
+     * 断言表达式为false
      *
      * @param expression        需要断言的表达式
      * @param exceptionSupplier 异常提供器
      */
     public static void mustFalse(boolean expression, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
         if (expression) {
+            throw Optional.of(exceptionSupplier).get().get();
+        }
+    }
+
+    /**
+     * 断言两个对象相等
+     *
+     * @param o1                对象1
+     * @param o2                对象2
+     * @param exceptionSupplier 异常提供器
+     */
+    public static void mustEqual(Object o1, Object o2, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        if (!Objects.equals(o1, o2)) {
             throw Optional.of(exceptionSupplier).get().get();
         }
     }

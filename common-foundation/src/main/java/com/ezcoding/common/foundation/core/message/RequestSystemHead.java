@@ -38,10 +38,10 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
         this.consumerSequenceNo = consumerSequenceNo;
     }
 
-    @Override
-    public boolean valid() {
-        return super.valid() && consumerId != null && consumerSequenceNo != null;
-    }
+//    @Override
+//    public boolean valid() {
+//        return super.valid() && consumerId != null && consumerSequenceNo != null;
+//    }
 
     @Override
     public String toString() {

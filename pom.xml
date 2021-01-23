@@ -21,6 +21,7 @@
     <modules>
         <module>common-parent</module>
         <module>common-bom</module>
+        <module>common-sdk</module>
         <module>common-foundation</module>
         <module>common-core</module>
         <module>common-mybatis</module>

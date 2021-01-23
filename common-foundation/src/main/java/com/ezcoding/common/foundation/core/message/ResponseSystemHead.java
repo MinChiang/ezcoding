@@ -41,10 +41,10 @@ public class ResponseSystemHead extends AbstractSystemHead implements Serializab
         this.providerSequenceNo = providerSequenceNo;
     }
 
-    @Override
-    public boolean valid() {
-        return super.valid() && providerId != null && providerSequenceNo != null;
-    }
+//    @Override
+//    public boolean valid() {
+//        return super.valid() && providerId != null && providerSequenceNo != null;
+//    }
 
     @Override
     public String toString() {
