@@ -91,11 +91,11 @@ public class AssertUtils {
     /**
      * 断言字符串为空
      *
-     * @param text              需要断言的字符串
+     * @param charSequence      需要断言的字符串
      * @param exceptionSupplier 异常提供器
      */
-    public static void mustEmpty(String text, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
-        if (!(text == null || text.isEmpty())) {
+    public static void mustEmpty(CharSequence charSequence, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        if (!(charSequence == null || charSequence.length() == 0)) {
             throw Optional.of(exceptionSupplier).get().get();
         }
     }
@@ -103,11 +103,11 @@ public class AssertUtils {
     /**
      * 断言字符串不能为空
      *
-     * @param text              需要断言的字符串
+     * @param charSequence      需要断言的字符串
      * @param exceptionSupplier 异常提供器
      */
-    public static void mustNotEmpty(String text, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
-        if (text == null || text.isEmpty()) {
+    public static void mustNotEmpty(CharSequence charSequence, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        if (charSequence == null || charSequence.length() == 0) {
             throw Optional.of(exceptionSupplier).get().get();
         }
     }

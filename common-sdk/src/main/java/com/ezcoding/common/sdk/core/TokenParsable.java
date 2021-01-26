@@ -10,17 +10,15 @@ public interface TokenParsable {
     /**
      * 令牌是否过期
      *
-     * @param token 令牌
      * @return 是否过期
      */
-    boolean isTokenExpired(String token);
+    boolean isTokenExpired();
 
     /**
      * 解析令牌
      *
-     * @param token 令牌
      * @return 解析内容
      */
-    UserAuthentication parseToken(String token);
+    UserAuthentication acquireUserAuthentication();
 
 }

@@ -1,8 +1,11 @@
 package com.ezcoding.common.sdk.core;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 
+import java.security.KeyPair;
 import java.security.PublicKey;
+import java.util.*;
 
 /**
  * @author MinChiang
@@ -11,43 +14,55 @@ import java.security.PublicKey;
  */
 public class TokenHelper implements TokenParsable {
 
-    private PublicKey publicKey;
-    private JwtParser jwtParser;
+    public static final String PRINCIPAL = "principal";
+    public static final String DETAIL = "detail";
+    public static final String AUTHORITIES = "authorities";
 
-    public TokenHelper(PublicKey publicKey) {
+    private final PublicKey publicKey;
+    private final String rawToken;
+
+    private Date expireTime;
+    private UserAuthentication userAuthentication;
+
+    public TokenHelper(PublicKey publicKey, String rawToken) {
         this.publicKey = publicKey;
-        buildParser();
+        this.rawToken = rawToken;
+        init();
+
     }
 
     @Override
-    public boolean isTokenExpired(String token) {
-//        return this.jwtParser.parse(token).getBody().
+    public boolean isTokenExpired() {
         return false;
     }
 
     @Override
-    public UserAuthentication parseToken(String token) {
-//        jwtParser.parse(token, )
-        return null;
+    public UserAuthentication acquireUserAuthentication() {
+        return this.userAuthentication;
     }
 
     /**
      * 获取解析器
      */
-    private void buildParser() {
-        this.jwtParser = Jwts
+    private void init() {
+        this.userAuthentication = Jwts
                 .parserBuilder()
                 .setSigningKey(this.publicKey)
-                .build();
+                .build()
+                .parse(this.rawToken, new UserAuthenticationJwtHandler());
     }
 
     private static class UserAuthenticationJwtHandler extends JwtHandlerAdapter<UserAuthentication> {
 
         @Override
         public UserAuthentication onClaimsJws(Jws<Claims> jws) {
-//            Claims body = jws.getBody();
-//            body.get()
-            return null;
+            Claims body = jws.getBody();
+            Long principal = body.get(PRINCIPAL, Long.class);
+            List<String> list = body.get(AUTHORITIES, List.class);
+            Map<String, Object> map = body.get(DETAIL, Map.class);
+
+            return new UserAuthentication(principal, null, null, Collections.emptyList(), new HashMap<>());
+
         }
 
     }
