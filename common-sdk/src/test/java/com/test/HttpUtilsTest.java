@@ -4,7 +4,7 @@ import com.ezcoding.common.foundation.core.message.MessageFactory;
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.util.ResponseUtils;
-import com.ezcoding.common.sdk.HttpUtils;
+import com.ezcoding.common.sdk.util.HttpUtils;
 import org.junit.Test;
 
 /**

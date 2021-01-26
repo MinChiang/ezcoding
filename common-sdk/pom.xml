@@ -46,5 +46,9 @@
             <groupId>com.ezcoding</groupId>
             <artifactId>common-foundation</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ezcoding</groupId>
+            <artifactId>common-core</artifactId>
+        </dependency>
     </dependencies>
 </project>

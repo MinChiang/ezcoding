@@ -1,4 +1,4 @@
-package com.ezcoding.common.sdk;
+package com.ezcoding.common.sdk.util;
 
 import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
