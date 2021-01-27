@@ -17,7 +17,7 @@ public class KeyUtilsTest {
 
     @Test
     public void getPublicKey() throws Exception {
-        File file = new File("D:\\workspace\\ezcoding_distribution\\common-sdk\\src\\test\\resources\\rsa_public_key.pem");
+        File file = new File("D:\\workspace\\ezcoding_distribution\\common-sdk\\src\\test\\resources\\jwtRS256.key.pub");
         PublicKey publicKey = KeyUtils.acquirePublicKey(file);
         System.out.println(publicKey.getFormat());
 

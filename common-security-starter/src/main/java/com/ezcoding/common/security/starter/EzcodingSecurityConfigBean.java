@@ -1,7 +1,6 @@
 package com.ezcoding.common.security.starter;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * @author MinChiang
@@ -17,10 +16,8 @@ public class EzcodingSecurityConfigBean {
 
     public static final String DYNAMIC_ROLE_LOAD_YAML = "role";
 
-    @NestedConfigurationProperty
     private String privateKey = PRIVATE_KEY_PATH;
 
-    @NestedConfigurationProperty
     private String publicKey = PUBLIC_KEY_PATH;
 
     private String defaultFailureUrl;
