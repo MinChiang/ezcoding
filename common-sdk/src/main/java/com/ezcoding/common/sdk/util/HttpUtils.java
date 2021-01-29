@@ -86,11 +86,12 @@ public class HttpUtils {
         if (parameters != null && !parameters.isEmpty()) {
             parameters.forEach(httpUrlBuilder::addQueryParameter);
         }
-        return new Request
-                .Builder()
-                .method(method, RequestBody.create(DEFAULT_MEDIA_TYPE, requestBody))
-                .url(httpUrlBuilder.build())
-                .build();
+
+        Request.Builder requestBuilder = new Request.Builder().url(httpUrlBuilder.build());
+        if (requestBody != null) {
+            requestBuilder.method(method, RequestBody.create(DEFAULT_MEDIA_TYPE, requestBody));
+        }
+        return requestBuilder.build();
     }
 
     /**

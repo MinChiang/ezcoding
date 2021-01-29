@@ -7,6 +7,11 @@ package com.ezcoding.common.sdk.core;
  */
 public interface UrlConstants {
 
+    char PATH_SPLIT = '/';
     String OAUTH_PUBLIC_KEY = "/oauth/public_key";
+
+    static String formatUrl(String baseUrl, String relativePath) {
+        return baseUrl + relativePath;
+    }
 
 }

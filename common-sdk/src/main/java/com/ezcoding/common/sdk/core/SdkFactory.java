@@ -16,7 +16,7 @@ public class SdkFactory {
 
     static {
         SdkConfig local = new SdkConfig();
-        local.setBaseUrl("http://127.0.0.1");
+        local.setBaseUrl("http://127.0.0.1:8081");
 
         SdkConfig dev = new SdkConfig();
         dev.setBaseUrl("http://dev.ezcoding.com");
@@ -44,8 +44,7 @@ public class SdkFactory {
         if (sdkConfig == null) {
             throw new RuntimeException("can not find enviroment: [" + enviroment.toString() + "]");
         }
-
-
+        return new Sdk(sdkConfig);
     }
 
 }
