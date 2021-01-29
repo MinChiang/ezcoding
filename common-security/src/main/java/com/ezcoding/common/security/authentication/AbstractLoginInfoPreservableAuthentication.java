@@ -18,9 +18,6 @@ import java.util.Map;
  */
 public abstract class AbstractLoginInfoPreservableAuthentication extends AbstractAuthenticationToken {
 
-    public static final String LOGIN_TYPE_KEY = "loginType";
-    public static final String DEVICE_TYPE_KEY = "deviceType";
-
     /**
      * 登录类型
      */
@@ -71,7 +68,6 @@ public abstract class AbstractLoginInfoPreservableAuthentication extends Abstrac
 
     public void setLoginType(LoginRegisterTypeEnum loginType) {
         this.loginType = loginType;
-        this.addAdditionalInformation(LOGIN_TYPE_KEY, loginType);
     }
 
     public DeviceTypeEnum getDeviceType() {
@@ -80,7 +76,6 @@ public abstract class AbstractLoginInfoPreservableAuthentication extends Abstrac
 
     public void setDeviceType(DeviceTypeEnum deviceType) {
         this.deviceType = deviceType;
-        this.addAdditionalInformation(DEVICE_TYPE_KEY, deviceType);
     }
 
 }

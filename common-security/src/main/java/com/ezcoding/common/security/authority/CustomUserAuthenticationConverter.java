@@ -3,12 +3,11 @@ package com.ezcoding.common.security.authority;
 import com.ezcoding.common.core.user.model.DeviceTypeEnum;
 import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
 import com.ezcoding.common.foundation.core.enums.EnumMappableUtils;
-import com.ezcoding.common.security.authentication.AbstractLoginInfoPreservableAuthentication;
 import com.ezcoding.common.security.authentication.UserAuthentication;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
+import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -18,27 +17,41 @@ import java.util.*;
  * @version 1.0.0
  * @date 2019-05-29 14:14
  */
-public class CustomUserAuthenticationConverter implements UserAuthenticationConverter {
+public class CustomUserAuthenticationConverter extends DefaultUserAuthenticationConverter {
 
     private static final char UNDERSCORE = '_';
-
-    private final String PRINCIPAL = "principal";
-    private final String DETAIL = "detail";
+    private static final String PRINCIPAL = "principal";
+    private static final String DETAIL = "detail";
+    private static final String LOGIN_TYPE = "login_type";
+    private static final String DEVICE_TYPE = "device_type";
 
     @Override
     public Map<String, ?> convertUserAuthentication(Authentication authentication) {
+        Map<String, Object> response = new LinkedHashMap<>();
+
+        // 用户基本信息
         Object principal;
+        int loginType;
+        int deviceType;
         if (authentication instanceof UserAuthentication) {
             UserAuthentication userAuthentication = (UserAuthentication) authentication;
             principal = userAuthentication.getPrincipal();
+            loginType = Optional.ofNullable(userAuthentication.getLoginType()).orElse(LoginRegisterTypeEnum.UNKNOWN).getId();
+            deviceType = Optional.ofNullable(userAuthentication.getDeviceType()).orElse(DeviceTypeEnum.UNKNOWN).getId();
+            response.put(PRINCIPAL, principal);
+            response.put(LOGIN_TYPE, loginType);
+            response.put(DEVICE_TYPE, deviceType);
         } else {
             principal = authentication.getName();
+            response.put(PRINCIPAL, principal);
         }
 
-        Map<String, Object> response = new LinkedHashMap<>();
+        // 权限列表
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put(AUTHORITIES, AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
         }
+
+        // 额外信息
         Object details = authentication.getDetails();
         if (details != null) {
             if (details instanceof Map) {
@@ -46,7 +59,6 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
             }
             response.put(DETAIL, details);
         }
-        response.put(PRINCIPAL, principal);
 
         return response;
     }
@@ -59,7 +71,7 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
      */
     protected Map<String, Object> convertUserDetails(Map<?, ?> map) {
         Map<String, Object> result = new HashMap<>();
-        map.forEach((key, value) -> result.put(camelCaseTolowerUnderscore(key.toString()), value));
+        map.forEach((key, value) -> result.put(camelCaseToLowerUnderscore(key.toString()), value));
         return result;
     }
 
@@ -69,7 +81,7 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
      * @param camelCase 驼峰形式的字符串
      * @return 下划线形式的字符串
      */
-    protected static String camelCaseTolowerUnderscore(String camelCase) {
+    protected static String camelCaseToLowerUnderscore(String camelCase) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < camelCase.length(); i++) {
             char c = camelCase.charAt(i);
@@ -86,25 +98,21 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
     public Authentication extractAuthentication(Map<String, ?> map) {
         if (map.containsKey(PRINCIPAL)) {
             Object principal = map.get(PRINCIPAL);
-            Collection<? extends GrantedAuthority> authorities = getAuthorities(map);
-            Object details = null;
-            LoginRegisterTypeEnum loginType = LoginRegisterTypeEnum.UNKNOWN;
-            DeviceTypeEnum deviceType = DeviceTypeEnum.UNKNOWN;
 
-            if (map.containsKey(DETAIL)) {
-                Map<String, Object> content = this.extractUserDetails((Map<String, ?>) map.get(DETAIL));
-                loginType = EnumMappableUtils.map(content.get(AbstractLoginInfoPreservableAuthentication.LOGIN_TYPE_KEY), LoginRegisterTypeEnum.class);
-                deviceType = EnumMappableUtils.map(content.get(AbstractLoginInfoPreservableAuthentication.DEVICE_TYPE_KEY), DeviceTypeEnum.class);
-                details = content;
-            }
+            LoginRegisterTypeEnum loginType = Optional.ofNullable(map.get(LOGIN_TYPE)).map(type -> EnumMappableUtils.map(type, LoginRegisterTypeEnum.class)).orElse(LoginRegisterTypeEnum.UNKNOWN);
+            DeviceTypeEnum deviceType = Optional.ofNullable(map.get(DEVICE_TYPE)).map(type -> EnumMappableUtils.map(type, DeviceTypeEnum.class)).orElse(DeviceTypeEnum.UNKNOWN);
+            Map<String, Object> details = Optional.ofNullable((Map<String, ?>) map.get(DETAIL)).map(this::extractUserDetails).orElseGet(HashMap::new);
+            Collection<? extends GrantedAuthority> authorities = extractAuthorities(map);
 
             UserAuthentication userAuthentication = new UserAuthentication(Long.valueOf(principal.toString()), authorities, true);
             userAuthentication.setLoginType(loginType);
             userAuthentication.setDeviceType(deviceType);
             userAuthentication.setDetails(details);
             return userAuthentication;
+        } else {
+            // 以默认方式读取凭证数据
+            return super.extractAuthentication(map);
         }
-        return null;
     }
 
     /**
@@ -149,7 +157,7 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
      * @param map 权限来源
      * @return 用户所拥有的权限列表
      */
-    private Collection<? extends GrantedAuthority> getAuthorities(Map<String, ?> map) {
+    protected Collection<? extends GrantedAuthority> extractAuthorities(Map<String, ?> map) {
         if (!map.containsKey(AUTHORITIES)) {
             return new ArrayList<>(0);
         }
@@ -161,7 +169,7 @@ public class CustomUserAuthenticationConverter implements UserAuthenticationConv
             return AuthorityUtils.commaSeparatedStringToAuthorityList(StringUtils
                     .collectionToCommaDelimitedString((Collection<?>) authorities));
         }
-        throw new IllegalArgumentException("authority list is uncorrect");
+        throw new IllegalArgumentException("authority list is incorrect");
     }
 
 }
