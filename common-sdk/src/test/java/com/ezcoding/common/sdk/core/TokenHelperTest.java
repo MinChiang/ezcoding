@@ -1,6 +1,6 @@
 package com.ezcoding.common.sdk.core;
 
-import com.ezcoding.common.sdk.util.KeyUtils;
+import com.ezcoding.common.foundation.util.PublicKeyUtils;
 import org.junit.Test;
 
 import java.io.File;
@@ -18,11 +18,11 @@ public class TokenHelperTest {
     @Test
     public void acquireUserAuthentication() throws Exception {
         File file = new File("D:\\workspace\\ezcoding_distribution\\common-sdk\\src\\test\\resources\\jwtRS256.key.pub");
-        PublicKey publicKey = KeyUtils.acquirePublicKey(file);
+        PublicKey publicKey = PublicKeyUtils.acquirePublicKey(file);
         System.out.println(publicKey.getFormat());
 
-        TokenHelper tokenHelper = new TokenHelper(publicKey, TOKEN);
-        UserAuthentication userAuthentication = tokenHelper.acquireUserAuthentication();
+        JwtToken jwtToken = new JwtToken(publicKey, TOKEN);
+        UserAuthentication userAuthentication = jwtToken.acquireUserAuthentication();
     }
 
 }

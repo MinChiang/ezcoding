@@ -1,4 +1,4 @@
-package com.ezcoding.common.sdk.util;
+package com.ezcoding.common.foundation.util;
 
 import sun.misc.BASE64Decoder;
 
@@ -15,10 +15,27 @@ import java.security.spec.X509EncodedKeySpec;
  * @version 1.0.0
  * @date 2021-01-26 18:12
  */
-public class KeyUtils {
+public class PublicKeyUtils {
 
-    public static final String BEGIN_KEY = "-----BEGIN PUBLIC KEY-----";
-    public static final String END_KEY = "-----END PUBLIC KEY-----";
+    public static final String BEGIN_KEY = "-----BEGIN PUBLIC KEY-----\r\n";
+    public static final String END_KEY = "\r\n-----END PUBLIC KEY-----";
+
+    /**
+     * 去除原生公钥的首位注解
+     *
+     * @param rawKey 原生公钥
+     * @return 处理后的公钥
+     */
+    public static String removePrefixAndSuffix(String rawKey) {
+        rawKey = rawKey.trim();
+        if (rawKey.startsWith(BEGIN_KEY)) {
+            rawKey = rawKey.substring(BEGIN_KEY.length());
+        }
+        if (rawKey.endsWith(END_KEY)) {
+            rawKey = rawKey.substring(0, rawKey.length() - END_KEY.length());
+        }
+        return rawKey;
+    }
 
     /**
      * 获取公钥
@@ -27,7 +44,7 @@ public class KeyUtils {
      * @return 公钥
      * @throws Exception 异常
      */
-    public static PublicKey acquirePublicKey(String key) throws Exception {
+    private static PublicKey acquirePublicKey(String key) throws Exception {
         byte[] keyBytes;
         keyBytes = (new BASE64Decoder()).decodeBuffer(key);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
@@ -62,13 +79,7 @@ public class KeyUtils {
      */
     public static PublicKey acquirePublicKey(File file) throws Exception {
         String key = acquireRawPublicKey(file);
-        key = key.trim();
-        if (key.startsWith(BEGIN_KEY)) {
-            key = key.substring(BEGIN_KEY.length());
-        }
-        if (key.endsWith(END_KEY)) {
-            key = key.substring(0, key.length() - END_KEY.length());
-        }
+        key = removePrefixAndSuffix(key);
         return acquirePublicKey(key);
     }
 

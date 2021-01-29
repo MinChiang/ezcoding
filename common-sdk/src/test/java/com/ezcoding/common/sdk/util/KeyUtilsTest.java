@@ -1,11 +1,9 @@
 package com.ezcoding.common.sdk.util;
 
+import com.ezcoding.common.foundation.util.PublicKeyUtils;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.security.PublicKey;
 
 /**
@@ -18,7 +16,7 @@ public class KeyUtilsTest {
     @Test
     public void getPublicKey() throws Exception {
         File file = new File("D:\\workspace\\ezcoding_distribution\\common-sdk\\src\\test\\resources\\jwtRS256.key.pub");
-        PublicKey publicKey = KeyUtils.acquirePublicKey(file);
+        PublicKey publicKey = PublicKeyUtils.acquirePublicKey(file);
         System.out.println(publicKey.getFormat());
 
 

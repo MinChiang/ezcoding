@@ -5,7 +5,7 @@ package com.ezcoding.common.sdk.core;
  * @version 1.0.0
  * @date 2021-01-26 10:51
  */
-public interface TokenParsable {
+public interface Token {
 
     /**
      * 令牌是否过期
