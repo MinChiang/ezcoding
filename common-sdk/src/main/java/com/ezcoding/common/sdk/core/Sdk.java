@@ -1,5 +1,6 @@
 package com.ezcoding.common.sdk.core;
 
+import com.ezcoding.common.core.user.model.DeviceTypeEnum;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.util.ResponseUtils;
 import com.ezcoding.common.sdk.util.HttpUtils;
@@ -56,7 +57,35 @@ public class Sdk implements TokenStorable {
         return this.token;
     }
 
-    public Token login() {
+    /**
+     * 根据账号密码登录
+     *
+     * @param account    账号
+     * @param password   密码
+     * @param deviceType 设备类型
+     * @return token
+     */
+    public Token loginByAccountPassword(String account, String password, DeviceTypeEnum deviceType) {
+        if (account == null || account.isEmpty()) {
+            throw new IllegalArgumentException("account and not be empty");
+        }
+        if (password == null || password.isEmpty()) {
+            throw new IllegalArgumentException("password and not be empty");
+        }
+        UserLoginRequestDTO userLoginRequestDTO = UserLoginRequestDTO.createByAccountPassword(account, password, deviceType);
+//        HttpUtils.doPostRequest()
+        return null;
+    }
+
+    /**
+     * 根据手机号密码登录
+     *
+     * @param phone    手机号
+     * @param password 密码
+     * @return token
+     */
+    public Token loginByPhonePassword(String phone, String password) {
+
         return null;
     }
 
