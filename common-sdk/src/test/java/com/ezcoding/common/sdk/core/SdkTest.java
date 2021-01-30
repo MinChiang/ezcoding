@@ -1,6 +1,6 @@
 package com.ezcoding.common.sdk.core;
 
-import com.ezcoding.common.foundation.core.enviroment.Enviroment;
+import com.ezcoding.common.foundation.core.enviroment.Environment;
 import org.junit.Test;
 
 /**
@@ -12,8 +12,7 @@ public class SdkTest {
 
     @Test
     public void sdkTest() {
-        Sdk sdk = SdkFactory.create(Enviroment.LOCAL);
-
+        Sdk sdk = SdkFactory.create(Environment.LOCAL);
     }
 
 }

@@ -7,6 +7,9 @@ import com.ezcoding.common.foundation.util.ResponseUtils;
 import com.ezcoding.common.sdk.util.HttpUtils;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -17,8 +20,10 @@ public class HttpUtilsTest {
     @Test
     public void doPostRequest() {
         RequestMessage<?> requestMessage = MessageFactory.buildRequestMessage(1);
-        ResponseMessage<Long> responseMessage = HttpUtils.doPostRequest("http://localhost:8081/oauth/test2", null, requestMessage);
-        Long id = ResponseUtils.checkAndGet(responseMessage);
+        Map<String, String> map = new HashMap<>();
+        map.put("path", "public_key");
+        ResponseMessage<String> responseMessage = HttpUtils.doPostRequest("http://localhost:8089/oauth/{path}", map, null, requestMessage);
+        String id = ResponseUtils.checkAndGet(responseMessage);
         System.out.println(id);
     }
 

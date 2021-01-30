@@ -31,17 +31,11 @@ public class HttpUtils {
 
     private static final String AUTHORIZATION = "Authorization";
 
+    private static final String LEFT_BRACE = "{";
+    private static final String RIGHT_BRACE = "}";
+
     static {
-        INSTANCE = new OkHttpClient.Builder().authenticator(new Authenticator() {
-            @Override
-            public Request authenticate(Route route, Response response) throws IOException {
-                if (response.request().header(AUTHORIZATION) != null) {
-                    return null; // Give up, we've already attempted to authenticate.
-                }
-//                response.request().newBuilder().header(AUTHORIZATION, )
-                return null;
-            }
-        }).build();
+        INSTANCE = new OkHttpClient.Builder().build();
         OBJECT_MAPPER = new ObjectMapper();
     }
 
@@ -71,16 +65,23 @@ public class HttpUtils {
      *
      * @param method         请求方法
      * @param url            请求路径
+     * @param urlParameters  url路径参数
      * @param parameters     路径参数
      * @param requestMessage 请求信息
      * @param <K>            请求类型
      * @return 请求
      * @throws IOException io异常
      */
-    private static <K> Request handleRequest(String url, String method, Map<String, String> parameters, RequestMessage<K> requestMessage) throws IOException {
+    private static <K> Request handleRequest(String url, String method, Map<String, String> urlParameters, Map<String, String> parameters, RequestMessage<K> requestMessage) throws IOException {
         String requestBody = null;
         if (requestMessage != null) {
             requestBody = OBJECT_MAPPER.writeValueAsString(requestMessage);
+        }
+
+        if (urlParameters != null && !urlParameters.isEmpty()) {
+            for (Map.Entry<String, String> entry : urlParameters.entrySet()) {
+                url = url.replace(LEFT_BRACE + entry.getKey() + RIGHT_BRACE, entry.getValue());
+            }
         }
         HttpUrl.Builder httpUrlBuilder = HttpUrl.get(url).newBuilder();
         if (parameters != null && !parameters.isEmpty()) {
@@ -111,15 +112,16 @@ public class HttpUtils {
      * 开始post请求
      *
      * @param url            请求路径
+     * @param urlParameters  url路径参数
      * @param parameters     请求路径参数
      * @param requestMessage 请求信息
      * @param <K>            请求泛型
      * @param <V>            响应泛型
      * @return 响应信息
      */
-    public static <K, V> ResponseMessage<V> doPostRequest(String url, Map<String, String> parameters, RequestMessage<K> requestMessage) {
+    public static <K, V> ResponseMessage<V> doPostRequest(String url, Map<String, String> urlParameters, Map<String, String> parameters, RequestMessage<K> requestMessage) {
         try {
-            return doRequest(handleRequest(url, METHOD_POST, parameters, requestMessage));
+            return doRequest(handleRequest(url, METHOD_POST, urlParameters, parameters, requestMessage));
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
@@ -128,14 +130,15 @@ public class HttpUtils {
     /**
      * 开始get请求
      *
-     * @param url        请求路径
-     * @param parameters 请求路径参数
-     * @param <V>        响应泛型
+     * @param url           请求路径
+     * @param urlParameters url路径参数
+     * @param parameters    请求路径参数
+     * @param <V>           响应泛型
      * @return 响应信息
      */
-    public static <V> ResponseMessage<V> doGetRequest(String url, Map<String, String> parameters) {
+    public static <V> ResponseMessage<V> doGetRequest(String url, Map<String, String> urlParameters, Map<String, String> parameters) {
         try {
-            return doRequest(handleRequest(url, METHOD_GET, parameters, null));
+            return doRequest(handleRequest(url, METHOD_GET, urlParameters, parameters, null));
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }

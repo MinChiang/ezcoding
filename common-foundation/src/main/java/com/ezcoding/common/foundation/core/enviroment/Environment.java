@@ -5,7 +5,7 @@ package com.ezcoding.common.foundation.core.enviroment;
  * @version 1.0.0
  * @date 2021-01-29 17:56
  */
-public enum Enviroment {
+public enum Environment {
 
     /**
      * 本地

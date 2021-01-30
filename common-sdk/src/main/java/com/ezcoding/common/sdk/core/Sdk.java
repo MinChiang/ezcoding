@@ -9,19 +9,26 @@ import com.ezcoding.common.sdk.util.HttpUtils;
  * @version 1.0.0
  * @date 2021-01-29 15:57
  */
-public class Sdk {
+public class Sdk implements TokenStorable {
 
-    private SdkConfig sdkConfig;
-    private volatile Token token;
-    private volatile String publicKey;
+    private final SdkConfig sdkConfig;
+
+    private transient volatile Token token;
+    private transient volatile String publicKey;
 
     Sdk(SdkConfig sdkConfig) {
         this.sdkConfig = sdkConfig;
-        //获取公钥
+        this.init();
+    }
+
+    /**
+     * 初始化
+     */
+    private void init() {
         synchronized (this) {
-            ResponseMessage<String> responseMessage = HttpUtils.doGetRequest(completeUrl(UrlConstants.OAUTH_PUBLIC_KEY), null);
+            //获取公钥
+            ResponseMessage<String> responseMessage = HttpUtils.doGetRequest(completeUrl(UrlConstants.OAUTH_PUBLIC_KEY), null, null);
             this.publicKey = ResponseUtils.checkAndGet(responseMessage);
-            System.out.println(this.publicKey);
         }
     }
 
@@ -36,7 +43,21 @@ public class Sdk {
      * @return 完整路径
      */
     public String completeUrl(String relativeUrl) {
-        return UrlConstants.formatUrl(this.sdkConfig.getBaseUrl(), relativeUrl);
+        return this.sdkConfig.getBaseUrl() + relativeUrl;
+    }
+
+    @Override
+    public void setToken(Token token) {
+        this.token = token;
+    }
+
+    @Override
+    public Token getToken() {
+        return this.token;
+    }
+
+    public Token login() {
+        return null;
     }
 
 }

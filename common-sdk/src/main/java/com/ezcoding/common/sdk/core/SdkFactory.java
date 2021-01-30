@@ -1,6 +1,6 @@
 package com.ezcoding.common.sdk.core;
 
-import com.ezcoding.common.foundation.core.enviroment.Enviroment;
+import com.ezcoding.common.foundation.core.enviroment.Environment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class SdkFactory {
 
-    public static Map<Enviroment, SdkConfig> SDK_CONFIGS = new HashMap<>();
+    public static Map<Environment, SdkConfig> SDK_CONFIGS = new HashMap<>();
 
     static {
         SdkConfig local = new SdkConfig();
@@ -27,22 +27,22 @@ public class SdkFactory {
         SdkConfig prod = new SdkConfig();
         dev.setBaseUrl("http://prod.ezcoding.com");
 
-        SDK_CONFIGS.put(Enviroment.LOCAL, local);
-        SDK_CONFIGS.put(Enviroment.DEV, dev);
-        SDK_CONFIGS.put(Enviroment.TEST, test);
-        SDK_CONFIGS.put(Enviroment.PROD, prod);
+        SDK_CONFIGS.put(Environment.LOCAL, local);
+        SDK_CONFIGS.put(Environment.DEV, dev);
+        SDK_CONFIGS.put(Environment.TEST, test);
+        SDK_CONFIGS.put(Environment.PROD, prod);
     }
 
     /**
      * 根据环境获取sdk实例
      *
-     * @param enviroment 环境配置
+     * @param environment 环境配置
      * @return sdk实例
      */
-    public static Sdk create(Enviroment enviroment) {
-        SdkConfig sdkConfig = SDK_CONFIGS.get(enviroment);
+    public static Sdk create(Environment environment) {
+        SdkConfig sdkConfig = SDK_CONFIGS.get(environment);
         if (sdkConfig == null) {
-            throw new RuntimeException("can not find enviroment: [" + enviroment.toString() + "]");
+            throw new RuntimeException("can not find enviroment: [" + environment.toString() + "]");
         }
         return new Sdk(sdkConfig);
     }
