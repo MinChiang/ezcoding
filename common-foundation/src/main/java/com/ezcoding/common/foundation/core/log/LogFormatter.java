@@ -16,6 +16,7 @@ public interface LogFormatter {
      * @param logMetadata 元数据
      * @param target      目标对象
      * @param args        参数值
+     * @return 标准化参数输出
      */
     String format(String expression, LogMetadata logMetadata, Object target, List<Object> args);
 

@@ -9,5 +9,6 @@ public interface UrlConstants {
 
     char PATH_SPLIT = '/';
     String OAUTH_PUBLIC_KEY = "/oauth/public_key";
+    String OAUTH_AUTHORIZE = "/oauth/authorize";
 
 }

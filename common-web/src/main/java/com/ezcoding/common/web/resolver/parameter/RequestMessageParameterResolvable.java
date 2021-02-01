@@ -27,6 +27,7 @@ public interface RequestMessageParameterResolvable {
      * @param parameterAnnotation 方法级注解
      * @param methodParameter     方法参数
      * @return 解析后的报文
+     * @throws Exception 异常
      */
     Object resolve(RequestMessage<JsonNode> requestMessage, StandardParam parameterAnnotation, MethodParameter methodParameter) throws Exception;
 

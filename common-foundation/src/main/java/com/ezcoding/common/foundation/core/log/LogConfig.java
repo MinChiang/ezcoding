@@ -26,7 +26,7 @@ class LogConfig {
     private LogParser defaultLogParser = new EmptyLogParser();
     private LogFormatter defaultLogFormatter = new EmptyLogFormatter();
 
-    private Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new DefaultThreadFactory());
+    private Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2, new DefaultThreadFactory());
 
     public LogConfig(Map<Class<? extends LogPrinter>, LogPrinter> logPrinterMap, Map<Class<? extends LogParser>, LogParser> logParserMap, Map<Class<? extends LogFormatter>, LogFormatter> logFormatterMap, LogPrinter defaultLogPrinter, LogParser defaultLogParser, LogFormatter defaultLogFormatter, Executor executor) {
         this.logPrinterMap = logPrinterMap;
@@ -43,9 +43,6 @@ class LogConfig {
         this.defaultLogParser = defaultLogParser;
         this.defaultLogFormatter = defaultLogFormatter;
         this.executor = executor;
-    }
-
-    public LogConfig() {
     }
 
     /**

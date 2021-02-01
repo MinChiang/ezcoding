@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public class LockConfig {
 
-    private Map<Class<? extends LockImplement>, LockImplement> lockImplementMap;
-    private Map<Class<? extends LockIdentification>, LockIdentification> lockIdentificationMap;
+    private final Map<Class<? extends LockImplement>, LockImplement> lockImplementMap;
+    private final Map<Class<? extends LockIdentification>, LockIdentification> lockIdentificationMap;
 
     private LockImplement defaultLockImplement = new SimpleLockImplement();
     private LockIdentification defaultLockIdentification = new SimpleLockIdentification();
@@ -25,9 +25,6 @@ public class LockConfig {
         this.lockIdentificationMap = lockIdentificationMap;
         this.defaultLockImplement = defaultLockImplement;
         this.defaultLockIdentification = defaultLockIdentification;
-    }
-
-    public LockConfig() {
     }
 
     /**

@@ -1,9 +1,17 @@
 package com.ezcoding.common.sdk.core;
 
 import com.ezcoding.common.core.user.model.DeviceTypeEnum;
+import com.ezcoding.common.foundation.core.message.MessageFactory;
+import com.ezcoding.common.foundation.core.message.RequestMessage;
 import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import com.ezcoding.common.foundation.util.ResponseUtils;
 import com.ezcoding.common.sdk.util.HttpUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import java.io.IOException;
 
 /**
  * @author MinChiang
@@ -16,6 +24,9 @@ public class Sdk implements TokenStorable {
 
     private transient volatile Token token;
     private transient volatile String publicKey;
+
+    private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient.Builder().build();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     Sdk(SdkConfig sdkConfig) {
         this.sdkConfig = sdkConfig;
@@ -65,7 +76,7 @@ public class Sdk implements TokenStorable {
      * @param deviceType 设备类型
      * @return token
      */
-    public Token loginByAccountPassword(String account, String password, DeviceTypeEnum deviceType) {
+    public Token loginByAccountPassword(String account, String password, DeviceTypeEnum deviceType) throws IOException {
         if (account == null || account.isEmpty()) {
             throw new IllegalArgumentException("account and not be empty");
         }
@@ -73,7 +84,12 @@ public class Sdk implements TokenStorable {
             throw new IllegalArgumentException("password and not be empty");
         }
         UserLoginRequestDTO userLoginRequestDTO = UserLoginRequestDTO.createByAccountPassword(account, password, deviceType);
-//        HttpUtils.doPostRequest()
+        RequestMessage<UserLoginRequestDTO> requestMessage = MessageFactory.buildRequestMessage(userLoginRequestDTO);
+        Request request = HttpUtils.handleRequest(completeUrl(UrlConstants.OAUTH_AUTHORIZE), HttpUtils.METHOD_POST, null, null, requestMessage);
+        Response response = OK_HTTP_CLIENT.newCall(request).execute();
+        String location = response.header("Location");
+        ResponseMessage<?> responseMessage = HttpUtils.handleResponse(response);
+        ResponseUtils.check(responseMessage);
         return null;
     }
 

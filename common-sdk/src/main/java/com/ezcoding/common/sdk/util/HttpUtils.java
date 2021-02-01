@@ -17,17 +17,17 @@ import java.util.Objects;
  */
 public class HttpUtils {
 
-    private static final OkHttpClient INSTANCE;
+    private static final OkHttpClient OK_HTTP_CLIENT;
     private static final ObjectMapper OBJECT_MAPPER;
     private static final String TYPE_JSON = "application/json";
     private static final String CHARSET_UTF8 = "utf-8";
-    private static final MediaType DEFAULT_MEDIA_TYPE = MediaType.get(TYPE_JSON + ";charset=" + CHARSET_UTF8);
+    public static final MediaType DEFAULT_MEDIA_TYPE = MediaType.get(TYPE_JSON + ";charset=" + CHARSET_UTF8);
 
-    private static final String METHOD_GET = "GET";
-    private static final String METHOD_POST = "POST";
-    private static final String METHOD_DELETE = "DELETE";
-    private static final String METHOD_PUT = "PUT";
-    private static final String METHOD_PATCH = "PATCH";
+    public static final String METHOD_GET = "GET";
+    public static final String METHOD_POST = "POST";
+    public static final String METHOD_DELETE = "DELETE";
+    public static final String METHOD_PUT = "PUT";
+    public static final String METHOD_PATCH = "PATCH";
 
     private static final String AUTHORIZATION = "Authorization";
 
@@ -35,7 +35,7 @@ public class HttpUtils {
     private static final String RIGHT_BRACE = "}";
 
     static {
-        INSTANCE = new OkHttpClient.Builder().build();
+        OK_HTTP_CLIENT = new OkHttpClient.Builder().build();
         OBJECT_MAPPER = new ObjectMapper();
     }
 
@@ -47,7 +47,7 @@ public class HttpUtils {
      * @return 响应信息
      * @throws IOException io异常
      */
-    private static <V> ResponseMessage<V> handleResponse(Response response) throws IOException {
+    public static <V> ResponseMessage<V> handleResponse(Response response) throws IOException {
         if (!response.isSuccessful()) {
             throw new RuntimeException("error request to url: [" + response.request().url() + "] , response status: [" + response.code() + "] , message: [" + response.message() + "]");
         }
@@ -68,11 +68,10 @@ public class HttpUtils {
      * @param urlParameters  url路径参数
      * @param parameters     路径参数
      * @param requestMessage 请求信息
-     * @param <K>            请求类型
      * @return 请求
      * @throws IOException io异常
      */
-    private static <K> Request handleRequest(String url, String method, Map<String, String> urlParameters, Map<String, String> parameters, RequestMessage<K> requestMessage) throws IOException {
+    public static Request handleRequest(String url, String method, Map<String, String> urlParameters, Map<String, String> parameters, RequestMessage<?> requestMessage) throws IOException {
         String requestBody = null;
         if (requestMessage != null) {
             requestBody = OBJECT_MAPPER.writeValueAsString(requestMessage);
@@ -104,7 +103,7 @@ public class HttpUtils {
      * @throws IOException io异常
      */
     private static <V> ResponseMessage<V> doRequest(Request request) throws IOException {
-        Response response = INSTANCE.newCall(request).execute();
+        Response response = OK_HTTP_CLIENT.newCall(request).execute();
         return handleResponse(response);
     }
 
@@ -115,11 +114,10 @@ public class HttpUtils {
      * @param urlParameters  url路径参数
      * @param parameters     请求路径参数
      * @param requestMessage 请求信息
-     * @param <K>            请求泛型
      * @param <V>            响应泛型
      * @return 响应信息
      */
-    public static <K, V> ResponseMessage<V> doPostRequest(String url, Map<String, String> urlParameters, Map<String, String> parameters, RequestMessage<K> requestMessage) {
+    public static <V> ResponseMessage<V> doPostRequest(String url, Map<String, String> urlParameters, Map<String, String> parameters, RequestMessage<?> requestMessage) {
         try {
             return doRequest(handleRequest(url, METHOD_POST, urlParameters, parameters, requestMessage));
         } catch (IOException exception) {
@@ -152,7 +150,7 @@ public class HttpUtils {
      * @param callbackAction 回调函数
      */
     private static <V> void doRequestAsync(Request request, CallbackAction<V> callbackAction) {
-        INSTANCE.newCall(request).enqueue(new Callback() {
+        OK_HTTP_CLIENT.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 throw new RuntimeException(e);
@@ -171,10 +169,9 @@ public class HttpUtils {
      * @param url            请求路径
      * @param requestMessage 请求信息
      * @param callbackAction 回调函数
-     * @param <K>            请求泛型
      * @param <V>            响应泛型
      */
-    public static <K, V> void doPostRequestAsync(String url, RequestMessage<K> requestMessage, CallbackAction<V> callbackAction) {
+    public static <V> void doPostRequestAsync(String url, RequestMessage<?> requestMessage, CallbackAction<V> callbackAction) {
         try {
             String requestBody = OBJECT_MAPPER.writeValueAsString(Objects.requireNonNull(requestMessage));
             Request request = new Request

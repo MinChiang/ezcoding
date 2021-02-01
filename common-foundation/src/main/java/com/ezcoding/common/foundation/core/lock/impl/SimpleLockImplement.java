@@ -11,10 +11,13 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 已经弃用，原因是有性能问题
+ *
  * @author MinChiang
  * @version 1.0.0
  * @date 2020-11-30 11:40
  */
+@Deprecated
 public class SimpleLockImplement implements LockImplement {
 
     private final Map<String, Lock> map = Collections.synchronizedMap(new WeakHashMap<>());

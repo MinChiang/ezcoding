@@ -32,7 +32,7 @@ public @interface StandardLock {
     String prefix() default "";
 
     /**
-     * 过期时间
+     * 锁过期时间
      *
      * @return 过期时间
      */

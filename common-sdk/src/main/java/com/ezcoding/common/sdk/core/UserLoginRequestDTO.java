@@ -166,6 +166,27 @@ public class UserLoginRequestDTO implements Serializable {
         userLoginRequestDTO.setScope("app");
         userLoginRequestDTO.setDeviceType((deviceType == null ? DeviceTypeEnum.UNKNOWN : deviceType).getId());
         userLoginRequestDTO.setFailureAction("response");
+        return userLoginRequestDTO;
+    }
+
+    @Override
+    public String toString() {
+        return "UserLoginRequestDTO{" +
+                "account='" + account + '\'' +
+                ", password='" + password + '\'' +
+                ", loginType=" + loginType +
+                ", verificationCode='" + verificationCode + '\'' +
+                ", receipt='" + receipt + '\'' +
+                ", phone='" + phone + '\'' +
+                ", responseType='" + responseType + '\'' +
+                ", clientId='" + clientId + '\'' +
+                ", redirectUri='" + redirectUri + '\'' +
+                ", scope='" + scope + '\'' +
+                ", state='" + state + '\'' +
+                ", deviceType=" + deviceType +
+                ", failureAction='" + failureAction + '\'' +
+                ", failureUri='" + failureUri + '\'' +
+                '}';
     }
 
 }
