@@ -23,13 +23,13 @@ public class EnumMappableUtils {
         register(new EnumHandleable<BooleanTypeEnum, Integer>() {
             @Override
             public Integer map(BooleanTypeEnum booleanTypeEnum) {
-                return booleanTypeEnum.getId();
+                return booleanTypeEnum.id;
             }
         });
         register(new EnumHandleable<BooleanTypeEnum, String>() {
             @Override
             public String map(BooleanTypeEnum booleanTypeEnum) {
-                return String.valueOf(booleanTypeEnum.getId());
+                return String.valueOf(booleanTypeEnum.id);
             }
         });
     }

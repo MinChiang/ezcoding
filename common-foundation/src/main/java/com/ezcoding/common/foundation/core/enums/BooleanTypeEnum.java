@@ -1,8 +1,8 @@
 package com.ezcoding.common.foundation.core.enums;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author MinChiang
@@ -21,11 +21,7 @@ public enum BooleanTypeEnum implements EnumMappable<Integer> {
      */
     FALSE(0);
 
-    private static final Map<Integer, BooleanTypeEnum> ALL = new HashMap<>();
-
-    static {
-        Arrays.stream(BooleanTypeEnum.class.getEnumConstants()).forEach(value -> ALL.put(value.getId(), value));
-    }
+    private static final Map<Integer, BooleanTypeEnum> ALL = Arrays.stream(BooleanTypeEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, value -> value));
 
     /**
      * 转换
@@ -37,18 +33,14 @@ public enum BooleanTypeEnum implements EnumMappable<Integer> {
         return ALL.get(id);
     }
 
-    private final int id;
+    public final int id;
 
     BooleanTypeEnum(int id) {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
-    }
-
     @Override
     public Integer map() {
-        return this.getId();
+        return this.id;
     }
 }

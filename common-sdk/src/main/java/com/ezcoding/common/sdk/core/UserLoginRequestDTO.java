@@ -160,11 +160,11 @@ public class UserLoginRequestDTO implements Serializable {
         UserLoginRequestDTO userLoginRequestDTO = new UserLoginRequestDTO();
         userLoginRequestDTO.setAccount(account);
         userLoginRequestDTO.setPassword(password);
-        userLoginRequestDTO.setLoginType(LoginRegisterTypeEnum.ACCOUNT_PASSWORD.getId());
+        userLoginRequestDTO.setLoginType(LoginRegisterTypeEnum.ACCOUNT_PASSWORD.id);
         userLoginRequestDTO.setResponseType("token");
         userLoginRequestDTO.setClientId("testClient");
         userLoginRequestDTO.setScope("app");
-        userLoginRequestDTO.setDeviceType((deviceType == null ? DeviceTypeEnum.UNKNOWN : deviceType).getId());
+        userLoginRequestDTO.setDeviceType((deviceType == null ? DeviceTypeEnum.UNKNOWN : deviceType).id);
         userLoginRequestDTO.setFailureAction("response");
         return userLoginRequestDTO;
     }

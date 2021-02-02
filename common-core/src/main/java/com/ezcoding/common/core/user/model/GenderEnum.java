@@ -1,8 +1,8 @@
 package com.ezcoding.common.core.user.model;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author MinChiang
@@ -26,11 +26,7 @@ public enum GenderEnum {
      */
     FEMALE(2);
 
-    private static final Map<Integer, GenderEnum> ALL = new HashMap<>();
-
-    static {
-        Arrays.stream(GenderEnum.class.getEnumConstants()).forEach(value -> ALL.put(value.getId(), value));
-    }
+    private static final Map<Integer, GenderEnum> ALL = Arrays.stream(GenderEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, value -> value));
 
     /**
      * 转换
@@ -42,14 +38,10 @@ public enum GenderEnum {
         return ALL.get(id);
     }
 
-    private final int id;
+    public final int id;
 
     GenderEnum(int id) {
         this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 
 }

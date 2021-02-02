@@ -1,8 +1,8 @@
 package com.ezcoding.common.core.user.model;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author MinChiang
@@ -46,11 +46,7 @@ public enum LoginRegisterTypeEnum {
      */
     REGISTER(6);
 
-    private static final Map<Integer, LoginRegisterTypeEnum> ALL = new HashMap<>();
-
-    static {
-        Arrays.stream(LoginRegisterTypeEnum.class.getEnumConstants()).forEach(value -> ALL.put(value.getId(), value));
-    }
+    private static final Map<Integer, LoginRegisterTypeEnum> ALL = Arrays.stream(LoginRegisterTypeEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, value -> value));
 
     /**
      * 转换
@@ -62,14 +58,10 @@ public enum LoginRegisterTypeEnum {
         return ALL.get(id);
     }
 
-    private final int id;
+    public final int id;
 
     LoginRegisterTypeEnum(int id) {
         this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 
 }

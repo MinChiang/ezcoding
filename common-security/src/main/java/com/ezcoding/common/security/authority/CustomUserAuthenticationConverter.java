@@ -36,8 +36,8 @@ public class CustomUserAuthenticationConverter extends DefaultUserAuthentication
         if (authentication instanceof UserAuthentication) {
             UserAuthentication userAuthentication = (UserAuthentication) authentication;
             principal = userAuthentication.getPrincipal();
-            loginType = Optional.ofNullable(userAuthentication.getLoginType()).orElse(LoginRegisterTypeEnum.UNKNOWN).getId();
-            deviceType = Optional.ofNullable(userAuthentication.getDeviceType()).orElse(DeviceTypeEnum.UNKNOWN).getId();
+            loginType = Optional.ofNullable(userAuthentication.getLoginType()).orElse(LoginRegisterTypeEnum.UNKNOWN).id;
+            deviceType = Optional.ofNullable(userAuthentication.getDeviceType()).orElse(DeviceTypeEnum.UNKNOWN).id;
             response.put(PRINCIPAL, principal);
             response.put(LOGIN_TYPE, loginType);
             response.put(DEVICE_TYPE, deviceType);
