@@ -4,7 +4,9 @@ import com.ezcoding.common.foundation.util.AssembleUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -181,6 +183,15 @@ public class TestAssembleUtils {
         Assert.assertEquals(userDTO.getAge(), age);
         Assert.assertEquals(userDTO.getGender(), Gender.from(gender));
         Assert.assertEquals(userDTO.getId(), "G" + id);
+    }
+
+    @Test
+    public void test2() {
+        List<? extends Number> list = new ArrayList<>();
+        Number number = list.get(1);
+
+        List<? super Integer> list2 = new ArrayList<>();
+        Object object = list2.get(1);
     }
 
 }

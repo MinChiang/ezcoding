@@ -1,6 +1,7 @@
 package com.ezcoding.common.foundation.starter;
 
 import com.ezcoding.common.foundation.core.constant.AopConstants;
+import com.ezcoding.common.foundation.core.lock.LockContext;
 import com.ezcoding.common.foundation.core.lock.LockProcessor;
 import com.ezcoding.common.foundation.core.lock.LockProcessorFactory;
 import com.ezcoding.common.foundation.core.lock.LockResult;
@@ -60,15 +61,16 @@ public class LockConfiguration {
         LockProcessor lockProcessor = lockProcessorFactory.create(method);
         LockResult lockResult = null;
         Object result = null;
+        LockContext lockContext = new LockContext();
         try {
-            lockResult = lockProcessor.lock(target, args);
+            lockResult = lockProcessor.lock(target, args, lockContext);
             if (lockResult.success()) {
                 //执行业务
                 result = proceedingJoinPoint.proceed();
             }
         } finally {
             if (lockResult != null && lockResult.success()) {
-                lockProcessor.unlock(lockResult.acquireKey(), target, args);
+                lockProcessor.unlock(lockResult.acquireKey(), target, args, lockContext);
             }
         }
         return result;
@@ -76,7 +78,7 @@ public class LockConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public LockProcessorFactory lockProcessorFactory() throws IllegalAccessException, ClassNotFoundException, InstantiationException {
+    public LockProcessorFactory lockProcessorFactory(@Autowired(required = false) List<FoundationConfigurer> configurers) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         LockConfigBean lockConfigBean = ezcodingFoundationConfigBean.getLock();
 
         return LockProcessorFactory

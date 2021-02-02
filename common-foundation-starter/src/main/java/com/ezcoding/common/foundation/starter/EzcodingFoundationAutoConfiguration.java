@@ -53,7 +53,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
 
     @Autowired(required = false)
-    private List<ApplicationEnumConfigurer> enumConfigurers;
+    private List<FoundationConfigurer> foundationConfigurers;
 
     @Autowired(required = false)
     private IdProduceable idProduceable;
@@ -98,8 +98,8 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         EnumConfigBean enums = ezcodingFoundationConfigBean.getEnums();
 
         List<EnumMappableStrategy> strategies = new ArrayList<>();
-        if (enumConfigurers != null && !enumConfigurers.isEmpty()) {
-            enumConfigurers.forEach(conf -> conf.registerEnumStrategy(strategies));
+        if (foundationConfigurers != null && !foundationConfigurers.isEmpty()) {
+            foundationConfigurers.forEach(conf -> conf.registerEnumStrategy(strategies));
         }
 
         //使用enum扫描策略
@@ -235,7 +235,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     @ConditionalOnMissingBean(AbstractApplicationExceptionManager.class)
     @Bean("defaultExceptionManager")
     public ModuleApplicationExceptionManager moduleApplicationExceptionManager(@Autowired(required = false) @Qualifier(value = "defaultLayerModuleProcessor") AbstractLayerModuleProcessor defaultProcessor,
-                                                                               @Autowired(required = false) List<ApplicationExceptionProcessorConfigurer> registers) {
+                                                                               @Autowired(required = false) List<FoundationConfigurer> registers) {
         ModuleApplicationExceptionManager moduleApplicationExceptionManager = new ModuleApplicationExceptionManager(defaultProcessor);
         registerDefaultProcessor(moduleApplicationExceptionManager, defaultProcessor);
         if (registers != null && !registers.isEmpty()) {
@@ -251,7 +251,7 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
     }
 
     private void registerExtraProcessor(ModuleApplicationExceptionManager moduleApplicationExceptionManager,
-                                        List<ApplicationExceptionProcessorConfigurer> registers,
+                                        List<FoundationConfigurer> registers,
                                         AbstractLayerModuleProcessor defaultProcessor) {
         if (registers != null && !registers.isEmpty()) {
             registers

@@ -1,8 +1,5 @@
 package com.ezcoding.common.foundation.core.lock;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Method;
 
 /**
@@ -11,8 +8,6 @@ import java.lang.reflect.Method;
  * @date 2020-12-01 17:43
  */
 public class LockProcessor {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(LockProcessor.class);
 
     private final Method method;
     private final LockConfig lockConfig;
@@ -44,27 +39,29 @@ public class LockProcessor {
     /**
      * 上锁
      *
-     * @param target 目标对象
-     * @param args   入参
+     * @param target      目标对象
+     * @param args        入参
+     * @param lockContext 上下文
      * @return 锁元素
      */
-    public LockResult lock(Object target, Object[] args) throws Exception {
+    public LockResult lock(Object target, Object[] args, LockContext lockContext) throws Exception {
         String lockKey = lockIdentification.identify(lockMetadata, lockConfig, this.method);
         if (lockKey == null || lockKey.isEmpty()) {
             return LockResult.lockFail();
         }
-        return lockImplement.lock(lockKey, this.lockMetadata, target, args);
+        return lockImplement.lock(lockKey, this.lockMetadata, target, args, lockContext);
     }
 
     /**
      * 解锁
      *
-     * @param lockKey 锁标志
-     * @param target  目标对象
-     * @param args    入参
+     * @param lockKey     锁标志
+     * @param target      目标对象
+     * @param args        入参
+     * @param lockContext 上下文
      */
-    public void unlock(String lockKey, Object target, Object[] args) {
-        lockImplement.unlock(lockKey, this.lockMetadata, target, args);
+    public void unlock(String lockKey, Object target, Object[] args, LockContext lockContext) {
+        lockImplement.unlock(lockKey, this.lockMetadata, target, args, lockContext);
     }
 
     public LockConfig getLockConfig() {

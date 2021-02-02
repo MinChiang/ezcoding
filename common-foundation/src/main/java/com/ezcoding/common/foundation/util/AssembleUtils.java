@@ -19,15 +19,15 @@ public class AssembleUtils {
      *
      * @param <S>    源类型
      * @param <T>    目标类型
-     * @param src    原类型对象
+     * @param source 原类型对象
      * @param target 目标类型对象
      * @return 装配映射器
      */
-    public static <S, T> Assembler<S, T> of(S src, T target) {
-        if (src == null || target == null) {
+    public static <S, T> Assembler<S, T> of(S source, T target) {
+        if (source == null || target == null) {
             throw new RuntimeException("source and target can not be null");
         }
-        return new Assembler<>(src, target);
+        return new Assembler<>(source, target);
     }
 
     /**
@@ -40,7 +40,7 @@ public class AssembleUtils {
 
         private final S src;
         private final T target;
-        private final List<FunctionAndBiConsumerAssembler<S, T, ?>> mappingList = new LinkedList<>();
+        private final List<FunctionAndBiConsumerAssembler<S, T, ?>> assemblers = new LinkedList<>();
 
         private Assembler(S src, T target) {
             this.src = src;
@@ -55,8 +55,8 @@ public class AssembleUtils {
          * @param <K>        获取到的源数据类型
          * @return 装配映射器
          */
-        public <K> Assembler<S, T> with(Function<S, K> function, BiConsumer<T, K> biConsumer) {
-            mappingList.add(new FunctionAndBiConsumerAssembler<>(function, biConsumer));
+        public <K> Assembler<S, T> with(Function<S, ? extends K> function, BiConsumer<T, ? super K> biConsumer) {
+            assemblers.add(new FunctionAndBiConsumerAssembler<>(function, biConsumer));
             return this;
         }
 
@@ -67,7 +67,7 @@ public class AssembleUtils {
          * @return 装配输出
          */
         public T assemble() {
-            for (FunctionAndBiConsumerAssembler<S, T, ?> mapping : this.mappingList) {
+            for (FunctionAndBiConsumerAssembler<S, T, ?> mapping : this.assemblers) {
                 Function<S, Object> function = (Function<S, Object>) mapping.function;
                 BiConsumer<T, Object> biConsumer = (BiConsumer<T, Object>) mapping.biConsumer;
 
@@ -85,10 +85,10 @@ public class AssembleUtils {
          */
         private static class FunctionAndBiConsumerAssembler<S, T, K> {
 
-            Function<S, K> function;
-            BiConsumer<T, K> biConsumer;
+            Function<S, ? extends K> function;
+            BiConsumer<T, ? super K> biConsumer;
 
-            FunctionAndBiConsumerAssembler(Function<S, K> function, BiConsumer<T, K> biConsumer) {
+            FunctionAndBiConsumerAssembler(Function<S, ? extends K> function, BiConsumer<T, ? super K> biConsumer) {
                 this.function = function;
                 this.biConsumer = biConsumer;
             }

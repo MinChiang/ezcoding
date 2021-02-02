@@ -6,8 +6,8 @@ import com.ezcoding.common.foundation.core.enums.JacksonStrategy;
 import com.ezcoding.common.foundation.core.enums.MappingPair;
 import com.ezcoding.common.foundation.core.exception.processor.WebDefaultApplicationExceptionProcessor;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
-import com.ezcoding.common.foundation.starter.ApplicationEnumConfigurer;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationConfigBean;
+import com.ezcoding.common.foundation.starter.FoundationConfigurer;
 import com.ezcoding.common.web.convertor.StandardEnumDeserializer;
 import com.ezcoding.common.web.convertor.StandardEnumSerializer;
 import com.ezcoding.common.web.error.ApplicationErrorController;
@@ -47,7 +47,7 @@ import static org.springframework.util.StringUtils.tokenizeToStringArray;
  */
 @Configuration
 @EnableConfigurationProperties(EzcodingWebConfigBean.class)
-public class WebCommonConfiguration implements InitializingBean, ApplicationEnumConfigurer {
+public class WebCommonConfiguration implements InitializingBean, FoundationConfigurer {
 
     @Autowired(required = false)
     private List<ApplicationWebConfigurer> applicationWebConfigurers;
