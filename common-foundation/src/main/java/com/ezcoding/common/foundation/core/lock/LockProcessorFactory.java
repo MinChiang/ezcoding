@@ -1,5 +1,7 @@
 package com.ezcoding.common.foundation.core.lock;
 
+import com.ezcoding.common.foundation.core.lock.impl.DefaultLockIdentification;
+import com.ezcoding.common.foundation.core.lock.impl.DefaultLockImplement;
 import com.ezcoding.common.foundation.core.lock.impl.SimpleLockIdentification;
 import com.ezcoding.common.foundation.core.lock.impl.SimpleLockImplement;
 
@@ -89,33 +91,44 @@ public class LockProcessorFactory {
             return this;
         }
 
-        public Map<Class<? extends LockImplement>, LockImplement> getLockImplementMap() {
-            return lockImplementMap;
-        }
-
-        public Map<Class<? extends LockIdentification>, LockIdentification> getLockIdentificationMap() {
-            return lockIdentificationMap;
-        }
-
-        public LockImplement getDefaultLockImplement() {
-            return defaultLockImplement;
-        }
-
-        public LockIdentification getDefaultLockIdentification() {
-            return defaultLockIdentification;
-        }
-
         /**
          * 构建对象
+         * 需要设置默认的锁实现以及处理器
          *
          * @return 构建后的对象实例
          */
         public LockProcessorFactory build() {
+            if (!lockImplementMap.containsKey(defaultLockImplement.getClass())) {
+                lockImplementMap.put(defaultLockImplement.getClass(), defaultLockImplement);
+            }
+            // 处理默认的锁实现
+            if (defaultLockImplement != null && !lockImplementMap.containsKey(DefaultLockImplement.class)) {
+                if (defaultLockImplement instanceof DefaultLockImplement) {
+                    lockImplementMap.put(DefaultLockImplement.class, defaultLockImplement);
+                } else {
+                    DefaultLockImplement lockImplement = new DefaultLockImplement();
+                    lockImplement.setLockImplement(defaultLockImplement);
+                    lockImplementMap.put(DefaultLockImplement.class, lockImplement);
+                }
+            }
+
+            if (!lockIdentificationMap.containsKey(defaultLockIdentification.getClass())) {
+                lockIdentificationMap.put(defaultLockIdentification.getClass(), defaultLockIdentification);
+            }
+            // 处理默认的锁处理
+            if (defaultLockIdentification != null && !lockIdentificationMap.containsKey(DefaultLockIdentification.class)) {
+                if (defaultLockIdentification instanceof DefaultLockIdentification) {
+                    lockIdentificationMap.put(DefaultLockIdentification.class, defaultLockIdentification);
+                } else {
+                    DefaultLockIdentification lockIdentification = new DefaultLockIdentification();
+                    lockIdentification.setDefaultLockIdentification(defaultLockIdentification);
+                    lockIdentificationMap.put(DefaultLockIdentification.class, lockIdentification);
+                }
+            }
+
             LockConfig lockConfig = new LockConfig(
                     this.lockImplementMap,
-                    this.lockIdentificationMap,
-                    this.defaultLockImplement,
-                    this.defaultLockIdentification
+                    this.lockIdentificationMap
             );
             return new LockProcessorFactory(lockConfig);
         }

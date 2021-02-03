@@ -7,11 +7,11 @@ package com.ezcoding.common.foundation.core.lock;
  */
 public class LockResult {
 
-    private final boolean lock;
+    private final boolean success;
     private final String lockKey;
 
-    private LockResult(boolean lock, String lockKey) {
-        this.lock = lock;
+    private LockResult(boolean success, String lockKey) {
+        this.success = success;
         this.lockKey = lockKey;
     }
 
@@ -37,7 +37,16 @@ public class LockResult {
      * @return 上锁是否成功
      */
     public boolean success() {
-        return lock;
+        return success;
+    }
+
+    /**
+     * 判断上锁失败
+     *
+     * @return 上锁是否失败
+     */
+    public boolean fail() {
+        return !success();
     }
 
     /**

@@ -24,11 +24,11 @@ public class DefaultLockImplement implements LockImplement {
         this.lockImplement.unlock(lockKey, lockMetadata, target, args, lockContext);
     }
 
-    public LockImplement getLock() {
+    public LockImplement getLockImplement() {
         return lockImplement;
     }
 
-    public void setLock(LockImplement lockImplement) {
+    public void setLockImplement(LockImplement lockImplement) {
         this.lockImplement = lockImplement;
     }
 

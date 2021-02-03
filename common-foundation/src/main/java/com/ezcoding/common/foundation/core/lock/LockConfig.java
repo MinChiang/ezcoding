@@ -1,10 +1,5 @@
 package com.ezcoding.common.foundation.core.lock;
 
-import com.ezcoding.common.foundation.core.lock.impl.DefaultLockIdentification;
-import com.ezcoding.common.foundation.core.lock.impl.DefaultLockImplement;
-import com.ezcoding.common.foundation.core.lock.impl.SimpleLockIdentification;
-import com.ezcoding.common.foundation.core.lock.impl.SimpleLockImplement;
-
 import java.util.Map;
 
 /**
@@ -17,14 +12,10 @@ public class LockConfig {
     private final Map<Class<? extends LockImplement>, LockImplement> lockImplementMap;
     private final Map<Class<? extends LockIdentification>, LockIdentification> lockIdentificationMap;
 
-    private LockImplement defaultLockImplement = new SimpleLockImplement();
-    private LockIdentification defaultLockIdentification = new SimpleLockIdentification();
-
-    public LockConfig(Map<Class<? extends LockImplement>, LockImplement> lockImplementMap, Map<Class<? extends LockIdentification>, LockIdentification> lockIdentificationMap, LockImplement defaultLockImplement, LockIdentification defaultLockIdentification) {
+    public LockConfig(Map<Class<? extends LockImplement>, LockImplement> lockImplementMap,
+                      Map<Class<? extends LockIdentification>, LockIdentification> lockIdentificationMap) {
         this.lockImplementMap = lockImplementMap;
         this.lockIdentificationMap = lockIdentificationMap;
-        this.defaultLockImplement = defaultLockImplement;
-        this.defaultLockIdentification = defaultLockIdentification;
     }
 
     /**
@@ -34,11 +25,7 @@ public class LockConfig {
      * @return 锁实现实例
      */
     public LockImplement acquireLockImplement(Class<? extends LockImplement> cls) {
-        LockImplement lockImplement = lockImplementMap.getOrDefault(cls, defaultLockImplement);
-        if (lockImplement instanceof DefaultLockImplement) {
-            return ((DefaultLockImplement) lockImplement).getLock();
-        }
-        return lockImplement;
+        return lockImplementMap.get(cls);
     }
 
     /**
@@ -48,11 +35,7 @@ public class LockConfig {
      * @return 锁id实例
      */
     public LockIdentification acquireLockIdentification(Class<? extends LockIdentification> cls) {
-        LockIdentification lockIdentification = lockIdentificationMap.getOrDefault(cls, defaultLockIdentification);
-        if (lockIdentification instanceof DefaultLockIdentification) {
-            return ((DefaultLockIdentification) lockIdentification).getDefaultLockIdentification();
-        }
-        return lockIdentification;
+        return lockIdentificationMap.get(cls);
     }
 
 }

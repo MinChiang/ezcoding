@@ -2,6 +2,8 @@ package com.ezcoding.common.foundation.starter;
 
 import com.ezcoding.common.foundation.core.constant.AopConstants;
 import com.ezcoding.common.foundation.core.lock.*;
+import com.ezcoding.common.foundation.core.lock.impl.SimpleLockIdentification;
+import com.ezcoding.common.foundation.core.lock.impl.SimpleLockImplement;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -29,7 +31,7 @@ import java.util.List;
 @Order(AopConstants.Order.LOCK_ORDER)
 @Configuration
 @ConditionalOnProperty(prefix = "ezcoding.foundation.lock", name = "enabled", havingValue = "true", matchIfMissing = true)
-public class LockConfiguration {
+public class LockConfiguration implements FoundationConfigurer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LockConfiguration.class);
 
@@ -61,13 +63,24 @@ public class LockConfiguration {
         LockContext lockContext = new LockContext();
         try {
             lockResult = lockProcessor.lock(target, args, lockContext);
-            if (lockResult.success()) {
-                //执行业务
-                result = proceedingJoinPoint.proceed();
+            if (lockResult.fail()) {
+                throw new LockFailException(lockProcessor.getLockMetadata().failMessage);
             }
+            //执行业务
+            result = proceedingJoinPoint.proceed();
+        } catch (Exception e) {
+            throw new LockFailException(lockProcessor.getLockMetadata().failMessage, e);
         } finally {
             if (lockResult != null && lockResult.success()) {
-                lockProcessor.unlock(lockResult.acquireKey(), target, args, lockContext);
+                try {
+                    lockProcessor.unlock(lockResult.acquireKey(), target, args, lockContext);
+                } catch (Exception ignored) {
+
+                }
+            }
+            if (!lockContext.isEmpty()) {
+                lockContext.clear();
+                lockContext = null;
             }
         }
         return result;
@@ -75,11 +88,11 @@ public class LockConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public LockProcessorFactory lockProcessorFactory(@Autowired(required = false) List<FoundationConfigurer> configurers) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
-        LockConfigBean lockConfigBean = ezcodingFoundationConfigBean.getLock();
-
-        List<LockImplement> lockImplements = new ArrayList<>(getInstances(lockConfigBean.getLockImplementClass()));
-        List<LockIdentification> lockIdentifications = new ArrayList<>(getInstances(lockConfigBean.getIdentificationClass()));
+    public LockProcessorFactory lockProcessorFactory(@Autowired(required = false) List<FoundationConfigurer> configurers,
+                                                     @Autowired LockImplement defaultLockImplement,
+                                                     @Autowired LockIdentification defaultLockIdentification) {
+        List<LockImplement> lockImplements = new ArrayList<>();
+        List<LockIdentification> lockIdentifications = new ArrayList<>();
         if (configurers != null && !configurers.isEmpty()) {
             for (FoundationConfigurer configurer : configurers) {
                 configurer.registerLockImplement(lockImplements);
@@ -89,43 +102,33 @@ public class LockConfiguration {
 
         return LockProcessorFactory
                 .builder()
-                .defaultLockImplement(getInstance(lockConfigBean.getDefaultLockImplementClass()))
-                .defaultLockIdentification(getInstance(lockConfigBean.getDefaultLockIdentificationClass()))
+                .defaultLockImplement(defaultLockImplement)
+                .defaultLockIdentification(defaultLockIdentification)
                 .lockImplements(lockImplements)
                 .lockIdentifications(lockIdentifications)
                 .build();
     }
 
-    /**
-     * 实例化
-     *
-     * @param classString 列表
-     * @param <T>         类型
-     * @return 实例
-     */
-    private <T> T getInstance(String classString) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        try {
-            Class<T> cls = (Class<T>) Class.forName(classString);
-            return cls.newInstance();
-        } catch (Exception e) {
-            LOGGER.error("unable to find or instance class : {}", classString);
-            throw e;
-        }
+    @Bean("defaultLockImplement")
+    @ConditionalOnMissingBean
+    public LockImplement defaultLockImplement() {
+        return new SimpleLockImplement();
     }
 
-    /**
-     * 实例化
-     *
-     * @param classStrings 列表
-     * @param <T>          类型
-     * @return 实例
-     */
-    private <T> List<T> getInstances(List<String> classStrings) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        List<T> result = new ArrayList<>();
-        for (String classString : classStrings) {
-            result.add(getInstance(classString));
-        }
-        return result;
+    @Bean("defaultLockIdentification")
+    @ConditionalOnMissingBean
+    public LockIdentification defaultLockIdentification() {
+        return new SimpleLockIdentification();
+    }
+
+    @Override
+    public void registerLockImplement(List<LockImplement> lockImplements) {
+        lockImplements.add(new SimpleLockImplement());
+    }
+
+    @Override
+    public void registerLockIdentification(List<LockIdentification> lockIdentifications) {
+        lockIdentifications.add(new SimpleLockIdentification());
     }
 
 }

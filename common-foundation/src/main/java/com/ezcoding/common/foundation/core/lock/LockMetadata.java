@@ -16,8 +16,16 @@ public class LockMetadata {
     public final TimeUnit timeUnit;
     public final Class<? extends LockImplement> implementClass;
     public final Class<? extends LockIdentification> identificationClass;
+    public final String failMessage;
 
-    public LockMetadata(String key, String prefix, long expireTime, long waitTime, TimeUnit timeUnit, Class<? extends LockImplement> implementClass, Class<? extends LockIdentification> identificationClass) {
+    public LockMetadata(String key,
+                        String prefix,
+                        long expireTime,
+                        long waitTime,
+                        TimeUnit timeUnit,
+                        Class<? extends LockImplement> implementClass,
+                        Class<? extends LockIdentification> identificationClass,
+                        String failMessage) {
         this.key = key;
         this.prefix = prefix;
         this.expireTime = expireTime;
@@ -25,6 +33,7 @@ public class LockMetadata {
         this.timeUnit = timeUnit;
         this.implementClass = implementClass;
         this.identificationClass = identificationClass;
+        this.failMessage = failMessage;
     }
 
 }

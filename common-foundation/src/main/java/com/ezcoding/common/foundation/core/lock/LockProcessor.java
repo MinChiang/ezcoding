@@ -29,8 +29,9 @@ public class LockProcessor {
                 standardLock.expireTime(),
                 standardLock.waitTime(),
                 standardLock.timeUnit(),
-                standardLock.processorClass(),
-                standardLock.identificationClass()
+                standardLock.implementClass(),
+                standardLock.identificationClass(),
+                standardLock.failMessage()
         );
         this.lockIdentification = lockConfig.acquireLockIdentification(this.lockMetadata.identificationClass);
         this.lockImplement = lockConfig.acquireLockImplement(this.lockMetadata.implementClass);

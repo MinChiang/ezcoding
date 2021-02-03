@@ -57,7 +57,7 @@ public @interface StandardLock {
      *
      * @return 锁默认实现方式
      */
-    Class<? extends LockImplement> processorClass() default DefaultLockImplement.class;
+    Class<? extends LockImplement> implementClass() default DefaultLockImplement.class;
 
     /**
      * 锁默认实现方式
@@ -65,5 +65,12 @@ public @interface StandardLock {
      * @return 锁默认实现方式
      */
     Class<? extends LockIdentification> identificationClass() default DefaultLockIdentification.class;
+
+    /**
+     * 获取锁失败错误信息
+     *
+     * @return 获取锁失败信息
+     */
+    String failMessage() default "acquire lock error!";
 
 }
