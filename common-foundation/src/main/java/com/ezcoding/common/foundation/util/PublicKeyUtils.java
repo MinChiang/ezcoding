@@ -2,10 +2,7 @@ package com.ezcoding.common.foundation.util;
 
 import sun.misc.BASE64Decoder;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
@@ -26,7 +23,7 @@ public class PublicKeyUtils {
      * @param rawKey 原生公钥
      * @return 处理后的公钥
      */
-    public static String removePrefixAndSuffix(String rawKey) {
+    public static String removeComment(String rawKey) {
         rawKey = rawKey.trim();
         if (rawKey.startsWith(BEGIN_KEY)) {
             rawKey = rawKey.substring(BEGIN_KEY.length());
@@ -42,44 +39,104 @@ public class PublicKeyUtils {
      *
      * @param key 公钥内容
      * @return 公钥
-     * @throws Exception 异常
      */
-    private static PublicKey acquirePublicKey(String key) throws Exception {
-        byte[] keyBytes;
-        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        return keyFactory.generatePublic(keySpec);
+    private static PublicKey convertPublicKey(String key) {
+        PublicKey publicKey;
+        try {
+            byte[] keyBytes;
+            keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            publicKey = keyFactory.generatePublic(keySpec);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return publicKey;
     }
 
     /**
-     * 获取公钥
+     * 根据流读取公钥
      *
-     * @param file 文件
-     * @return 公钥
-     * @throws Exception 异常
+     * @param inputStream 流
+     * @return 公钥内容
      */
-    public static String acquireRawPublicKey(File file) throws Exception {
-        InputStream fileInputStream = new FileInputStream(file);
-        int len;
-        byte[] bytes = new byte[128];
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        while ((len = fileInputStream.read(bytes)) != -1) {
-            baos.write(bytes, 0, len);
+    private static String readKey(InputStream inputStream) {
+        ByteArrayOutputStream baos;
+        try {
+            int len;
+            byte[] bytes = new byte[128];
+            baos = new ByteArrayOutputStream();
+            while ((len = inputStream.read(bytes)) != -1) {
+                baos.write(bytes, 0, len);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return baos.toString();
     }
 
     /**
      * 获取公钥
+     * 公钥中含有对应的头部尾部注释
+     * -----BEGIN PUBLIC KEY-----
+     * -----END PUBLIC KEY-----
+     *
+     * @param file 文件
+     * @return 公钥
+     */
+    public static String acquireRawPublicKey(File file) {
+        if (file == null || !file.exists()) {
+            return null;
+        }
+        String result = null;
+        try {
+            result = readKey(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(result);
+        }
+        return result;
+    }
+
+    /**
+     * 获取公钥
+     * 公钥中含有对应的头部尾部注释
+     * -----BEGIN PUBLIC KEY-----
+     * -----END PUBLIC KEY-----
+     *
+     * @param path 公钥文件路径
+     * @return 公钥
+     */
+    public static String acquireRawPublicKey(String path) {
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+        if (inputStream == null) {
+            return null;
+        }
+        return readKey(inputStream);
+    }
+
+    /**
+     * 获取公钥
+     * 公钥中含无对应的头部尾部注释
      *
      * @param file 公钥文件
      * @return 公钥
-     * @throws Exception 异常
      */
-    public static PublicKey acquirePublicKey(File file) throws Exception {
+    public static PublicKey acquirePublicKey(File file) {
         String key = acquireRawPublicKey(file);
-        key = removePrefixAndSuffix(key);
+        key = removeComment(key);
+        return convertPublicKey(key);
+    }
+
+    /**
+     * 获取公钥
+     * 公钥中含无对应的头部尾部注释
+     *
+     * @param path 公钥文件路径
+     * @return 公钥
+     */
+    public static PublicKey acquirePublicKey(String path) {
+        String key = acquireRawPublicKey(path);
+        key = removeComment(key);
         return acquirePublicKey(key);
     }
 

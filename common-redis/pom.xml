@@ -28,7 +28,7 @@
         <!-- Redis -->
         <dependency>
             <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
+            <artifactId>redisson-spring-data-21</artifactId>
         </dependency>
 
         <!-- Custom -->
