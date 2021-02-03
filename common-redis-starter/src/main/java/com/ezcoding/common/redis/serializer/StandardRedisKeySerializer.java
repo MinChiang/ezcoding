@@ -1,5 +1,6 @@
-package com.ezcoding.redis.serializer;
+package com.ezcoding.common.redis.serializer;
 
+import com.ezcoding.redis.serializer.StandardRedisKey;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.data.redis.serializer.StringRedisSerializer;

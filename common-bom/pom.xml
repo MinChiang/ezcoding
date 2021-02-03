@@ -163,6 +163,21 @@
             </dependency>
             <dependency>
                 <groupId>com.ezcoding</groupId>
+                <artifactId>common-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ezcoding</groupId>
+                <artifactId>common-redis-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ezcoding</groupId>
+                <artifactId>common-sdk</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ezcoding</groupId>
                 <artifactId>common-security</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -179,11 +194,6 @@
             <dependency>
                 <groupId>com.ezcoding</groupId>
                 <artifactId>common-web-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ezcoding</groupId>
-                <artifactId>common-redis</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

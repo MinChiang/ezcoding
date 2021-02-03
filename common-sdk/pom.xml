@@ -15,7 +15,7 @@
         <groupId>com.ezcoding</groupId>
         <artifactId>common-api</artifactId>
         <version>1.0.0</version>
-        <relativePath>../common-parent/common-api</relativePath>
+        <relativePath>../common-parent/common-api/pom.xml</relativePath>
     </parent>
 
     <dependencies>

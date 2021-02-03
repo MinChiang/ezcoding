@@ -41,7 +41,7 @@ public class StandardRedisKey {
         this.key = key;
     }
 
-    static StandardRedisKey createWithoutCheck(String key) {
+    public static StandardRedisKey createWithoutCheck(String key) {
         return new StandardRedisKey(key);
     }
 
