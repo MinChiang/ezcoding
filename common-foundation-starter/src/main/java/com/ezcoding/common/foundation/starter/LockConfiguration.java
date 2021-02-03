@@ -1,10 +1,7 @@
 package com.ezcoding.common.foundation.starter;
 
 import com.ezcoding.common.foundation.core.constant.AopConstants;
-import com.ezcoding.common.foundation.core.lock.LockContext;
-import com.ezcoding.common.foundation.core.lock.LockProcessor;
-import com.ezcoding.common.foundation.core.lock.LockProcessorFactory;
-import com.ezcoding.common.foundation.core.lock.LockResult;
+import com.ezcoding.common.foundation.core.lock.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -81,12 +78,21 @@ public class LockConfiguration {
     public LockProcessorFactory lockProcessorFactory(@Autowired(required = false) List<FoundationConfigurer> configurers) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         LockConfigBean lockConfigBean = ezcodingFoundationConfigBean.getLock();
 
+        List<LockImplement> lockImplements = new ArrayList<>(getInstances(lockConfigBean.getLockImplementClass()));
+        List<LockIdentification> lockIdentifications = new ArrayList<>(getInstances(lockConfigBean.getIdentificationClass()));
+        if (configurers != null && !configurers.isEmpty()) {
+            for (FoundationConfigurer configurer : configurers) {
+                configurer.registerLockImplement(lockImplements);
+                configurer.registerLockIdentification(lockIdentifications);
+            }
+        }
+
         return LockProcessorFactory
                 .builder()
                 .defaultLockImplement(getInstance(lockConfigBean.getDefaultLockImplementClass()))
                 .defaultLockIdentification(getInstance(lockConfigBean.getDefaultLockIdentificationClass()))
-                .lockImplements(getInstances(lockConfigBean.getLockImplementClass()))
-                .lockIdentifications(getInstances(lockConfigBean.getIdentificationClass()))
+                .lockImplements(lockImplements)
+                .lockIdentifications(lockIdentifications)
                 .build();
     }
 
