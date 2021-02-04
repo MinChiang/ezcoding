@@ -80,12 +80,23 @@ public class MessageFactory {
     /**
      * 构造成功响应信息
      *
+     * @param pageInfo 分页详情
+     * @param body     响应对象
+     * @return 成功响应信息
+     */
+    public static <T> ResponseMessage<T> buildSuccessResponseMessage(PageInfo pageInfo, T body) {
+        return new ResponseMessage<>(new ResponseSystemHead(APP_ID, SEQUENCE_NO_PRODUCER.produce()), new SuccessAppHead(pageInfo), body);
+    }
+
+    /**
+     * 构造成功响应信息
+     *
      * @param totalItem 查询对象总数量
      * @param body      响应对象
      * @return 成功响应信息
      */
     public static <T> ResponseMessage<T> buildSuccessResponseMessage(Integer totalItem, T body) {
-        return new ResponseMessage<>(new ResponseSystemHead(APP_ID, SEQUENCE_NO_PRODUCER.produce()), new SuccessAppHead(new PageInfo(totalItem)), body);
+        return buildSuccessResponseMessage(new PageInfo(totalItem), body);
     }
 
     /**
@@ -95,7 +106,7 @@ public class MessageFactory {
      * @return 成功响应信息
      */
     public static <T> ResponseMessage<T> buildSuccessResponseMessage(T body) {
-        return buildSuccessResponseMessage(null, body);
+        return buildSuccessResponseMessage((PageInfo) null, body);
     }
 
     /**

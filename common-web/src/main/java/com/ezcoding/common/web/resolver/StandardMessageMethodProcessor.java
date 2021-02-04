@@ -1,9 +1,6 @@
 package com.ezcoding.common.web.resolver;
 
-import com.ezcoding.common.foundation.core.message.RequestMessage;
-import com.ezcoding.common.foundation.core.message.ResponseMessage;
-import com.ezcoding.common.foundation.core.message.ResponseSystemHead;
-import com.ezcoding.common.foundation.core.message.SuccessAppHead;
+import com.ezcoding.common.foundation.core.message.*;
 import com.ezcoding.common.web.resolver.parameter.RequestMessageParameterResolvable;
 import com.ezcoding.common.web.resolver.result.ResponseMessageReturnValueResolvable;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -38,8 +35,8 @@ public class StandardMessageMethodProcessor extends AbstractMessageConverterMeth
 
     private static final String REQUEST_MESSAGE = "__REQUEST_MESSAGE__";
 
-    private final List<ResponseMessageReturnValueResolvable> returnValueResolvables = new ArrayList<>();
-    private final List<RequestMessageParameterResolvable> parameterResolvables = new ArrayList<>();
+    private final List<ResponseMessageReturnValueResolvable> returnValueResolvers = new ArrayList<>();
+    private final List<RequestMessageParameterResolvable> parameterResolvers = new ArrayList<>();
 
     public StandardMessageMethodProcessor(List<HttpMessageConverter<?>> converters) {
         super(converters);
@@ -72,7 +69,7 @@ public class StandardMessageMethodProcessor extends AbstractMessageConverterMeth
             clearCurrentRequestMessage();
         }
         //解析参数
-        RequestMessageParameterResolvable resolvable = parameterResolvables
+        RequestMessageParameterResolvable resolvable = parameterResolvers
                 .stream()
                 .filter(resolver -> resolver.match(parameter.getParameterType()))
                 .findFirst()
@@ -87,13 +84,13 @@ public class StandardMessageMethodProcessor extends AbstractMessageConverterMeth
 
         ResponseMessage<Object> responseMessage;
         if (returnValue == null) {
-            responseMessage = new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), returnValue);
+            responseMessage = MessageFactory.buildSuccessResponseMessage();
         } else {
-            responseMessage = this.returnValueResolvables.stream()
+            responseMessage = this.returnValueResolvers.stream()
                     .filter(resolver -> resolver.match(returnValue.getClass()))
                     .map(resolver -> resolver.resolveReturnValue(returnValue, returnType))
                     .findFirst()
-                    .orElse(new ResponseMessage<>(new ResponseSystemHead(), new SuccessAppHead(), returnValue));
+                    .orElseGet(() -> MessageFactory.buildSuccessResponseMessage(returnValue));
         }
 
         ServletServerHttpRequest inputMessage = this.createInputMessage(webRequest);
@@ -142,7 +139,7 @@ public class StandardMessageMethodProcessor extends AbstractMessageConverterMeth
         if (resolvers == null) {
             return;
         }
-        returnValueResolvables.addAll(Arrays.asList(resolvers));
+        returnValueResolvers.addAll(Arrays.asList(resolvers));
     }
 
     /**
@@ -154,7 +151,7 @@ public class StandardMessageMethodProcessor extends AbstractMessageConverterMeth
         if (resolvers == null) {
             return;
         }
-        returnValueResolvables.addAll(resolvers);
+        returnValueResolvers.addAll(resolvers);
     }
 
     /**
@@ -166,7 +163,7 @@ public class StandardMessageMethodProcessor extends AbstractMessageConverterMeth
         if (resolvers == null) {
             return;
         }
-        parameterResolvables.addAll(Arrays.asList(resolvers));
+        parameterResolvers.addAll(Arrays.asList(resolvers));
     }
 
     /**
@@ -178,7 +175,7 @@ public class StandardMessageMethodProcessor extends AbstractMessageConverterMeth
         if (resolvers == null) {
             return;
         }
-        parameterResolvables.addAll(resolvers);
+        parameterResolvers.addAll(resolvers);
     }
 
 }

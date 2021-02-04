@@ -1,7 +1,8 @@
 package com.ezcoding.common.web.error;
 
 import com.ezcoding.common.foundation.core.message.ErrorAppHead;
-import com.ezcoding.common.foundation.core.message.ResponseSystemHead;
+import com.ezcoding.common.foundation.core.message.MessageFactory;
+import com.ezcoding.common.foundation.core.message.ResponseMessage;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -37,12 +38,14 @@ public class ApplicationErrorController extends BasicErrorController {
         Map<String, Object> body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
         HttpStatus status = getStatus(request);
 
-        Map<String, Object> map = new HashMap<>(2);
-        map.put(SYSTEM_HEAD, new ResponseSystemHead());
-        map.put(APP_HEAD, new ErrorAppHead(
+        ResponseMessage<?> errorResponseMessage = MessageFactory.buildErrorResponseMessage(
                 (String) body.getOrDefault(KEY_APPLICATION_EXCEPTION_IDENTIFICATION, ErrorAppHead.getDefaultErrorCode()),
                 (String) body.getOrDefault(MESSAGE_KEY, ErrorAppHead.getDefaultErrorMessage())
-        ));
+        );
+
+        Map<String, Object> map = new HashMap<>(2);
+        map.put(SYSTEM_HEAD, errorResponseMessage.getSystemHead());
+        map.put(APP_HEAD, errorResponseMessage.getAppHead());
         return new ResponseEntity<>(map, status);
     }
 

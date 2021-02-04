@@ -15,18 +15,18 @@ public class ResponseMessage<T> extends AbstractMessage<T> implements Serializab
     protected ResponseSystemHead systemHead;
     protected ResponseAppHead appHead;
 
-    public ResponseMessage() {
+    ResponseMessage() {
     }
 
-    public ResponseMessage(T body) {
+    ResponseMessage(T body) {
         this.body = body;
     }
 
-    public ResponseMessage(ResponseAppHead appHead, T body) {
+    ResponseMessage(ResponseAppHead appHead, T body) {
         this(new ResponseSystemHead(), appHead, body);
     }
 
-    public ResponseMessage(ResponseSystemHead systemHead, ResponseAppHead appHead, T body) {
+    ResponseMessage(ResponseSystemHead systemHead, ResponseAppHead appHead, T body) {
         super(body);
         this.systemHead = systemHead;
         this.appHead = appHead;

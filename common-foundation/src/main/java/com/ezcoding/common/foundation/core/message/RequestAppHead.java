@@ -11,10 +11,10 @@ public class RequestAppHead extends AbstractAppHead implements Serializable {
 
     private static final long serialVersionUID = -6695279371779351920L;
 
-    public RequestAppHead() {
+    RequestAppHead() {
     }
 
-    public RequestAppHead(PageInfo pageInfo) {
+    RequestAppHead(PageInfo pageInfo) {
         super(pageInfo);
     }
 

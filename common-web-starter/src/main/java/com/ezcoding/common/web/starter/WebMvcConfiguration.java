@@ -9,6 +9,7 @@ import com.ezcoding.common.foundation.core.exception.processor.ApplicationExcept
 import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationAutoConfiguration;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationConfigBean;
+import com.ezcoding.common.web.resolver.result.*;
 import com.ezcoding.common.web.util.ObjectMapperUtils;
 import com.ezcoding.common.web.convertor.EnumToObjectConverter;
 import com.ezcoding.common.web.convertor.ObjectToEnumConverter;
@@ -16,10 +17,6 @@ import com.ezcoding.common.web.jwt.AuthSettings;
 import com.ezcoding.common.web.resolver.StandardMessageMethodProcessor;
 import com.ezcoding.common.web.resolver.UserArgumentResolver;
 import com.ezcoding.common.web.resolver.parameter.*;
-import com.ezcoding.common.web.resolver.result.ResponseAppHeadResolver;
-import com.ezcoding.common.web.resolver.result.ResponseMessageResolver;
-import com.ezcoding.common.web.resolver.result.ResponseMessageReturnValueResolvable;
-import com.ezcoding.common.web.resolver.result.ResponseSystemHeadResolver;
 import com.ezcoding.common.web.user.CompositeUserLoader;
 import com.ezcoding.common.web.user.UserProxyable;
 import org.hibernate.validator.HibernateValidator;
@@ -91,8 +88,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     private void registerDefaultReturnValueResolvers(List<ResponseMessageReturnValueResolvable> resolvables) {
         resolvables.add(new ResponseMessageResolver());
-        resolvables.add(new ResponseSystemHeadResolver());
-        resolvables.add(new ResponseAppHeadResolver());
+        resolvables.add(new PageInfoResolver());
     }
 
     @Bean
@@ -253,6 +249,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     }
 
+    /**
+     * 为了请求对应的后台而做的鉴权请求模板
+     * @return 请求模板
+     */
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();

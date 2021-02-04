@@ -14,11 +14,11 @@ public class ErrorAppHead extends ResponseAppHead implements Serializable {
     protected static String defaultErrorMessage = "unkown error";
     protected static String defaultErrorCode = "9999999999";
 
-    public ErrorAppHead() {
+    ErrorAppHead() {
         super(defaultErrorCode, defaultErrorMessage);
     }
 
-    public ErrorAppHead(String returnCode, String returnMessage) {
+    ErrorAppHead(String returnCode, String returnMessage) {
         super(returnCode == null ? defaultErrorCode : returnCode, returnMessage == null ? defaultErrorMessage : returnMessage);
     }
 
