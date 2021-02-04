@@ -19,5 +19,6 @@ public interface ExceptionCodeGeneratorConstants {
     WebExceptionCodeGenerator GEN_COMMON_SERVICE_NOT_AVALIABLE_ERROR = new WebExceptionCodeGenerator(DEFAULT_MODULE_LAYER_MODULE, "8", "COMMON_SERVICE_NOT_AVALIABLE_ERROR");
     WebExceptionCodeGenerator GEN_COMMON_USER_IS_KICKED_OUT_ERROR = new WebExceptionCodeGenerator(DEFAULT_MODULE_LAYER_MODULE, "9", "COMMON_USER_IS_KICKED_OUT_ERROR");
     WebExceptionCodeGenerator GEN_COMMON_REMOTE_REQUEST_ERROR = new WebExceptionCodeGenerator(DEFAULT_MODULE_LAYER_MODULE, "10", "COMMON_REMOTE_REQUEST_ERROR");
+    WebExceptionCodeGenerator GEN_COMMON_LOCK_FAIL_ERROR = new WebExceptionCodeGenerator(DEFAULT_MODULE_LAYER_MODULE, "11", "COMMON_LOCK_FAIL_ERROR");
 
 }

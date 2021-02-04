@@ -36,9 +36,6 @@ public class LockConfiguration implements FoundationConfigurer {
     private static final Logger LOGGER = LoggerFactory.getLogger(LockConfiguration.class);
 
     @Autowired
-    private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
-
-    @Autowired
     private LockProcessorFactory lockProcessorFactory;
 
     @Pointcut("@annotation(com.ezcoding.common.foundation.core.lock.StandardLock)")
@@ -59,7 +56,7 @@ public class LockConfiguration implements FoundationConfigurer {
 
         LockProcessor lockProcessor = lockProcessorFactory.create(method);
         LockResult lockResult = null;
-        Object result = null;
+        Object result;
         LockContext lockContext = new LockContext();
         try {
             lockResult = lockProcessor.lock(target, args, lockContext);
@@ -74,13 +71,12 @@ public class LockConfiguration implements FoundationConfigurer {
             if (lockResult != null && lockResult.success()) {
                 try {
                     lockProcessor.unlock(lockResult.acquireKey(), target, args, lockContext);
-                } catch (Exception ignored) {
-
+                } catch (Exception e) {
+                    LOGGER.debug("lockProcessor unlock error!", e);
                 }
             }
             if (!lockContext.isEmpty()) {
                 lockContext.clear();
-                lockContext = null;
             }
         }
         return result;

@@ -1,5 +1,8 @@
 package com.ezcoding.common.foundation.core.lock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Method;
 
 /**
@@ -8,6 +11,8 @@ import java.lang.reflect.Method;
  * @date 2020-12-01 17:43
  */
 public class LockProcessor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LockProcessor.class);
 
     private final Method method;
     private final LockConfig lockConfig;
@@ -50,6 +55,7 @@ public class LockProcessor {
         if (lockKey == null || lockKey.isEmpty()) {
             return LockResult.lockFail();
         }
+        LOGGER.debug("ready to lock key [{}]", lockKey);
         return lockImplement.lock(lockKey, this.lockMetadata, target, args, lockContext);
     }
 

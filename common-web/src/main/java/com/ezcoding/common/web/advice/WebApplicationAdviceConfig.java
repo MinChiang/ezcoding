@@ -2,6 +2,7 @@ package com.ezcoding.common.web.advice;
 
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.lock.LockFailException;
 import com.ezcoding.common.foundation.core.message.StandardResponseEntity;
 import com.ezcoding.common.foundation.core.message.StandardResponseEntityFactory;
 import org.slf4j.Logger;
@@ -80,6 +81,14 @@ public class WebApplicationAdviceConfig {
         return StandardResponseEntityFactory
                 .status(HttpStatus.NOT_FOUND)
                 .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_RESOURCE_NOT_FIND_ERROR).build());
+    }
+
+    @ExceptionHandler(value = LockFailException.class)
+    public StandardResponseEntity<?> handleLockFailException(LockFailException e) {
+        LOGGER.error("lock fail error by: ", e);
+        return StandardResponseEntityFactory
+                .status(HttpStatus.BAD_REQUEST)
+                .error(WebExceptionBuilderFactory.webExceptionBuilder(GEN_COMMON_LOCK_FAIL_ERROR).build());
     }
 
     @ExceptionHandler(value = ApplicationException.class)
