@@ -10,6 +10,9 @@ import com.ezcoding.common.foundation.core.message.MessageFactory;
 import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 import com.ezcoding.common.foundation.core.tools.uuid.SnowflakeIdProducer;
+import com.ezcoding.common.foundation.core.validation.PrependMessageInterpolator;
+import org.hibernate.validator.HibernateValidator;
+import org.hibernate.validator.spi.resourceloading.ResourceBundleLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -19,6 +22,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -27,7 +31,13 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
+import org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator;
+import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
 
+import javax.validation.MessageInterpolator;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.io.IOException;
 import java.util.*;
 
@@ -261,6 +271,29 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
                         register.registerFunctionProcessor(moduleApplicationExceptionManager, defaultProcessor);
                     });
         }
+    }
+
+    /**
+     * 1.默认读取ValidationMessages.properties中的内容，注意此文件需要使用UTF-8进行编码
+     * 2.开启快速校验模式，当遇到第一个校验失败时马上返回
+     * 3.使用PrependMessageInterpolator默认消息插值模板，若想使用默认的消息插值方式，则在payload里面添加对应的Default.class
+     *
+     * @return 校验器
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public Validator validator(MessageSource messageSource) {
+        ResourceBundleLocator resourceBundleLocator = new MessageSourceResourceBundleLocator(messageSource);
+        MessageInterpolator messageInterpolator = new PrependMessageInterpolator(resourceBundleLocator);
+        MessageInterpolator localeContextMessageInterpolator = new LocaleContextMessageInterpolator(messageInterpolator);
+
+        ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
+                .configure()
+                //开启快速校验，只抛出第一个检测到的异常
+                .failFast(true)
+                .messageInterpolator(localeContextMessageInterpolator)
+                .buildValidatorFactory();
+        return validatorFactory.getValidator();
     }
 
 }

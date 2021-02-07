@@ -13,10 +13,10 @@ public abstract class AbstractAppHead implements AppHead, Serializable {
 
     protected PageInfo pageInfo;
 
-    AbstractAppHead() {
+    public AbstractAppHead() {
     }
 
-    AbstractAppHead(PageInfo pageInfo) {
+    public AbstractAppHead(PageInfo pageInfo) {
         this.pageInfo = pageInfo;
     }
 

@@ -1,5 +1,7 @@
-package com.ezcoding.common.foundation.core.log;
+package com.ezcoding.common.foundation.core.log.impl;
 
+import com.ezcoding.common.foundation.core.log.LogParser;
+import com.ezcoding.common.foundation.core.log.ParamLogMetadata;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 

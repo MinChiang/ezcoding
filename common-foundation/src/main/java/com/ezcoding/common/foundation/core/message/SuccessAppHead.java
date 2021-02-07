@@ -14,11 +14,11 @@ public class SuccessAppHead extends ResponseAppHead implements Serializable {
     protected static String defaultSuceessMessage = "success";
     protected static String defaultSuccessCode = "0000000000";
 
-    SuccessAppHead() {
+    public SuccessAppHead() {
         super(defaultSuccessCode, defaultSuceessMessage);
     }
 
-    SuccessAppHead(PageInfo pageInfo) {
+    public SuccessAppHead(PageInfo pageInfo) {
         super(pageInfo, defaultSuccessCode, defaultSuceessMessage);
     }
 

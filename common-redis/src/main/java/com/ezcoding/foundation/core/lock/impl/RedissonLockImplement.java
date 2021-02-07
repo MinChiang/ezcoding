@@ -1,9 +1,9 @@
 package com.ezcoding.foundation.core.lock.impl;
 
-import com.ezcoding.common.foundation.core.lock.LockContext;
 import com.ezcoding.common.foundation.core.lock.LockImplement;
 import com.ezcoding.common.foundation.core.lock.LockMetadata;
 import com.ezcoding.common.foundation.core.lock.LockResult;
+import com.ezcoding.common.foundation.core.lock.LockRuntime;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 
@@ -22,18 +22,18 @@ public class RedissonLockImplement implements LockImplement {
     }
 
     @Override
-    public LockResult lock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args, LockContext lockContext) throws Exception {
+    public LockResult lock(String lockKey, LockMetadata lockMetadata, LockRuntime lockRuntime) throws Exception {
         RLock lock = redissonClient.getLock(lockKey);
         if (lock.tryLock(lockMetadata.waitTime, lockMetadata.expireTime, lockMetadata.timeUnit)) {
-            lockContext.put(RLOCK_KEY_NAME, lock);
+            lockRuntime.lockContext.put(RLOCK_KEY_NAME, lock);
             return LockResult.lockSuccess(lockKey);
         }
         return LockResult.lockFail();
     }
 
     @Override
-    public void unlock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args, LockContext lockContext) {
-        RLock lock = (RLock) lockContext.get(RLOCK_KEY_NAME);
+    public void unlock(String lockKey, LockMetadata lockMetadata, LockRuntime lockRuntime) {
+        RLock lock = (RLock) lockRuntime.lockContext.get(RLOCK_KEY_NAME);
         if (lock != null) {
             lock.unlock();
         }

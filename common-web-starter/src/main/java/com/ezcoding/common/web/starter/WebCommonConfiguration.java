@@ -6,6 +6,8 @@ import com.ezcoding.common.foundation.core.enums.JacksonStrategy;
 import com.ezcoding.common.foundation.core.enums.MappingPair;
 import com.ezcoding.common.foundation.core.exception.processor.WebDefaultApplicationExceptionProcessor;
 import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuilderFactory;
+import com.ezcoding.common.foundation.core.lock.LockIdentification;
+import com.ezcoding.common.foundation.core.lock.impl.SpelLockIdentification;
 import com.ezcoding.common.foundation.starter.EzcodingFoundationConfigBean;
 import com.ezcoding.common.foundation.starter.FoundationConfigurer;
 import com.ezcoding.common.web.convertor.StandardEnumDeserializer;
@@ -55,6 +57,8 @@ public class WebCommonConfiguration implements InitializingBean, FoundationConfi
     private MessageSource messageSource;
     @Autowired
     private EzcodingFoundationConfigBean ezcodingFoundationConfigBean;
+    @Autowired(required = false)
+    private SpelLockIdentification spelLockIdentification;
 
     @Override
     public void afterPropertiesSet() {
@@ -144,6 +148,19 @@ public class WebCommonConfiguration implements InitializingBean, FoundationConfi
     @Override
     public void registerEnumStrategy(List<EnumMappableStrategy> strategies) {
         strategies.add(new JacksonStrategy());
+    }
+
+    @Override
+    public void registerLockIdentification(List<LockIdentification> lockIdentifications) {
+        if (spelLockIdentification != null) {
+            lockIdentifications.add(spelLockIdentification);
+        }
+    }
+
+    @Bean("defaultLockIdentification")
+    @ConditionalOnMissingBean
+    public SpelLockIdentification defaultLockIdentification() {
+        return new SpelLockIdentification();
     }
 
 }

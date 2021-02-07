@@ -16,7 +16,7 @@ public abstract class AbstractSystemHead implements SystemHead, Serializable {
     protected long transactionDate = System.currentTimeMillis();
     protected String version = DEFAULT_VERSION;
 
-    AbstractSystemHead() {
+    public AbstractSystemHead() {
     }
 
     @Override

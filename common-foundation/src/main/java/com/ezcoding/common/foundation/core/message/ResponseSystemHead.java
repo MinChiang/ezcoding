@@ -17,10 +17,10 @@ public class ResponseSystemHead extends AbstractSystemHead implements Serializab
     protected String providerId;
     protected String providerSequenceNo;
 
-    ResponseSystemHead() {
+    public ResponseSystemHead() {
     }
 
-    ResponseSystemHead(String providerId, String providerSequenceNo) {
+    public ResponseSystemHead(String providerId, String providerSequenceNo) {
         this.providerId = providerId;
         this.providerSequenceNo = providerSequenceNo;
     }

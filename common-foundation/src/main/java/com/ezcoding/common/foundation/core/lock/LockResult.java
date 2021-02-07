@@ -41,15 +41,6 @@ public class LockResult {
     }
 
     /**
-     * 判断上锁失败
-     *
-     * @return 上锁是否失败
-     */
-    public boolean fail() {
-        return !success();
-    }
-
-    /**
      * 获取锁标志
      *
      * @return 锁标志

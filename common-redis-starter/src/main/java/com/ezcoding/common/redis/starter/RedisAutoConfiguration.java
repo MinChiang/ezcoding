@@ -19,7 +19,7 @@ import java.util.List;
 @Configuration
 public class RedisAutoConfiguration implements FoundationConfigurer {
 
-    @Autowired
+    @Autowired(required = false)
     private RedissonLockImplement redissonLockImplement;
 
     @Bean("defaultLockImplement")
@@ -30,7 +30,9 @@ public class RedisAutoConfiguration implements FoundationConfigurer {
 
     @Override
     public void registerLockImplement(List<LockImplement> lockImplements) {
-        lockImplements.add(redissonLockImplement);
+        if (redissonLockImplement != null) {
+            lockImplements.add(redissonLockImplement);
+        }
     }
 
 }

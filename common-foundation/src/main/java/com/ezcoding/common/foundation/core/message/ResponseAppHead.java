@@ -15,20 +15,20 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
     protected String returnCode;
     protected String returnMessage;
 
-    ResponseAppHead() {
+    public ResponseAppHead() {
     }
 
-    ResponseAppHead(PageInfo pageInfo) {
+    public ResponseAppHead(PageInfo pageInfo) {
         super(pageInfo);
     }
 
-    ResponseAppHead(PageInfo pageInfo, String returnCode, String returnMessage) {
+    public ResponseAppHead(PageInfo pageInfo, String returnCode, String returnMessage) {
         this.returnCode = returnCode;
         this.returnMessage = returnMessage;
         this.pageInfo = pageInfo;
     }
 
-    ResponseAppHead(String returnCode, String returnMessage) {
+    public ResponseAppHead(String returnCode, String returnMessage) {
         this(null, returnCode, returnMessage);
     }
 

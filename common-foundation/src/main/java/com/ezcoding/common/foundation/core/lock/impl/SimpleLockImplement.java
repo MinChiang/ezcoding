@@ -1,9 +1,9 @@
 package com.ezcoding.common.foundation.core.lock.impl;
 
-import com.ezcoding.common.foundation.core.lock.LockContext;
 import com.ezcoding.common.foundation.core.lock.LockImplement;
 import com.ezcoding.common.foundation.core.lock.LockMetadata;
 import com.ezcoding.common.foundation.core.lock.LockResult;
+import com.ezcoding.common.foundation.core.lock.LockRuntime;
 
 import java.util.Collections;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class SimpleLockImplement implements LockImplement {
     private final Map<String, Lock> map = Collections.synchronizedMap(new WeakHashMap<>());
 
     @Override
-    public LockResult lock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args, LockContext lockContext) throws Exception {
+    public LockResult lock(String lockKey, LockMetadata lockMetadata, LockRuntime lockRuntime) throws Exception {
         Lock lock = this.getOrCreate(lockKey);
         if (lock.tryLock(lockMetadata.expireTime, lockMetadata.timeUnit)) {
             return LockResult.lockSuccess(lockKey);
@@ -33,7 +33,7 @@ public class SimpleLockImplement implements LockImplement {
     }
 
     @Override
-    public void unlock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args, LockContext lockContext) {
+    public void unlock(String lockKey, LockMetadata lockMetadata, LockRuntime lockRuntime) {
         Lock lock = this.getLock(lockKey);
         if (lock != null) {
             lock.unlock();

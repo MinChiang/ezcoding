@@ -14,10 +14,10 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
     protected String consumerId;
     protected String consumerSequenceNo;
 
-    RequestSystemHead() {
+    public RequestSystemHead() {
     }
 
-    RequestSystemHead(String consumerId, String consumerSequenceNo) {
+    public RequestSystemHead(String consumerId, String consumerSequenceNo) {
         this.consumerId = consumerId;
         this.consumerSequenceNo = consumerSequenceNo;
     }

@@ -13,10 +13,10 @@ public abstract class AbstractMessage<T> implements Message<T>, Serializable {
 
     protected T body;
 
-    AbstractMessage() {
+    public AbstractMessage() {
     }
 
-    AbstractMessage(T body) {
+    public AbstractMessage(T body) {
         this.body = body;
     }
 

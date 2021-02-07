@@ -113,28 +113,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         return standardMessageMethodProcessor;
     }
 
-    /**
-     * 1.默认读取ValidationMessages.properties中的内容，注意此文件需要使用UTF-8进行编码
-     * 2.开启快速校验模式，当遇到第一个校验失败时马上返回
-     * 3.使用PrependMessageInterpolator默认消息插值模板，若想使用默认的消息插值方式，则在payload里面添加对应的Default.class
-     *
-     * @return 校验器
-     */
-    @Bean
-    public Validator validator(MessageSource messageSource) {
-        ResourceBundleLocator resourceBundleLocator = new MessageSourceResourceBundleLocator(messageSource);
-        MessageInterpolator messageInterpolator = new PrependMessageInterpolator(resourceBundleLocator);
-        MessageInterpolator localeContextMessageInterpolator = new LocaleContextMessageInterpolator(messageInterpolator);
-
-        ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
-                .configure()
-                //开启快速校验，只抛出第一个检测到的异常
-                .failFast(true)
-                .messageInterpolator(localeContextMessageInterpolator)
-                .buildValidatorFactory();
-        return validatorFactory.getValidator();
-    }
-
     private UserLoadable compositeUserLoader() {
         List<UserLoadable> loaders = new ArrayList<>();
         Optional<List<ApplicationWebConfigurer>> applicationWebConfigurers = Optional.ofNullable(this.applicationWebConfigurers);

@@ -3,8 +3,6 @@ package com.ezcoding.common.foundation.core.lock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Method;
-
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -14,20 +12,18 @@ public class LockProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LockProcessor.class);
 
-    private final Method method;
-    private final LockConfig lockConfig;
-
-    private final LockMetadata lockMetadata;
-    private final LockIdentification lockIdentification;
-    private final LockImplement lockImplement;
+    public final LockRuntime lockRuntime;
+    public final LockMetadata lockMetadata;
+    public final LockIdentification lockIdentification;
+    public final LockImplement lockImplement;
 
     LockProcessor(LockConfig lockConfig,
-                  Method method) {
-        this.method = method;
-        this.lockConfig = lockConfig;
+                  LockRuntime lockRuntime) {
+
+        this.lockRuntime = lockRuntime;
 
         //元素据初始化
-        StandardLock standardLock = this.method.getAnnotation(StandardLock.class);
+        StandardLock standardLock = this.lockRuntime.method.getAnnotation(StandardLock.class);
         this.lockMetadata = new LockMetadata(
                 standardLock.key(),
                 standardLock.prefix(),
@@ -45,50 +41,24 @@ public class LockProcessor {
     /**
      * 上锁
      *
-     * @param target      目标对象
-     * @param args        入参
-     * @param lockContext 上下文
      * @return 锁元素
      */
-    public LockResult lock(Object target, Object[] args, LockContext lockContext) throws Exception {
-        String lockKey = lockIdentification.identify(lockMetadata, lockConfig, this.method);
+    public LockResult lock() throws Exception {
+        String lockKey = lockIdentification.identify(lockMetadata, this.lockRuntime);
         if (lockKey == null || lockKey.isEmpty()) {
             return LockResult.lockFail();
         }
         LOGGER.debug("ready to lock key [{}]", lockKey);
-        return lockImplement.lock(lockKey, this.lockMetadata, target, args, lockContext);
+        return lockImplement.lock(lockKey, this.lockMetadata, this.lockRuntime);
     }
 
     /**
      * 解锁
      *
-     * @param lockKey     锁标志
-     * @param target      目标对象
-     * @param args        入参
-     * @param lockContext 上下文
+     * @param lockKey 锁标志
      */
-    public void unlock(String lockKey, Object target, Object[] args, LockContext lockContext) {
-        lockImplement.unlock(lockKey, this.lockMetadata, target, args, lockContext);
-    }
-
-    public LockConfig getLockConfig() {
-        return lockConfig;
-    }
-
-    public Method getMethod() {
-        return method;
-    }
-
-    public LockMetadata getLockMetadata() {
-        return lockMetadata;
-    }
-
-    public LockIdentification getLockIdentification() {
-        return lockIdentification;
-    }
-
-    public LockImplement getLockImplement() {
-        return lockImplement;
+    public void unlock(String lockKey) {
+        lockImplement.unlock(lockKey, this.lockMetadata, this.lockRuntime);
     }
 
 }

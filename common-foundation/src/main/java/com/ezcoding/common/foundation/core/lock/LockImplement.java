@@ -12,23 +12,19 @@ public interface LockImplement {
      *
      * @param lockKey      锁对象
      * @param lockMetadata 锁元数据
-     * @param target       目标对象
-     * @param args         参数值
-     * @param lockContext  上下文
+     * @param lockRuntime  锁运行时参数
      * @return 锁结果
      * @throws Exception 异常
      */
-    LockResult lock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args, LockContext lockContext) throws Exception;
+    LockResult lock(String lockKey, LockMetadata lockMetadata, LockRuntime lockRuntime) throws Exception;
 
     /**
      * 获取锁
      *
      * @param lockKey      锁对象
      * @param lockMetadata 锁元数据
-     * @param target       目标对象
-     * @param args         参数值
-     * @param lockContext  上下文
+     * @param lockRuntime  锁运行时参数
      */
-    void unlock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args, LockContext lockContext);
+    void unlock(String lockKey, LockMetadata lockMetadata, LockRuntime lockRuntime);
 
 }

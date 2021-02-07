@@ -49,28 +49,33 @@ public class LockConfiguration implements FoundationConfigurer {
         Object target = proceedingJoinPoint.getTarget();
         //获取参数
         MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
+        //获取参数名称
+        String[] parameterNames = signature.getParameterNames();
         //获取方法
         Method method = signature.getMethod();
         //获取参数
         Object[] args = proceedingJoinPoint.getArgs();
 
-        LockProcessor lockProcessor = lockProcessorFactory.create(method);
+        //锁结果
         LockResult lockResult = null;
+        //业务执行结果
         Object result;
         LockContext lockContext = new LockContext();
+        LockRuntime lockRuntime = new LockRuntime(target, args, method, parameterNames, lockContext);
+        LockProcessor lockProcessor = lockProcessorFactory.create(lockRuntime);
         try {
-            lockResult = lockProcessor.lock(target, args, lockContext);
-            if (lockResult.fail()) {
-                throw new LockFailException(lockProcessor.getLockMetadata().failMessage);
+            lockResult = lockProcessor.lock();
+            if (!lockResult.success()) {
+                throw new LockFailException(lockProcessor.lockMetadata.failMessage);
             }
             //执行业务
             result = proceedingJoinPoint.proceed();
         } catch (Exception e) {
-            throw new LockFailException(lockProcessor.getLockMetadata().failMessage, e);
+            throw new LockFailException(lockProcessor.lockMetadata.failMessage, e);
         } finally {
             if (lockResult != null && lockResult.success()) {
                 try {
-                    lockProcessor.unlock(lockResult.acquireKey(), target, args, lockContext);
+                    lockProcessor.unlock(lockResult.acquireKey());
                 } catch (Exception e) {
                     LOGGER.debug("lockProcessor unlock error!", e);
                 }

@@ -5,7 +5,6 @@ import com.ezcoding.common.foundation.core.lock.impl.DefaultLockImplement;
 import com.ezcoding.common.foundation.core.lock.impl.SimpleLockIdentification;
 import com.ezcoding.common.foundation.core.lock.impl.SimpleLockImplement;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +25,13 @@ public class LockProcessorFactory {
     /**
      * 构建对象
      *
-     * @param method 调用方法
+     * @param lockRuntime 锁运行时内容
      * @return 构建的对象
      */
-    public LockProcessor create(Method method) {
+    public LockProcessor create(LockRuntime lockRuntime) {
         return new LockProcessor(
                 this.lockConfig,
-                method
+                lockRuntime
         );
     }
 

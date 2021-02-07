@@ -1,9 +1,9 @@
 package com.ezcoding.common.foundation.core.lock.impl;
 
-import com.ezcoding.common.foundation.core.lock.LockContext;
 import com.ezcoding.common.foundation.core.lock.LockImplement;
 import com.ezcoding.common.foundation.core.lock.LockMetadata;
 import com.ezcoding.common.foundation.core.lock.LockResult;
+import com.ezcoding.common.foundation.core.lock.LockRuntime;
 
 /**
  * @author MinChiang
@@ -15,13 +15,13 @@ public class DefaultLockImplement implements LockImplement {
     private LockImplement lockImplement = new SimpleLockImplement();
 
     @Override
-    public LockResult lock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args, LockContext lockContext) throws Exception {
-        return this.lockImplement.lock(lockKey, lockMetadata, target, args, lockContext);
+    public LockResult lock(String lockKey, LockMetadata lockMetadata, LockRuntime lockRuntime) throws Exception {
+        return this.lockImplement.lock(lockKey, lockMetadata, lockRuntime);
     }
 
     @Override
-    public void unlock(String lockKey, LockMetadata lockMetadata, Object target, Object[] args, LockContext lockContext) {
-        this.lockImplement.unlock(lockKey, lockMetadata, target, args, lockContext);
+    public void unlock(String lockKey, LockMetadata lockMetadata, LockRuntime lockRuntime) {
+        this.lockImplement.unlock(lockKey, lockMetadata, lockRuntime);
     }
 
     public LockImplement getLockImplement() {
