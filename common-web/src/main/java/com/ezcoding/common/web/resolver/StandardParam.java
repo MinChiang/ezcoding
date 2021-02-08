@@ -15,6 +15,8 @@ public @interface StandardParam {
 
     /**
      * 参数路径
+     * 为json path路径解析
+     * 若为空，则默认取对应参数名称的路径
      *
      * @return 参数路径
      */
@@ -29,6 +31,8 @@ public @interface StandardParam {
 
     /**
      * 默认参数
+     * 自动转化为参数类型的默认值
+     * 支持类型：String、char、Character、boolean、Boolean、byte、Byte、short、Short、int、Integer、long、Long、float、Float、double、Double
      *
      * @return 默认参数
      */

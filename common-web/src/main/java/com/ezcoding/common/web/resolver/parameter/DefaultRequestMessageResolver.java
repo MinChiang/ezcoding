@@ -37,7 +37,11 @@ public class DefaultRequestMessageResolver extends AbstractRequestMessageResolve
         JsonNode body = requestMessage.getBody();
         String value = parameterAnnotation.value();
         Object result;
-        if (!value.isEmpty()) {
+        if (value.isEmpty()) {
+            //默认取对应的参数节点
+            String parameterName = methodParameter.getParameterName();
+            body = body.at(PATH_PREFIX + parameterName);
+        } else {
             if (!value.startsWith(PATH_PREFIX)) {
                 value = (PATH_PREFIX + value);
             }

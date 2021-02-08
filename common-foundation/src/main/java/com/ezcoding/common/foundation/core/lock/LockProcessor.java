@@ -58,6 +58,7 @@ public class LockProcessor {
      * @param lockKey 锁标志
      */
     public void unlock(String lockKey) {
+        LOGGER.debug("ready to unlock key [{}]", lockKey);
         lockImplement.unlock(lockKey, this.lockMetadata, this.lockRuntime);
     }
 

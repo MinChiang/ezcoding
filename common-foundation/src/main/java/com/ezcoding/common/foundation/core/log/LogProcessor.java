@@ -26,11 +26,12 @@ public class LogProcessor {
     private final LogMetadata logMetadata;
     private final LogFormatter formatter;
     private final LogPrinter printer;
-    private final List<LogParamProcessor> beforeLogParamProcessors;
-    private final LogParamProcessor afterLogParamProcessor;
 
     private final boolean unnecessaryToLogBefore;
     private final boolean unnecessaryToLogAfter;
+
+    private List<LogParamProcessor> beforeLogParamProcessors;
+    private LogParamProcessor afterLogParamProcessor;
 
     LogProcessor(LogConfig logConfig,
                  Method method) {
@@ -53,16 +54,24 @@ public class LogProcessor {
         //入参初始化
         Parameter[] parameters = method.getParameters();
         this.beforeLogParamProcessors = new ArrayList<>();
+        boolean hasParameterAnnotation = false;
         for (Parameter parameter : parameters) {
-            this.beforeLogParamProcessors.add(new LogParamProcessor(this.logConfig, parameter));
+            if (parameter.isAnnotationPresent(StandardLogParam.class)) {
+                this.beforeLogParamProcessors.add(new LogParamProcessor(this.logConfig, parameter));
+                hasParameterAnnotation = true;
+            }
         }
 
         //出参初始化
-        this.afterLogParamProcessor = new LogParamProcessor(this.logConfig, this.method);
+        boolean hasMethodAnnotation = false;
+        if (this.method.isAnnotationPresent(StandardLogParam.class)) {
+            this.afterLogParamProcessor = new LogParamProcessor(this.logConfig, this.method);
+            hasMethodAnnotation = true;
+        }
 
         //控制打印
-        this.unnecessaryToLogBefore = this.logMetadata.beforeExpression.isEmpty();
-        this.unnecessaryToLogAfter = this.logMetadata.afterExpression.isEmpty();
+        this.unnecessaryToLogBefore = !hasParameterAnnotation;
+        this.unnecessaryToLogAfter = !hasMethodAnnotation;
     }
 
     /**

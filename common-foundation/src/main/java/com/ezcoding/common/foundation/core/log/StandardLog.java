@@ -47,8 +47,9 @@ public @interface StandardLog {
      * 打印方式
      *
      * @return 打印方式
+     * @see LogTypeEnum
      */
-    LogTypeEnum type() default LogTypeEnum.ASYNC;
+    LogTypeEnum type() default LogTypeEnum.SYNC;
 
     /**
      * 是否在返回表达式中用请求参数填充

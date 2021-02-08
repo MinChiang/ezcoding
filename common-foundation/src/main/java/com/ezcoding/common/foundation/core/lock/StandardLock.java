@@ -26,6 +26,7 @@ public @interface StandardLock {
 
     /**
      * 锁前缀
+     * 为了防止所有上锁入口都加同一个锁
      *
      * @return 锁前缀
      */
@@ -39,7 +40,8 @@ public @interface StandardLock {
     long expireTime() default 5;
 
     /**
-     * 获取锁等待时长，若为0则马上判断获取是否成功
+     * 获取锁等待时长
+     * 若为0则马上判断获取是否成功，若不为0则阻塞直到成功获取锁或超过等待时长
      *
      * @return 等待时长
      */

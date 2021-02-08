@@ -34,6 +34,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.beanvalidation.LocaleContextMessageInterpolator;
 import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
 import org.springframework.web.client.RestTemplate;
@@ -62,8 +64,6 @@ import static org.springframework.util.StringUtils.tokenizeToStringArray;
 @AutoConfigureAfter(value = EzcodingFoundationAutoConfiguration.class)
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
-    @Autowired
-    private HttpMessageConverters httpMessageConverters;
     @Autowired(required = false)
     private List<ApplicationWebConfigurer> applicationWebConfigurers;
     @Autowired
@@ -93,7 +93,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Bean
     public StandardMessageMethodProcessor jsonMessageMethodProcessor() {
-        StandardMessageMethodProcessor standardMessageMethodProcessor = new StandardMessageMethodProcessor(httpMessageConverters.getConverters());
+        HttpMessageConverter<?> httpMessageConverter = new MappingJackson2HttpMessageConverter(ObjectMapperUtils.message());
+        StandardMessageMethodProcessor standardMessageMethodProcessor = new StandardMessageMethodProcessor(Collections.singletonList(httpMessageConverter));
 
         List<RequestMessageParameterResolvable> parameterResolvers = new ArrayList<>();
         List<ResponseMessageReturnValueResolvable> returnValueResolvers = new ArrayList<>();
@@ -229,6 +230,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     /**
      * 为了请求对应的后台而做的鉴权请求模板
+     *
      * @return 请求模板
      */
     @Bean
