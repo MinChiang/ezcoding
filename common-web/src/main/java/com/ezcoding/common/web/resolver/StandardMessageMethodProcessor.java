@@ -18,6 +18,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,9 +66,9 @@ public class StandardMessageMethodProcessor extends AbstractMessageConverterMeth
             persistCurrentRequestMessage(requestMessage);
         }
         //清除对应的请求信息
-        if (parameter.getParameterIndex() + 1 == parameter.getMethod().getParameterCount()) {
-            clearCurrentRequestMessage();
-        }
+//        if (parameter.getParameterIndex() + 1 == parameter.getMethod().getParameterCount()) {
+//            clearCurrentRequestMessage();
+//        }
         //解析参数
         RequestMessageParameterResolvable resolvable = parameterResolvers
                 .stream()
