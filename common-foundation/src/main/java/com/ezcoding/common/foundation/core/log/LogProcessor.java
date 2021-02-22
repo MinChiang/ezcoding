@@ -27,9 +27,6 @@ public class LogProcessor {
     private final LogFormatter formatter;
     private final LogPrinter printer;
 
-    private final boolean unnecessaryToLogBefore;
-    private final boolean unnecessaryToLogAfter;
-
     private List<LogParamProcessor> beforeLogParamProcessors;
     private LogParamProcessor afterLogParamProcessor;
 
@@ -54,24 +51,16 @@ public class LogProcessor {
         //入参初始化
         Parameter[] parameters = method.getParameters();
         this.beforeLogParamProcessors = new ArrayList<>();
-        boolean hasParameterAnnotation = false;
         for (Parameter parameter : parameters) {
             if (parameter.isAnnotationPresent(StandardLogParam.class)) {
                 this.beforeLogParamProcessors.add(new LogParamProcessor(this.logConfig, parameter));
-                hasParameterAnnotation = true;
             }
         }
 
         //出参初始化
-        boolean hasMethodAnnotation = false;
         if (this.method.isAnnotationPresent(StandardLogParam.class)) {
             this.afterLogParamProcessor = new LogParamProcessor(this.logConfig, this.method);
-            hasMethodAnnotation = true;
         }
-
-        //控制打印
-        this.unnecessaryToLogBefore = !hasParameterAnnotation;
-        this.unnecessaryToLogAfter = !hasMethodAnnotation;
     }
 
     /**
@@ -81,9 +70,6 @@ public class LogProcessor {
      * @param args   入参
      */
     public void logBefore(Object target, Object[] args) {
-        if (this.unnecessaryToLogBefore) {
-            return;
-        }
         if (Objects.equals(this.logMetadata.type, LogTypeEnum.ASYNC)) {
             CompletableFuture.runAsync(() -> logBeforeSync(target, args), logConfig.acquireExecutor());
         } else {
@@ -117,9 +103,6 @@ public class LogProcessor {
      * @param result 出参
      */
     public void logAfter(Object target, Object result) {
-        if (unnecessaryToLogAfter) {
-            return;
-        }
         if (Objects.equals(this.logMetadata.type, LogTypeEnum.ASYNC)) {
             CompletableFuture.runAsync(() -> logAfterSync(target, result), logConfig.acquireExecutor());
         } else {
