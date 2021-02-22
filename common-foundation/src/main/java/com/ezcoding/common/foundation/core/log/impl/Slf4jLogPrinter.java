@@ -14,12 +14,11 @@ import java.util.List;
  */
 public class Slf4jLogPrinter implements LogPrinter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Slf4jLogPrinter.class);
-
     @Override
     public void print(String message, LogMetadata logMetadata, Object target, List<Object> objects) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info(message, objects.toArray());
+        Logger logger = LoggerFactory.getLogger(target.getClass());
+        if (logger.isInfoEnabled()) {
+            logger.info(message, objects.toArray());
         }
     }
 
