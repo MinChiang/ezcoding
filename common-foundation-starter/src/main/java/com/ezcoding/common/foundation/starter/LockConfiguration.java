@@ -61,10 +61,11 @@ public class LockConfiguration implements FoundationConfigurer {
         //业务执行结果
         Object result;
         LockContext lockContext = new LockContext();
-        LockRuntime lockRuntime = new LockRuntime(target, args, method, parameterNames, lockContext);
-        LockProcessor lockProcessor = lockProcessorFactory.create(lockRuntime);
+        LockInfo lockInfo = new LockInfo(method, parameterNames);
+        LockProcessor lockProcessor = lockProcessorFactory.getOrCreate(lockInfo);
+        LockRuntime lockRuntime = new LockRuntime(target, args, lockContext);
         try {
-            lockResult = lockProcessor.lock();
+            lockResult = lockProcessor.lock(lockRuntime);
             if (!lockResult.success()) {
                 throw new LockFailException(lockProcessor.lockMetadata.failMessage);
             }
@@ -75,7 +76,7 @@ public class LockConfiguration implements FoundationConfigurer {
         } finally {
             if (lockResult != null && lockResult.success()) {
                 try {
-                    lockProcessor.unlock(lockResult.acquireKey());
+                    lockProcessor.unlock(lockResult.acquireKey(), lockRuntime);
                 } catch (Exception e) {
                     LOGGER.debug("lockProcessor unlock error!", e);
                 }

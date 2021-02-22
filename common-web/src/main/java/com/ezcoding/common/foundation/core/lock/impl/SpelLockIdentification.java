@@ -22,11 +22,11 @@ public class SpelLockIdentification implements LockIdentification {
         EvaluationContext ctx = new StandardEvaluationContext();
         if (lockRuntime.args != null && lockRuntime.args.length > 0) {
             for (int i = 0; i < lockRuntime.args.length; i++) {
-                ctx.setVariable(lockRuntime.parameterNames[i], lockRuntime.args[i]);
+                ctx.setVariable(lockMetadata.parameterNames[i], lockRuntime.args[i]);
             }
         }
         String key = PARSER.parseExpression(lockMetadata.key).getValue(ctx, String.class);
-        String prefix = lockMetadata.prefix.isEmpty() ? lockRuntime.method.getDeclaringClass().getName() : lockMetadata.prefix;
+        String prefix = lockMetadata.prefix.isEmpty() ? lockMetadata.method.getDeclaringClass().getName() : lockMetadata.prefix;
         return prefix + "#" + key;
     }
 

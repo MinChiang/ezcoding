@@ -8,6 +8,7 @@ import com.ezcoding.common.foundation.core.lock.impl.SimpleLockImplement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author MinChiang
@@ -17,6 +18,7 @@ import java.util.Map;
 public class LockProcessorFactory {
 
     private final LockConfig lockConfig;
+    private final Map<LockInfo, LockProcessor> cache = new ConcurrentHashMap<>();
 
     private LockProcessorFactory(LockConfig lockConfig) {
         this.lockConfig = lockConfig;
@@ -25,14 +27,14 @@ public class LockProcessorFactory {
     /**
      * 构建对象
      *
-     * @param lockRuntime 锁运行时内容
+     * @param lockInfo 锁内容
      * @return 构建的对象
      */
-    public LockProcessor create(LockRuntime lockRuntime) {
-        return new LockProcessor(
+    public LockProcessor getOrCreate(LockInfo lockInfo) {
+        return cache.computeIfAbsent(lockInfo, info -> new LockProcessor(
                 this.lockConfig,
-                lockRuntime
-        );
+                lockInfo
+        ));
     }
 
     /**

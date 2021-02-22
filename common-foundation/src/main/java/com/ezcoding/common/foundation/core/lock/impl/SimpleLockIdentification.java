@@ -15,8 +15,8 @@ public class SimpleLockIdentification implements LockIdentification {
 
     @Override
     public String identify(LockMetadata lockMetadata, LockRuntime lockRuntime) {
-        String key = lockMetadata.key.isEmpty() ? lockRuntime.method.getName() : lockMetadata.key;
-        String prefix = lockMetadata.prefix.isEmpty() ? lockRuntime.method.getDeclaringClass().getName() : lockMetadata.prefix;
+        String key = lockMetadata.key.isEmpty() ? lockMetadata.method.getName() : lockMetadata.key;
+        String prefix = lockMetadata.prefix.isEmpty() ? lockMetadata.method.getDeclaringClass().getName() : lockMetadata.prefix;
         return prefix + SPLITTER + key;
     }
 
