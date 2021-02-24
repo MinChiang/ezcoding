@@ -20,13 +20,12 @@ import java.io.IOException;
  */
 public class Sdk implements TokenStorable {
 
-    private final SdkConfig sdkConfig;
-
-    private transient volatile Token token;
-    private transient volatile String publicKey;
-
     private static final OkHttpClient OK_HTTP_CLIENT = new OkHttpClient.Builder().build();
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    private final SdkConfig sdkConfig;
+    private transient volatile Token token;
+    private transient volatile String publicKey;
 
     Sdk(SdkConfig sdkConfig) {
         this.sdkConfig = sdkConfig;
@@ -54,7 +53,7 @@ public class Sdk implements TokenStorable {
      * @param relativeUrl 相对url路径
      * @return 完整路径
      */
-    public String completeUrl(String relativeUrl) {
+    private String completeUrl(String relativeUrl) {
         return this.sdkConfig.getBaseUrl() + relativeUrl;
     }
 

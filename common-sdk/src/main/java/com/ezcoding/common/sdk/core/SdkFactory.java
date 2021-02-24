@@ -4,6 +4,7 @@ import com.ezcoding.common.foundation.core.enviroment.Environment;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author MinChiang
@@ -12,9 +13,7 @@ import java.util.Map;
  */
 public class SdkFactory {
 
-    public static Map<Environment, SdkConfig> SDK_CONFIGS = new HashMap<>();
-
-    static {
+    public static Map<Environment, SdkConfig> SDK_CONFIGS = new HashMap<Environment, SdkConfig>() {{
         SdkConfig local = new SdkConfig();
         local.setBaseUrl("http://127.0.0.1:8081");
 
@@ -31,7 +30,7 @@ public class SdkFactory {
         SDK_CONFIGS.put(Environment.DEV, dev);
         SDK_CONFIGS.put(Environment.TEST, test);
         SDK_CONFIGS.put(Environment.PROD, prod);
-    }
+    }};
 
     /**
      * 根据环境获取sdk实例
@@ -40,9 +39,10 @@ public class SdkFactory {
      * @return sdk实例
      */
     public static Sdk create(Environment environment) {
+        Objects.requireNonNull(environment);
         SdkConfig sdkConfig = SDK_CONFIGS.get(environment);
         if (sdkConfig == null) {
-            throw new RuntimeException("can not find enviroment: [" + environment.toString() + "]");
+            throw new RuntimeException("can not find environment: [" + environment.toString() + "]");
         }
         return new Sdk(sdkConfig);
     }
