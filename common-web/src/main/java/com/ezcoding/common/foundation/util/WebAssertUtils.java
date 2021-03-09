@@ -6,6 +6,7 @@ import com.ezcoding.common.foundation.core.exception.processor.WebExceptionBuild
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author MinChiang
@@ -15,12 +16,22 @@ import java.util.Map;
 public class WebAssertUtils {
 
     /**
+     * 校验生成器参数
+     *
+     * @param generator 生成器参数
+     */
+    private static void checkGenerator(WebExceptionCodeGenerator generator) {
+        Objects.requireNonNull(generator, "WebExceptionCodeGenerator can not be null");
+    }
+
+    /**
      * 断言表达式为true
      *
      * @param expression 需要断言的表达式
      * @param generator  异常提供器
      */
     public static void mustTrue(boolean expression, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustTrue(expression, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -31,6 +42,7 @@ public class WebAssertUtils {
      * @param generator  异常提供器
      */
     public static void mustFalse(boolean expression, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustFalse(expression, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -42,6 +54,7 @@ public class WebAssertUtils {
      * @param generator 异常提供器
      */
     public static void mustEqual(Object o1, Object o2, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustEqual(o1, o2, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -52,6 +65,7 @@ public class WebAssertUtils {
      * @param generator 异常提供器
      */
     public static void mustNull(Object object, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustNull(object, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -62,6 +76,7 @@ public class WebAssertUtils {
      * @param generator 异常提供器
      */
     public static void mustNotNull(Object object, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustNotNull(object, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -72,6 +87,7 @@ public class WebAssertUtils {
      * @param generator 异常提供器
      */
     public static void mustNotNull(Object[] objects, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustNotNull(objects, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -82,6 +98,7 @@ public class WebAssertUtils {
      * @param generator 异常提供器
      */
     public static void mustEmpty(String text, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustEmpty(text, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -92,6 +109,7 @@ public class WebAssertUtils {
      * @param generator 异常提供器
      */
     public static void mustNotEmpty(String text, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustNotEmpty(text, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -102,6 +120,7 @@ public class WebAssertUtils {
      * @param generator 异常提供器
      */
     public static <T> void mustNotEmpty(T[] array, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustNotEmpty(array, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -112,6 +131,7 @@ public class WebAssertUtils {
      * @param generator  异常提供器
      */
     public static void mustNotEmpty(Collection<?> collection, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustNotEmpty(collection, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -122,6 +142,7 @@ public class WebAssertUtils {
      * @param generator 异常提供器
      */
     public static void mustNotEmpty(Map<?, ?> map, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustNotEmpty(map, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -133,6 +154,7 @@ public class WebAssertUtils {
      * @param generator 异常提供器
      */
     public static void mustInstanceOf(Class<?> type, Object obj, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustInstanceOf(type, obj, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
@@ -144,6 +166,7 @@ public class WebAssertUtils {
      * @param generator 异常提供器
      */
     public static void mustAssignable(Class<?> superType, Class<?> subType, WebExceptionCodeGenerator generator) throws ApplicationException {
+        checkGenerator(generator);
         AssertUtils.mustAssignable(superType, subType, () -> WebExceptionBuilderFactory.webExceptionBuilder(generator).build());
     }
 
