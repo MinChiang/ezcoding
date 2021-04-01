@@ -1,6 +1,7 @@
 package com.ezcoding.common.core.user.model;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public enum DeviceTypeEnum {
      */
     WEARABLE(6);
 
-    private static final Map<Integer, DeviceTypeEnum> ALL = Arrays.stream(DeviceTypeEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, value -> value));
+    private static final Map<Integer, DeviceTypeEnum> ALL = Collections.unmodifiableMap(Arrays.stream(DeviceTypeEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, value -> value)));
 
     public static DeviceTypeEnum from(int id) {
         return ALL.get(id);

@@ -1,6 +1,7 @@
 package com.ezcoding.common.core.user.model;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public enum GenderEnum {
      */
     FEMALE(2);
 
-    private static final Map<Integer, GenderEnum> ALL = Arrays.stream(GenderEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, value -> value));
+    private static final Map<Integer, GenderEnum> ALL = Collections.unmodifiableMap(Arrays.stream(GenderEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, value -> value)));
 
     /**
      * 转换
