@@ -1,6 +1,7 @@
 package com.ezcoding.common.foundation.core.enums;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public enum BooleanTypeEnum implements EnumMappable<Integer> {
      */
     FALSE(0);
 
-    private static final Map<Integer, BooleanTypeEnum> ALL = Arrays.stream(BooleanTypeEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, value -> value));
+    private static final Map<Integer, BooleanTypeEnum> ALL = Collections.unmodifiableMap(Arrays.stream(BooleanTypeEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, value -> value)));
 
     /**
      * 转换
