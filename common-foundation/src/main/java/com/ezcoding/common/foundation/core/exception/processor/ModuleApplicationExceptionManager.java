@@ -31,7 +31,7 @@ public class ModuleApplicationExceptionManager extends AbstractApplicationExcept
     }
 
     @Override
-    public boolean canProcessible(ApplicationException applicationException) {
+    public boolean canProcess(ApplicationException applicationException) {
         return false;
     }
 

@@ -25,7 +25,7 @@ public class SimpleApplicationExceptionManager extends AbstractApplicationExcept
     }
 
     @Override
-    public boolean canProcessible(ApplicationException applicationException) {
+    public boolean canProcess(ApplicationException applicationException) {
         return processors.containsKey(applicationException.getIdentification());
     }
 
@@ -34,7 +34,7 @@ public class SimpleApplicationExceptionManager extends AbstractApplicationExcept
         Optional
                 .of(applicationException.getIdentification())
                 .map(processors::get)
-                .filter(p -> p.canProcessible(applicationException))
+                .filter(p -> p.canProcess(applicationException))
                 .ifPresent(p -> {
                     p.process(applicationException, processContext);
                     processContext.setProcessed(true);

@@ -15,7 +15,7 @@ public interface ApplicationExceptionProcessible {
      * @param applicationException 程序错误
      * @return 是否能够捕获处理
      */
-    boolean canProcessible(ApplicationException applicationException);
+    boolean canProcess(ApplicationException applicationException);
 
     /**
      * 处理错误
