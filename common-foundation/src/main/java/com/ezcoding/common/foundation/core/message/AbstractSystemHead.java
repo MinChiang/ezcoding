@@ -11,7 +11,7 @@ public abstract class AbstractSystemHead implements SystemHead, Serializable {
 
     private static final long serialVersionUID = 9212375428640216675L;
 
-    public static final String DEFAULT_VERSION = "1.0";
+    public static final String DEFAULT_VERSION = "1.0.0";
 
     protected long transactionDate = System.currentTimeMillis();
     protected String version = DEFAULT_VERSION;

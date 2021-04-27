@@ -14,12 +14,9 @@ import java.util.Random;
 public class MessageFactory {
 
     private static IdProduceable SEQUENCE_NO_PRODUCER;
-    private static String APP_ID;
 
     static {
         SEQUENCE_NO_PRODUCER = OriginalUuidProducer.getInstance();
-        Random random = new Random();
-        APP_ID = String.valueOf(random.nextLong());
     }
 
     private MessageFactory() {
@@ -31,13 +28,6 @@ public class MessageFactory {
             throw new IllegalArgumentException("sequence no producer can't be null");
         }
         SEQUENCE_NO_PRODUCER = sequenceNoProducer;
-    }
-
-    public static void setAppId(String appId) {
-        if (appId == null || appId.isEmpty()) {
-            throw new IllegalArgumentException("current app id can't be null");
-        }
-        APP_ID = appId;
     }
 
     public static void setDefaultErrorResponseCode(String defaultErrorResponseCode) {
@@ -74,7 +64,7 @@ public class MessageFactory {
      * @return 请求信息
      */
     public static <T> RequestMessage<T> buildRequestMessage(PageInfo pageInfo, T body) {
-        return new RequestMessage<>(new RequestSystemHead(APP_ID, SEQUENCE_NO_PRODUCER.produce()), new RequestAppHead(pageInfo), body);
+        return new RequestMessage<>(new RequestSystemHead(SEQUENCE_NO_PRODUCER.produce()), new RequestAppHead(pageInfo), body);
     }
 
     /**
@@ -85,7 +75,7 @@ public class MessageFactory {
      * @return 成功响应信息
      */
     public static <T> ResponseMessage<T> buildSuccessResponseMessage(PageInfo pageInfo, T body) {
-        return new ResponseMessage<>(new ResponseSystemHead(APP_ID, SEQUENCE_NO_PRODUCER.produce()), new SuccessAppHead(pageInfo), body);
+        return new ResponseMessage<>(new ResponseSystemHead(SEQUENCE_NO_PRODUCER.produce()), new SuccessAppHead(pageInfo), body);
     }
 
     /**
@@ -127,7 +117,7 @@ public class MessageFactory {
      * @return 失败响应信息
      */
     public static <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage, T body) {
-        return new ResponseMessage<>(new ResponseSystemHead(APP_ID, SEQUENCE_NO_PRODUCER.produce()), new ErrorAppHead(returnCode, returnMessage), body);
+        return new ResponseMessage<>(new ResponseSystemHead(SEQUENCE_NO_PRODUCER.produce()), new ErrorAppHead(returnCode, returnMessage), body);
     }
 
     /**

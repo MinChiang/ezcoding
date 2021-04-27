@@ -98,10 +98,6 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
         MessageFactory.setDefaultSuccessResponseCode(message.getSuccessResponseCode());
         MessageFactory.setDefaultErrorResponseMessage(message.getErrorResponseMessage());
         MessageFactory.setDefaultSuccessResponseMessage(message.getSuccessResponseMessage());
-
-        Long categoryNo = ezcodingFoundationConfigBean.getMetadata().getCategoryNo();
-        Long dataCenterNo = ezcodingFoundationConfigBean.getMetadata().getDataCenterNo();
-        MessageFactory.setAppId(String.valueOf(dataCenterNo) + categoryNo);
     }
 
     private void initEnumMapping() throws ClassNotFoundException, IOException {

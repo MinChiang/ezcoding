@@ -16,14 +16,24 @@ import java.util.function.Supplier;
 public class AssertUtils {
 
     /**
+     * 校验生成器参数
+     *
+     * @param exceptionSupplier 断言表达式
+     */
+    private static void checkExceptionSupplier(Supplier<? extends ApplicationException> exceptionSupplier) {
+        Objects.requireNonNull(exceptionSupplier, "exceptionSupplier can not be null");
+    }
+
+    /**
      * 断言表达式为true
      *
      * @param expression        需要断言的表达式
      * @param exceptionSupplier 异常提供器
      */
     public static void mustTrue(boolean expression, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (!expression) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 
@@ -34,8 +44,9 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustFalse(boolean expression, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (expression) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 
@@ -47,8 +58,9 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustEqual(Object o1, Object o2, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (!Objects.equals(o1, o2)) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 
@@ -59,8 +71,9 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustNull(Object object, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (object != null) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 
@@ -71,8 +84,9 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustNotNull(Object object, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (object == null) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 
@@ -83,6 +97,7 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustNotNull(Object[] objects, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         for (Object object : objects) {
             mustNotNull(object, exceptionSupplier);
         }
@@ -95,8 +110,9 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustEmpty(CharSequence charSequence, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (!(charSequence == null || charSequence.length() == 0)) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 
@@ -107,8 +123,9 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustNotEmpty(CharSequence charSequence, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (charSequence == null || charSequence.length() == 0) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 
@@ -119,8 +136,9 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static <T> void mustNotEmpty(T[] array, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (array == null || array.length == 0) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 
@@ -131,8 +149,9 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustNotEmpty(Collection<?> collection, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (collection == null || collection.size() == 0) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 
@@ -143,8 +162,9 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustNotEmpty(Map<?, ?> map, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (map == null || map.size() == 0) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 
@@ -156,8 +176,9 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustInstanceOf(Class<?> type, Object obj, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (!type.isInstance(obj)) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 
@@ -169,8 +190,9 @@ public class AssertUtils {
      * @param exceptionSupplier 异常提供器
      */
     public static void mustAssignable(Class<?> superType, Class<?> subType, Supplier<? extends ApplicationException> exceptionSupplier) throws ApplicationException {
+        checkExceptionSupplier(exceptionSupplier);
         if (subType == null || !superType.isAssignableFrom(subType)) {
-            throw Optional.of(exceptionSupplier).get().get();
+            throw exceptionSupplier.get();
         }
     }
 

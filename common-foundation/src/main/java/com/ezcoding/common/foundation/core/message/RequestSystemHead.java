@@ -11,23 +11,13 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
 
     private static final long serialVersionUID = 7333737769389481420L;
 
-    protected String consumerId;
     protected String consumerSequenceNo;
 
     public RequestSystemHead() {
     }
 
-    public RequestSystemHead(String consumerId, String consumerSequenceNo) {
-        this.consumerId = consumerId;
+    public RequestSystemHead(String consumerSequenceNo) {
         this.consumerSequenceNo = consumerSequenceNo;
-    }
-
-    public String getConsumerId() {
-        return consumerId;
-    }
-
-    public void setConsumerId(String consumerId) {
-        this.consumerId = consumerId;
     }
 
     public String getConsumerSequenceNo() {
@@ -38,19 +28,9 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
         this.consumerSequenceNo = consumerSequenceNo;
     }
 
-//    @Override
-//    public boolean valid() {
-//        return super.valid() && consumerId != null && consumerSequenceNo != null;
-//    }
-
     @Override
     public String toString() {
-        return "RequestSystemHead{" +
-                "consumerId='" + consumerId + '\'' +
-                ", consumerSequenceNo='" + consumerSequenceNo + '\'' +
-                ", transactionDate=" + transactionDate +
-                ", version='" + version + '\'' +
-                '}';
+        return super.toString();
     }
 
 }

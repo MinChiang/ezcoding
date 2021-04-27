@@ -51,7 +51,7 @@ public class ResponseUtils {
      * @param <E>             错误类型
      */
     public static <E extends Throwable> void checkThrowWithReturnMessage(ResponseMessage<?> responseMessage, Function<String, E> function) throws E {
-        checkThrowWithResponseAppHead(responseMessage, appHead -> function.apply(appHead.getReturnMessage()));
+        checkThrowWithResponseAppHead(responseMessage, appHead -> function.apply(appHead.getMessage()));
     }
 
     /**
@@ -61,7 +61,7 @@ public class ResponseUtils {
      * @param responseMessage 返回信息
      */
     public static void check(ResponseMessage<?> responseMessage) {
-        checkThrowWithResponseAppHead(responseMessage, head -> new RuntimeException("response error with code [" + head.getReturnCode() + "] and message [" + head.getReturnMessage() + "]"));
+        checkThrowWithResponseAppHead(responseMessage, head -> new RuntimeException("response error with code [" + head.getCode() + "] and message [" + head.getMessage() + "]"));
     }
 
     /**

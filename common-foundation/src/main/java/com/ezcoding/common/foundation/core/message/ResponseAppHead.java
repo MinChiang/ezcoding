@@ -12,8 +12,8 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
 
     private static final long serialVersionUID = 4369838938491033889L;
 
-    protected String returnCode;
-    protected String returnMessage;
+    protected String code;
+    protected String message;
 
     public ResponseAppHead() {
     }
@@ -22,30 +22,30 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
         super(pageInfo);
     }
 
-    public ResponseAppHead(PageInfo pageInfo, String returnCode, String returnMessage) {
-        this.returnCode = returnCode;
-        this.returnMessage = returnMessage;
+    public ResponseAppHead(PageInfo pageInfo, String code, String message) {
+        this.code = code;
+        this.message = message;
         this.pageInfo = pageInfo;
     }
 
-    public ResponseAppHead(String returnCode, String returnMessage) {
-        this(null, returnCode, returnMessage);
+    public ResponseAppHead(String code, String message) {
+        this(null, code, message);
     }
 
-    public String getReturnCode() {
-        return returnCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setReturnCode(String returnCode) {
-        this.returnCode = returnCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getReturnMessage() {
-        return returnMessage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setReturnMessage(String returnMessage) {
-        this.returnMessage = returnMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     /**
@@ -54,19 +54,19 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
      * @return 是否成功
      */
     public boolean success() {
-        return Optional.ofNullable(this.returnCode).map(SuccessAppHead.getDefaultSuccessCode()::equals).orElse(false);
+        return Optional.ofNullable(this.code).map(SuccessAppHead.getDefaultSuccessCode()::equals).orElse(false);
     }
 
     @Override
     public boolean valid() {
-        return super.valid() && (returnCode != null && !returnCode.isEmpty()) && (returnMessage != null && !returnMessage.isEmpty());
+        return super.valid() && (code != null && !code.isEmpty()) && (message != null && !message.isEmpty());
     }
 
     @Override
     public String toString() {
         return "ResponseAppHead{" +
-                "returnCode='" + returnCode + '\'' +
-                ", returnMessage='" + returnMessage + '\'' +
+                "returnCode='" + code + '\'' +
+                ", returnMessage='" + message + '\'' +
                 ", pageInfo=" + pageInfo +
                 '}';
     }

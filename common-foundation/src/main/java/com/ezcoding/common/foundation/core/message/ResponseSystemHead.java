@@ -14,23 +14,13 @@ public class ResponseSystemHead extends AbstractSystemHead implements Serializab
     public static final String PROVIDER_SEQUENCE_NO_KEY = "providerSequenceNo";
     public static final String PROVIDER_ID = "providerId";
 
-    protected String providerId;
     protected String providerSequenceNo;
 
     public ResponseSystemHead() {
     }
 
-    public ResponseSystemHead(String providerId, String providerSequenceNo) {
-        this.providerId = providerId;
+    public ResponseSystemHead(String providerSequenceNo) {
         this.providerSequenceNo = providerSequenceNo;
-    }
-
-    public String getProviderId() {
-        return providerId;
-    }
-
-    public void setProviderId(String providerId) {
-        this.providerId = providerId;
     }
 
     public String getProviderSequenceNo() {
@@ -41,19 +31,9 @@ public class ResponseSystemHead extends AbstractSystemHead implements Serializab
         this.providerSequenceNo = providerSequenceNo;
     }
 
-//    @Override
-//    public boolean valid() {
-//        return super.valid() && providerId != null && providerSequenceNo != null;
-//    }
-
     @Override
     public String toString() {
-        return "ResponseSystemHead{" +
-                "providerId='" + providerId + '\'' +
-                ", providerSequenceNo='" + providerSequenceNo + '\'' +
-                ", transactionDate=" + transactionDate +
-                ", version='" + version + '\'' +
-                '}';
+        return super.toString();
     }
 
 }
