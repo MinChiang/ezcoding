@@ -1,9 +1,8 @@
 package com.ezcoding.common.foundation.core.exception;
 
 import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
+import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
-
-import static com.ezcoding.common.foundation.core.application.ModuleNameable.FILL_CHAR;
 
 /**
  * @author MinChiang
@@ -13,21 +12,17 @@ import static com.ezcoding.common.foundation.core.application.ModuleNameable.FIL
 public interface ModuleConstants {
 
     /**
+     * 默认的填充字符
+     */
+    int BASE_NUMBER = 0;
+
+    /**
      * 默认的全局应用名称
      */
-    String DEFAULT_APPLICATION_NAME = "application";
+    String BASE_NAME = "common";
 
-    /**
-     * 默认的全局模块名称
-     */
-    String DEFAULT_MODULE_NAME = "module";
-
-    /**
-     * 默认的全局业业务名称
-     */
-    String DEFAULT_FUNCTION_NAME = "common";
-
-    ApplicationLayerModule DEFAULT_APPLICATION_LAYER_MODULE = new ApplicationLayerModule(DEFAULT_APPLICATION_NAME, String.valueOf(FILL_CHAR));
-    ModuleLayerModule DEFAULT_MODULE_LAYER_MODULE = new ModuleLayerModule(DEFAULT_APPLICATION_LAYER_MODULE, DEFAULT_MODULE_NAME, String.valueOf(FILL_CHAR));
+    ApplicationLayerModule DEFAULT_APPLICATION_LAYER_MODULE = new ApplicationLayerModule(BASE_NAME, BASE_NUMBER);
+    ModuleLayerModule DEFAULT_MODULE_LAYER_MODULE = new ModuleLayerModule(DEFAULT_APPLICATION_LAYER_MODULE, BASE_NAME, BASE_NUMBER);
+    FunctionLayerModule DEFAULT_FUNCTION_LAYER_MODULE = new FunctionLayerModule(DEFAULT_MODULE_LAYER_MODULE, BASE_NAME, BASE_NUMBER);
 
 }

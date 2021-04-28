@@ -14,7 +14,14 @@ public class FunctionLayerModule extends ModuleLayerModule {
     protected static int functionCodeLength = FUNCTION_CODE_LENGTH;
     protected static char functionFillChar = FILL_CHAR;
 
+    /**
+     * 功能名称
+     */
     protected final String functionName;
+
+    /**
+     * 功能号
+     */
     protected final String functionCode;
 
     public FunctionLayerModule(String applicationName, String applicationCode, String moduleName, String moduleCode, String functionName, String functionCode) {
@@ -31,6 +38,14 @@ public class FunctionLayerModule extends ModuleLayerModule {
 
     public FunctionLayerModule(ModuleLayerModule moduleLayerModule, String functionName, String functionCode) {
         this(moduleLayerModule.getApplicationName(), moduleLayerModule.getApplicationCode(), moduleLayerModule.getModuleName(), moduleLayerModule.getModuleCode(), functionName, functionCode);
+    }
+
+    public FunctionLayerModule(String applicationName, String applicationCode, String moduleName, int moduleCode, String functionName, int functionCode) {
+        this(applicationName, applicationCode, moduleName, String.valueOf(moduleCode), functionName, String.valueOf(functionCode));
+    }
+
+    public FunctionLayerModule(ModuleLayerModule moduleLayerModule, String functionName, int functionCode) {
+        this(moduleLayerModule, functionName, String.valueOf(functionCode));
     }
 
     public String getFunctionCode() {

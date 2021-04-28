@@ -14,7 +14,14 @@ public class ApplicationLayerModule implements ModuleNameable {
     protected static int applicationCodeLength = APPLICATION_CODE_LENGTH;
     protected static char applicationFillChar = FILL_CHAR;
 
+    /**
+     * 应用名称
+     */
     protected final String applicationName;
+
+    /**
+     * 应用号
+     */
     protected final String applicationCode;
 
     public ApplicationLayerModule(String applicationName, String applicationCode) {
@@ -27,6 +34,10 @@ public class ApplicationLayerModule implements ModuleNameable {
 
         this.applicationName = applicationName;
         this.applicationCode = ModuleNameable.leftPad(applicationCode, applicationCodeLength, applicationFillChar);
+    }
+
+    public ApplicationLayerModule(String applicationName, int applicationCode) {
+        this(applicationName, String.valueOf(applicationCode));
     }
 
     @Override

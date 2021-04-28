@@ -14,7 +14,14 @@ public class ModuleLayerModule extends ApplicationLayerModule {
     protected static int moduleCodeLength = MODULE_CODE_LENGTH;
     protected static char moduleFillChar = FILL_CHAR;
 
+    /**
+     * 业务名称
+     */
     protected final String moduleName;
+
+    /**
+     * 业务号
+     */
     protected final String moduleCode;
 
     public ModuleLayerModule(String applicationName, String applicationCode, String moduleName, String moduleCode) {
@@ -31,6 +38,14 @@ public class ModuleLayerModule extends ApplicationLayerModule {
 
     public ModuleLayerModule(ApplicationLayerModule applicationLayerModule, String moduleName, String moduleCode) {
         this(applicationLayerModule.getApplicationName(), applicationLayerModule.getApplicationCode(), moduleName, moduleCode);
+    }
+
+    public ModuleLayerModule(String applicationName, String applicationCode, String moduleName, int moduleCode) {
+        this(applicationName, applicationCode, moduleName, String.valueOf(moduleCode));
+    }
+
+    public ModuleLayerModule(ApplicationLayerModule applicationLayerModule, String moduleName, int moduleCode) {
+        this(applicationLayerModule, moduleName, String.valueOf(moduleCode));
     }
 
     public String getModuleName() {
