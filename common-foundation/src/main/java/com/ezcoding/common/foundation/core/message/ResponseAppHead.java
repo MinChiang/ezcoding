@@ -65,9 +65,9 @@ public class ResponseAppHead extends AbstractAppHead implements Serializable {
     @Override
     public String toString() {
         return "ResponseAppHead{" +
-                "returnCode='" + code + '\'' +
-                ", returnMessage='" + message + '\'' +
-                ", pageInfo=" + pageInfo +
+                "pageInfo=" + pageInfo +
+                ", code='" + code + '\'' +
+                ", message='" + message + '\'' +
                 '}';
     }
 

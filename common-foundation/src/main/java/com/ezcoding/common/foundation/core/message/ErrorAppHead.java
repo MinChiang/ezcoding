@@ -41,9 +41,9 @@ public class ErrorAppHead extends ResponseAppHead implements Serializable {
     @Override
     public String toString() {
         return "ErrorAppHead{" +
-                "returnCode='" + code + '\'' +
-                ", returnMessage='" + message + '\'' +
-                ", pageInfo=" + pageInfo +
+                "pageInfo=" + pageInfo +
+                ", code='" + code + '\'' +
+                ", message='" + message + '\'' +
                 '}';
     }
 

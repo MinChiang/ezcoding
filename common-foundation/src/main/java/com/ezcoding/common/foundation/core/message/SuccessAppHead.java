@@ -11,15 +11,15 @@ public class SuccessAppHead extends ResponseAppHead implements Serializable {
 
     private static final long serialVersionUID = -3547811863595703652L;
 
-    protected static String defaultSuceessMessage = "success";
+    protected static String defaultSuccessMessage = "success";
     protected static String defaultSuccessCode = "0000000000";
 
     public SuccessAppHead() {
-        super(defaultSuccessCode, defaultSuceessMessage);
+        super(defaultSuccessCode, defaultSuccessMessage);
     }
 
     public SuccessAppHead(PageInfo pageInfo) {
-        super(pageInfo, defaultSuccessCode, defaultSuceessMessage);
+        super(pageInfo, defaultSuccessCode, defaultSuccessMessage);
     }
 
     public static String getDefaultSuccessCode() {
@@ -30,20 +30,20 @@ public class SuccessAppHead extends ResponseAppHead implements Serializable {
         SuccessAppHead.defaultSuccessCode = defaultSuccessCode;
     }
 
-    public static String getDefaultSuceessMessage() {
-        return defaultSuceessMessage;
+    public static String getDefaultSuccessMessage() {
+        return defaultSuccessMessage;
     }
 
-    static void setDefaultSuceessMessage(String defaultSuceessMessage) {
-        SuccessAppHead.defaultSuceessMessage = defaultSuceessMessage;
+    static void setDefaultSuccessMessage(String defaultSuccessMessage) {
+        SuccessAppHead.defaultSuccessMessage = defaultSuccessMessage;
     }
 
     @Override
     public String toString() {
         return "SuccessAppHead{" +
-                "returnCode='" + code + '\'' +
-                ", returnMessage='" + message + '\'' +
-                ", pageInfo=" + pageInfo +
+                "pageInfo=" + pageInfo +
+                ", code='" + code + '\'' +
+                ", message='" + message + '\'' +
                 '}';
     }
 

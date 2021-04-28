@@ -30,7 +30,11 @@ public class RequestSystemHead extends AbstractSystemHead implements Serializabl
 
     @Override
     public String toString() {
-        return super.toString();
+        return "RequestSystemHead{" +
+                "transactionDate=" + transactionDate +
+                ", version='" + version + '\'' +
+                ", consumerSequenceNo='" + consumerSequenceNo + '\'' +
+                '}';
     }
 
 }

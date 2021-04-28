@@ -3,7 +3,7 @@ package com.ezcoding.common.foundation.starter;
 import static com.ezcoding.common.foundation.core.message.ErrorAppHead.getDefaultErrorCode;
 import static com.ezcoding.common.foundation.core.message.ErrorAppHead.getDefaultErrorMessage;
 import static com.ezcoding.common.foundation.core.message.SuccessAppHead.getDefaultSuccessCode;
-import static com.ezcoding.common.foundation.core.message.SuccessAppHead.getDefaultSuceessMessage;
+import static com.ezcoding.common.foundation.core.message.SuccessAppHead.getDefaultSuccessMessage;
 
 /**
  * @author MinChiang
@@ -15,7 +15,7 @@ public class MessageConfigBean {
     private String errorResponseCode = getDefaultErrorCode();
     private String successResponseCode = getDefaultSuccessCode();
     private String errorResponseMessage = getDefaultErrorMessage();
-    private String successResponseMessage = getDefaultSuceessMessage();
+    private String successResponseMessage = getDefaultSuccessMessage();
 
     public String getErrorResponseCode() {
         return errorResponseCode;

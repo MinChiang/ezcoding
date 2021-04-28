@@ -4,8 +4,6 @@ import com.ezcoding.common.foundation.core.exception.ApplicationException;
 import com.ezcoding.common.foundation.core.tools.uuid.IdProduceable;
 import com.ezcoding.common.foundation.core.tools.uuid.OriginalUuidProducer;
 
-import java.util.Random;
-
 /**
  * @author MinChiang
  * @version 1.0.0
@@ -43,7 +41,7 @@ public class MessageFactory {
     }
 
     public static void setDefaultSuccessResponseMessage(String defaultSuccessResponseMessage) {
-        SuccessAppHead.setDefaultSuceessMessage(defaultSuccessResponseMessage);
+        SuccessAppHead.setDefaultSuccessMessage(defaultSuccessResponseMessage);
     }
 
     /**

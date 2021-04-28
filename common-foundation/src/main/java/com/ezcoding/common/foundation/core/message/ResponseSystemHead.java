@@ -33,7 +33,11 @@ public class ResponseSystemHead extends AbstractSystemHead implements Serializab
 
     @Override
     public String toString() {
-        return super.toString();
+        return "ResponseSystemHead{" +
+                "transactionDate=" + transactionDate +
+                ", version='" + version + '\'' +
+                ", providerSequenceNo='" + providerSequenceNo + '\'' +
+                '}';
     }
 
 }
