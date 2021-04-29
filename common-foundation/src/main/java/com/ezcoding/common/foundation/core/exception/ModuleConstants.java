@@ -2,6 +2,7 @@ package com.ezcoding.common.foundation.core.exception;
 
 import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
 import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
+import com.ezcoding.common.foundation.core.application.LayerModuleFactory;
 import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 
 /**
@@ -21,8 +22,8 @@ public interface ModuleConstants {
      */
     String BASE_NAME = "common";
 
-    ApplicationLayerModule DEFAULT_APPLICATION_LAYER_MODULE = new ApplicationLayerModule(BASE_NAME, BASE_NUMBER);
-    ModuleLayerModule DEFAULT_MODULE_LAYER_MODULE = new ModuleLayerModule(DEFAULT_APPLICATION_LAYER_MODULE, BASE_NAME, BASE_NUMBER);
-    FunctionLayerModule DEFAULT_FUNCTION_LAYER_MODULE = new FunctionLayerModule(DEFAULT_MODULE_LAYER_MODULE, BASE_NAME, BASE_NUMBER);
+    ApplicationLayerModule DEFAULT_APPLICATION_LAYER_MODULE = LayerModuleFactory.applicationLayerModule(BASE_NAME, BASE_NUMBER);
+    ModuleLayerModule DEFAULT_MODULE_LAYER_MODULE = LayerModuleFactory.moduleLayerModule(DEFAULT_APPLICATION_LAYER_MODULE, BASE_NAME, BASE_NUMBER);
+    FunctionLayerModule DEFAULT_FUNCTION_LAYER_MODULE = LayerModuleFactory.functionLayerModule(DEFAULT_MODULE_LAYER_MODULE, BASE_NAME, BASE_NUMBER);
 
 }

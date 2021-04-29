@@ -1,6 +1,8 @@
 package com.ezcoding.common.foundation.core.exception.processor;
 
+import com.ezcoding.common.foundation.core.application.ModuleNameable;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
+import com.ezcoding.common.foundation.core.exception.ExceptionCodeGeneratable;
 
 /**
  * @author MinChiang
@@ -8,6 +10,10 @@ import com.ezcoding.common.foundation.core.exception.ApplicationException;
  * @date 2020-01-17 9:11
  */
 public interface ApplicationExceptionProcessible {
+
+    int APPLICATION_BEGIN = ModuleNameable.APPLICATION_CODE_LENGTH;
+    int MODULE_BEGIN = APPLICATION_BEGIN + ModuleNameable.MODULE_CODE_LENGTH;
+    int ERROR_CODE_END = MODULE_BEGIN + ExceptionCodeGeneratable.ERROR_SUFFIX_CODE_LENGTH;
 
     /**
      * 判断错误是否能被捕获处理

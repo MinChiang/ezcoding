@@ -11,9 +11,6 @@ import java.util.Objects;
  */
 public class ApplicationLayerModule implements ModuleNameable {
 
-    protected static int applicationCodeLength = APPLICATION_CODE_LENGTH;
-    protected static char applicationFillChar = FILL_CHAR;
-
     /**
      * 应用名称
      */
@@ -24,19 +21,12 @@ public class ApplicationLayerModule implements ModuleNameable {
      */
     protected final String applicationCode;
 
-    public ApplicationLayerModule(String applicationName, String applicationCode) {
-        if (applicationName == null || applicationName.isEmpty() || applicationCode == null || applicationCode.isEmpty()) {
-            throw new IllegalArgumentException("application name and application code can not be empty");
-        }
-        if (applicationCode.length() > applicationCodeLength) {
-            throw new IllegalArgumentException("application code length must less than [" + applicationCodeLength + "]");
-        }
-
+    ApplicationLayerModule(String applicationName, String applicationCode) {
         this.applicationName = applicationName;
-        this.applicationCode = ModuleNameable.leftPad(applicationCode, applicationCodeLength, applicationFillChar);
+        this.applicationCode = applicationCode;
     }
 
-    public ApplicationLayerModule(String applicationName, int applicationCode) {
+    ApplicationLayerModule(String applicationName, int applicationCode) {
         this(applicationName, String.valueOf(applicationCode));
     }
 
@@ -78,22 +68,6 @@ public class ApplicationLayerModule implements ModuleNameable {
     @Override
     public int hashCode() {
         return Objects.hash(applicationCode);
-    }
-
-    public static int getApplicationCodeLength() {
-        return applicationCodeLength;
-    }
-
-    public static void setApplicationCodeLength(int applicationCodeLength) {
-        ApplicationLayerModule.applicationCodeLength = applicationCodeLength;
-    }
-
-    public static char getApplicationFillChar() {
-        return applicationFillChar;
-    }
-
-    public static void setApplicationFillChar(char applicationFillChar) {
-        ApplicationLayerModule.applicationFillChar = applicationFillChar;
     }
 
     @Override

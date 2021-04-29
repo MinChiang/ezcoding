@@ -12,9 +12,6 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 public class EzcodingFoundationConfigBean {
 
     @NestedConfigurationProperty
-    private MessageConfigBean message = new MessageConfigBean();
-
-    @NestedConfigurationProperty
     private MetadataConfigBean metadata = new MetadataConfigBean();
 
     @NestedConfigurationProperty
@@ -25,22 +22,6 @@ public class EzcodingFoundationConfigBean {
 
     @NestedConfigurationProperty
     private LockConfigBean lock = new LockConfigBean();
-
-    public MessageConfigBean getMessage() {
-        return message;
-    }
-
-    public void setMessage(MessageConfigBean message) {
-        this.message = message;
-    }
-
-    public MetadataConfigBean getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(MetadataConfigBean metadata) {
-        this.metadata = metadata;
-    }
 
     public EnumConfigBean getEnums() {
         return enums;
@@ -64,6 +45,14 @@ public class EzcodingFoundationConfigBean {
 
     public void setLock(LockConfigBean lock) {
         this.lock = lock;
+    }
+
+    public MetadataConfigBean getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(MetadataConfigBean metadata) {
+        this.metadata = metadata;
     }
 
 }

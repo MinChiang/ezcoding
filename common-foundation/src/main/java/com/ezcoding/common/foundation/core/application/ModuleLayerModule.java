@@ -11,9 +11,6 @@ import java.util.Objects;
  */
 public class ModuleLayerModule extends ApplicationLayerModule {
 
-    protected static int moduleCodeLength = MODULE_CODE_LENGTH;
-    protected static char moduleFillChar = FILL_CHAR;
-
     /**
      * 业务名称
      */
@@ -24,28 +21,14 @@ public class ModuleLayerModule extends ApplicationLayerModule {
      */
     protected final String moduleCode;
 
-    public ModuleLayerModule(String applicationName, String applicationCode, String moduleName, String moduleCode) {
+    ModuleLayerModule(String applicationName, String applicationCode, String moduleName, String moduleCode) {
         super(applicationName, applicationCode);
-        if (moduleName == null || moduleName.isEmpty() || moduleCode == null || moduleCode.isEmpty()) {
-            throw new IllegalArgumentException("module name, module code can not be empty");
-        }
-        if (moduleCode.length() > moduleCodeLength) {
-            throw new IllegalArgumentException("module code length must less than [" + moduleCodeLength + "]");
-        }
         this.moduleName = moduleName;
-        this.moduleCode = ModuleNameable.leftPad(moduleCode, moduleCodeLength, moduleFillChar);
+        this.moduleCode = moduleCode;
     }
 
-    public ModuleLayerModule(ApplicationLayerModule applicationLayerModule, String moduleName, String moduleCode) {
+    ModuleLayerModule(ApplicationLayerModule applicationLayerModule, String moduleName, String moduleCode) {
         this(applicationLayerModule.getApplicationName(), applicationLayerModule.getApplicationCode(), moduleName, moduleCode);
-    }
-
-    public ModuleLayerModule(String applicationName, String applicationCode, String moduleName, int moduleCode) {
-        this(applicationName, applicationCode, moduleName, String.valueOf(moduleCode));
-    }
-
-    public ModuleLayerModule(ApplicationLayerModule applicationLayerModule, String moduleName, int moduleCode) {
-        this(applicationLayerModule, moduleName, String.valueOf(moduleCode));
     }
 
     public String getModuleName() {
@@ -89,22 +72,6 @@ public class ModuleLayerModule extends ApplicationLayerModule {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), moduleCode);
-    }
-
-    public static int getModuleCodeLength() {
-        return moduleCodeLength;
-    }
-
-    public static void setModuleCodeLength(int moduleCodeLength) {
-        ModuleLayerModule.moduleCodeLength = moduleCodeLength;
-    }
-
-    public static char getModuleFillChar() {
-        return moduleFillChar;
-    }
-
-    public static void setModuleFillChar(char moduleFillChar) {
-        ModuleLayerModule.moduleFillChar = moduleFillChar;
     }
 
     @Override

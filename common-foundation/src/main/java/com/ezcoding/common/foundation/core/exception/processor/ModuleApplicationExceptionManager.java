@@ -39,7 +39,7 @@ public class ModuleApplicationExceptionManager extends AbstractApplicationExcept
     public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
         String applicationCode = applicationException
                 .getIdentification()
-                .substring(0, ApplicationLayerModule.getApplicationCodeLength());
+                .substring(0, ModuleNameable.APPLICATION_CODE_LENGTH);
         ApplicationLayerModuleProcessor applicationLayerModuleProcessor = applicationLayerModuleProcessors.get(applicationCode);
         ProcessContext result;
         if (applicationLayerModuleProcessor == null) {

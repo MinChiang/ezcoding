@@ -1,8 +1,5 @@
 package com.ezcoding.common.foundation.starter;
 
-import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
-import com.ezcoding.common.foundation.core.application.FunctionLayerModule;
-import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.enums.*;
 import com.ezcoding.common.foundation.core.exception.BaseModuleExceptionBuilderFactory;
 import com.ezcoding.common.foundation.core.exception.processor.*;
@@ -73,31 +70,14 @@ public class EzcodingFoundationAutoConfiguration implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws ClassNotFoundException, IOException {
-        initApplicationMetadata();
         initMessage();
         initEnumMapping();
-    }
-
-    private void initApplicationMetadata() {
-        MetadataConfigBean metadata = ezcodingFoundationConfigBean.getMetadata();
-        ApplicationLayerModule.setApplicationCodeLength(metadata.getApplicationCodeLength());
-        ApplicationLayerModule.setApplicationFillChar(metadata.getApplicationFillChar());
-        ModuleLayerModule.setModuleCodeLength(metadata.getModuleCodeLength());
-        ModuleLayerModule.setModuleFillChar(metadata.getModuleFillChar());
-        FunctionLayerModule.setFunctionCodeLength(metadata.getFunctionCodeLength());
-        FunctionLayerModule.setFunctionFillChar(metadata.getFunctionFillChar());
     }
 
     private void initMessage() {
         if (idProduceable != null) {
             MessageFactory.setSequenceNoProducer(idProduceable);
         }
-
-        MessageConfigBean message = ezcodingFoundationConfigBean.getMessage();
-        MessageFactory.setDefaultErrorResponseCode(message.getErrorResponseCode());
-        MessageFactory.setDefaultSuccessResponseCode(message.getSuccessResponseCode());
-        MessageFactory.setDefaultErrorResponseMessage(message.getErrorResponseMessage());
-        MessageFactory.setDefaultSuccessResponseMessage(message.getSuccessResponseMessage());
     }
 
     private void initEnumMapping() throws ClassNotFoundException, IOException {

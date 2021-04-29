@@ -28,22 +28,6 @@ public class MessageFactory {
         SEQUENCE_NO_PRODUCER = sequenceNoProducer;
     }
 
-    public static void setDefaultErrorResponseCode(String defaultErrorResponseCode) {
-        ErrorAppHead.setDefaultErrorCode(defaultErrorResponseCode);
-    }
-
-    public static void setDefaultErrorResponseMessage(String defaultErrorResponseMessage) {
-        ErrorAppHead.setDefaultErrorMessage(defaultErrorResponseMessage);
-    }
-
-    public static void setDefaultSuccessResponseCode(String defaultSuccessResponseCode) {
-        SuccessAppHead.setDefaultSuccessCode(defaultSuccessResponseCode);
-    }
-
-    public static void setDefaultSuccessResponseMessage(String defaultSuccessResponseMessage) {
-        SuccessAppHead.setDefaultSuccessMessage(defaultSuccessResponseMessage);
-    }
-
     /**
      * 构造请求信息
      *
@@ -109,24 +93,24 @@ public class MessageFactory {
     /**
      * 构造失败响应信息
      *
-     * @param returnCode    响应结果号码
-     * @param returnMessage 响应信息内容
+     * @param code    响应结果号码
+     * @param message 响应信息内容
      * @param body          返回内容
      * @return 失败响应信息
      */
-    public static <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage, T body) {
-        return new ResponseMessage<>(new ResponseSystemHead(SEQUENCE_NO_PRODUCER.produce()), new ErrorAppHead(returnCode, returnMessage), body);
+    public static <T> ResponseMessage<T> buildErrorResponseMessage(String code, String message, T body) {
+        return new ResponseMessage<>(new ResponseSystemHead(SEQUENCE_NO_PRODUCER.produce()), new ErrorAppHead(code, message), body);
     }
 
     /**
      * 构造失败响应信息
      *
-     * @param returnCode    返回码
-     * @param returnMessage 返回内容
+     * @param code    返回码
+     * @param message 返回内容
      * @return 失败响应信息
      */
-    public static <T> ResponseMessage<T> buildErrorResponseMessage(String returnCode, String returnMessage) {
-        return buildErrorResponseMessage(returnCode, returnMessage, null);
+    public static <T> ResponseMessage<T> buildErrorResponseMessage(String code, String message) {
+        return buildErrorResponseMessage(code, message, null);
     }
 
     /**
@@ -156,7 +140,7 @@ public class MessageFactory {
      * @return 失败响应信息
      */
     public static <T> ResponseMessage<T> buildErrorResponseMessage() {
-        return buildErrorResponseMessage(ErrorAppHead.getDefaultErrorCode(), ErrorAppHead.getDefaultErrorMessage());
+        return buildErrorResponseMessage(ErrorAppHead.DEFAULT_ERROR_CODE, ErrorAppHead.DEFAULT_ERROR_MESSAGE);
     }
 
     public static <T> SuccessResponseFactory<T> success(T body) {

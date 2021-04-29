@@ -25,7 +25,7 @@ public class WebEmptyApplicationExceptionProcessor extends AbstractWebFunctionLa
     @Override
     public void doProcess(ApplicationException applicationException, WebProcessContext processContext) {
         processContext.setHttpStatus(defaultStatus == null ? HttpStatus.INTERNAL_SERVER_ERROR : defaultStatus);
-        processContext.setReturnSummary(defaultReturnSummary == null ? ErrorAppHead.getDefaultErrorMessage() : defaultReturnSummary);
+        processContext.setReturnSummary(defaultReturnSummary == null ? ErrorAppHead.DEFAULT_ERROR_MESSAGE : defaultReturnSummary);
     }
 
 }

@@ -11,31 +11,15 @@ public class ErrorAppHead extends ResponseAppHead implements Serializable {
 
     private static final long serialVersionUID = -1370948908683721517L;
 
-    protected static String defaultErrorMessage = "unknown error";
-    protected static String defaultErrorCode = "9999999999";
+    public static final String DEFAULT_ERROR_MESSAGE = "unknown error";
+    public static final String DEFAULT_ERROR_CODE = "9999999999";
 
     public ErrorAppHead() {
-        super(defaultErrorCode, defaultErrorMessage);
+        super(DEFAULT_ERROR_CODE, DEFAULT_ERROR_MESSAGE);
     }
 
-    public ErrorAppHead(String returnCode, String returnMessage) {
-        super(returnCode == null ? defaultErrorCode : returnCode, returnMessage == null ? defaultErrorMessage : returnMessage);
-    }
-
-    public static String getDefaultErrorCode() {
-        return defaultErrorCode;
-    }
-
-    static void setDefaultErrorCode(String defaultErrorCode) {
-        ErrorAppHead.defaultErrorCode = defaultErrorCode;
-    }
-
-    public static String getDefaultErrorMessage() {
-        return defaultErrorMessage;
-    }
-
-    static void setDefaultErrorMessage(String defaultErrorMessage) {
-        ErrorAppHead.defaultErrorMessage = defaultErrorMessage;
+    public ErrorAppHead(String code, String message) {
+        super(code == null ? DEFAULT_ERROR_CODE : code, message == null ? DEFAULT_ERROR_MESSAGE : message);
     }
 
     @Override

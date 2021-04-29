@@ -57,7 +57,7 @@ public class ApplicationExceptionResolver extends AbstractHandlerExceptionResolv
             processMessage = processContext.getReturnSummary();
         } else {
             processStatus = (defaultHttpStatus == null ? HttpStatus.INTERNAL_SERVER_ERROR : defaultHttpStatus);
-            processMessage = (defaultMessage == null ? ErrorAppHead.getDefaultErrorMessage() : defaultMessage);
+            processMessage = (defaultMessage == null ? ErrorAppHead.DEFAULT_ERROR_MESSAGE : defaultMessage);
         }
 
         try {

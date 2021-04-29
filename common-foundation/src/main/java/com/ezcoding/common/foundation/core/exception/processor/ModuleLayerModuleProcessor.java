@@ -1,9 +1,6 @@
 package com.ezcoding.common.foundation.core.exception.processor;
 
-import com.ezcoding.common.foundation.core.application.ApplicationLayerModule;
-import com.ezcoding.common.foundation.core.application.ModuleLayerModule;
 import com.ezcoding.common.foundation.core.exception.ApplicationException;
-import com.ezcoding.common.foundation.core.exception.ModuleExceptionCodeGenerator;
 
 import java.util.Map;
 import java.util.Optional;
@@ -38,11 +35,9 @@ public class ModuleLayerModuleProcessor extends AbstractLayerModuleProcessor {
 
     @Override
     public ProcessContext process(ApplicationException applicationException, ProcessContext processContext) {
-        int startInclude = ApplicationLayerModule.getApplicationCodeLength() + ModuleLayerModule.getModuleCodeLength();
-        int endExclude = startInclude + ModuleExceptionCodeGenerator.getErrorSuffixCodeLength();
         String errorSuffixCode = applicationException
                 .getIdentification()
-                .substring(startInclude, endExclude);
+                .substring(MODULE_BEGIN, ERROR_CODE_END);
         AbstractErrorSuffixCodeProcessor abstractErrorSuffixCodeProcessor = errorSuffixCodeProcessors.get(errorSuffixCode);
         ProcessContext result;
         if (abstractErrorSuffixCodeProcessor == null) {

@@ -39,8 +39,8 @@ public class ApplicationErrorController extends BasicErrorController {
         HttpStatus status = getStatus(request);
 
         ResponseMessage<?> errorResponseMessage = MessageFactory.buildErrorResponseMessage(
-                (String) body.getOrDefault(KEY_APPLICATION_EXCEPTION_IDENTIFICATION, ErrorAppHead.getDefaultErrorCode()),
-                (String) body.getOrDefault(MESSAGE_KEY, ErrorAppHead.getDefaultErrorMessage())
+                (String) body.getOrDefault(KEY_APPLICATION_EXCEPTION_IDENTIFICATION, ErrorAppHead.DEFAULT_ERROR_CODE),
+                (String) body.getOrDefault(MESSAGE_KEY, ErrorAppHead.DEFAULT_ERROR_MESSAGE)
         );
 
         Map<String, Object> map = new HashMap<>(2);
