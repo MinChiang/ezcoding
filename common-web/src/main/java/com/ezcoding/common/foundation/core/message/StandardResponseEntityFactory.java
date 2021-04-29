@@ -203,26 +203,6 @@ public class StandardResponseEntityFactory<T> {
          */
         StandardResponseEntity<?> error(ApplicationException exception);
 
-//        /**
-//         * 返回错误标准响应消息
-//         *
-//         * @param returnCode    响应错误码
-//         * @param returnMessage 响应错误信息
-//         * @param body          响应体
-//         * @param <T>           响应内容泛型
-//         * @return 响应的错误标准消息
-//         */
-//        <T> StandardResponseHttpEntity<T> error(String returnCode, String returnMessage, T body);
-//
-//        /**
-//         * 返回错误标准响应消息
-//         *
-//         * @param returnCode    响应错误码
-//         * @param returnMessage 响应错误信息
-//         * @return 响应的错误标准消息
-//         */
-//        StandardResponseHttpEntity<?> error(String returnCode, String returnMessage);
-
     }
 
     private static class DefaultBuilder implements BodyBuilder {
@@ -321,11 +301,6 @@ public class StandardResponseEntityFactory<T> {
             return success();
         }
 
-//        @Override
-//        public <T> StandardResponseEntity<T> message(ResponseSystemHead responseSystemHead, ResponseAppHead responseAppHead, T body) {
-//            return new StandardResponseEntity<>(new ResponseMessage<>(responseSystemHead, responseAppHead, body), this.headers, this.statusCode);
-//        }
-
         @Override
         public <T> StandardResponseEntity<T> success(Integer totalItem, T body) {
             return new StandardResponseEntity<>(MessageFactory.buildSuccessResponseMessage(totalItem, body), this.headers, this.statusCode);
@@ -340,16 +315,6 @@ public class StandardResponseEntityFactory<T> {
         public StandardResponseEntity<?> success() {
             return success(null);
         }
-
-//        @Override
-//        public <T> StandardResponseHttpEntity<T> error(String returnCode, String returnMessage, T body) {
-//            return message(new ResponseSystemHead(), new ErrorAppHead(returnCode, returnMessage), body);
-//        }
-//
-//        @Override
-//        public StandardResponseHttpEntity<?> error(String returnCode, String returnMessage) {
-//            return error(returnCode, returnMessage, null);
-//        }
 
         @Override
         public <T> StandardResponseEntity<T> error(ApplicationException exception, T body) {
