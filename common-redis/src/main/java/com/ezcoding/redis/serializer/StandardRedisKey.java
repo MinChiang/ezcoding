@@ -13,10 +13,7 @@ public class StandardRedisKey {
 
     private String key;
 
-    public StandardRedisKey(FunctionLayerModule functionLayerModule, String key) {
-        if (functionLayerModule == null || key == null) {
-            throw new IllegalArgumentException("functionLayerModule and key can not be null");
-        }
+    StandardRedisKey(FunctionLayerModule functionLayerModule, String key) {
         this.functionLayerModule = functionLayerModule;
         this.key = key;
     }
