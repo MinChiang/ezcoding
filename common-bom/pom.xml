@@ -13,10 +13,10 @@
     <description>ezcoding项目基础依赖bom</description>
 
     <properties>
-        <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
-        <spring-cloud.version>Greenwich.SR2</spring-cloud.version>
+        <spring-boot.version>2.3.10.RELEASE</spring-boot.version>
+        <spring-cloud.version>Hoxton.SR11</spring-cloud.version>
         <mybatis-plus.version>3.1.2</mybatis-plus.version>
-        <redisson.version>3.14.0</redisson.version>
+        <redisson.version>3.15.0</redisson.version>
     </properties>
 
     <dependencyManagement>
@@ -102,18 +102,19 @@
                 <!--                redisson-spring-data-22	          2.2.x-->
                 <!--                redisson-spring-data-23	          2.3.x-->
                 <!--                redisson-spring-data-24	          2.4.x-->
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.redisson</groupId>
-                        <artifactId>redisson-spring-data-23</artifactId>
-                    </exclusion>
-                </exclusions>
+                <!-- 由于现在使用的版本为2.3.x，对应内部的redission-spring-data-23，因此不用排除版本 -->
+                <!--                <exclusions>-->
+                <!--                    <exclusion>-->
+                <!--                        <groupId>org.redisson</groupId>-->
+                <!--                        <artifactId>redisson-spring-data-23</artifactId>-->
+                <!--                    </exclusion>-->
+                <!--                </exclusions>-->
             </dependency>
-            <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson-spring-data-21</artifactId>
-                <version>${redisson.version}</version>
-            </dependency>
+            <!--            <dependency>-->
+            <!--                <groupId>org.redisson</groupId>-->
+            <!--                <artifactId>redisson-spring-data-23</artifactId>-->
+            <!--                <version>${redisson.version}</version>-->
+            <!--            </dependency>-->
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
