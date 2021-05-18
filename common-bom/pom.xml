@@ -153,6 +153,11 @@
                 <artifactId>springfox-boot-starter</artifactId>
                 <version>3.0.0</version>
             </dependency>
+            <dependency>
+                <groupId>org.roaringbitmap</groupId>
+                <artifactId>RoaringBitmap</artifactId>
+                <version>0.9.10</version>
+            </dependency>
 
             <!-- 自定义内部依赖 -->
             <dependency>
