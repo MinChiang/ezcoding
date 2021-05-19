@@ -22,9 +22,9 @@ public class RedisAutoConfiguration implements FoundationConfigurer {
     @Autowired(required = false)
     private RedissonLockImplement redissonLockImplement;
 
-    @Bean("defaultLockImplement")
-    @ConditionalOnMissingBean
-    public RedissonLockImplement defaultLockImplement(RedissonClient redissonClient) {
+    @Bean
+    @ConditionalOnMissingBean(LockImplement.class)
+    public RedissonLockImplement redissonLockImplement(RedissonClient redissonClient) {
         return new RedissonLockImplement(redissonClient);
     }
 

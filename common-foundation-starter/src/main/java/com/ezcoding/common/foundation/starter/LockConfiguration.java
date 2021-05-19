@@ -111,15 +111,15 @@ public class LockConfiguration implements FoundationConfigurer {
                 .build();
     }
 
-    @Bean("defaultLockImplement")
-    @ConditionalOnMissingBean
-    public LockImplement defaultLockImplement() {
+    @Bean
+    @ConditionalOnMissingBean(LockImplement.class)
+    public SimpleLockImplement simpleLockImplement() {
         return new SimpleLockImplement();
     }
 
-    @Bean("defaultLockIdentification")
-    @ConditionalOnMissingBean
-    public LockIdentification defaultLockIdentification() {
+    @Bean
+    @ConditionalOnMissingBean(LockIdentification.class)
+    public SimpleLockIdentification simpleLockIdentification() {
         return new SimpleLockIdentification();
     }
 

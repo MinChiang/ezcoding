@@ -29,7 +29,7 @@ import java.util.List;
 @Aspect
 @Order(AopConstants.Order.LOG_ORDER)
 @Configuration
-@ConditionalOnProperty(prefix = "ezcoding.foundation.log", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "ezcoding.foundation.log", name = "enabled", havingValue = "true")
 public class LogConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogConfiguration.class);
