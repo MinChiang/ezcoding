@@ -12,20 +12,22 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * @author MinChiang
  * @version 1.0.0
- * @date 2019-08-07 11:01
+ * @date 2021-06-01 15:40
  */
 @Documented
-@Constraint(validatedBy = {EnumValueValidator.class})
+@Constraint(validatedBy = {SpecialValueValidator.class})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
-public @interface EnumValue {
+public @interface SpecialValue {
 
-    String message() default "{com.ezcoding.common.foundation.core.validation.EnumValue.message}";
+    String message() default "{com.ezcoding.common.foundation.core.validation.SpecialValue.message}";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    Class<? extends Enum<?>> enumClass();
+    Class<?> classOf() default String.class;
+
+    String[] optionValues() default {};
 
 }
