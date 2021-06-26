@@ -28,7 +28,7 @@ import java.util.List;
 public class MethodSecurityAutoConfiguration extends GlobalMethodSecurityConfiguration {
 
     @Value("${spring.application.name}")
-    private String applicationName = "";
+    private String applicationName;
     @Autowired
     private EzcodingSecurityConfigBean ezcodingSecurityConfigBean;
     @Autowired(required = false)
@@ -62,7 +62,7 @@ public class MethodSecurityAutoConfiguration extends GlobalMethodSecurityConfigu
         @Autowired
         private EzcodingSecurityConfigBean ezcodingSecurityConfigBean;
         @Value("${spring.application.name}")
-        private String applicationName = "";
+        private String applicationName;
 
         @Bean
         public DynamicRoleVoter dynamicRoleVoter() {

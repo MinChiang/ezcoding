@@ -27,7 +27,7 @@
             <id>local</id>
             <properties>
                 <docker.host>http://192.168.123.200:2375</docker.host>
-                <environment.name>local</environment.name>
+                <environmentEnum.name>local</environmentEnum.name>
             </properties>
             <activation>
                 <!-- 默认激活这个配置 -->
@@ -40,7 +40,7 @@
             <id>dev</id>
             <properties>
                 <docker.host>http://192.168.123.102:2375</docker.host>
-                <environment.name>dev</environment.name>
+                <environmentEnum.name>dev</environmentEnum.name>
             </properties>
         </profile>
 
@@ -49,7 +49,7 @@
             <id>test</id>
             <properties>
                 <docker.host>http://192.168.123.102:2375</docker.host>
-                <environment.name>test</environment.name>
+                <environmentEnum.name>test</environmentEnum.name>
             </properties>
         </profile>
 
@@ -58,7 +58,7 @@
             <id>prod</id>
             <properties>
                 <docker.host>http://192.168.123.100:2375</docker.host>
-                <environment.name>prod</environment.name>
+                <environmentEnum.name>prod</environmentEnum.name>
             </properties>
         </profile>
         <!-- 环境架构end -->
@@ -68,7 +68,7 @@
         <profile>
             <id>windows</id>
             <properties>
-                <environment.type>windows</environment.type>
+                <environmentEnum.type>windows</environmentEnum.type>
             </properties>
         </profile>
 
@@ -76,7 +76,7 @@
         <profile>
             <id>linux</id>
             <properties>
-                <environment.type>linux</environment.type>
+                <environmentEnum.type>linux</environmentEnum.type>
             </properties>
             <activation>
                 <!-- 默认激活这个配置 -->
@@ -161,7 +161,7 @@
                 <version>3.1.0</version>
                 <configuration>
                     <descriptors>
-                        <descriptor>src/main/resources/assembly/assembly-${environment.type}.xml</descriptor>
+                        <descriptor>src/main/resources/assembly/assembly-${environmentEnum.type}.xml</descriptor>
                     </descriptors>
                 </configuration>
             </plugin>

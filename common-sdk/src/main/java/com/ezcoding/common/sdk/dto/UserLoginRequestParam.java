@@ -1,4 +1,4 @@
-package com.ezcoding.common.sdk.core;
+package com.ezcoding.common.sdk.dto;
 
 import com.ezcoding.common.core.user.model.DeviceTypeEnum;
 import com.ezcoding.common.core.user.model.LoginRegisterTypeEnum;
@@ -10,24 +10,9 @@ import java.io.Serializable;
  * @version 1.0.0
  * @date 2021-01-30 15:12
  */
-public class UserLoginRequestDTO implements Serializable {
+public class UserLoginRequestParam implements Serializable {
 
     private static final long serialVersionUID = -3254727328806669918L;
-
-    private static final String ACCOUNT_KEY = "account";
-    private static final String PASSWORD_KEY = "password";
-    private static final String LOGIN_TYPE_KEY = "login_type";
-    private static final String VERIFICATION_CODE_KEY = "verification_code";
-    private static final String RECEIPT_KEY = "receipt";
-    private static final String PHONE_KEY = "phone";
-    private static final String RESPONSE_TYPE_KEY = "response_type";
-    private static final String CLIENT_ID_KEY = "client_id";
-    private static final String REDIRECT_URI_KEY = "redirect_uri";
-    private static final String SCOPE_KEY = "scope";
-    private static final String STATE_KEY = "state";
-    private static final String DEVICE_TYPE_KEY = "device_type";
-    private static final String FAILURE_ACTION_KEY = "failure_action";
-    private static final String FAILURE_URI_KEY = "failure_uri";
 
     private String account;
     private String password;
@@ -156,17 +141,17 @@ public class UserLoginRequestDTO implements Serializable {
         this.responseType = responseType;
     }
 
-    public static UserLoginRequestDTO createByAccountPassword(String account, String password, DeviceTypeEnum deviceType) {
-        UserLoginRequestDTO userLoginRequestDTO = new UserLoginRequestDTO();
-        userLoginRequestDTO.setAccount(account);
-        userLoginRequestDTO.setPassword(password);
-        userLoginRequestDTO.setLoginType(LoginRegisterTypeEnum.ACCOUNT_PASSWORD.id);
-        userLoginRequestDTO.setResponseType("token");
-        userLoginRequestDTO.setClientId("testClient");
-        userLoginRequestDTO.setScope("app");
-        userLoginRequestDTO.setDeviceType((deviceType == null ? DeviceTypeEnum.UNKNOWN : deviceType).id);
-        userLoginRequestDTO.setFailureAction("response");
-        return userLoginRequestDTO;
+    public static UserLoginRequestParam createByAccountPassword(String account, String password, DeviceTypeEnum deviceType) {
+        UserLoginRequestParam userLoginRequestParam = new UserLoginRequestParam();
+        userLoginRequestParam.setAccount(account);
+        userLoginRequestParam.setPassword(password);
+        userLoginRequestParam.setLoginType(LoginRegisterTypeEnum.ACCOUNT_PASSWORD.id);
+        userLoginRequestParam.setResponseType("token");
+        userLoginRequestParam.setClientId("testClient");
+        userLoginRequestParam.setScope("app");
+        userLoginRequestParam.setDeviceType((deviceType == null ? DeviceTypeEnum.UNKNOWN : deviceType).id);
+        userLoginRequestParam.setFailureAction("response");
+        return userLoginRequestParam;
     }
 
     @Override

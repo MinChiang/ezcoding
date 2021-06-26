@@ -16,7 +16,7 @@ import java.util.*;
  * @version 1.0.0
  * @date 2021-01-26 10:50
  */
-public class JwtToken implements Token {
+public class JwtTokenImpl implements Token {
 
     public static final String PRINCIPAL = "principal";
     public static final String DETAIL = "detail";
@@ -29,13 +29,13 @@ public class JwtToken implements Token {
     private Date expireTime;
     private UserAuthentication userAuthentication;
 
-    public JwtToken(PublicKey publicKey, String token) {
+    public JwtTokenImpl(PublicKey publicKey, String token) {
         this.token = token;
         init(publicKey);
     }
 
     @Override
-    public boolean isTokenExpired() {
+    public boolean tokenExpired() {
         return new Date().after(expireTime);
     }
 
@@ -57,10 +57,10 @@ public class JwtToken implements Token {
 
     private static class UserAuthenticationJwtHandler extends JwtHandlerAdapter<UserAuthentication> {
 
-        JwtToken jwtToken;
+        JwtTokenImpl jwtTokenImpl;
 
-        public UserAuthenticationJwtHandler(JwtToken jwtToken) {
-            this.jwtToken = jwtToken;
+        public UserAuthenticationJwtHandler(JwtTokenImpl jwtTokenImpl) {
+            this.jwtTokenImpl = jwtTokenImpl;
         }
 
         @Override
@@ -76,10 +76,10 @@ public class JwtToken implements Token {
             List<String> authorities = body.get(AUTHORITIES, List.class);
             Map<String, Object> detail = body.get(DETAIL, Map.class);
 
-            this.jwtToken.userAuthentication = new UserAuthentication(principal, loginType, deviceTypeEnum, authorities == null ? new ArrayList<>() : authorities, detail == null ? new HashMap<>() : detail);
-            this.jwtToken.expireTime = expiration;
+            this.jwtTokenImpl.userAuthentication = new UserAuthentication(principal, loginType, deviceTypeEnum, authorities == null ? new ArrayList<>() : authorities, detail == null ? new HashMap<>() : detail);
+            this.jwtTokenImpl.expireTime = expiration;
 
-            return this.jwtToken.userAuthentication;
+            return this.jwtTokenImpl.userAuthentication;
         }
 
     }

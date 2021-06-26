@@ -1,4 +1,4 @@
-package com.ezcoding.common.sdk.core;
+package com.ezcoding.common.sdk.common;
 
 /**
  * @author MinChiang
@@ -8,7 +8,7 @@ package com.ezcoding.common.sdk.core;
 public interface UrlConstants {
 
     char PATH_SPLIT = '/';
-    String OAUTH_PUBLIC_KEY = "/oauth/public_key";
+    String OAUTH_PUBLIC_KEY = "/oauth/token_key";
     String OAUTH_AUTHORIZE = "/oauth/authorize";
 
 }

@@ -31,7 +31,7 @@
         <profile>
             <id>local</id>
             <properties>
-                <environment.name>local</environment.name>
+                <environmentEnum.name>local</environmentEnum.name>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -41,21 +41,21 @@
         <profile>
             <id>dev</id>
             <properties>
-                <environment.name>dev</environment.name>
+                <environmentEnum.name>dev</environmentEnum.name>
             </properties>
         </profile>
         <!-- 测试环境 -->
         <profile>
             <id>test</id>
             <properties>
-                <environment.name>test</environment.name>
+                <environmentEnum.name>test</environmentEnum.name>
             </properties>
         </profile>
         <!-- 生产环境 -->
         <profile>
             <id>prod</id>
             <properties>
-                <environment.name>prod</environment.name>
+                <environmentEnum.name>prod</environmentEnum.name>
             </properties>
         </profile>
 
@@ -63,14 +63,14 @@
         <profile>
             <id>windows</id>
             <properties>
-                <environment.type>windows</environment.type>
+                <environmentEnum.type>windows</environmentEnum.type>
             </properties>
         </profile>
         <!-- linux环境 -->
         <profile>
             <id>linux</id>
             <properties>
-                <environment.type>linux</environment.type>
+                <environmentEnum.type>linux</environmentEnum.type>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -140,7 +140,7 @@
                 <version>${maven-assembly-plugin.version}</version>
                 <configuration>
                     <descriptors>
-                        <descriptor>src/main/resources/assembly/assembly-${environment.type}.xml</descriptor>
+                        <descriptor>src/main/resources/assembly/assembly-${environmentEnum.type}.xml</descriptor>
                     </descriptors>
                 </configuration>
             </plugin>

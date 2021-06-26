@@ -3,6 +3,7 @@ package com.ezcoding.common.core.user.model;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -47,7 +48,7 @@ public enum LoginRegisterTypeEnum {
      */
     REGISTER(6);
 
-    private static final Map<Integer, LoginRegisterTypeEnum> ALL = Collections.unmodifiableMap(Arrays.stream(LoginRegisterTypeEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, value -> value)));
+    private static final Map<Integer, LoginRegisterTypeEnum> ALL = Collections.unmodifiableMap(Arrays.stream(LoginRegisterTypeEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, Function.identity())));
 
     /**
      * 转换

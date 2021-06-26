@@ -1,10 +1,10 @@
 package com.ezcoding.common.sdk.core;
 
-import com.ezcoding.common.foundation.core.enviroment.Environment;
+import com.ezcoding.common.foundation.core.enviroment.EnvironmentEnum;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 import java.util.Objects;
+import java.util.Properties;
 
 /**
  * @author MinChiang
@@ -13,38 +13,41 @@ import java.util.Objects;
  */
 public class SdkFactory {
 
-    public static Map<Environment, SdkConfig> SDK_CONFIGS = new HashMap<Environment, SdkConfig>() {{
-        SdkConfig local = new SdkConfig();
-        local.setBaseUrl("http://127.0.0.1:8081");
+    private static final String PROPERTIES_SUFFIX = ".properties";
 
-        SdkConfig dev = new SdkConfig();
-        dev.setBaseUrl("http://dev.ezcoding.com");
+    private static final String BASE_URL = "baseUrl";
 
-        SdkConfig test = new SdkConfig();
-        dev.setBaseUrl("http://test.ezcoding.com");
+    private SdkFactory() {
+    }
 
-        SdkConfig prod = new SdkConfig();
-        dev.setBaseUrl("http://prod.ezcoding.com");
-
-        SDK_CONFIGS.put(Environment.LOCAL, local);
-        SDK_CONFIGS.put(Environment.DEV, dev);
-        SDK_CONFIGS.put(Environment.TEST, test);
-        SDK_CONFIGS.put(Environment.PROD, prod);
-    }};
+    public static SdkFactory getInstance() {
+        return SdkFactoryHolder.HOLDER;
+    }
 
     /**
      * 根据环境获取sdk实例
      *
-     * @param environment 环境配置
+     * @param environmentEnum 环境配置
      * @return sdk实例
      */
-    public static Sdk create(Environment environment) {
-        Objects.requireNonNull(environment);
-        SdkConfig sdkConfig = SDK_CONFIGS.get(environment);
-        if (sdkConfig == null) {
-            throw new RuntimeException("can not find environment: [" + environment.toString() + "]");
+    public SdkImpl create(EnvironmentEnum environmentEnum) {
+        Objects.requireNonNull(environmentEnum);
+        Properties properties = new Properties();
+        try {
+            properties.load(getClass().getClassLoader().getResourceAsStream(environmentEnum.id + PROPERTIES_SUFFIX));
+            SdkConfig sdkConfig = SdkConfig.builder()
+                    .setBaseUrl(properties.getProperty(BASE_URL))
+                    .build();
+            return new SdkImpl(sdkConfig);
+        } catch (IOException e) {
+            throw new RuntimeException("properties read error!");
         }
-        return new Sdk(sdkConfig);
+    }
+
+    private static class SdkFactoryHolder {
+
+        private static final SdkFactory HOLDER = new SdkFactory();
+
     }
 
 }

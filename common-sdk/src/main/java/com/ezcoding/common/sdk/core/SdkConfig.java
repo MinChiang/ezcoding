@@ -7,14 +7,32 @@ package com.ezcoding.common.sdk.core;
  */
 public class SdkConfig {
 
-    private String baseUrl;
+    public final String baseUrl;
 
-    public String getBaseUrl() {
-        return baseUrl;
+    private SdkConfig(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
+    public static SdkConfigBuilder builder() {
+        return new SdkConfigBuilder();
+    }
+
+    static class SdkConfigBuilder {
+
+        private String baseUrl;
+
+        private SdkConfigBuilder() {
+        }
+
+        public SdkConfig build() {
+            return new SdkConfig(this.baseUrl);
+        }
+
+        public SdkConfigBuilder setBaseUrl(String baseUrl) {
+            this.baseUrl = baseUrl;
+            return this;
+        }
+
     }
 
 }

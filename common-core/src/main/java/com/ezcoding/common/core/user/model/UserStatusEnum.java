@@ -3,6 +3,7 @@ package com.ezcoding.common.core.user.model;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +28,7 @@ public enum UserStatusEnum {
      */
     CANCELED(2);
 
-    private static final Map<Integer, UserStatusEnum> ALL = Collections.unmodifiableMap(Arrays.stream(UserStatusEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, value -> value)));
+    private static final Map<Integer, UserStatusEnum> ALL = Collections.unmodifiableMap(Arrays.stream(UserStatusEnum.class.getEnumConstants()).collect(Collectors.toMap(value -> value.id, Function.identity())));
 
     /**
      * 转换

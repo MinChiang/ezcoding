@@ -12,7 +12,7 @@ public interface Token {
      *
      * @return 是否过期
      */
-    boolean isTokenExpired();
+    boolean tokenExpired();
 
     /**
      * 解析令牌
