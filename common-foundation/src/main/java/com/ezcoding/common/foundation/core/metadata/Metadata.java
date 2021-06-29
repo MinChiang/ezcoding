@@ -72,10 +72,11 @@ public class Metadata implements MetadataIdentifiable, Serializable {
     }
 
     public Metadata(String bucket, String key, SerializationTypeEnum type, String content) {
-        this.bucket = bucket;
-        this.key = key;
-        this.type = type;
-        this.content = content;
+        this(null, bucket, key, type, content);
+    }
+
+    public Metadata(String bucketKeyJoiner, String bucket, String key, SerializationTypeEnum type, String content) {
+        this(bucketKeyJoiner, bucket, key, type, content, null, null);
     }
 
     public String getBucket() {

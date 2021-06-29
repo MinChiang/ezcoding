@@ -7,6 +7,7 @@ package com.ezcoding.common.foundation.core.metadata;
  */
 public interface BaseMetadataFetchable extends MetadataFetchable {
 
+    int SIMPLE_METADATA_FETCHER = -1;
     int PROPERTIES_FILE_FETCHER = 0;
 
     /**

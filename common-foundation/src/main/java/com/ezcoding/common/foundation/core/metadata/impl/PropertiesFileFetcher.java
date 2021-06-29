@@ -2,7 +2,6 @@ package com.ezcoding.common.foundation.core.metadata.impl;
 
 import com.ezcoding.common.foundation.core.metadata.BaseMetadataFetchable;
 import com.ezcoding.common.foundation.core.metadata.Metadata;
-import com.ezcoding.common.foundation.core.metadata.MetadataIdentifiable;
 import com.ezcoding.common.foundation.core.metadata.SerializationTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ public class PropertiesFileFetcher extends AbstractMetadataFetcher {
     }
 
     public PropertiesFileFetcher(List<File> files) {
-        this(BaseMetadataFetchable.PROPERTIES_FILE_FETCHER, MetadataIdentifiable.BUCKET_KEY_JOINER, files);
+        this(BaseMetadataFetchable.PROPERTIES_FILE_FETCHER, null, files);
     }
 
     @Override
@@ -56,9 +55,10 @@ public class PropertiesFileFetcher extends AbstractMetadataFetcher {
                 for (Map.Entry<Object, Object> entry : properties.entrySet()) {
                     String key = (String) entry.getKey();
                     String value = (String) entry.getValue();
-                    TemporaryMetadata temporaryMetadata = new TemporaryMetadata();
-                    temporaryMetadata.setBucketkeyjoiner(getBucketKeyJoiner());
+                    TemporaryMetadata temporaryMetadata = null;
                     if (isSimpleFormat(key)) {
+                        temporaryMetadata = new TemporaryMetadata();
+                        temporaryMetadata.setBucketkeyjoiner(getBucketKeyJoiner());
                         temporaryMetadata.setBucket(bucket);
                         temporaryMetadata.setKey(key);
                         temporaryMetadata.setType(SerializationTypeEnum.STRING);
@@ -70,7 +70,12 @@ public class PropertiesFileFetcher extends AbstractMetadataFetcher {
                             LOGGER.warn("properties key must like [key].[type|content|createTime|description]");
                             continue;
                         }
-                        temporaryMetadata = incompleteMetadata.computeIfAbsent(arr[0], k -> new TemporaryMetadata());
+
+                        temporaryMetadata = incompleteMetadata.computeIfAbsent(arr[0], k -> {
+                            TemporaryMetadata t = new TemporaryMetadata();
+                            t.setBucketkeyjoiner(getBucketKeyJoiner());
+                            return t;
+                        });
                         temporaryMetadata.setBucket(bucket);
                         temporaryMetadata.setKey(arr[0]);
                         switch (arr[1]) {
