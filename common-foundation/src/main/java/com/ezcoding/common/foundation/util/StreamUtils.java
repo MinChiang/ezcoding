@@ -60,6 +60,33 @@ public class StreamUtils {
     }
 
     /**
+     * 关联列表
+     * 此关联操作，返回结果是与sourceList的顺序保证一致
+     *
+     * @param sourceList     元素列表
+     * @param keyExtractor   关联key提取器
+     * @param extraCollector 额外信息收集器
+     * @param resultMapper   返回结果映射器
+     * @param <K>            关联元素
+     * @param <S>            源元素
+     * @param <E>            额外信息
+     * @param <T>            目标类型
+     * @return 目标对象列表
+     */
+    public static <K, S, E, T> List<T> associateListOptional(List<? extends S> sourceList,
+                                                             Function<? super S, ? extends K> keyExtractor,
+                                                             Function<Set<? extends K>, Map<? extends K, ? extends E>> extraCollector,
+                                                             BiFunction<? super S, Optional<? extends E>, ? extends T> resultMapper) {
+        return
+                associateList(
+                        sourceList,
+                        keyExtractor,
+                        extraCollector,
+                        (s, e) -> resultMapper.apply(s, Optional.ofNullable(e))
+                );
+    }
+
+    /**
      * 关联集合
      *
      * @param source         元素列表
@@ -105,6 +132,32 @@ public class StreamUtils {
             }
         }
         return result;
+    }
+
+    /**
+     * 关联集合
+     *
+     * @param source         元素列表
+     * @param keyExtractor   关联key提取器
+     * @param extraCollector 额外信息收集器
+     * @param resultMapper   返回结果映射器
+     * @param <K>            关联元素
+     * @param <S>            源元素
+     * @param <E>            额外信息
+     * @param <T>            目标类型
+     * @return 目标对象列表
+     */
+    public static <K, S, E, T> Set<T> associateSetOptional(Collection<? extends S> source,
+                                                           Function<? super S, ? extends K> keyExtractor,
+                                                           Function<Set<? extends K>, Map<? extends K, ? extends E>> extraCollector,
+                                                           BiFunction<? super S, Optional<? extends E>, ? extends T> resultMapper) {
+        return
+                associateSet(
+                        source,
+                        keyExtractor,
+                        extraCollector,
+                        (s, e) -> resultMapper.apply(s, Optional.ofNullable(e))
+                );
     }
 
 }

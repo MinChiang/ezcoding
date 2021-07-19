@@ -4,7 +4,6 @@ import com.ezcoding.common.foundation.util.StreamUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -38,23 +37,25 @@ public class StreamUtilsTest {
 
         Map<Long, Student> mapping = students.stream().collect(Collectors.toMap(student -> student.id, Function.identity()));
 
-        List<ScoreInfo> associate = StreamUtils.associateList(
+//        List<ScoreInfo> associate = StreamUtils.associateList(
+//                scores,
+//                score -> score.studentId,
+//                ids -> mapping,
+//                (score, student) -> {
+//                    if (student == null) {
+//                        return new ScoreInfo(null, null, score.score, score.subject);
+//                    }
+//                    return new ScoreInfo(student.id, student.name, score.score, score.subject);
+//                });
+
+        List<ScoreInfo> associate = StreamUtils.associateListOptional(
                 scores,
                 score -> score.studentId,
-                ids -> {
-                    Map<Long, Student> map = new HashMap<>();
-                    for (Long id : ids) {
-                        Student student = mapping.get(id);
-                        map.put(id, student);
-                    }
-                    return map;
-                },
-                (score, student) -> {
-                    if (student == null) {
-                        return new ScoreInfo(null, null, score.score, score.subject);
-                    }
-                    return new ScoreInfo(student.id, student.name, score.score, score.subject);
-                });
+                ids -> mapping,
+                (score, studentOpt) -> studentOpt
+                        .map(student -> new ScoreInfo(student.id, student.name, score.score, score.subject))
+                        .orElse(null)
+        );
 
         System.out.println(associate);
     }
